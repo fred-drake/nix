@@ -79,6 +79,7 @@
   programs.neovim.viAlias = true;
   programs.neovim.vimAlias = true;
   programs.neovim.vimdiffAlias = true;
+  programs.zsh.enable = true;
   programs.tmux = import ./tmux.nix { inherit pkgs; };
   targets.darwin.currentHostDefaults."com.apple.controlcenter".BatteryShowPercentage = true;
   targets.darwin.defaults."com.apple.Safari".AutoFillCreditCardData = false;
