@@ -1,7 +1,7 @@
 # Preferences and configuration for all MacOS devices
 { pkgs, ... }: {
   environment.loginShell = pkgs.zsh;
-  environment.shells = with pkgs; [ bash zsh fish ];
+  environment.shells = with pkgs; [ bash zsh ];
   environment.systemPackages = [ pkgs.coreutils ];
   environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
   environment.pathsToLink = [ "/Applications" ];

@@ -14,7 +14,6 @@
       indent_size = 2;
     };
   };
-  home.activation.tideConfig = lib.hm.dag.entryAfter["writeBoundary"] ("${pkgs.fish}/bin/fish ~/.config/nix/modules/home-manager/tideconfig.fish");
   home.packages = with pkgs; [
     age
     alacritty
@@ -36,6 +35,7 @@
     jq
     lazygit
     mas
+    meld
     ripgrep
     rsync
     slack
@@ -54,6 +54,7 @@
     HOMEBREW_PREFIX = "/opt/homebrew";
 	  HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
 	  HOMEBREW_REPOSITORY = "/opt/homebrew";
+    GHQ_ROOT = "$HOME/Source";
   };
   home.stateVersion = "24.05";
   programs.alacritty = import ./alacritty.nix;
@@ -68,9 +69,21 @@
   ];
   programs.eza.git = true;
   programs.eza.icons = true;
-  programs.fish = import ./fish.nix { inherit pkgs; };
   programs.fzf.enable = true;
   programs.git.enable = true;
+  programs.git.extraConfig = {
+    credential.helper = "store";
+    diff.tool = "meld";
+    difftool.prompt = false;
+    "difftool \"meld\"".cmd = "meld \"$LOCAL\" \"$REMOTE\"";
+    init.defaultBranch = "master";
+    pull.rebase = true;
+  };
+  programs.git.ignores = [
+    "*~"
+    ".DS_Store"
+    "*.swp"
+  ];
   programs.git.lfs.enable = true;
   programs.git.userEmail = "fred.drake@gmail.com";
   programs.git.userName = "fred-drake";
@@ -80,6 +93,25 @@
   programs.neovim.vimAlias = true;
   programs.neovim.vimdiffAlias = true;
   programs.zsh.enable = true;
+  programs.zsh.antidote.enable = true;
+  programs.zsh.antidote.plugins = [
+    "mattmc3/ez-compinit"
+    "zsh-users/zsh-autosuggestions"
+    "ohmyzsh/ohmyzsh path:plugins/sudo"
+    "ohmyzsh/ohmyzsh path:plugins/dirhistory"
+    "ohmyzsh/ohmyzsh path:plugins/z"
+    "ohmyzsh/ohmyzsh path:plugins/macos"
+    "jeffreytse/zsh-vi-mode"
+    "zsh-users/zsh-syntax-highlighting"
+    "zsh-users/zsh-completions"
+    "MichaelAquilina/zsh-you-should-use"
+    "romkatv/powerlevel10k"
+    "hlissner/zsh-autopair"
+    "olets/zsh-abbr"
+  ];
+  programs.zsh.initExtra = ''
+    [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+  '';
   programs.tmux = import ./tmux.nix { inherit pkgs; };
   targets.darwin.currentHostDefaults."com.apple.controlcenter".BatteryShowPercentage = true;
   targets.darwin.defaults."com.apple.Safari".AutoFillCreditCardData = false;
@@ -90,4 +122,5 @@
   targets.darwin.defaults."com.apple.finder".FXRemoveOldTrashItems = true;
   targets.darwin.search = "Google";
 }
+
 
