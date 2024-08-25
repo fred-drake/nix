@@ -1,5 +1,5 @@
 { pkgs, ... }: {
-  enable = true;
+  enable = false;
   interactiveShellInit = ''
     # Kill stock greeting
     set fish_greeting
