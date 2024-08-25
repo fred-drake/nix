@@ -1,6 +1,6 @@
 # Preferences and configuration for all MacOS devices
 { pkgs, ... }: {
-  environment.loginShell = pkgs.fish;
+  environment.loginShell = pkgs.zsh;
   environment.shells = with pkgs; [ bash zsh fish ];
   environment.systemPackages = [ pkgs.coreutils ];
   environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
@@ -77,6 +77,6 @@
   users.knownUsers = [ "fdrake" ];
   users.users.fdrake.uid = 501;
   users.users.fdrake.home = "/Users/fdrake";
-  users.users.fdrake.shell = pkgs.fish;
+  users.users.fdrake.shell = pkgs.zsh;
 }
 
