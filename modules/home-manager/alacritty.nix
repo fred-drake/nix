@@ -62,7 +62,7 @@
     };
 
     shell = {
-      program = "/etc/profiles/per-user/fdrake/bin/fish";
+      program = "/etc/profiles/per-user/fdrake/bin/zsh";
     };
 
     window = {
