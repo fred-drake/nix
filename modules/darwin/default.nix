@@ -32,6 +32,7 @@
       "raycast"
       "rider"
       "rustrover"
+      "sourcetree"
       "steam"
       "ultimaker-cura"
       "vlc"
