@@ -30,12 +30,14 @@
     git
     gnupg
     google-chrome
+    imagemagick
     inetutils
     inkscape
     jq
     lazygit
     mas
     meld
+    neofetch
     ripgrep
     rsync
     slack
@@ -47,7 +49,7 @@
     z-lua
   ];
   home.sessionVariables = {
-    TERM = "xterm-256color";
+    TERM = "xterm-kitty";
     PAGER = "less";
     CLICOLOR = 1;
     EDITOR = "nvim";
@@ -147,6 +149,7 @@
   programs.neovim.viAlias = true;
   programs.neovim.vimAlias = true;
   programs.neovim.vimdiffAlias = true;
+  programs.yazi.enable = true;
   programs.zsh.enable = true;
   programs.zsh.antidote.enable = true;
   programs.zsh.antidote.plugins = [
