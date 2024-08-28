@@ -10,7 +10,7 @@
       indent_style = "space";
       indent_size = 4;
     };
-    "*.{js,py,nix}" = {
+    "*.{toml,js,py,nix}" = {
       indent_size = 2;
     };
   };
@@ -38,6 +38,7 @@
     mas
     meld
     neofetch
+    oh-my-posh
     ripgrep
     rsync
     slack
@@ -163,12 +164,17 @@
     "zsh-users/zsh-syntax-highlighting"
     "zsh-users/zsh-completions"
     "MichaelAquilina/zsh-you-should-use"
-    "romkatv/powerlevel10k"
+    # "romkatv/powerlevel10k"
     "hlissner/zsh-autopair"
     "olets/zsh-abbr"
   ];
+  # programs.zsh.initExtra = ''
+  #   [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+  # '';
   programs.zsh.initExtra = ''
-    [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+    if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+      eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/config.toml)"
+    fi
   '';
   programs.tmux = import ./tmux.nix { inherit pkgs; };
   targets.darwin.currentHostDefaults."com.apple.controlcenter".BatteryShowPercentage = true;
