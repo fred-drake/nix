@@ -21,6 +21,7 @@
       "Xcode" = 497799835;
     };
     casks = [
+      "brave-browser"
       "daisydisk"
       "finicky"
       "goland"
