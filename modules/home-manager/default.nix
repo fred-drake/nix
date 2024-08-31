@@ -43,7 +43,6 @@
     rsync
     slack
     spotify
-    vscode
     wget
     wireguard-tools
     yq-go
@@ -58,6 +57,12 @@
 	  HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
 	  HOMEBREW_REPOSITORY = "/opt/homebrew";
     GHQ_ROOT = "$HOME/Source";
+  };
+  home.shellAliases = {
+    man = "batman";
+    llat = "eza -la --sort=modified";
+    llart = "eza -lar --sort=modified";
+    lg = "lazygit";
   };
   home.stateVersion = "24.05";
   programs.alacritty = import ./alacritty.nix;
@@ -177,6 +182,12 @@
     fi
   '';
   programs.tmux = import ./tmux.nix { inherit pkgs; };
+  programs.vscode.enable = true;
+  programs.vscode.extensions = with pkgs.vscode-extensions; [
+    bbenoist.nix
+    arrterian.nix-env-selector
+  ];
+  programs.vscode.mutableExtensionsDir = false;
   targets.darwin.currentHostDefaults."com.apple.controlcenter".BatteryShowPercentage = true;
   targets.darwin.defaults."com.apple.Safari".AutoFillCreditCardData = false;
   targets.darwin.defaults."com.apple.Safari".AutoFillPasswords = false;

@@ -22,6 +22,7 @@
     };
     casks = [
       "brave-browser"
+      "cursor"
       "daisydisk"
       "finicky"
       "goland"
@@ -39,7 +40,7 @@
       "vlc"
       "wine-stable"
     ];
-    taps = [ ];
+    taps = [ "fred-drake/tap" ];
     brews = [ "watch" ];
   };
   nix.extraOptions = ''
@@ -50,6 +51,9 @@
   programs.zsh.enable = true;
   security.pam.enableSudoTouchIdAuth = true;
   services.nix-daemon.enable = true;
+  system.activationScripts.extraActivation.text = ''
+    softwareupdate --install-rosetta --agree-to-license
+  '';
   system.defaults = {
     dock.autohide = true;
     finder = {
@@ -81,4 +85,3 @@
   users.users.fdrake.home = "/Users/fdrake";
   users.users.fdrake.shell = pkgs.zsh;
 }
-

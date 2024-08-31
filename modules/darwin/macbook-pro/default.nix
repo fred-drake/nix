@@ -1,3 +1,3 @@
-{ pkgs, ... }: {
-
+{ ... }: {
+  homebrew.casks = [ "xp-pen" ];
 }

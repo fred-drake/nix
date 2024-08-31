@@ -16,13 +16,13 @@
       modules = [
         ./modules/darwin
         ./modules/darwin/macbook-pro
+
         home-manager.darwinModules.home-manager {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
             users.fdrake.imports = [
               ./modules/home-manager
-              ./modules/home-manager/macbook-pro
             ];
           };
         }
