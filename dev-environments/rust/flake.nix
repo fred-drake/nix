@@ -65,7 +65,7 @@
           env = {
             # Descriptive shell name gets used in the oh-my-posh prompt
             NIX_SHELL_NAME = "rust " + (builtins.readFile (pkgs.runCommand "cargo-version" {} ''
-              ${pkgs.cargo}/bin/cargo --version | cut -d ' ' -f 2 | tr -d '\n' > $out
+              ${pkgs.rustc}/bin/rustc --version | cut -d ' ' -f 2 | tr -d '\n' > $out
             ''));
           };
 
@@ -77,7 +77,7 @@
             export LIBRARY_PATH="$LIBRARY_PATH:$METAL_PATH"
             export FRAMEWORK_SEARCH_PATHS="$FRAMEWORK_SEARCH_PATHS:$METAL_PATH"
             echo "Rust environment is ready"
-            cargo version
+            rustc --version
           '';
         };
       });
