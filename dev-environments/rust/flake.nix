@@ -42,11 +42,11 @@
             rustc    # The Rust compiler
             rustfmt  # Rust code formatter
             clippy   # Rust linter for catching common mistakes and improving code style
-            libiconv
-            gcc
-            clang
-            llvmPackages.libclang
-            pkg-config
+            libiconv # Library for converting character encodings
+            gcc      # GNU Compiler Collection, required for building some Rust dependencies
+            clang    # C language family frontend for LLVM, used for compiling C/C++ code
+            llvmPackages.libclang # LLVM's C interface, used by some Rust tools for code analysis
+            pkg-config # Helper tool used when compiling applications and libraries
             (vscode-with-extensions.override {
               vscodeExtensions = commonVSCodeExtensions.common ++ (with marketplace; [
                 rust-lang.rust-analyzer        # Rust language server for code analysis and intelligent features
@@ -57,8 +57,6 @@
                 bierner.docs-view              # Markdown documentation viewer, helpful for Rust docs
                 belfz.search-crates-io         # Quick search and integration with crates.io
               ]);
-              # vscodeExtensions = with nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace; [
-              # ];
             })
           ];
 
@@ -70,12 +68,6 @@
           };
 
           shellHook = ''
-            export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
-            export LLVM_CONFIG_PATH="${pkgs.llvm}/bin/llvm-config"
-            export CPATH="${pkgs.darwin.apple_sdk.frameworks.Metal}/Library/Frameworks:${pkgs.darwin.apple_sdk.frameworks.Foundation}/Library/Frameworks:${pkgs.darwin.apple_sdk.frameworks.MetalKit}/Library/Frameworks"
-            export METAL_PATH="${pkgs.darwin.apple_sdk.frameworks.Metal}/Library/Frameworks"
-            export LIBRARY_PATH="$LIBRARY_PATH:$METAL_PATH"
-            export FRAMEWORK_SEARCH_PATHS="$FRAMEWORK_SEARCH_PATHS:$METAL_PATH"
             echo "Rust environment is ready"
             rustc --version
           '';
