@@ -43,7 +43,7 @@
     };
     casks = [
       # Homebrew casks (GUI applications)
-      "brave-browser" "cursor" "daisydisk" "finicky" "goland" "google-drive"
+      "brave-browser" "cursor" "daisydisk" "finicky" "goland" "godot-mono" "google-drive"
       "krita" "maestral" "obsidian" "pycharm" "raycast" "rider" "rustrover"
       "sourcetree" "steam" "ultimaker-cura" "vlc" "wine-stable" "winbox"
     ];

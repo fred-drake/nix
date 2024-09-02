@@ -13,7 +13,7 @@
 # Home Manager configuration for macOS
 { outputs, pkgs, nixpkgs, nix-vscode-extensions, ... }: 
 let
-  vscodeExtensions = import ../../apps/vscode-extensions.nix { inherit pkgs nix-vscode-extensions; };
+  commonVSCodeExtensions = import ../../apps/vscode-extensions.nix { inherit pkgs nix-vscode-extensions; };
 in
 {
   # Import additional configuration files
@@ -74,7 +74,7 @@ in
     yq-go           # YAML processor
     z-lua           # Directory jumper
     (vscode-with-extensions.override {
-      vscodeExtensions = vscodeExtensions.common ++ [
+      vscodeExtensions = commonVSCodeExtensions.common ++ [
 
       ];
     })

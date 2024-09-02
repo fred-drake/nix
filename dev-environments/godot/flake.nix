@@ -14,28 +14,34 @@
   outputs = { self, nixpkgs, nix-vscode-extensions, ... }:
     let
       supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
+      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: let
         pkgs = import nixpkgs {
           inherit system;
           config.allowUnfree = true;  # Allow unfree packages
         };
+        commonVSCodeExtensions = import ../../apps/vscode-extensions.nix { inherit pkgs nix-vscode-extensions; };
+        marketplace = nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace;
+      in f {
+        inherit pkgs commonVSCodeExtensions marketplace;
       });
     in
     {
 
-      devShells = forEachSupportedSystem ({ pkgs }: {
+      devShells = forEachSupportedSystem ({ pkgs, commonVSCodeExtensions, marketplace }: {
         default = pkgs.mkShell {
           packages = with pkgs; [
+            netcoredbg # Third party debugger required when using Cursor IDE
             (with dotnetCorePackages; combinePackages [
               sdk_8_0
             ])
             (vscode-with-extensions.override {
-              vscodeExtensions = with nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace; [
+              vscodeExtensions = commonVSCodeExtensions.common ++ (with marketplace; [
+                ms-dotnettools.vscode-dotnet-runtime
                 ms-dotnettools.csharp
                 geequlim.godot-tools
                 aliasadidev.nugetpackagemanagergui
                 revrenlove.c-sharp-utilities
-              ];
+              ]);
             })
           ];
 
