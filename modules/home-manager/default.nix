@@ -1,4 +1,28 @@
-{ pkgs, lib, ... }: {
+# Home Manager Configuration for macOS
+#
+# This file defines the Home Manager configuration for macOS systems.
+# It includes:
+#   - Package installations
+#   - Program configurations (git, kitty, neovim, vscode, zsh, etc.)
+#   - Environment variables and shell aliases
+#   - macOS-specific settings and defaults
+#
+# The configuration uses the Nix package manager and various Nix-related tools
+# to manage the user environment in a declarative and reproducible manner.
+
+# Home Manager configuration for macOS
+{ outputs, pkgs, nixpkgs, nix-vscode-extensions, ... }: 
+let
+  vscodeExtensions = import ../../apps/vscode-extensions.nix { inherit pkgs nix-vscode-extensions; };
+in
+{
+  # Import additional configuration files
+  imports = [
+    ../../apps/kitty.nix
+    ../../apps/zsh.nix
+  ];
+
+  # Enable and configure EditorConfig
   editorconfig.enable = true;
   editorconfig.settings = {
     "*" = {
@@ -10,74 +34,92 @@
       indent_style = "space";
       indent_size = 4;
     };
+    # Specific settings for certain file types
     "*.{toml,js,py,nix}" = {
       indent_size = 2;
     };
   };
+
+  # Install packages using Home Manager
   home.packages = with pkgs; [
-    age
-    alacritty
-    bartender
-    bat
-    bitwarden-cli
-    bruno
-    chezmoi
-    curl
-    discord
-    docker
-    fzf
-    ghq
-    git
-    gnupg
-    google-chrome
-    imagemagick
-    inetutils
-    inkscape
-    jq
-    lazygit
-    mas
-    meld
-    neofetch
-    oh-my-posh
-    ripgrep
-    rsync
-    slack
-    spotify
-    wget
-    wireguard-tools
-    yq-go
-    z-lua
+    age             # Modern encryption tool
+    bartender       # macOS menu bar organizer
+    bat             # Cat clone with syntax highlighting
+    bitwarden-cli   # Command-line interface for Bitwarden
+    bruno           # API client
+    chezmoi         # Dotfiles manager
+    curl            # URL retrieval utility
+    discord         # Voice and text chat app
+    docker          # Containerization platform
+    fzf             # Command-line fuzzy finder
+    ghq             # Remote repository management
+    git             # Version control system
+    gnupg           # GNU Privacy Guard
+    google-chrome   # Web browser
+    imagemagick     # Image manipulation tools
+    inetutils       # Network utilities
+    inkscape        # Vector graphics editor
+    jq              # Command-line JSON processor
+    lazygit         # Terminal UI for git commands
+    mas             # Mac App Store command-line interface
+    meld            # Visual diff and merge tool
+    neofetch        # System information tool
+    oh-my-posh      # Prompt theme engine
+    ripgrep         # Fast grep alternative
+    rsync           # File synchronization tool
+    slack           # Team communication tool
+    spotify         # Music streaming service
+    wget            # Network downloader
+    wireguard-tools # VPN tools
+    yq-go           # YAML processor
+    z-lua           # Directory jumper
+    (vscode-with-extensions.override {
+      vscodeExtensions = vscodeExtensions.common ++ [
+
+      ];
+    })
   ];
+
+  # Set session variables
   home.sessionVariables = {
     TERM = "xterm-kitty";
     PAGER = "less";
     CLICOLOR = 1;
     EDITOR = "nvim";
     HOMEBREW_PREFIX = "/opt/homebrew";
-	  HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
-	  HOMEBREW_REPOSITORY = "/opt/homebrew";
+    HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
+    HOMEBREW_REPOSITORY = "/opt/homebrew";
     GHQ_ROOT = "$HOME/Source";
+    NIX_SHELL_NAME = "unknown";
   };
+
+  # Define shell aliases
   home.shellAliases = {
     man = "batman";
     llat = "eza -la --sort=modified";
     llart = "eza -lar --sort=modified";
     lg = "lazygit";
+    ranger = "yazi";
   };
+
+  # Set Home Manager state version
   home.stateVersion = "24.05";
-  programs.alacritty = import ./alacritty.nix;
-  programs.atuin.enable = true;
+
+  # Enable and configure various programs
+  programs.atuin.enable = true;  # Shell history sync
   programs.bat.enable = true;
   programs.bat.extraPackages = with pkgs.bat-extras; [ batgrep batman batpipe prettybat ];
-  programs.bottom.enable = true;
-  programs.eza.enable = true;
+  programs.bottom.enable = true;  # System monitor
+  programs.eza.enable = true;     # Modern ls replacement
   programs.eza.extraOptions = [
     "--group-directories-first"
     "--header"
   ];
   programs.eza.git = true;
   programs.eza.icons = true;
-  programs.fzf.enable = true;
+  programs.fzf.enable = true;     # Fuzzy finder
+
+  # Git configuration
   programs.git.enable = true;
   programs.git.extraConfig = {
     credential.helper = "store";
@@ -95,99 +137,20 @@
   programs.git.lfs.enable = true;
   programs.git.userEmail = "fred.drake@gmail.com";
   programs.git.userName = "fred-drake";
-  programs.jq.enable = true;
-  programs.kitty.enable = true;
-  programs.kitty.font = {
-      name = "MesloLGS NF";
-      size = 14.0;
-  };
-  programs.kitty.keybindings = {
-    "super+alt+enter" = "launch --cwd=current";
 
-    "super+alt+w" = "close_window";
-    "super+alt+l" = "next_window";
-    "super+alt+h" = "previous_window";
-    "super+alt+1" = "first_window";
-    "super+alt+2" = "second_window";
-    "super+alt+3" = "third_window";
-    "super+alt+4" = "fourth_window";
-    "super+alt+5" = "fifth_window";
-    "super+alt+6" = "sixth_window";
-    "super+alt+7" = "seventh_window";
-    "super+alt+8" = "eighth_window";
-    "super+alt+9" = "ninth_window";
-    "super+alt+0" = "tenth_window";
-    "super+alt+o" = "next_layout";
+  # Enable other utilities
+  programs.jq.enable = true;      # JSON processor
 
-    "super+l" = "next_tab";
-    "super+h" = "previous_tab";
-    "super+enter" = "new_tab";
-    "super+t" = "new_tab";
-    "super+1" = "goto_tab 1";
-    "super+2" = "goto_tab 2";
-    "super+3" = "goto_tab 3";
-    "super+4" = "goto_tab 4";
-    "super+5" = "goto_tab 5";
-    "super+6" = "goto_tab 6";
-    "super+7" = "goto_tab 7";
-    "super+8" = "goto_tab 8";
-    "super+9" = "goto_tab 9";
-
-    "super+plus" = "change_font_size all +2.0";
-    "super+minus" = "change_font_size all -2.0";
-  };
-  programs.kitty.settings = {
-    "window_margin_width" = 10;
-    "single_window_margin_width" = 0;
-    "background_image" = "~/Pictures/night-desert.png";
-    "background_image_layout" = "scaled";
-    "window_border_width" = 2;
-    "background_tint" = "0.8";
-    "background_tint_gaps" = -10;
-    "enabled_layouts" = "tall:full_size=2, grid, *";
-    "tab_bar_style" = "powerline";
-    "tab_powerline_style" = "round";
-    "tab_title_template" = "{index}: {title}";
-  };
-  programs.kitty.shellIntegration.enableZshIntegration = true;
-  # programs.kitty.theme = "";
+  # Neovim configuration
   programs.neovim.enable = true;
   programs.neovim.viAlias = true;
   programs.neovim.vimAlias = true;
   programs.neovim.vimdiffAlias = true;
+
+  # Yazi file manager
   programs.yazi.enable = true;
-  programs.zsh.enable = true;
-  programs.zsh.antidote.enable = true;
-  programs.zsh.antidote.plugins = [
-    "mattmc3/ez-compinit"
-    "zsh-users/zsh-autosuggestions"
-    "ohmyzsh/ohmyzsh path:plugins/sudo"
-    "ohmyzsh/ohmyzsh path:plugins/dirhistory"
-    "ohmyzsh/ohmyzsh path:plugins/z"
-    "ohmyzsh/ohmyzsh path:plugins/macos"
-    "jeffreytse/zsh-vi-mode"
-    "zsh-users/zsh-syntax-highlighting"
-    "zsh-users/zsh-completions"
-    "MichaelAquilina/zsh-you-should-use"
-    # "romkatv/powerlevel10k"
-    "hlissner/zsh-autopair"
-    "olets/zsh-abbr"
-  ];
-  # programs.zsh.initExtra = ''
-  #   [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-  # '';
-  programs.zsh.initExtra = ''
-    if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-      eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/config.toml)"
-    fi
-  '';
-  programs.tmux = import ./tmux.nix { inherit pkgs; };
-  programs.vscode.enable = true;
-  programs.vscode.extensions = with pkgs.vscode-extensions; [
-    bbenoist.nix
-    arrterian.nix-env-selector
-  ];
-  programs.vscode.mutableExtensionsDir = false;
+
+  # macOS-specific settings
   targets.darwin.currentHostDefaults."com.apple.controlcenter".BatteryShowPercentage = true;
   targets.darwin.defaults."com.apple.Safari".AutoFillCreditCardData = false;
   targets.darwin.defaults."com.apple.Safari".AutoFillPasswords = false;
@@ -196,6 +159,11 @@
   targets.darwin.defaults."com.apple.desktopservices".DSDontWriteUSBStores = true;
   targets.darwin.defaults."com.apple.finder".FXRemoveOldTrashItems = true;
   targets.darwin.search = "Google";
+
+  # Additional file configurations
+  home.file = {
+    ".config/docker".source = ./docker;
+  };
 }
 
 

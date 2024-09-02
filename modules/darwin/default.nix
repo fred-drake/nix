@@ -1,87 +1,119 @@
-# Preferences and configuration for all MacOS devices
+#
+# This file contains common settings and configurations that apply to all
+# macOS devices in the system. It includes:
+#   - Environment setup (shells, packages, system paths)
+#   - Font configurations
+#   - Homebrew package management
+#   - Nix configuration
+#   - System programs and services
+#   - Security settings
+#
+# Individual device-specific configurations should be placed in separate files.
 { pkgs, ... }: {
-  environment.loginShell = pkgs.zsh;
-  environment.shells = with pkgs; [ bash zsh ];
-  environment.systemPackages = [ pkgs.coreutils ];
-  environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
-  environment.pathsToLink = [ "/Applications" ];
-  fonts.packages = [ (pkgs.nerdfonts.override { fonts = [ "Hack" "Meslo" ]; }) ];
+  # Environment configuration
+  environment = {
+    loginShell = pkgs.zsh;  # Set zsh as the login shell
+    shells = with pkgs; [ bash zsh ];  # Available shells
+    systemPackages = [ pkgs.coreutils ];  # Core utilities package
+    systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];  # Add Homebrew paths
+    pathsToLink = [ "/Applications" ];  # Link Applications directory
+  };
+
+  # Font configuration
+  fonts.packages = [
+    (pkgs.nerdfonts.override { fonts = [ "Hack" "JetBrainsMono" "Meslo" ]; })
+  ];
+
+  # Homebrew configuration
   homebrew = {
     enable = true;
-    caskArgs.no_quarantine = true;
-    global.brewfile = true;
+    caskArgs.no_quarantine = true;  # Disable quarantine for casks
+    global.brewfile = true;  # Use a global Brewfile
     masApps = {
+      # Mac App Store applications
       "Bitwarden" = 1352778147;
       "Microsoft Remote Desktop" = 1295203466;
       "OneDrive" = 823766827;
       "Pages" = 409201541;
+      "RunCat" = 1429033973;
       "The Unarchiver" = 425424353;
       "Unsplash Wallpapers" = 1284863847;
       "UTM Virtual Machines" = 1538878817;
       "Xcode" = 497799835;
     };
     casks = [
-      "brave-browser"
-      "cursor"
-      "daisydisk"
-      "finicky"
-      "goland"
-      "google-drive"
-      "krita"
-      "maestral"
-      "obsidian"
-      "pycharm"
-      "raycast"
-      "rider"
-      "rustrover"
-      "sourcetree"
-      "steam"
-      "ultimaker-cura"
-      "vlc"
-      "wine-stable"
+      # Homebrew casks (GUI applications)
+      "brave-browser" "cursor" "daisydisk" "finicky" "goland" "google-drive"
+      "krita" "maestral" "obsidian" "pycharm" "raycast" "rider" "rustrover"
+      "sourcetree" "steam" "ultimaker-cura" "vlc" "wine-stable" "winbox"
     ];
-    taps = [ "fred-drake/tap" ];
-    brews = [ "watch" ];
+    taps = [ "fred-drake/tap" ];  # Additional Homebrew taps
+    brews = [ "watch" ];  # Homebrew formulae
   };
+
+  # Nix configuration
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
 
-  programs.direnv.enable = true;
-  programs.zsh.enable = true;
-  security.pam.enableSudoTouchIdAuth = true;
-  services.nix-daemon.enable = true;
-  system.activationScripts.extraActivation.text = ''
-    softwareupdate --install-rosetta --agree-to-license
-  '';
-  system.defaults = {
-    dock.autohide = true;
-    finder = {
-      AppleShowAllExtensions = true;
-      AppleShowAllFiles = true;
-      CreateDesktop = false;
-      FXPreferredViewStyle = "Nlsv";
-      _FXShowPosixPathInTitle = true;
-      QuitMenuItem = true;
-      ShowPathbar = true;
-      ShowStatusBar = true;
-    };
-    trackpad.Clicking = true;
-    menuExtraClock.ShowSeconds = true;
-    NSGlobalDomain.AppleShowAllExtensions = true;
-    NSGlobalDomain.InitialKeyRepeat = 14;
-    NSGlobalDomain.KeyRepeat = 1;
-    NSGlobalDomain.NSAutomaticCapitalizationEnabled = false;
-    NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
-    NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
-    SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;
-    WindowManager.StandardHideDesktopIcons = true;
+  # Program configurations
+  programs = {
+    direnv.enable = true;  # Enable direnv for directory-specific environments
+    zsh.enable = true;  # Enable Zsh
   };
-  system.keyboard.enableKeyMapping = true;
-  system.keyboard.remapCapsLockToControl = true;
-  system.stateVersion = 4;
-  users.knownUsers = [ "fdrake" ];
-  users.users.fdrake.uid = 501;
-  users.users.fdrake.home = "/Users/fdrake";
-  users.users.fdrake.shell = pkgs.zsh;
+
+  # Security configuration
+  security.pam.enableSudoTouchIdAuth = true;  # Enable Touch ID for sudo
+
+  # Enable Nix daemon service
+  services.nix-daemon.enable = true;
+
+  # System configuration
+  system = {
+    # Activation script to install Rosetta 2 for x86 app compatibility
+    activationScripts.extraActivation.text = ''
+      softwareupdate --install-rosetta --agree-to-license
+    '';
+    # System defaults
+    defaults = {
+      dock.autohide = true;  # Auto-hide the Dock
+      finder = {
+        AppleShowAllExtensions = true;
+        AppleShowAllFiles = true;
+        CreateDesktop = false;
+        FXPreferredViewStyle = "Nlsv";
+        _FXShowPosixPathInTitle = true;
+        QuitMenuItem = true;
+        ShowPathbar = true;
+        ShowStatusBar = true;
+      };
+      trackpad.Clicking = true;  # Enable tap to click
+      menuExtraClock.ShowSeconds = true;  # Show seconds in menu bar clock
+      NSGlobalDomain = {
+        AppleShowAllExtensions = true;
+        InitialKeyRepeat = 14;
+        KeyRepeat = 1;
+        NSAutomaticCapitalizationEnabled = false;
+        NSAutomaticSpellingCorrectionEnabled = false;
+        "com.apple.mouse.tapBehavior" = 1;
+      };
+      SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;  # Auto-install macOS updates
+      WindowManager.StandardHideDesktopIcons = true;  # Hide desktop icons
+    };
+    keyboard = {
+      enableKeyMapping = true;
+      remapCapsLockToControl = true;  # Remap Caps Lock to Control
+    };
+    stateVersion = 4;  # System state version
+  };
+
+  # User configuration
+  users = {
+    knownUsers = [ "fdrake" ];  # Known users
+    users.fdrake = {
+      uid = 501;
+      home = "/Users/fdrake";
+      shell = pkgs.zsh;  # Set zsh as the user's shell
+    };
+  };
 }
