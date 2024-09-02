@@ -10,7 +10,7 @@
   description = "A Nix-flake-based Rust development environment";
 
   inputs = {
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*.tar.gz";
+    nixpkgs.url = "github:nixos/nixpkgs/3007f981ee958d8e7607a7c5a2de09e634cafc4c";
 
     # Repository for VSCode extensions
     nix-vscode-extensions = {
