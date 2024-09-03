@@ -35,7 +35,7 @@ When first receiving a new MacOS device (or if wiping the current one to the def
 12. Change into this nix directory: `cd ~/nix`
 13. Build the flake based on your system.  This will take a while the first time.
     - Macbook Pro: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.Freds-MacBook-Pro.system`
-    - Mac Studio: TBD
+    - Mac Studio: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfiguratiions.Freds-Mac-Studio.system`
 14. Run the initial switch into the flake.  This will take a long while the first time: `./result/sw/bin/darwin-rebuild switch --flake ~/nix`
 15. Reboot the machine to ensure all Mac settings were applied.
 

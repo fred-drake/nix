@@ -91,6 +91,27 @@
 
     # Darwin (macOS) configurations
     darwinConfigurations = {
+      Freds-Mac-Studio = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        pkgs = import nixpkgs {
+          system = "aarch64-darwin";
+          config.allowUnfree = true; # Allow unfree packages
+        };
+        specialArgs = { inherit inputs outputs nixpkgs; };
+        modules = [
+          ./modules/darwin
+          ./modules/darwin/mac-studio
+          home-manager.darwinModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = { inherit nix-vscode-extensions; };
+              users.fdrake.imports = [ ./modules/home-manager ];
+            };
+          }
+        ];
+      };
       Freds-MacBook-Pro = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         pkgs = import nixpkgs {
