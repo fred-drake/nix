@@ -18,5 +18,12 @@ in
     wayou.vscode-todo-highlight   # Highlight TODO, FIXME and other annotations in code
     vscode-icons-team.vscode-icons # Adds icons to files and folders in the file explorer
     rodrigocfd.format-comment     # Format comments in code
-  ]);
+  ]) ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+    {
+      name = "editorconfig";
+      publisher = "editorconfig";
+      version = "0.16.4";
+      sha256 = "sha256-j+P2oprpH0rzqI0VKt0JbZG19EDE7e7+kAb3MGGCRDk=";
+    }
+  ];
 }
