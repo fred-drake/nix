@@ -13,7 +13,7 @@
   # Environment configuration
   environment = {
     loginShell = pkgs.zsh;  # Set zsh as the login shell
-    shells = with pkgs; [ bash zsh ];  # Available shells
+    shells = with pkgs; [ bash zsh fish ];  # Available shells
     systemPackages = [ pkgs.coreutils ];  # Core utilities package
     systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];  # Add Homebrew paths
     pathsToLink = [ "/Applications" ];  # Link Applications directory

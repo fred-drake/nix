@@ -11,7 +11,7 @@
 # to manage the user environment in a declarative and reproducible manner.
 
 # Home Manager configuration for macOS
-{ outputs, pkgs, nixpkgs, nix-vscode-extensions, ... }: 
+{ outputs, pkgs, nixpkgs, nix-vscode-extensions, ... }:
 let
   commonVSCodeExtensions = import ../../apps/vscode-extensions.nix { inherit pkgs nix-vscode-extensions; };
 in
@@ -20,6 +20,7 @@ in
   imports = [
     ../../apps/kitty.nix
     ../../apps/zsh.nix
+    ../../apps/fish.nix
   ];
 
   # Enable and configure EditorConfig
@@ -165,5 +166,3 @@ in
     ".config/docker".source = ./docker;
   };
 }
-
-
