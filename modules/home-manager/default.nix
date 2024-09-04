@@ -74,6 +74,7 @@ in
     wireguard-tools # VPN tools
     yq-go           # YAML processor
     z-lua           # Directory jumper
+    zoom-us
     (vscode-with-extensions.override {
       vscodeExtensions = commonVSCodeExtensions.common ++ [
 
