@@ -41,6 +41,8 @@
         set_color normal
       end
 
+      direnv hook fish | source
+      
       oh-my-posh init fish --config ~/.config/oh-my-posh/config.toml | source
     '';
     plugins = [

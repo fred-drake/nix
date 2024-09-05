@@ -69,6 +69,7 @@ in
     ripgrep         # Fast grep alternative
     rsync           # File synchronization tool
     slack           # Team communication tool
+    sops
     spotify         # Music streaming service
     wget            # Network downloader
     wireguard-tools # VPN tools
@@ -93,6 +94,7 @@ in
     HOMEBREW_REPOSITORY = "/opt/homebrew";
     GHQ_ROOT = "$HOME/Source";
     NIX_SHELL_NAME = "unknown";
+    SOPS_AGE_KEY_FILE = "$HOME/.age/personal-key.txt";
   };
 
   # Define shell aliases
