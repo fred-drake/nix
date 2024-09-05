@@ -30,10 +30,6 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs"; # Use the same nixpkgs as above
     };
-
-    sops-nix.url = "github:Mic92/sops-nix"; # Add sops-nix input
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-
   };
 
   # Output configuration
@@ -111,8 +107,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               extraSpecialArgs = { inherit nix-vscode-extensions; };
-              users.fdrake.imports = [ ./modules/home-manager inputs.sops-nix.homeManagerModules.sops ];
-              # sharedModules = [ inputs.sops-nix.homeManagerModules.sops ];
+              users.fdrake.imports = [ ./modules/home-manager ];
             };
           }
         ];
