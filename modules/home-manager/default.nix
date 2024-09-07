@@ -80,7 +80,7 @@ home.file = {
     age             # Modern encryption tool
     bartender       # macOS menu bar organizer
     bat             # Cat clone with syntax highlighting
-    bitwarden-cli   # Command-line interface for Bitwarden
+    # bitwarden-cli   # Command-line interface for Bitwarden
     bruno           # API client
     chezmoi         # Dotfiles manager
     curl            # URL retrieval utility

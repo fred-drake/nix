@@ -5,7 +5,7 @@
   # Input sources for the flake
   inputs = {
     # Use a specific commit hash for nixpkgs instead of a branch for stability
-    nixpkgs.url = "github:nixos/nixpkgs/b74e7a74498f63ffac3153df86d8be73d8936f0e";
+    nixpkgs.url = "github:nixos/nixpkgs/d68746a3c4ccce698285e1f7a4760a61a756ff47";
 
     flake-utils.url = "github:numtide/flake-utils";
 

@@ -19,6 +19,7 @@ in
     vscode-icons-team.vscode-icons # Adds icons to files and folders in the file explorer
     rodrigocfd.format-comment     # Format comments in code
     signageos.signageos-vscode-sops
+    continue.continue
   ]) ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
     {
       name = "editorconfig";
