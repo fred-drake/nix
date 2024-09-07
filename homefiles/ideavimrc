@@ -1,0 +1,4 @@
+" Lots of inspiration here: https://github.com/danidiaz/miscellany/blob/master/windows/.ideavimrc
+set relativenumber
+set number
+

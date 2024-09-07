@@ -29,9 +29,6 @@
           '';
 
           postShellHook = ''
-            echo "Python virtual environment activated. To deactivate, run 'deactivate'"
-            # Load secrets from sops-encrypted file
-            eval $(sops -d ./secrets.enc.yaml | sed 's/: /=/')
           '';
 
         };

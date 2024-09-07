@@ -11,7 +11,7 @@
 # to manage the user environment in a declarative and reproducible manner.
 
 # Home Manager configuration for macOS
-{ outputs, pkgs, nixpkgs, nix-vscode-extensions, ... }:
+{ inputs, outputs, pkgs, nixpkgs, nix-vscode-extensions, ... }:
 let
   commonVSCodeExtensions = import ../../apps/vscode-extensions.nix { inherit pkgs nix-vscode-extensions; };
 in
@@ -36,10 +36,44 @@ in
       indent_size = 4;
     };
     # Specific settings for certain file types
-    "*.{toml,js,py,nix}" = {
+    "*.{toml,js,py,nix,yaml}" = {
       indent_size = 2;
     };
   };
+
+home.file = {
+  "bin" = {
+    source = ../../homefiles/bin;
+    recursive = true;
+  };
+
+  ".ssh" = {
+    source = ../../homefiles/ssh;
+    recursive = true;
+  };
+
+  ".config" = {
+    source = ../../homefiles/config;
+    recursive = true;
+  };
+
+  "Pictures" = {
+    source = ../../homefiles/config;
+    recursive = true;
+  };
+
+  ".finicky.js" = {
+    source = ../../homefiles/finicky.js;
+  };
+
+  ".hgignore_global" = {
+    source = ../../homefiles/hgignore_global;
+  };
+
+  ".ideavimrc" = {
+    source = ../../homefiles/ideavimrc;
+  };
+};
 
   # Install packages using Home Manager
   home.packages = with pkgs; [
