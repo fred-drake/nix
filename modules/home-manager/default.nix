@@ -58,7 +58,7 @@ home.file = {
   };
 
   "Pictures" = {
-    source = ../../homefiles/config;
+    source = ../../homefiles/Pictures;
     recursive = true;
   };
 
