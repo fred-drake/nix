@@ -36,7 +36,7 @@ in
       indent_size = 4;
     };
     # Specific settings for certain file types
-    "*.{toml,js,py,nix,yaml}" = {
+    "*.{toml,js,nix,yaml}" = {
       indent_size = 2;
     };
   };
