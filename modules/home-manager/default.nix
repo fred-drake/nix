@@ -155,6 +155,11 @@ home.file = {
   ];
   programs.eza.git = true;
   programs.eza.icons = true;
+
+  programs.fish.shellAbbrs = {
+    code = "code --user-data-dir ~/.config/vscode";
+    cm = "chezmoi";
+  };
   programs.fzf.enable = true;     # Fuzzy finder
 
   # Git configuration
