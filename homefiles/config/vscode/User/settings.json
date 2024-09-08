@@ -1,0 +1,22 @@
+{
+    "window.commandCenter": true,
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.colorTheme": "Jetbrains Dark Theme",
+    "workbench.preferredDarkColorTheme": "Jetbrains Dark Theme",
+    "workbench.preferredHighContrastColorTheme": "Jetbrains Dark Theme",
+    "workbench.preferredHighContrastLightColorTheme": "Jetbrains Dark Theme",
+    "workbench.preferredLightColorTheme": "Jetbrains Dark Theme",
+    "editor.fontFamily": "JetBrainsMono Nerd Font",
+    "git.confirmSync": false,
+    "editor.fontSize": 16,
+    "files.autoSave": "afterDelay",
+    "git.autofetch": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
+    },
+    "black-formatter.path": [
+        "black"
+    ],
+    "workbench.startupEditor": "none"
+}
