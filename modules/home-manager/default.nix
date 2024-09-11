@@ -57,13 +57,6 @@ home.file = {
     recursive = true;
   };
 
-# Conditionally add the VSCode settings file to this location only if the system is MacOS
-  home.file = if pkgs.stdenv.system == "aarch64-darwin" || pkgs.stdenv.system == "x86_64-darwin" then {
-    "Library/Application Support/Code/User/settings.json" = {
-      source = ../../vscode/settings.json;
-    };
-  } else {}; # TODO: add linux settings, add it to ~/.config/Code/User/settings.json
-
   "Pictures" = {
     source = ../../homefiles/Pictures;
     recursive = true;
@@ -79,6 +72,10 @@ home.file = {
 
   ".ideavimrc" = {
     source = ../../homefiles/ideavimrc;
+  };
+
+  "Library/Application Support/Code/User/settings.json" = {
+    source = ../../apps/vscode/settings.json;
   };
 };
 
@@ -112,6 +109,7 @@ home.file = {
     slack           # Team communication tool
     sops
     spotify         # Music streaming service
+    vscode
     wget            # Network downloader
     wireguard-tools # VPN tools
     yq-go           # YAML processor
