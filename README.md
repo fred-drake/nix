@@ -23,13 +23,21 @@ With `direnv`, going into the flake directory will execute the flake in the `./d
 ## VSCode Extensions
 There is a procedure in this flake to add and update VSCode extensions.  It is heavier-weight than merely clicking "Install" but it yields declarability with the control of updating to the latest version without waiting for third-party updates.
 
-1. Add the publisher and extension name in `vscode/vscode-extensions.toml`
-2. Go into the `development/nix4vscode` directory (a git submodule)
-3. Run `nix develop -c $SHELL` which will run `nix4vscode`'s environment flake, including a rust environment
-4. Run `cargo run -- ../vscode-extensions.toml` which will update all extensions to their latest versions
-5. Commit the updated `vscode-extensions.toml` file
+### Add An Extension
 
-If you are simply wanting to refresh extensions to the latest without adding new ones, skip step 1.
+1. Add the publisher and extension name in `vscode/vscode-extensions.toml`
+2. Add the extension declaration in `apps/vscode/vscode.nix`
+3. Go into the `development/nix4vscode` directory (a git submodule)
+4. Run `nix develop -c $SHELL` which will run `nix4vscode`'s environment flake, including a rust environment
+5. Run `cargo run -- ../vscode-extensions.toml > ../../apps/vscode/extensions.nix` which will update all extensions to their latest versions
+6. Commit the updated `vscode-extensions.toml`, `apps/vscode/vscode.nix` and `apps/vscode/extensions.nix` files
+
+### Update Extensions
+
+1. Go into the `development/nix4vscode` directory (a git submodule)
+2. Run `nix develop -c $SHELL` which will run `nix4vscode`'s environment flake, including a rust environment
+3. Run `cargo run -- ../vscode-extensions.toml > ../../apps/vscode/extensions.nix` which will update all extensions to their latest versions
+4. Commit the updated `apps/vscode/extensions.nix` file
 
 ## MacOS Setup
 
