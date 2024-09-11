@@ -44,7 +44,7 @@
     casks = [
       # Homebrew casks (GUI applications)
       "brave-browser" "cursor" "daisydisk" "docker" "finicky" "goland" "godot-mono" "google-drive"
-      "krita" "maestral" "obsidian" "pycharm" "raycast" "rider" "rustrover"
+      "krita" "maestral" "obs" "obsidian" "pycharm" "raycast" "rider" "rustrover"
       "sourcetree" "steam" "ultimaker-cura" "vlc" "wine-stable" "winbox" "zed"
     ];
     taps = [ "fred-drake/tap" ];  # Additional Homebrew taps
