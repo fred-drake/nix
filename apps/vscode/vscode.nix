@@ -22,5 +22,7 @@ in
     extensions.pkief.material-icon-theme
     extensions.editorconfig.editorconfig
     extensions.saoudrizwan.claude-dev
+    extensions.be5invis.vscode-custom-css
+    extensions.tamasfe.even-better-toml
   ];
 }

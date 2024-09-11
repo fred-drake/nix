@@ -60,3 +60,10 @@ extension_name = "editorconfig"
 publisher_name = "saoudrizwan"
 extension_name = "claude-dev"
 
+[[extensions]]
+publisher_name = "be5invis"
+extension_name = "vscode-custom-css"
+
+[[extensions]]
+publisher_name = "tamasfe"
+extension_name = "even-better-toml"

@@ -58,6 +58,18 @@ merge
           version = "1.0.5";
           sha256 = "1sg4zbr1jgj9adsj3rik5flcn6cbr4k2pzxi446rfzbzvcqns189";
         };
+        "tamasfe"."even-better-toml" = vscode-utils.extensionFromVscodeMarketplace {
+          name = "even-better-toml";
+          publisher = "tamasfe";
+          version = "0.19.2";
+          sha256 = "0q9z98i446cc8bw1h1mvrddn3dnpnm2gwmzwv2s3fxdni2ggma14";
+        };
+        "be5invis"."vscode-custom-css" = vscode-utils.extensionFromVscodeMarketplace {
+          name = "vscode-custom-css";
+          publisher = "be5invis";
+          version = "7.2.2";
+          sha256 = "1ld8l7xivlgw01s3qmysph63cilpb5i12rp4dj404aq0fj8nmdgw";
+        };
         "bbenoist"."nix" = vscode-utils.extensionFromVscodeMarketplace {
           name = "nix";
           publisher = "bbenoist";
@@ -73,8 +85,8 @@ merge
         "saoudrizwan"."claude-dev" = vscode-utils.extensionFromVscodeMarketplace {
           name = "claude-dev";
           publisher = "saoudrizwan";
-          version = "1.6.2";
-          sha256 = "00myky968c0r6sarxgfj7zqidzai8aji9683bnhdkbda4cp4rj70";
+          version = "1.6.3";
+          sha256 = "1br2874pz62hfwvkdczs7alm68bf6605m7bnp750qvkw183c30d9";
         };
         "signageos"."signageos-vscode-sops" = vscode-utils.extensionFromVscodeMarketplace {
           name = "signageos-vscode-sops";
