@@ -17,6 +17,20 @@ Currently home-manager and darwin modules are used to generate their respective 
 
 Many applications for MacOS are not available in the Nixpkgs, so these must be installed using Homebrew integration through [nix-darwin](https://github.com/LnL7/nix-darwin).  As the Nix repository matures beyond the Linux world, this should lessen.
 
+## Flake Development Environment
+With `direnv`, going into the flake directory will execute the flake in the `./development` directory.  This will install VSCode with the global extensions.
+
+## VSCode Extensions
+There is a procedure in this flake to add and update VSCode extensions.  It is heavier-weight than merely clicking "Install" but it yields declarability with the control of updating to the latest version without waiting for third-party updates.
+
+1. Add the publisher and extension name in `vscode/vscode-extensions.toml`
+2. Go into the `development/nix4vscode` directory (a git submodule)
+3. Run `nix develop -c $SHELL` which will run `nix4vscode`'s environment flake, including a rust environment
+4. Run `cargo run -- ../vscode-extensions.toml` which will update all extensions to their latest versions
+5. Commit the updated `vscode-extensions.toml` file
+
+If you are simply wanting to refresh extensions to the latest without adding new ones, skip step 1.
+
 ## MacOS Setup
 
 ### Nix setup
