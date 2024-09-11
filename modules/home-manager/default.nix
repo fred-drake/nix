@@ -57,6 +57,13 @@ home.file = {
     recursive = true;
   };
 
+# Conditionally add the VSCode settings file to this location only if the system is MacOS
+  home.file = if pkgs.stdenv.system == "aarch64-darwin" || pkgs.stdenv.system == "x86_64-darwin" then {
+    "Library/Application Support/Code/User/settings.json" = {
+      source = ../../vscode/settings.json;
+    };
+  } else {}; # TODO: add linux settings, add it to ~/.config/Code/User/settings.json
+
   "Pictures" = {
     source = ../../homefiles/Pictures;
     recursive = true;
@@ -110,13 +117,7 @@ home.file = {
     yq-go           # YAML processor
     z-lua           # Directory jumper
     zoom-us
-    (vscode-with-extensions.override {
-      vscodeExtensions = commonVSCodeExtensions.common ++ [
-
-      ];
-    })
   ];
-
   # Set session variables
   home.sessionVariables = {
     TERM = "xterm-kitty";
@@ -157,7 +158,6 @@ home.file = {
   programs.eza.icons = true;
 
   programs.fish.shellAbbrs = {
-    code = "code --user-data-dir ~/.config/vscode";
     cm = "chezmoi";
   };
   programs.fzf.enable = true;     # Fuzzy finder

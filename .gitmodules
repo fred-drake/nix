@@ -1,0 +1,3 @@
+[submodule "development/nix4vscode"]
+	path = development/nix4vscode
+	url = https://github.com/nix-community/nix4vscode.git

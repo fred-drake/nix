@@ -1,0 +1,62 @@
+vscode_version = "1.93.0"
+
+[[extensions]]
+publisher_name = "bbenoist"
+extension_name = "nix"
+
+[[extensions]]
+publisher_name = "ms-vscode-remote"
+extension_name = "remote-ssh"
+
+[[extensions]]
+publisher_name = "mikestead"
+extension_name = "dotenv"
+
+[[extensions]]
+publisher_name = "mobalic"
+extension_name = "jetbrains-dark-theme"
+
+[[extensions]]
+publisher_name = "eamodio"
+extension_name = "gitlens"
+
+[[extensions]]
+publisher_name = "donjayamanne"
+extension_name = "githistory"
+
+[[extensions]]
+publisher_name = "oderwat"
+extension_name = "indent-rainbow"
+
+[[extensions]]
+publisher_name = "wayou"
+extension_name = "vscode-todo-highlight"
+
+[[extensions]]
+publisher_name = "rodrigocfd"
+extension_name = "format-comment"
+
+[[extensions]]
+publisher_name = "signageos"
+extension_name = "signageos-vscode-sops"
+
+[[extensions]]
+publisher_name = "continue"
+extension_name = "continue"
+
+[[extensions]]
+publisher_name = "mkhl"
+extension_name = "direnv"
+
+[[extensions]]
+publisher_name = "pkief"
+extension_name = "material-icon-theme"
+
+[[extensions]]
+publisher_name = "editorconfig"
+extension_name = "editorconfig"
+
+[[extensions]]
+publisher_name = "saoudrizwan"
+extension_name = "claude-dev"
+
