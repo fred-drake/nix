@@ -114,6 +114,7 @@ home.file = {
     wireguard-tools # VPN tools
     yq-go           # YAML processor
     z-lua           # Directory jumper
+    # zed-editor    # Broken on Darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
     zoom-us
   ];
   # Set session variables
