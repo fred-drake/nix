@@ -43,7 +43,8 @@
     };
     casks = [
       # Homebrew casks (GUI applications)
-      "brave-browser" "cursor" "daisydisk" "docker" "finicky" "goland" "godot-mono" "google-drive"
+      # Using zed in homebrew because nix pkg is currently broken for Darwin
+      "brave-browser" "cursor" "daisydisk" "docker" "finicky" "fork" "goland" "godot-mono" "google-drive"
       "krita" "maestral" "obs" "obsidian" "pycharm" "raycast" "rider" "rustrover"
       "sourcetree" "steam" "ultimaker-cura" "vlc" "wine-stable" "winbox" "zed"
     ];
