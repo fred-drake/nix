@@ -74,7 +74,7 @@ home.file = {
     source = ../../homefiles/ideavimrc;
   };
 
-  "Library/Application Support/Code/User/settings.json" = {
+  ${if pkgs.stdenv.isDarwin then "Library/Application Support/Code/User/settings.json" else null} = {
     source = ../../apps/vscode/settings.json;
   };
 };
