@@ -185,7 +185,7 @@ home.file = {
   ];
   programs.git.lfs.enable = true;
   programs.git.userEmail = "fred.drake@gmail.com";
-  programs.git.userName = "fred-drake";
+  programs.git.userName = "Fred Drake";
 
   # Enable other utilities
   programs.jq.enable = true;      # JSON processor
