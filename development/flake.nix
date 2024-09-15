@@ -36,6 +36,7 @@
           buildInputs = with pkgs; [
             git
             cargo
+            just
             (vscode-with-extensions.override {
               vscodeExtensions = vscode.globalExtensions ++ (with marketplace; [
               ]);
