@@ -11,9 +11,8 @@
 # to manage the user environment in a declarative and reproducible manner.
 
 # Home Manager configuration for macOS
-{ inputs, outputs, pkgs, nixpkgs, nix-vscode-extensions, ... }:
+{ inputs, outputs, pkgs, nixpkgs, ... }:
 let
-  commonVSCodeExtensions = import ../../apps/vscode-extensions.nix { inherit pkgs nix-vscode-extensions; };
 in
 {
   # Import additional configuration files
@@ -74,16 +73,6 @@ home.file = {
     source = ../../homefiles/ideavimrc;
   };
 
-  ${
-    if pkgs.stdenv.isDarwin then
-      "Library/Application Support/Code/User/settings.json"
-    else if pkgs.stdenv.isLinux then
-      ".config/Code/User/settings.json"
-    else
-      null
-  } = {
-    source = ../../apps/vscode/settings.json;
-  };
 };
 
   # Install packages using Home Manager
@@ -116,7 +105,6 @@ home.file = {
     slack           # Team communication tool
     sops
     spotify         # Music streaming service
-    vscode
     wget            # Network downloader
     wireguard-tools # VPN tools
     yq-go           # YAML processor

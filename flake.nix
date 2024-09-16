@@ -24,12 +24,6 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs"; # Use the same nixpkgs as above
     };
-
-    # Repository for VSCode extensions
-    nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
-      inputs.nixpkgs.follows = "nixpkgs"; # Use the same nixpkgs as above
-    };
   };
 
   # Output configuration
@@ -40,7 +34,6 @@
     nixpkgs,
     home-manager,
     darwin,
-    nix-vscode-extensions,
     ...
   } @ inputs:
   let
@@ -63,14 +56,6 @@
       system = "aarch64-darwin";
       config.allowUnfree = true; # Allow unfree packages
     };
-
-    commonVSCodeExtensions = with pkgs.vscode-extensions; [
-      # Add your common extensions here, for example:
-      vscodevim.vim
-      ms-vsliveshare.vsliveshare
-      eamodio.gitlens
-      # Add more as needed
-    ];
 
   in
   flake-utils.lib.eachDefaultSystem (system:
@@ -106,7 +91,6 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = { inherit nix-vscode-extensions; };
               users.fdrake.imports = [ ./modules/home-manager ];
             };
           }
@@ -127,7 +111,6 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = { inherit nix-vscode-extensions; };
               users.fdrake.imports = [ ./modules/home-manager ];
             };
           }

@@ -3,8 +3,7 @@
 # This flake defines a Nix-based development environment for Godot projects.
 # It includes:
 #   - .NET SDK and tools
-#   - VSCode with Godot-related extensions
-#   - Custom shell environment with .NET version in prompt
+#   -Custom shell environment with .NET version in prompt
 
 {
   description = "A Nix-flake-based Godot development environment";
@@ -26,7 +25,7 @@
     let
       # Define the supported systems for the development environment
       supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-      
+
       # Function to generate attributes for each supported system
       forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: let
         # Import the nixpkgs for the given system
@@ -34,10 +33,10 @@
           inherit system;
           config.allowUnfree = true;  # Allow unfree packages
         };
-        
+
         # Import common VSCode extensions
         commonVSCodeExtensions = import ../../apps/vscode-extensions.nix { inherit pkgs nix-vscode-extensions; };
-        
+
         # Get the marketplace extensions for the given system
         marketplace = nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace;
       in f {
