@@ -2,7 +2,7 @@
   description = "Development environment for Cover Letter Writer";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/935bc62216cc9c87e5604d5bc576c607fca45dee";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
