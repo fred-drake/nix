@@ -23,6 +23,7 @@
             git
             cargo
             just
+            aider-chat
           ];
 
           shellHook = ''

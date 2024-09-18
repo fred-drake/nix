@@ -78,15 +78,16 @@ home.file = {
   # Install packages using Home Manager
   home.packages = with pkgs; [
     age             # Modern encryption tool
-    bartender       # macOS menu bar organizer
     bat             # Cat clone with syntax highlighting
     # bitwarden-cli   # Command-line interface for Bitwarden
     bruno           # API client
     chezmoi         # Dotfiles manager
     curl            # URL retrieval utility
+    direnv
     discord         # Voice and text chat app
     docker          # Containerization platform
     fzf             # Command-line fuzzy finder
+    gcc
     ghq             # Remote repository management
     git             # Version control system
     gnupg           # GNU Privacy Guard
@@ -95,8 +96,6 @@ home.file = {
     inetutils       # Network utilities
     inkscape        # Vector graphics editor
     jq              # Command-line JSON processor
-    lazygit         # Terminal UI for git commands
-    mas             # Mac App Store command-line interface
     meld            # Visual diff and merge tool
     neofetch        # System information tool
     oh-my-posh      # Prompt theme engine
@@ -178,6 +177,14 @@ home.file = {
   # Enable other utilities
   programs.jq.enable = true;      # JSON processor
 
+  # TODO: implement declarative settings
+  programs.lazygit.enable = true;
+  programs.lazygit.settings = {
+    gui.theme = {
+      lightTheme = true;
+    };
+  };
+
   # Neovim configuration
   programs.neovim.enable = true;
   programs.neovim.viAlias = true;
@@ -186,16 +193,6 @@ home.file = {
 
   # Yazi file manager
   programs.yazi.enable = true;
-
-  # macOS-specific settings
-  targets.darwin.currentHostDefaults."com.apple.controlcenter".BatteryShowPercentage = true;
-  targets.darwin.defaults."com.apple.Safari".AutoFillCreditCardData = false;
-  targets.darwin.defaults."com.apple.Safari".AutoFillPasswords = false;
-  targets.darwin.defaults."com.apple.Safari".IncludeDevelopMenu = true;
-  targets.darwin.defaults."com.apple.desktopservices".DSDontWriteNetworkStores = true;
-  targets.darwin.defaults."com.apple.desktopservices".DSDontWriteUSBStores = true;
-  targets.darwin.defaults."com.apple.finder".FXRemoveOldTrashItems = true;
-  targets.darwin.search = "Google";
 
   # Additional file configurations
   home.file = {

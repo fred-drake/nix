@@ -9,5 +9,5 @@ fi
 if [ "$(uname -s)" = "Darwin" ]; then
     darwin-rebuild --flake .#$HOST switch
 else
-    nixos-rebuild --flake .#$HOST switch
+    sudo nixos-rebuild --flake .#$HOST switch
 fi
