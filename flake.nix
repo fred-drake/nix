@@ -125,7 +125,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.fdrake.imports = [ ./modules/home-manager ./modules/home-manager/darwin ];
+              users.fdrake.imports = [ ./modules/home-manager ./modules/home-manager/darwin ./modules/home-manager/mac-studio ];
             };
           }
         ];

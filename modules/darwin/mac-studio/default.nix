@@ -1,7 +1,7 @@
 # Configuration specific to the Mac Studio machine
 { ... }: {
   homebrew = {
-    casks = [ "mutedeck" "proxy-audio-device" ]; 
+    casks = [ "mutedeck" "proxy-audio-device" "elgato-stream-deck" ];
     masApps = {
       "iWallpaper - Live Wallpaper" = 1552826194;
     };
