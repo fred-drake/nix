@@ -45,7 +45,7 @@
       # Homebrew casks (GUI applications)
       # Using zed in homebrew because nix pkg is currently broken for Darwin
       "balenaetcher" "brave-browser" "cursor" "daisydisk" "docker" "finicky" "fork" "goland" "godot-mono" "google-drive"
-      "krita" "maestral" "obs" "obsidian" "pycharm" "raycast" "rider" "rustrover"
+      "krita" "maestral" "obs" "obsidian" "ollama" "pycharm" "raycast" "rider" "rustrover"
       "sourcetree" "steam" "ultimaker-cura" "vlc" "wine-stable" "winbox" "zed"
     ];
     taps = [ "fred-drake/tap" ];  # Additional Homebrew taps
