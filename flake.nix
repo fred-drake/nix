@@ -130,7 +130,7 @@
           }
         ];
       };
-      fred-macbook-pro-wireless = darwin.lib.darwinSystem {
+      freds-macbook-pro = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         pkgs = import nixpkgs {
           system = "aarch64-darwin";

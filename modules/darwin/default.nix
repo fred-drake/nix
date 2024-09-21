@@ -40,6 +40,7 @@
       "Unsplash Wallpapers" = 1284863847;
       "UTM Virtual Machines" = 1538878817;
       "Xcode" = 497799835;
+      "WireGuard" = 1451685025;
     };
     casks = [
       # Homebrew casks (GUI applications)
@@ -100,10 +101,6 @@
       };
       SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;  # Auto-install macOS updates
       WindowManager.StandardHideDesktopIcons = true;  # Hide desktop icons
-    };
-    keyboard = {
-      enableKeyMapping = true;
-      remapCapsLockToControl = true;  # Remap Caps Lock to Control
     };
     stateVersion = 4;  # System state version
   };
