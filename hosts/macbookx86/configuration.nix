@@ -51,6 +51,19 @@
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
 
+  # Prevent suspend
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.login1.suspend" ||
+            action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
+            action.id == "org.freedesktop.login1.hibernate" ||
+            action.id == "org.freedesktop.login1.hibernate-multiple-sessions")
+        {
+            return polkit.Result.NO;
+        }
+      });
+    '';
+
   # Power management.
   services.logind = {
     lidSwitch = "ignore";
@@ -82,10 +95,11 @@
   };
 
   # Enable the X11 windowing system.
-  # services.xserver.enable = true;
+  # Also disable suspend
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
+    displayManager.gdm.autoSuspend = false;
     desktopManager.gnome.enable = true;
   };
 
