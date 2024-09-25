@@ -54,10 +54,26 @@
   };
 
   # Nix configuration
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes
-  '';
-
+  nix = {
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+    gc = {
+      automatic = true;  # Enable automatic garbage collection
+      interval = [
+      {
+        Hour = 4;
+        Minute = 30;
+        Weekday = 2;
+      }];  # Garbage collect every Tuesday at 4:30 AM
+      options = "--delete-older-than 7d";  # Delete old garbage
+    };
+    settings = {
+      auto-optimise-store = true;  # Optimize the Nix store
+      cores = 0;  # Set Nix to use all available cores
+      sandbox = true;  # Enable Nix sandboxing
+    };
+  };
   # Program configurations
   programs = {
     direnv.enable = true;  # Enable direnv for directory-specific environments
