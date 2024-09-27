@@ -3,7 +3,6 @@ let
 in
 {
   home.packages = with pkgs; [
-    bartender       # macOS menu bar organizer
     mas             # Mac App Store command-line interface
   ];
 
