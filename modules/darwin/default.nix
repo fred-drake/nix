@@ -45,8 +45,8 @@
     casks = [
       # Homebrew casks (GUI applications)
       # Using zed in homebrew because nix pkg is currently broken for Darwin
-      "balenaetcher" "bartender" "brave-browser" "cursor" "daisydisk" "docker" "finicky" "fork" "goland" "godot-mono" "google-drive"
-      "krita" "maestral" "obs" "obsidian" "ollama" "pycharm" "raycast" "rider" "rustrover"
+      "balenaetcher" "bartender" "brave-browser" "cursor" "daisydisk" "docker" "finicky" "fork" "godot-mono" "google-drive"
+      "krita" "maestral" "obs" "obsidian" "ollama" "raycast"
       "sourcetree" "steam" "ultimaker-cura" "vlc" "wine-stable" "winbox" "zed"
     ];
     taps = [ "fred-drake/tap" ];  # Additional Homebrew taps
@@ -71,7 +71,7 @@
     settings = {
       auto-optimise-store = true;  # Optimize the Nix store
       cores = 0;  # Set Nix to use all available cores
-      sandbox = true;  # Enable Nix sandboxing
+      sandbox = false;
     };
   };
   # Program configurations
