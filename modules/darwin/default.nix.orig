@@ -45,6 +45,7 @@
     casks = [
       # Homebrew casks (GUI applications)
       # Using zed in homebrew because nix pkg is currently broken for Darwin
+<<<<<<< HEAD
       "balenaetcher"
       "brave-browser"
       "cursor"
@@ -60,7 +61,6 @@
       "obsidian"
       "ollama"
       "raycast"
-      "rider"
       "sourcetree"
       "steam"
       "ultimaker-cura"
@@ -68,6 +68,11 @@
       "wine-stable"
       "winbox"
       "zed"
+=======
+      "balenaetcher" "bartender" "brave-browser" "cursor" "daisydisk" "docker" "finicky" "fork" "godot-mono" "google-drive"
+      "krita" "maestral" "obs" "obsidian" "ollama" "raycast" "rider"
+      "sourcetree" "steam" "ultimaker-cura" "vlc" "wine-stable" "winbox" "zed"
+>>>>>>> 671998b (Added rider)
     ];
     taps = [ "fred-drake/tap" ]; # Additional Homebrew taps
     brews = [ "watch" "rubyfmt" ]; # Homebrew formulae
