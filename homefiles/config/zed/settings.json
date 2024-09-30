@@ -64,6 +64,12 @@
           }
         }
       }
+    },
+    "omnisharp": {
+      "binary": {
+        "path": "OmniSharp",
+        "args": ["optional", "additional", "args", "-lsp"]
+      }
     }
   },
   "git": {
