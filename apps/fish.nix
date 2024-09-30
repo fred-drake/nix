@@ -14,6 +14,10 @@
       set -gx fish_cursor_visual block
       set -gx fish_cursor_replace_one underscore
 
+      # fzf options
+      set fzf_diff_highlighter delta --paging=never --width=20
+      set fzf_preview_dir_cmd eza --all --color=always
+
       # Render vi mode
       function render_vi_prompt
         set_color $argv[1]
@@ -42,7 +46,7 @@
       end
 
       direnv hook fish | source
-      
+
       oh-my-posh init fish --config ~/.config/oh-my-posh/config.toml | source
     '';
     plugins = [

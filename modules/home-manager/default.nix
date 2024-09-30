@@ -77,22 +77,28 @@ home.file = {
 
   # Install packages using Home Manager
   home.packages = with pkgs; [
+    aider-chat
     age             # Modern encryption tool
     bat             # Cat clone with syntax highlighting
     # bitwarden-cli   # Command-line interface for Bitwarden
     bruno           # API client
+    chafa
     chezmoi         # Dotfiles manager
     curl            # URL retrieval utility
+    delta
     direnv
     discord         # Voice and text chat app
     docker          # Containerization platform
+    fd
     fzf             # Command-line fuzzy finder
     gcc
     ghq             # Remote repository management
     git             # Version control system
     gnupg           # GNU Privacy Guard
     google-chrome   # Web browser
+    hclfmt
     imagemagick     # Image manipulation tools
+    imgcat
     inetutils       # Network utilities
     inkscape        # Vector graphics editor
     jq              # Command-line JSON processor
@@ -101,6 +107,7 @@ home.file = {
     oh-my-posh      # Prompt theme engine
     ripgrep         # Fast grep alternative
     rsync           # File synchronization tool
+    rustup
     slack           # Team communication tool
     sops
     spotify         # Music streaming service
@@ -132,6 +139,7 @@ home.file = {
     llart = "eza -lar --sort=modified";
     lg = "lazygit";
     ranger = "yazi";
+    cat = "bat --paging=never --style=plain";
   };
 
   # Set Home Manager state version
@@ -152,17 +160,42 @@ home.file = {
 
   programs.fish.shellAbbrs = {
     cm = "chezmoi";
+    mc = "ranger";
   };
-  programs.fzf.enable = true;     # Fuzzy finder
+
+  programs.fzf = {
+    enable = true;     # Fuzzy finder
+    changeDirWidgetCommand = "fd --type d";
+    changeDirWidgetOptions = [ "--preview 'tree -C {} | head -200'" ];
+    defaultCommand = "fd --type f";
+    fileWidgetCommand = "fd --type f";
+    fileWidgetOptions = [ "--preview 'head {}'" ];
+    historyWidgetOptions = [ "--sort" "--exact" ];
+  };
 
   # Git configuration
   programs.git.enable = true;
   programs.git.extraConfig = {
+    core.pager = "delta";
     credential.helper = "store";
+    delta = {
+      features = "decorations";
+      interactive.keep-plus-minus-markers = false;
+      decorations = {
+        commit-decoration-style = "blue ol";
+        commit-style = "raw";
+        file-style = "omit";
+        hunk-header-decoration-style = "blue box";
+        hunk-header-file-style = "red";
+        hunk-header-line-number-style = "#067a00";
+        hunk-header-style = "file line-number syntax";
+      };
+    };
     diff.tool = "meld";
     difftool.prompt = false;
     "difftool \"meld\"".cmd = "meld \"$LOCAL\" \"$REMOTE\"";
     init.defaultBranch = "master";
+    interactive.diffFilter = "delta --color-only --features=interactive";
     pull.rebase = true;
   };
   programs.git.ignores = [
@@ -177,19 +210,21 @@ home.file = {
   # Enable other utilities
   programs.jq.enable = true;      # JSON processor
 
-  # TODO: implement declarative settings
   programs.lazygit.enable = true;
   programs.lazygit.settings = {
+    git.paging = {
+      pager = "delta --dark --paging=never";
+    };
     gui.theme = {
       lightTheme = true;
     };
   };
 
   # Neovim configuration
-  programs.neovim.enable = true;
-  programs.neovim.viAlias = true;
-  programs.neovim.vimAlias = true;
-  programs.neovim.vimdiffAlias = true;
+  programs.neovim.enable = false;
+  # programs.neovim.viAlias = true;
+  # programs.neovim.vimAlias = true;
+  # programs.neovim.vimdiffAlias = true;
 
   # Yazi file manager
   programs.yazi.enable = true;

@@ -41,115 +41,110 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    neovim.url = "github:fred-drake/neovim";
   };
 
   # Output configuration
-  outputs = {
-    self,
-    alejandra,
-    flake-utils,
-    nixpkgs,
-    nixos-hardware,
-    home-manager,
-    darwin,
-    nur,
-    ...
-  } @ inputs:
-  let
-    inherit (self) outputs;
-    systems = [ "x86_64-linux" "aarch64-darwin" ]; # Supported systems
-
-    # Common modules for all configurations
-    genericModules = [{
-      nix = {
-        settings.experimental-features = [ "nix-command" "flakes" ];
-        registry.nixos.flake = inputs.self;
-        nixPath = [ "nixpkgs=${nixpkgs.outPath}" ];
-      };
-      environment.etc."nix/inputs/nixpkgs".source = nixpkgs.outPath;
-    }];
-  in
-  flake-utils.lib.eachDefaultSystem (system:
-    let
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-    in
-    {
+  outputs = { self, alejandra, flake-utils, nixpkgs, nixos-hardware
+    , home-manager, darwin, nur, ... }@inputs:
+    let inherit (self) outputs;
+    in flake-utils.lib.eachDefaultSystem (system: {
       # Formatter for the flake
       formatter = alejandra.defaultPackage.${system};
     }) // {
 
-    # NixOS configurations
-    nixosConfigurations = {
-      macbookx86 = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        pkgs = import nixpkgs {
+      # NixOS configurations
+      nixosConfigurations = {
+        macbookx86 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          config.allowUnfree = true;
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+          specialArgs = { inherit inputs outputs nixpkgs; };
+          modules = [
+            nur.nixosModules.nur
+            ./hosts/macbookx86/configuration.nix
+            ./substituter.nix
+            nixos-hardware.nixosModules.apple-t2
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                backupFileExtension = "backup";
+                users.fdrake.imports = [
+                  ./modules/home-manager
+                  ./modules/home-manager/linux
+                  ({ pkgs, ... }: {
+                    home.packages =
+                      [ inputs.neovim.packages.${pkgs.system}.default ];
+                  })
+                ];
+                extraSpecialArgs = { inherit inputs; };
+              };
+            }
+          ];
         };
-        specialArgs = { inherit inputs outputs nixpkgs; };
-        modules = [
-          nur.nixosModules.nur
-          ./hosts/macbookx86/configuration.nix
-          ./substituter.nix
-          nixos-hardware.nixosModules.apple-t2
-          home-manager.nixosModules.home-manager {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              backupFileExtension = "backup";
-              users.fdrake.imports = [ ./modules/home-manager ./modules/home-manager/linux ];
-              extraSpecialArgs = { inherit inputs; };
-            };
-          }
-        ];
       };
-    };
 
-    # Darwin (macOS) configurations
-    darwinConfigurations = {
-      mac-studio = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        pkgs = import nixpkgs {
+      # Darwin (macOS) configurations
+      darwinConfigurations = {
+        mac-studio = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          config.allowUnfree = true; # Allow unfree packages
+          pkgs = import nixpkgs {
+            system = "aarch64-darwin";
+            config.allowUnfree = true; # Allow unfree packages
+          };
+          specialArgs = { inherit inputs outputs nixpkgs; };
+          modules = [
+            ./modules/darwin
+            ./modules/darwin/mac-studio
+            home-manager.darwinModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.fdrake.imports = [
+                  ./modules/home-manager
+                  ./modules/home-manager/darwin
+                  ./modules/home-manager/mac-studio
+                  ({ pkgs, ... }: {
+                    home.packages =
+                      [ inputs.neovim.packages.${pkgs.system}.default ];
+                  })
+                ];
+              };
+            }
+          ];
         };
-        specialArgs = { inherit inputs outputs nixpkgs; };
-        modules = [
-          ./modules/darwin
-          ./modules/darwin/mac-studio
-          home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.fdrake.imports = [ ./modules/home-manager ./modules/home-manager/darwin ./modules/home-manager/mac-studio ];
-            };
-          }
-        ];
-      };
-      freds-macbook-pro = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        pkgs = import nixpkgs {
+        fred-macbook-pro-wireless = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          config.allowUnfree = true; # Allow unfree packages
+          pkgs = import nixpkgs {
+            system = "aarch64-darwin";
+            config.allowUnfree = true; # Allow unfree packages
+          };
+          specialArgs = { inherit inputs outputs nixpkgs; };
+          modules = [
+            ./modules/darwin
+            ./modules/darwin/macbook-pro
+            home-manager.darwinModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.fdrake.imports = [
+                  ./modules/home-manager
+                  ./modules/home-manager/darwin
+                  ({ pkgs, ... }: {
+                    home.packages =
+                      [ inputs.neovim.packages.${pkgs.system}.default ];
+                  })
+                ];
+              };
+            }
+          ];
         };
-        specialArgs = { inherit inputs outputs nixpkgs; };
-        modules = [
-          ./modules/darwin
-          ./modules/darwin/macbook-pro
-          home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.fdrake.imports = [ ./modules/home-manager ./modules/home-manager/darwin ];
-            };
-          }
-        ];
       };
     };
-  };
 }

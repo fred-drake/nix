@@ -50,7 +50,7 @@
       "sourcetree" "steam" "ultimaker-cura" "vlc" "wine-stable" "winbox" "zed"
     ];
     taps = [ "fred-drake/tap" ];  # Additional Homebrew taps
-    brews = [ "watch" ];  # Homebrew formulae
+    brews = [ "watch" "rubyfmt" ];  # Homebrew formulae
   };
 
   # Nix configuration
