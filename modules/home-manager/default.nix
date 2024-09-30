@@ -11,16 +11,11 @@
 # to manage the user environment in a declarative and reproducible manner.
 
 # Home Manager configuration for macOS
-{ inputs, outputs, pkgs, nixpkgs, ... }:
+{ pkgs, ... }:
 let
-in
-{
+in {
   # Import additional configuration files
-  imports = [
-    ../../apps/kitty.nix
-    ../../apps/zsh.nix
-    ../../apps/fish.nix
-  ];
+  imports = [ ../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix ];
 
   # Enable and configure EditorConfig
   editorconfig.enable = true;
@@ -35,86 +30,78 @@ in
       indent_size = 4;
     };
     # Specific settings for certain file types
-    "*.{toml,js,nix,yaml}" = {
-      indent_size = 2;
+    "*.{toml,js,nix,yaml}" = { indent_size = 2; };
+  };
+
+  home.file = {
+    "bin" = {
+      source = ../../homefiles/bin;
+      recursive = true;
     };
-  };
 
-home.file = {
-  "bin" = {
-    source = ../../homefiles/bin;
-    recursive = true;
-  };
+    ".ssh" = {
+      source = ../../homefiles/ssh;
+      recursive = true;
+    };
 
-  ".ssh" = {
-    source = ../../homefiles/ssh;
-    recursive = true;
-  };
+    ".config" = {
+      source = ../../homefiles/config;
+      recursive = true;
+    };
 
-  ".config" = {
-    source = ../../homefiles/config;
-    recursive = true;
-  };
+    "Pictures" = {
+      source = ../../homefiles/Pictures;
+      recursive = true;
+    };
 
-  "Pictures" = {
-    source = ../../homefiles/Pictures;
-    recursive = true;
-  };
+    ".finicky.js" = { source = ../../homefiles/finicky.js; };
 
-  ".finicky.js" = {
-    source = ../../homefiles/finicky.js;
-  };
+    ".hgignore_global" = { source = ../../homefiles/hgignore_global; };
 
-  ".hgignore_global" = {
-    source = ../../homefiles/hgignore_global;
-  };
+    ".ideavimrc" = { source = ../../homefiles/ideavimrc; };
 
-  ".ideavimrc" = {
-    source = ../../homefiles/ideavimrc;
   };
-
-};
 
   # Install packages using Home Manager
   home.packages = with pkgs; [
     aider-chat
-    age             # Modern encryption tool
-    bat             # Cat clone with syntax highlighting
+    age # Modern encryption tool
+    bat # Cat clone with syntax highlighting
     # bitwarden-cli   # Command-line interface for Bitwarden
-    bruno           # API client
+    bruno # API client
     chafa
-    chezmoi         # Dotfiles manager
-    curl            # URL retrieval utility
+    chezmoi # Dotfiles manager
+    curl # URL retrieval utility
     delta
     direnv
-    discord         # Voice and text chat app
-    docker          # Containerization platform
+    discord # Voice and text chat app
+    docker # Containerization platform
     fd
-    fzf             # Command-line fuzzy finder
+    fzf # Command-line fuzzy finder
     gcc
-    ghq             # Remote repository management
-    git             # Version control system
-    gnupg           # GNU Privacy Guard
-    google-chrome   # Web browser
+    ghq # Remote repository management
+    git # Version control system
+    gnupg # GNU Privacy Guard
+    google-chrome # Web browser
     hclfmt
-    imagemagick     # Image manipulation tools
+    imagemagick # Image manipulation tools
     imgcat
-    inetutils       # Network utilities
-    inkscape        # Vector graphics editor
-    jq              # Command-line JSON processor
-    meld            # Visual diff and merge tool
-    neofetch        # System information tool
-    oh-my-posh      # Prompt theme engine
-    ripgrep         # Fast grep alternative
-    rsync           # File synchronization tool
+    inetutils # Network utilities
+    inkscape # Vector graphics editor
+    jq # Command-line JSON processor
+    meld # Visual diff and merge tool
+    neofetch # System information tool
+    oh-my-posh # Prompt theme engine
+    ripgrep # Fast grep alternative
+    rsync # File synchronization tool
     rustup
-    slack           # Team communication tool
+    slack # Team communication tool
     sops
-    spotify         # Music streaming service
-    wget            # Network downloader
+    spotify # Music streaming service
+    wget # Network downloader
     wireguard-tools # VPN tools
-    yq-go           # YAML processor
-    z-lua           # Directory jumper
+    yq-go # YAML processor
+    z-lua # Directory jumper
     # zed-editor    # Broken on Darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
     zoom-us
   ];
@@ -146,15 +133,17 @@ home.file = {
   home.stateVersion = "24.05";
 
   # Enable and configure various programs
-  programs.atuin.enable = true;  # Shell history sync
+  programs.atuin.enable = true; # Shell history sync
   programs.bat.enable = true;
-  programs.bat.extraPackages = with pkgs.bat-extras; [ batgrep batman batpipe prettybat ];
-  programs.bottom.enable = true;  # System monitor
-  programs.eza.enable = true;     # Modern ls replacement
-  programs.eza.extraOptions = [
-    "--group-directories-first"
-    "--header"
+  programs.bat.extraPackages = with pkgs.bat-extras; [
+    batgrep
+    batman
+    batpipe
+    prettybat
   ];
+  programs.bottom.enable = true; # System monitor
+  programs.eza.enable = true; # Modern ls replacement
+  programs.eza.extraOptions = [ "--group-directories-first" "--header" ];
   programs.eza.git = true;
   programs.eza.icons = true;
 
@@ -164,7 +153,7 @@ home.file = {
   };
 
   programs.fzf = {
-    enable = true;     # Fuzzy finder
+    enable = true; # Fuzzy finder
     changeDirWidgetCommand = "fd --type d";
     changeDirWidgetOptions = [ "--preview 'tree -C {} | head -200'" ];
     defaultCommand = "fd --type f";
@@ -193,31 +182,23 @@ home.file = {
     };
     diff.tool = "meld";
     difftool.prompt = false;
-    "difftool \"meld\"".cmd = "meld \"$LOCAL\" \"$REMOTE\"";
+    "difftool \"meld\"".cmd = ''meld "$LOCAL" "$REMOTE"'';
     init.defaultBranch = "master";
     interactive.diffFilter = "delta --color-only --features=interactive";
     pull.rebase = true;
   };
-  programs.git.ignores = [
-    "*~"
-    ".DS_Store"
-    "*.swp"
-  ];
+  programs.git.ignores = [ "*~" ".DS_Store" "*.swp" ];
   programs.git.lfs.enable = true;
   programs.git.userEmail = "fred.drake@gmail.com";
   programs.git.userName = "Fred Drake";
 
   # Enable other utilities
-  programs.jq.enable = true;      # JSON processor
+  programs.jq.enable = true; # JSON processor
 
   programs.lazygit.enable = true;
   programs.lazygit.settings = {
-    git.paging = {
-      pager = "delta --dark --paging=never";
-    };
-    gui.theme = {
-      lightTheme = true;
-    };
+    git.paging = { pager = "delta --dark --paging=never"; };
+    gui.theme = { lightTheme = true; };
   };
 
   # Neovim configuration
@@ -230,7 +211,5 @@ home.file = {
   programs.yazi.enable = true;
 
   # Additional file configurations
-  home.file = {
-    ".config/docker".source = ./docker;
-  };
+  home.file = { ".config/docker".source = ./docker; };
 }

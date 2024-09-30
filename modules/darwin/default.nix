@@ -1,4 +1,3 @@
-#
 # This file contains common settings and configurations that apply to all
 # macOS devices in the system. It includes:
 #   - Environment setup (shells, packages, system paths)
@@ -12,11 +11,12 @@
 { pkgs, ... }: {
   # Environment configuration
   environment = {
-    loginShell = pkgs.zsh;  # Set zsh as the login shell
-    shells = with pkgs; [ bash zsh fish ];  # Available shells
-    systemPackages = [ pkgs.coreutils ];  # Core utilities package
-    systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];  # Add Homebrew paths
-    pathsToLink = [ "/Applications" ];  # Link Applications directory
+    loginShell = pkgs.zsh; # Set zsh as the login shell
+    shells = with pkgs; [ bash zsh fish ]; # Available shells
+    systemPackages = [ pkgs.coreutils ]; # Core utilities package
+    systemPath =
+      [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ]; # Add Homebrew paths
+    pathsToLink = [ "/Applications" ]; # Link Applications directory
   };
 
   # Font configuration
@@ -27,8 +27,8 @@
   # Homebrew configuration
   homebrew = {
     enable = true;
-    caskArgs.no_quarantine = true;  # Disable quarantine for casks
-    global.brewfile = true;  # Use a global Brewfile
+    caskArgs.no_quarantine = true; # Disable quarantine for casks
+    global.brewfile = true; # Use a global Brewfile
     masApps = {
       # Mac App Store applications
       "Bitwarden" = 1352778147;
@@ -45,12 +45,31 @@
     casks = [
       # Homebrew casks (GUI applications)
       # Using zed in homebrew because nix pkg is currently broken for Darwin
-      "balenaetcher" "bartender" "brave-browser" "cursor" "daisydisk" "docker" "finicky" "fork" "godot-mono" "google-drive"
-      "krita" "maestral" "obs" "obsidian" "ollama" "raycast"
-      "sourcetree" "steam" "ultimaker-cura" "vlc" "wine-stable" "winbox" "zed"
+      "balenaetcher"
+      "brave-browser"
+      "cursor"
+      "daisydisk"
+      "docker"
+      "finicky"
+      "fork"
+      "godot-mono"
+      "google-drive"
+      "krita"
+      "maestral"
+      "obs"
+      "obsidian"
+      "ollama"
+      "raycast"
+      "sourcetree"
+      "steam"
+      "ultimaker-cura"
+      "vlc"
+      "wine-stable"
+      "winbox"
+      "zed"
     ];
-    taps = [ "fred-drake/tap" ];  # Additional Homebrew taps
-    brews = [ "watch" "rubyfmt" ];  # Homebrew formulae
+    taps = [ "fred-drake/tap" ]; # Additional Homebrew taps
+    brews = [ "watch" "rubyfmt" ]; # Homebrew formulae
   };
 
   # Nix configuration
@@ -59,29 +78,28 @@
       experimental-features = nix-command flakes
     '';
     gc = {
-      automatic = true;  # Enable automatic garbage collection
-      interval = [
-      {
+      automatic = true; # Enable automatic garbage collection
+      interval = [{
         Hour = 4;
         Minute = 30;
         Weekday = 2;
-      }];  # Garbage collect every Tuesday at 4:30 AM
-      options = "--delete-older-than 7d";  # Delete old garbage
+      }]; # Garbage collect every Tuesday at 4:30 AM
+      options = "--delete-older-than 7d"; # Delete old garbage
     };
     settings = {
-      auto-optimise-store = true;  # Optimize the Nix store
-      cores = 0;  # Set Nix to use all available cores
+      auto-optimise-store = true; # Optimize the Nix store
+      cores = 0; # Set Nix to use all available cores
       sandbox = false;
     };
   };
   # Program configurations
   programs = {
-    direnv.enable = true;  # Enable direnv for directory-specific environments
-    zsh.enable = true;  # Enable Zsh
+    direnv.enable = true; # Enable direnv for directory-specific environments
+    zsh.enable = true; # Enable Zsh
   };
 
   # Security configuration
-  security.pam.enableSudoTouchIdAuth = true;  # Enable Touch ID for sudo
+  security.pam.enableSudoTouchIdAuth = true; # Enable Touch ID for sudo
 
   # Enable Nix daemon service
   services.nix-daemon.enable = true;
@@ -94,7 +112,7 @@
     '';
     # System defaults
     defaults = {
-      dock.autohide = true;  # Auto-hide the Dock
+      dock.autohide = true; # Auto-hide the Dock
       finder = {
         AppleShowAllExtensions = true;
         AppleShowAllFiles = true;
@@ -105,8 +123,8 @@
         ShowPathbar = true;
         ShowStatusBar = true;
       };
-      trackpad.Clicking = true;  # Enable tap to click
-      menuExtraClock.ShowSeconds = true;  # Show seconds in menu bar clock
+      trackpad.Clicking = true; # Enable tap to click
+      menuExtraClock.ShowSeconds = true; # Show seconds in menu bar clock
       NSGlobalDomain = {
         AppleShowAllExtensions = true;
         InitialKeyRepeat = 14;
@@ -115,19 +133,20 @@
         NSAutomaticSpellingCorrectionEnabled = false;
         "com.apple.mouse.tapBehavior" = 1;
       };
-      SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;  # Auto-install macOS updates
-      WindowManager.StandardHideDesktopIcons = true;  # Hide desktop icons
+      SoftwareUpdate.AutomaticallyInstallMacOSUpdates =
+        true; # Auto-install macOS updates
+      WindowManager.StandardHideDesktopIcons = true; # Hide desktop icons
     };
-    stateVersion = 4;  # System state version
+    stateVersion = 4; # System state version
   };
 
   # User configuration
   users = {
-    knownUsers = [ "fdrake" ];  # Known users
+    knownUsers = [ "fdrake" ]; # Known users
     users.fdrake = {
       uid = 501;
       home = "/Users/fdrake";
-      shell = pkgs.zsh;  # Set zsh as the user's shell
+      shell = pkgs.zsh; # Set zsh as the user's shell
     };
   };
 }

@@ -8,7 +8,7 @@
 #   - Tab bar style
 #   - Shell integration
 
-{ pkgs, ... }: {
+{
   programs.kitty = {
     enable = true;
     font = {
@@ -63,3 +63,4 @@
     shellIntegration.enableZshIntegration = true;
   };
 }
+

@@ -1,13 +1,11 @@
-{ inputs, outputs, pkgs, nixpkgs, ... }:
-let
-
-in
-{
+{ inputs, pkgs, ... }: {
   dconf = {
     enable = true;
-    settings."org/gnome/settings-daemon/plugins/power".sleep-inactive-ac-type = "nothing";
+    settings."org/gnome/settings-daemon/plugins/power".sleep-inactive-ac-type =
+      "nothing";
     settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
-    settings."org/gnome/desktop/input-sources".xkb-options = ["terminate:ctrl_alt_bksp" "ctrl:nocaps"];
+    settings."org/gnome/desktop/input-sources".xkb-options =
+      [ "terminate:ctrl_alt_bksp" "ctrl:nocaps" ];
     settings."org/gnome/shell/extensions/dash-to-dock".hot-keys = false;
     settings."org/gnome/shell/keybindings" = {
       "switch-to-application-1" = [ "" ];
@@ -31,11 +29,12 @@ in
       "switch-to-application-19" = [ "" ];
       "switch-to-application-20" = [ "" ];
     };
-    settings."org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-      name = "Toggle Albert";
-      binding = "<Super>space";
-      command = "albert toggle";
-    };
+    settings."org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" =
+      {
+        name = "Toggle Albert";
+        binding = "<Super>space";
+        command = "albert toggle";
+      };
   };
 
   home.packages = with pkgs; [
@@ -53,6 +52,8 @@ in
       DefaultDownloadDirectory = "\${home}/Downloads";
     };
 
-    profiles.default.extensions = with inputs.firefox-addons.packages.${pkgs.system}; [ bitwarden ];
+    profiles.default.extensions =
+      with inputs.firefox-addons.packages.${pkgs.system};
+      [ bitwarden ];
   };
 }
