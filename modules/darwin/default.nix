@@ -55,6 +55,7 @@
       "godot-mono"
       "google-drive"
       "krita"
+      "macdown"
       "maestral"
       "obs"
       "obsidian"
