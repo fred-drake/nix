@@ -64,28 +64,28 @@ in {
 
   # Install packages using Home Manager
   home.packages = with pkgs; [
-    aider-chat
+    aider-chat # AI Chat client
     age # Modern encryption tool
     bat # Cat clone with syntax highlighting
     # bitwarden-cli   # Command-line interface for Bitwarden
     bruno # API client
-    chafa
+    chafa # Image resizer
     chezmoi # Dotfiles manager
     curl # URL retrieval utility
-    delta
-    direnv
+    delta # Syntax-highlighting pager
+    direnv # Environment variable manager
     discord # Voice and text chat app
     docker # Containerization platform
-    fd
+    fd # Fast directory walker
     fzf # Command-line fuzzy finder
-    gcc
+    gcc # C compiler
     ghq # Remote repository management
     git # Version control system
     gnupg # GNU Privacy Guard
     google-chrome # Web browser
-    hclfmt
+    hclfmt # HCL formatter
     imagemagick # Image manipulation tools
-    imgcat
+    imgcat # Image viewer
     inetutils # Network utilities
     inkscape # Vector graphics editor
     jq # Command-line JSON processor
@@ -94,16 +94,17 @@ in {
     oh-my-posh # Prompt theme engine
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
-    rustup
+    rustup # Rust toolchain manager
     slack # Team communication tool
-    sops
+    sops # Secret management tool
     spotify # Music streaming service
+    tokei # Code statistics tool
     wget # Network downloader
     wireguard-tools # VPN tools
     yq-go # YAML processor
     z-lua # Directory jumper
     # zed-editor    # Broken on Darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
-    zoom-us
+    zoom-us # Video conferencing tool
   ];
   # Set session variables
   home.sessionVariables = {
