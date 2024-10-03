@@ -7,7 +7,8 @@
       # "https://hydra.soopy.moe"
       "https://cache.soopy.moe" # toggle these if this one doesn't work.
     ];
-    extra-trusted-public-keys = [ "hydra.soopy.moe:IZ/bZ1XO3IfGtq66g+C85fxU/61tgXLaJ2MlcGGXU8Q=" ];
+    extra-trusted-public-keys =
+      [ "hydra.soopy.moe:IZ/bZ1XO3IfGtq66g+C85fxU/61tgXLaJ2MlcGGXU8Q=" ];
   };
 
   # Input sources for the flake
@@ -40,26 +41,10 @@
   };
 
   # Output configuration
-  outputs =
-    {
-      self,
-      alejandra,
-      flake-utils,
-      nixpkgs,
-      nixos-hardware,
-      home-manager,
-      darwin,
-      nur,
-      ...
-    }@inputs:
-    let
-      inherit (self) outputs;
-    in
-    flake-utils.lib.eachDefaultSystem (system: {
-      # Formatter for the flake
-      formatter = alejandra.defaultPackage.${system};
-    })
-    // {
+  outputs = { self, flake-utils, nixpkgs, nixos-hardware, home-manager, darwin
+    , nur, ... }@inputs:
+    let inherit (self) outputs;
+    in flake-utils.lib.eachDefaultSystem (system: { }) // {
 
       # NixOS configurations
       nixosConfigurations = {
@@ -69,9 +54,7 @@
             system = "x86_64-linux";
             config.allowUnfree = true;
           };
-          specialArgs = {
-            inherit inputs outputs nixpkgs;
-          };
+          specialArgs = { inherit inputs outputs nixpkgs; };
           modules = [
             nur.nixosModules.nur
             ./hosts/macbookx86/configuration.nix
@@ -86,16 +69,12 @@
                 users.fdrake.imports = [
                   ./modules/home-manager
                   ./modules/home-manager/linux
-                  (
-                    { pkgs, ... }:
-                    {
-                      home.packages = [ inputs.neovim.packages.${pkgs.system}.default ];
-                    }
-                  )
+                  ({ pkgs, ... }: {
+                    home.packages =
+                      [ inputs.neovim.packages.${pkgs.system}.default ];
+                  })
                 ];
-                extraSpecialArgs = {
-                  inherit inputs;
-                };
+                extraSpecialArgs = { inherit inputs; };
               };
             }
           ];
@@ -110,9 +89,7 @@
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
           };
-          specialArgs = {
-            inherit inputs outputs nixpkgs;
-          };
+          specialArgs = { inherit inputs outputs nixpkgs; };
           modules = [
             ./modules/darwin
             ./modules/darwin/mac-studio
@@ -125,12 +102,10 @@
                   ./modules/home-manager
                   ./modules/home-manager/darwin
                   ./modules/home-manager/mac-studio
-                  (
-                    { pkgs, ... }:
-                    {
-                      home.packages = [ inputs.neovim.packages.${pkgs.system}.default ];
-                    }
-                  )
+                  ({ pkgs, ... }: {
+                    home.packages =
+                      [ inputs.neovim.packages.${pkgs.system}.default ];
+                  })
                 ];
               };
             }
@@ -142,9 +117,7 @@
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
           };
-          specialArgs = {
-            inherit inputs outputs nixpkgs;
-          };
+          specialArgs = { inherit inputs outputs nixpkgs; };
           modules = [
             ./modules/darwin
             ./modules/darwin/macbook-pro
@@ -156,12 +129,10 @@
                 users.fdrake.imports = [
                   ./modules/home-manager
                   ./modules/home-manager/darwin
-                  (
-                    { pkgs, ... }:
-                    {
-                      home.packages = [ inputs.neovim.packages.${pkgs.system}.default ];
-                    }
-                  )
+                  ({ pkgs, ... }: {
+                    home.packages =
+                      [ inputs.neovim.packages.${pkgs.system}.default ];
+                  })
                 ];
               };
             }
