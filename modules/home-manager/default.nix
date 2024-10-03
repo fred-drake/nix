@@ -11,9 +11,7 @@
 # to manage the user environment in a declarative and reproducible manner.
 
 # Home Manager configuration for macOS
-{ pkgs, ... }:
-let
-in {
+{ pkgs, ... }: {
   # Import additional configuration files
   imports = [ ../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix ];
 
@@ -202,11 +200,8 @@ in {
     gui.theme = { lightTheme = true; };
   };
 
-  # Neovim configuration
+  # We pull neovim through github:fred-drake/neovim now
   programs.neovim.enable = false;
-  # programs.neovim.viAlias = true;
-  # programs.neovim.vimAlias = true;
-  # programs.neovim.vimdiffAlias = true;
 
   # Yazi file manager
   programs.yazi.enable = true;
