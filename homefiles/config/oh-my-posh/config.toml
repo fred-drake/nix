@@ -158,15 +158,6 @@ console_title_template = '{{.Folder}}{{if .Root}} :: ROOT{{end}} :: {{.Shell}}'
     template = " 󱃾 {{.Context}}{{if .Namespace}} :: {{.Namespace}}{{end}} "
 
   [[blocks.segments]]
-    type = 'nix-shell'
-    style = 'diamond'
-    leading_diamond = ''
-    trailing_diamond = ' '
-    foreground = 'white'
-    background = 'blue'
-    template = " $NIX_SHELL_NAME"
-
-  [[blocks.segments]]
     type = "executiontime"
     template = " <#fefefe></> {{ .FormattedMs }} "
     style = "diamond"

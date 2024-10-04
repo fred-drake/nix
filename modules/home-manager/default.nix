@@ -112,7 +112,6 @@
     HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
     HOMEBREW_REPOSITORY = "/opt/homebrew";
     GHQ_ROOT = "$HOME/Source";
-    NIX_SHELL_NAME = "unknown";
     SOPS_AGE_KEY_FILE = "$HOME/.age/personal-key.txt";
   };
 
