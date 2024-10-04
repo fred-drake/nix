@@ -22,7 +22,7 @@
           src = ./.;
           hooks = {
             alejandra.enable = true;
-            nixpkgs-fmt.enable = true;
+            nil.enable = true;
             just.enable = true;
           };
         };
