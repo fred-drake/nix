@@ -1,5 +1,5 @@
 {
-  description = "Development environment for Cover Letter Writer";
+  description = "Development environment for the system flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
