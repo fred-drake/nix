@@ -9,11 +9,10 @@
 #
 # The configuration uses the Nix package manager and various Nix-related tools
 # to manage the user environment in a declarative and reproducible manner.
-
 # Home Manager configuration for macOS
-{ pkgs, ... }: {
+{pkgs, ...}: {
   # Import additional configuration files
-  imports = [ ../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix ];
+  imports = [../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix];
 
   # Enable and configure EditorConfig
   editorconfig.enable = true;
@@ -28,7 +27,7 @@
       indent_size = 4;
     };
     # Specific settings for certain file types
-    "*.{toml,js,nix,yaml}" = { indent_size = 2; };
+    "*.{toml,js,nix,yaml}" = {indent_size = 2;};
   };
 
   home.file = {
@@ -52,12 +51,11 @@
       recursive = true;
     };
 
-    ".finicky.js" = { source = ../../homefiles/finicky.js; };
+    ".finicky.js" = {source = ../../homefiles/finicky.js;};
 
-    ".hgignore_global" = { source = ../../homefiles/hgignore_global; };
+    ".hgignore_global" = {source = ../../homefiles/hgignore_global;};
 
-    ".ideavimrc" = { source = ../../homefiles/ideavimrc; };
-
+    ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
   };
 
   # Install packages using Home Manager
@@ -142,7 +140,7 @@
   ];
   programs.bottom.enable = true; # System monitor
   programs.eza.enable = true; # Modern ls replacement
-  programs.eza.extraOptions = [ "--group-directories-first" "--header" ];
+  programs.eza.extraOptions = ["--group-directories-first" "--header"];
   programs.eza.git = true;
   programs.eza.icons = true;
 
@@ -154,11 +152,11 @@
   programs.fzf = {
     enable = true; # Fuzzy finder
     changeDirWidgetCommand = "fd --type d";
-    changeDirWidgetOptions = [ "--preview 'tree -C {} | head -200'" ];
+    changeDirWidgetOptions = ["--preview 'tree -C {} | head -200'"];
     defaultCommand = "fd --type f";
     fileWidgetCommand = "fd --type f";
-    fileWidgetOptions = [ "--preview 'head {}'" ];
-    historyWidgetOptions = [ "--sort" "--exact" ];
+    fileWidgetOptions = ["--preview 'head {}'"];
+    historyWidgetOptions = ["--sort" "--exact"];
   };
 
   # Git configuration
@@ -186,7 +184,7 @@
     interactive.diffFilter = "delta --color-only --features=interactive";
     pull.rebase = true;
   };
-  programs.git.ignores = [ "*~" ".DS_Store" "*.swp" ];
+  programs.git.ignores = ["*~" ".DS_Store" "*.swp"];
   programs.git.lfs.enable = true;
   programs.git.userEmail = "fred.drake@gmail.com";
   programs.git.userName = "Fred Drake";
@@ -196,8 +194,8 @@
 
   programs.lazygit.enable = true;
   programs.lazygit.settings = {
-    git.paging = { pager = "delta --dark --paging=never"; };
-    gui.theme = { lightTheme = true; };
+    git.paging = {pager = "delta --dark --paging=never";};
+    gui.theme = {lightTheme = true;};
   };
 
   # We pull neovim through github:fred-drake/neovim now
@@ -207,5 +205,5 @@
   programs.yazi.enable = true;
 
   # Additional file configurations
-  home.file = { ".config/docker".source = ./docker; };
+  home.file = {".config/docker".source = ./docker;};
 }

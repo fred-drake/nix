@@ -7,7 +7,6 @@
 #   - Window layout and background image
 #   - Tab bar style
 #   - Shell integration
-
 {
   programs.kitty = {
     enable = true;
@@ -63,4 +62,3 @@
     shellIntegration.enableZshIntegration = true;
   };
 }
-

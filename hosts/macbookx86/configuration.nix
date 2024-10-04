@@ -1,14 +1,16 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
-{ config, lib, pkgs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -34,7 +36,7 @@
     secretsFile = "/home/fdrake/.config/wifi/workstation.env";
     networks."Frecklepie".pskRaw = "ext:WORKSTATION_PASSWORD";
   };
-  networking.networkmanager.enable = false;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = false; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -62,7 +64,7 @@
             return polkit.Result.NO;
         }
       });
-    '';
+  '';
 
   # Power management.
   services.logind = {
@@ -74,8 +76,7 @@
 
   services.acpid = {
     enable = true;
-    lidEventCommands =
-    ''
+    lidEventCommands = ''
       export PATH=$PATH:/run/current-system/sw/bin
 
       lid_state=$(cat /proc/acpi/button/lid/LID0/state | awk '{print $NF}')
@@ -88,8 +89,7 @@
       fi
     '';
 
-    powerEventCommands =
-    ''
+    powerEventCommands = ''
       systemctl suspend
     '';
   };
@@ -102,9 +102,6 @@
     displayManager.gdm.autoSuspend = false;
     desktopManager.gnome.enable = true;
   };
-
-
-
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -129,7 +126,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.fdrake = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = ["wheel"]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
     ];
     shell = pkgs.zsh;
@@ -186,5 +183,4 @@
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.11"; # Did you read the comment?
-
 }

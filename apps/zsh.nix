@@ -6,13 +6,12 @@
 #   - Antidote plugin manager and its plugins
 #   - Oh My Posh prompt initialization
 #   - Custom PATH modifications
-
-{ pkgs, ... }: {
+{pkgs, ...}: {
   programs.zsh = {
     enable = true;
     antidote = {
       enable = true;
-      plugins = [ ];
+      plugins = [];
     };
     # Add local bin to path, and ensure that oh-my-posh doesn't get initialized in Apple Terminal
     initExtra = ''

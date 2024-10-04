@@ -8,20 +8,32 @@
 #   - Security settings
 #
 # Individual device-specific configurations should be placed in separate files.
-{ pkgs, ... }: {
+{pkgs, ...}: {
   # Environment configuration
   environment = {
     loginShell = pkgs.zsh; # Set zsh as the login shell
-    shells = with pkgs; [ bash zsh fish ]; # Available shells
-    systemPackages = [ pkgs.coreutils ]; # Core utilities package
-    systemPath =
-      [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ]; # Add Homebrew paths
-    pathsToLink = [ "/Applications" ]; # Link Applications directory
+    shells = with pkgs; [
+      bash
+      zsh
+      fish
+    ]; # Available shells
+    systemPackages = [pkgs.coreutils]; # Core utilities package
+    systemPath = [
+      "/opt/homebrew/bin"
+      "/opt/homebrew/sbin"
+    ]; # Add Homebrew paths
+    pathsToLink = ["/Applications"]; # Link Applications directory
   };
 
   # Font configuration
   fonts.packages = [
-    (pkgs.nerdfonts.override { fonts = [ "Hack" "JetBrainsMono" "Meslo" ]; })
+    (pkgs.nerdfonts.override {
+      fonts = [
+        "Hack"
+        "JetBrainsMono"
+        "Meslo"
+      ];
+    })
   ];
 
   # Homebrew configuration
@@ -70,8 +82,11 @@
       "winbox"
       "zed"
     ];
-    taps = [ "fred-drake/tap" ]; # Additional Homebrew taps
-    brews = [ "watch" "rubyfmt" ]; # Homebrew formulae
+    taps = ["fred-drake/tap"]; # Additional Homebrew taps
+    brews = [
+      "watch"
+      "rubyfmt"
+    ]; # Homebrew formulae
   };
 
   # Nix configuration
@@ -81,11 +96,13 @@
     '';
     gc = {
       automatic = true; # Enable automatic garbage collection
-      interval = [{
-        Hour = 4;
-        Minute = 30;
-        Weekday = 2;
-      }]; # Garbage collect every Tuesday at 4:30 AM
+      interval = [
+        {
+          Hour = 4;
+          Minute = 30;
+          Weekday = 2;
+        }
+      ]; # Garbage collect every Tuesday at 4:30 AM
       options = "--delete-older-than 7d"; # Delete old garbage
     };
     settings = {
@@ -135,8 +152,7 @@
         NSAutomaticSpellingCorrectionEnabled = false;
         "com.apple.mouse.tapBehavior" = 1;
       };
-      SoftwareUpdate.AutomaticallyInstallMacOSUpdates =
-        true; # Auto-install macOS updates
+      SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true; # Auto-install macOS updates
       WindowManager.StandardHideDesktopIcons = true; # Hide desktop icons
     };
     stateVersion = 4; # System state version
@@ -144,7 +160,7 @@
 
   # User configuration
   users = {
-    knownUsers = [ "fdrake" ]; # Known users
+    knownUsers = ["fdrake"]; # Known users
     users.fdrake = {
       uid = 501;
       home = "/Users/fdrake";
