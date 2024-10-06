@@ -42,17 +42,24 @@
   # Output configuration
   outputs = {
     self,
-    flake-utils,
     nixpkgs,
-    nixos-hardware,
     home-manager,
     darwin,
-    nur,
     ...
   } @ inputs: let
     inherit (self) outputs;
+
+    # Function to create Neovim packages with unique names
+    mkNeovimPackages = pkgs: neovimPkgs: let
+      mkNeovimAlias = name: pkg:
+        pkgs.runCommand "neovim-${name}" {} ''
+          mkdir -p $out/bin
+          ln -s ${pkg}/bin/nvim $out/bin/nvim-${name}
+        '';
+    in
+      builtins.mapAttrs mkNeovimAlias neovimPkgs;
   in
-    flake-utils.lib.eachDefaultSystem (system: {})
+    inputs.flake-utils.lib.eachDefaultSystem (system: {})
     // {
       # NixOS configurations
       nixosConfigurations = {
@@ -64,10 +71,10 @@
           };
           specialArgs = {inherit inputs outputs nixpkgs;};
           modules = [
-            nur.nixosModules.nur
+            inputs.nur.nixosModules.nur
             ./hosts/macbookx86/configuration.nix
             ./substituter.nix
-            nixos-hardware.nixosModules.apple-t2
+            inputs.nixos-hardware.nixosModules.apple-t2
             home-manager.nixosModules.home-manager
             {
               home-manager = {
@@ -78,7 +85,9 @@
                   ./modules/home-manager
                   ./modules/home-manager/linux
                   ({pkgs, ...}: {
-                    home.packages = [inputs.neovim.packages.${pkgs.system}.default];
+                    home.packages =
+                      (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
+                      ++ [inputs.neovim.packages.${pkgs.system}.default];
                   })
                 ];
                 extraSpecialArgs = {inherit inputs;};
@@ -110,7 +119,9 @@
                   ./modules/home-manager/darwin
                   ./modules/home-manager/mac-studio
                   ({pkgs, ...}: {
-                    home.packages = [inputs.neovim.packages.${pkgs.system}.default];
+                    home.packages =
+                      (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
+                      ++ [inputs.neovim.packages.${pkgs.system}.default];
                   })
                 ];
               };
@@ -136,7 +147,9 @@
                   ./modules/home-manager
                   ./modules/home-manager/darwin
                   ({pkgs, ...}: {
-                    home.packages = [inputs.neovim.packages.${pkgs.system}.default];
+                    home.packages =
+                      (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
+                      ++ [inputs.neovim.packages.${pkgs.system}.default];
                   })
                 ];
               };
