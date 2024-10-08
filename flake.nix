@@ -8,6 +8,7 @@
       "https://cache.soopy.moe" # toggle these if this one doesn't work.
     ];
     extra-trusted-public-keys = ["hydra.soopy.moe:IZ/bZ1XO3IfGtq66g+C85fxU/61tgXLaJ2MlcGGXU8Q="];
+    trusted-users = ["root" "fdrake"];
   };
 
   # Input sources for the flake
