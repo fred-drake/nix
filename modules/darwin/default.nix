@@ -87,6 +87,11 @@
       "watch"
       "rubyfmt"
     ]; # Homebrew formulae
+    onActivation = {
+      cleanup = "zap";
+      autoUpdate = true;
+      upgrade = true;
+    };
   };
 
   # Nix configuration
