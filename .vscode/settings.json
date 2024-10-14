@@ -28,7 +28,7 @@
     "workbench.editor.enablePreviewFromCodeNavigation": false,
     "workbench.editor.showTabs": "none",
     // "window.newWindowDimensions": "inherit",
-    "workbench.sideBar.location": "right",
+    "workbench.sideBar.location": "left",
     "workbench.statusBar.visible": false,
     "workbench.tips.enabled": false,
 

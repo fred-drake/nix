@@ -38,6 +38,7 @@
     };
 
     neovim.url = "github:fred-drake/neovim";
+    vscode.url = "github:fred-drake/vscode";
   };
 
   # Output configuration
@@ -59,6 +60,16 @@
         '';
     in
       builtins.mapAttrs mkNeovimAlias neovimPkgs;
+
+    # Function to create VSCode packages with unique names
+    mkVSCodePackages = pkgs: vscodePkgs: let
+      mkVSCodeAlias = name: pkg:
+        pkgs.runCommand "vscode-${name}" {} ''
+          mkdir -p $out/bin
+          ln -s ${pkg}/bin/code $out/bin/code-${name}
+        '';
+    in
+      builtins.mapAttrs mkVSCodeAlias vscodePkgs;
   in
     inputs.flake-utils.lib.eachDefaultSystem (system: {})
     // {
@@ -89,6 +100,11 @@
                     home.packages =
                       (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
                       ++ [inputs.neovim.packages.${pkgs.system}.default];
+                  })
+                  ({pkgs, ...}: {
+                    home.packages =
+                      (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
+                      ++ [inputs.vscode.packages.${pkgs.system}.default];
                   })
                 ];
                 extraSpecialArgs = {inherit inputs;};
@@ -124,6 +140,11 @@
                       (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
                       ++ [inputs.neovim.packages.${pkgs.system}.default];
                   })
+                  ({pkgs, ...}: {
+                    home.packages =
+                      (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
+                      ++ [inputs.vscode.packages.${pkgs.system}.default];
+                  })
                 ];
               };
             }
@@ -151,6 +172,11 @@
                     home.packages =
                       (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
                       ++ [inputs.neovim.packages.${pkgs.system}.default];
+                  })
+                  ({pkgs, ...}: {
+                    home.packages =
+                      (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
+                      ++ [inputs.vscode.packages.${pkgs.system}.default];
                   })
                 ];
               };

@@ -3,7 +3,7 @@
 # This file defines the Home Manager configuration for macOS systems.
 # It includes:
 #   - Package installations
-#   - Program configurations (git, kitty, neovim, vscode, zsh, etc.)
+#   - Program configurations (git, kitty, neovim, zsh, etc.)
 #   - Environment variables and shell aliases
 #   - macOS-specific settings and defaults
 #
