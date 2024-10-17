@@ -1,5 +1,4 @@
 {
-  # Description of the flake
   description = "Nix Flake";
 
   nixConfig = {
@@ -13,31 +12,44 @@
 
   # Input sources for the flake
   inputs = {
-    # Use a specific commit hash for nixpkgs instead of a branch for stability
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    # Nixpkgs repository, based on my current level of debugging and stability
+    # nixpkgs.url = "github:nixos/nixpkgs"; # Absolutely bleeding edge
+    # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Typically 3-4 days behind master
+    # nixpkgs.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/nixpkgs"; # For locally testing my contributions
+    nixpkgs.url = "github:fred-drake/nixpkgs"; # My fork of nixpkgs, for when I am waiting for my contributions to be merged
+
+    # Specific revision of nixpkgs because wireguard-tools breaks with nixpkgs-unstable
+    nixpkgs-wireguard.url = "github:nixos/nixpkgs/e0464e47880a69896f0fb1810f00e0de469f770a";
+
+    # A collection of NixOS modules covering hardware quirks.
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
+    # Pure Nix flake utility functions
     flake-utils.url = "github:numtide/flake-utils";
 
-    # Home Manager for managing user environments
+    # Manage a user environment using Nix
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs"; # Use the same nixpkgs as above
     };
 
-    # nix-darwin for managing macOS system configuration
+    # nix modules for darwin
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs"; # Use the same nixpkgs as above
     };
 
+    # Nix User Repository: User contributed nix packages
     nur.url = "github:nix-community/NUR";
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # My custom neovim configuration
     neovim.url = "github:fred-drake/neovim";
+
+    # My custom vscode configuration
     vscode.url = "github:fred-drake/vscode";
   };
 
@@ -45,6 +57,7 @@
   outputs = {
     self,
     nixpkgs,
+    nixpkgs-wireguard,
     home-manager,
     darwin,
     ...
@@ -70,6 +83,10 @@
         '';
     in
       builtins.mapAttrs mkVSCodeAlias vscodePkgs;
+
+    overlayWireguardTools = final: prev: {
+      wireguard-tools = nixpkgs-wireguard.legacyPackages.${prev.system}.wireguard-tools;
+    };
   in
     inputs.flake-utils.lib.eachDefaultSystem (system: {})
     // {
@@ -80,6 +97,7 @@
           pkgs = import nixpkgs {
             system = "x86_64-linux";
             config.allowUnfree = true;
+            overlays = [overlayWireguardTools];
           };
           specialArgs = {inherit inputs outputs nixpkgs;};
           modules = [
@@ -121,6 +139,7 @@
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
+            overlays = [overlayWireguardTools];
           };
           specialArgs = {inherit inputs outputs nixpkgs;};
           modules = [
@@ -146,6 +165,7 @@
                       ++ [inputs.vscode.packages.${pkgs.system}.default];
                   })
                 ];
+                extraSpecialArgs = {inherit inputs;};
               };
             }
           ];
@@ -155,6 +175,7 @@
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
+            overlays = [overlayWireguardTools];
           };
           specialArgs = {inherit inputs outputs nixpkgs;};
           modules = [
@@ -179,6 +200,7 @@
                       ++ [inputs.vscode.packages.${pkgs.system}.default];
                   })
                 ];
+                extraSpecialArgs = {inherit inputs;};
               };
             }
           ];

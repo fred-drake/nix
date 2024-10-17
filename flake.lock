@@ -51,11 +51,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1728903803,
-        "narHash": "sha256-D6j/0rNY6BSAkKPrtU5cQWCnylEZZs2khnmz0BH7GM4=",
+        "lastModified": 1729137785,
+        "narHash": "sha256-9SshNHlrgUsBlVdl8GBH7dGBKX9qGUL+dvu5ZqhQcmU=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "bc25a8982de641c4388299f7fb4f22a0e42f99f7",
+        "rev": "96b37d54815787864c79010f1d07a50f98fdbd99",
         "type": "gitlab"
       },
       "original": {
@@ -285,11 +285,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1728903686,
-        "narHash": "sha256-ZHFrGNWDDriZ4m8CA/5kDa250SG1LiiLPApv1p/JF0o=",
+        "lastModified": 1729027341,
+        "narHash": "sha256-IqWD7bA9iJVifvJlB4vs2KUXVhN+d9lECWdNB4jJ0tE=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "e1aec543f5caf643ca0d94b6a633101942fd065f",
+        "rev": "2a4fd1cfd8ed5648583dadef86966a8231024221",
         "type": "github"
       },
       "original": {
@@ -441,6 +441,22 @@
         "url": "https://github.com/NixOS/nixpkgs/archive/fb192fec7cc7a4c26d51779e9bab07ce6fa5597a.tar.gz"
       }
     },
+    "nixpkgs-wireguard": {
+      "locked": {
+        "lastModified": 1727211877,
+        "narHash": "sha256-zy/ar3GpnzuGRCwrr6zV/QicoZcqd2kNNhkRDECfStU=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e0464e47880a69896f0fb1810f00e0de469f770a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e0464e47880a69896f0fb1810f00e0de469f770a",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1727348695,
@@ -475,16 +491,15 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1728538411,
-        "narHash": "sha256-f0SBJz1eZ2yOuKUr5CA9BHULGXVSn6miBuUWdTyhUhU=",
-        "owner": "nixos",
+        "lastModified": 1729131089,
+        "narHash": "sha256-ceboA3SzpAc1fgq9XawIkdB9h3HFuXaii8EicOXayK0=",
+        "owner": "fred-drake",
         "repo": "nixpkgs",
-        "rev": "b69de56fac8c2b6f8fd27f2eca01dcda8e0a4221",
+        "rev": "5defdd418695fe68f31c1f38ab3de32d67a6d6ab",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixpkgs-unstable",
+        "owner": "fred-drake",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -549,11 +564,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1728911269,
-        "narHash": "sha256-Y+HH3BAOqbMQPuJlXunYKf8ptFe81pu331kZTzfZ0Pg=",
+        "lastModified": 1729137860,
+        "narHash": "sha256-MRybyHq4hanIfMDsZ7dIz1rJI4HpXOd2xYiwTuWXzKQ=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "8eb5459e44c61654bb3ad512fd743d841fb8e230",
+        "rev": "6a4d78469f1fd64084f0f5349a50d80b808e5e84",
         "type": "github"
       },
       "original": {
@@ -594,6 +609,7 @@
         "neovim": "neovim",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_4",
+        "nixpkgs-wireguard": "nixpkgs-wireguard",
         "nur": "nur",
         "vscode": "vscode"
       }

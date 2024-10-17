@@ -101,6 +101,7 @@
     z-lua # Directory jumper
     # zed-editor    # Broken on Darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
     zoom-us # Video conferencing tool
+    zbctl
   ];
   # Set session variables
   home.sessionVariables = {
@@ -141,7 +142,7 @@
   programs.eza.enable = true; # Modern ls replacement
   programs.eza.extraOptions = ["--group-directories-first" "--header"];
   programs.eza.git = true;
-  programs.eza.icons = true;
+  programs.eza.icons = "auto";
 
   programs.fish.shellAbbrs = {
     cm = "chezmoi";
