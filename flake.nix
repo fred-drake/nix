@@ -144,7 +144,10 @@
             ./modules/darwin/mac-studio
             home-manager.darwinModules.home-manager
             {
-              home-manager = mkHomeManager [./modules/home-manager/darwin ./modules/home-manager/mac-studio];
+              home-manager = mkHomeManager [
+                ./modules/home-manager/os/darwin
+                ./modules/home-manager/host/mac-studio
+              ];
             }
           ];
         };
@@ -161,7 +164,10 @@
             ./modules/darwin/macbook-pro
             home-manager.darwinModules.home-manager
             {
-              home-manager = mkHomeManager [./modules/home-manager/darwin];
+              home-manager = mkHomeManager [
+                ./modules/home-manager/os/darwin
+                ./modules/home-manager/host/macbook-pro
+              ];
             }
           ];
         };
