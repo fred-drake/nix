@@ -204,7 +204,4 @@
 
   # Yazi file manager
   programs.yazi.enable = true;
-
-  # Additional file configurations
-  home.file = {".config/docker".source = ./docker;};
 }

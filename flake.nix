@@ -2,11 +2,6 @@
   description = "Nix Flake";
 
   nixConfig = {
-    extra-substituters = [
-      # "https://hydra.soopy.moe"
-      "https://cache.soopy.moe" # toggle these if this one doesn't work.
-    ];
-    extra-trusted-public-keys = ["hydra.soopy.moe:IZ/bZ1XO3IfGtq66g+C85fxU/61tgXLaJ2MlcGGXU8Q="];
     trusted-users = ["root" "fdrake"];
   };
 
@@ -18,8 +13,8 @@
     # nixpkgs.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/nixpkgs"; # For locally testing my contributions
     nixpkgs.url = "github:fred-drake/nixpkgs"; # My fork of nixpkgs, for when I am waiting for my contributions to be merged
 
-    # Specific revision of nixpkgs because wireguard-tools breaks with nixpkgs-unstable
-    nixpkgs-wireguard.url = "github:nixos/nixpkgs/e0464e47880a69896f0fb1810f00e0de469f770a";
+    # Nix stable channel, for packages that break with nixpkgs-unstable
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
 
     # A collection of NixOS modules covering hardware quirks.
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -57,7 +52,6 @@
   outputs = {
     self,
     nixpkgs,
-    nixpkgs-wireguard,
     home-manager,
     darwin,
     ...
@@ -84,8 +78,31 @@
     in
       builtins.mapAttrs mkVSCodeAlias vscodePkgs;
 
-    overlayWireguardTools = final: prev: {
-      wireguard-tools = nixpkgs-wireguard.legacyPackages.${prev.system}.wireguard-tools;
+    overlayPackages = final: prev: {
+      wireguard-tools = inputs.nixpkgs-stable.legacyPackages.${prev.system}.wireguard-tools;
+    };
+
+    # Create a home manager configuration, with additional imports specific to the configuration
+    mkHomeManager = imports: {
+      useGlobalPkgs = true;
+      useUserPackages = true;
+      backupFileExtension = "backup";
+      users.fdrake.imports =
+        [
+          ./modules/home-manager
+          ({pkgs, ...}: {
+            home.packages =
+              (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
+              ++ [inputs.neovim.packages.${pkgs.system}.default];
+          })
+          ({pkgs, ...}: {
+            home.packages =
+              (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
+              ++ [inputs.vscode.packages.${pkgs.system}.default];
+          })
+        ]
+        ++ imports;
+      extraSpecialArgs = {inherit inputs;};
     };
   in
     inputs.flake-utils.lib.eachDefaultSystem (system: {})
@@ -97,36 +114,16 @@
           pkgs = import nixpkgs {
             system = "x86_64-linux";
             config.allowUnfree = true;
-            overlays = [overlayWireguardTools];
+            overlays = [overlayPackages];
           };
           specialArgs = {inherit inputs outputs nixpkgs;};
           modules = [
             inputs.nur.nixosModules.nur
-            ./hosts/macbookx86/configuration.nix
-            ./substituter.nix
+            ./modules/nixos/macbookx86/configuration.nix
             inputs.nixos-hardware.nixosModules.apple-t2
             home-manager.nixosModules.home-manager
             {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                backupFileExtension = "backup";
-                users.fdrake.imports = [
-                  ./modules/home-manager
-                  ./modules/home-manager/linux
-                  ({pkgs, ...}: {
-                    home.packages =
-                      (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
-                      ++ [inputs.neovim.packages.${pkgs.system}.default];
-                  })
-                  ({pkgs, ...}: {
-                    home.packages =
-                      (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
-                      ++ [inputs.vscode.packages.${pkgs.system}.default];
-                  })
-                ];
-                extraSpecialArgs = {inherit inputs;};
-              };
+              home-manager = mkHomeManager [./modules/home-manager/linux];
             }
           ];
         };
@@ -139,7 +136,7 @@
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
-            overlays = [overlayWireguardTools];
+            overlays = [overlayPackages];
           };
           specialArgs = {inherit inputs outputs nixpkgs;};
           modules = [
@@ -147,26 +144,7 @@
             ./modules/darwin/mac-studio
             home-manager.darwinModules.home-manager
             {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                users.fdrake.imports = [
-                  ./modules/home-manager
-                  ./modules/home-manager/darwin
-                  ./modules/home-manager/mac-studio
-                  ({pkgs, ...}: {
-                    home.packages =
-                      (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
-                      ++ [inputs.neovim.packages.${pkgs.system}.default];
-                  })
-                  ({pkgs, ...}: {
-                    home.packages =
-                      (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
-                      ++ [inputs.vscode.packages.${pkgs.system}.default];
-                  })
-                ];
-                extraSpecialArgs = {inherit inputs;};
-              };
+              home-manager = mkHomeManager [./modules/home-manager/darwin ./modules/home-manager/mac-studio];
             }
           ];
         };
@@ -175,7 +153,7 @@
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
-            overlays = [overlayWireguardTools];
+            overlays = [overlayPackages];
           };
           specialArgs = {inherit inputs outputs nixpkgs;};
           modules = [
@@ -183,25 +161,7 @@
             ./modules/darwin/macbook-pro
             home-manager.darwinModules.home-manager
             {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                users.fdrake.imports = [
-                  ./modules/home-manager
-                  ./modules/home-manager/darwin
-                  ({pkgs, ...}: {
-                    home.packages =
-                      (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
-                      ++ [inputs.neovim.packages.${pkgs.system}.default];
-                  })
-                  ({pkgs, ...}: {
-                    home.packages =
-                      (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
-                      ++ [inputs.vscode.packages.${pkgs.system}.default];
-                  })
-                ];
-                extraSpecialArgs = {inherit inputs;};
-              };
+              home-manager = mkHomeManager [./modules/home-manager/darwin];
             }
           ];
         };

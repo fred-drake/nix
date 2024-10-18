@@ -441,19 +441,19 @@
         "url": "https://github.com/NixOS/nixpkgs/archive/fb192fec7cc7a4c26d51779e9bab07ce6fa5597a.tar.gz"
       }
     },
-    "nixpkgs-wireguard": {
+    "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1727211877,
-        "narHash": "sha256-zy/ar3GpnzuGRCwrr6zV/QicoZcqd2kNNhkRDECfStU=",
+        "lastModified": 1729044727,
+        "narHash": "sha256-GKJjtPY+SXfLF/yTN7M2cAnQB6RERFKnQhD8UvPSf3M=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "e0464e47880a69896f0fb1810f00e0de469f770a",
+        "rev": "dc2e0028d274394f73653c7c90cc63edbb696be1",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
+        "ref": "nixos-24.05",
         "repo": "nixpkgs",
-        "rev": "e0464e47880a69896f0fb1810f00e0de469f770a",
         "type": "github"
       }
     },
@@ -609,7 +609,7 @@
         "neovim": "neovim",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_4",
-        "nixpkgs-wireguard": "nixpkgs-wireguard",
+        "nixpkgs-stable": "nixpkgs-stable",
         "nur": "nur",
         "vscode": "vscode"
       }
