@@ -86,7 +86,7 @@
     inkscape # Vector graphics editor
     jq # Command-line JSON processor
     meld # Visual diff and merge tool
-    neofetch # System information tool
+    fastfetch # System information tool
     oh-my-posh # Prompt theme engine
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
