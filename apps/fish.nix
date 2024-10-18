@@ -86,6 +86,15 @@
           sha256 = "sha256-F1t81VliD+v6WEWqj1c1ehFBXzqLyumx5vV46s/FZRU=";
         };
       }
+      {
+        name = "puffer-fish";
+        src = pkgs.fetchFromGitHub {
+          owner = "nickeb96";
+          repo = "puffer-fish";
+          rev = "12d062eae0ad24f4ec20593be845ac30cd4b5923";
+          sha256 = "sha256-2niYj0NLfmVIQguuGTA7RrPIcorJEPkxhH6Dhcy+6Bk=";
+        };
+      }
     ];
   };
 }
