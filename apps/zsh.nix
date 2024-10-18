@@ -16,12 +16,11 @@
     # Add local bin to path, and ensure that oh-my-posh doesn't get initialized in Apple Terminal
     initExtra = ''
       PATH=~/bin:$PATH
-      if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-        # eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/config.toml)"
+      if [ "$TERM_PROGRAM" != "Apple_Terminal" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
         exec ${pkgs.fish}/bin/fish
+      elif [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+        eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/config.toml)"
       fi
-
-
     '';
   };
 }
