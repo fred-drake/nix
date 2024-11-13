@@ -11,7 +11,6 @@
 {pkgs, ...}: {
   # Environment configuration
   environment = {
-    loginShell = pkgs.zsh; # Set zsh as the login shell
     shells = with pkgs; [
       bash
       zsh
@@ -110,8 +109,8 @@
       ]; # Garbage collect every Tuesday at 4:30 AM
       options = "--delete-older-than 7d"; # Delete old garbage
     };
+    optimise.automatic = true; # Enable automatic garbage collection
     settings = {
-      auto-optimise-store = true; # Optimize the Nix store
       cores = 0; # Set Nix to use all available cores
       sandbox = false;
     };

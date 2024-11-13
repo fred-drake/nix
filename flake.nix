@@ -8,10 +8,10 @@
   # Input sources for the flake
   inputs = {
     # Nixpkgs repository, based on my current level of debugging and stability
-    # nixpkgs.url = "github:nixos/nixpkgs"; # Absolutely bleeding edge
+    nixpkgs.url = "github:nixos/nixpkgs"; # Absolutely bleeding edge
     # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Typically 3-4 days behind master
     # nixpkgs.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/nixpkgs"; # For locally testing my contributions
-    nixpkgs.url = "github:fred-drake/nixpkgs"; # My fork of nixpkgs, for when I am waiting for my contributions to be merged
+    # nixpkgs.url = "github:fred-drake/nixpkgs"; # My fork of nixpkgs, for when I am waiting for my contributions to be merged
 
     # Nix stable channel, for packages that break with nixpkgs-unstable
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
