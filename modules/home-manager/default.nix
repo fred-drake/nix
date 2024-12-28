@@ -64,7 +64,6 @@
     age # Modern encryption tool
     bat # Cat clone with syntax highlighting
     # bitwarden-cli   # Command-line interface for Bitwarden
-    bruno # API client
     chafa # Image resizer
     chezmoi # Dotfiles manager
     curl # URL retrieval utility

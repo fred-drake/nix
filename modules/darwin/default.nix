@@ -54,6 +54,7 @@
       # Using zed in homebrew because nix pkg is currently broken for Darwin
       "balenaetcher"
       "brave-browser"
+      "bruno"
       "cursor"
       "daisydisk"
       "docker"
