@@ -80,8 +80,9 @@
     ];
     taps = ["fred-drake/tap"]; # Additional Homebrew taps
     brews = [
-      "watch"
+      "openssh"
       "rubyfmt"
+      "watch"
     ]; # Homebrew formulae
     onActivation = {
       cleanup = "zap";
