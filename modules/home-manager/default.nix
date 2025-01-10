@@ -70,7 +70,7 @@
     delta # Syntax-highlighting pager
     direnv # Environment variable manager
     discord # Voice and text chat app
-    docker # Containerization platform
+    docker-compose # Compose multiple containers
     fd # Fast directory walker
     fzf # Command-line fuzzy finder
     gcc # C compiler
@@ -87,6 +87,8 @@
     meld # Visual diff and merge tool
     fastfetch # System information tool
     oh-my-posh # Prompt theme engine
+    podman
+    podman-tui
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
     rustup # Rust toolchain manager
@@ -112,6 +114,7 @@
     HOMEBREW_REPOSITORY = "/opt/homebrew";
     GHQ_ROOT = "$HOME/Source";
     SOPS_AGE_KEY_FILE = "$HOME/.age/personal-key.txt";
+    PODMAN_COMPOSE_WARNING_LOGS = "false";
   };
 
   # Define shell aliases

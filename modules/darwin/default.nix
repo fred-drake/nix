@@ -57,7 +57,6 @@
       "bruno"
       "cursor"
       "daisydisk"
-      "docker"
       "finicky"
       "fork"
       "godot-mono"
