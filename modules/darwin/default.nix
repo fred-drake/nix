@@ -67,6 +67,7 @@
       "obs"
       "obsidian"
       "ollama"
+      "pycharm"
       "raycast"
       "rider"
       "sourcetree"
