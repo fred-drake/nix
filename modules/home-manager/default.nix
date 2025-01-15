@@ -91,7 +91,6 @@
     podman-tui
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
-    rustup # Rust toolchain manager
     slack # Team communication tool
     sops # Secret management tool
     spotify # Music streaming service

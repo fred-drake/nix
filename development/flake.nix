@@ -32,7 +32,6 @@
           self.checks.${system}.pre-commit-check.enabledPackages
           ++ (with pkgs; [
             git
-            cargo
             just
             aider-chat
             alejandra
