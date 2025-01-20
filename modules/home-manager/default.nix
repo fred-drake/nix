@@ -12,7 +12,7 @@
 # Home Manager configuration for macOS
 {pkgs, ...}: {
   # Import additional configuration files
-  imports = [../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix];
+  imports = [../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix ../../apps/tmux.nix];
 
   # Enable and configure EditorConfig
   editorconfig.enable = true;
@@ -94,11 +94,13 @@
     slack # Team communication tool
     sops # Secret management tool
     spotify # Music streaming service
+    tmux # Terminal multiplexer
     tokei # Code statistics tool
     wget # Network downloader
     wireguard-tools # VPN tools
     yq-go # YAML processor
-    z-lua # Directory jumper
+    #z-lua # Directory jumper
+    zoxide # Directory jumper
     # zed-editor    # Broken on Darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
     zoom-us # Video conferencing tool
   ];

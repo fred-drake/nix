@@ -60,6 +60,7 @@
       "daisydisk"
       "finicky"
       "fork"
+      "ghostty"
       "godot-mono"
       "google-drive"
       "krita"
