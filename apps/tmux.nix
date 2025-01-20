@@ -57,8 +57,8 @@
       # Resize panes
       bind -r C-j resize-pane -D 5
       bind -r C-k resize-pane -U 5
-      bind -r C-h resize-pane -L 10
-      bind -r C-l resize-pane -R 10
+      bind -r C-h resize-pane -L 5
+      bind -r C-l resize-pane -R 5
 
       # base 1 indexing for windows and panes
       set-option -g base-index 1
