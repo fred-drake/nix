@@ -96,6 +96,7 @@
     slack # Team communication tool
     sops # Secret management tool
     spotify # Music streaming service
+    syncthing # File synchronization tool
     tldr # Documentation tool
     tmux # Terminal multiplexer
     tokei # Code statistics tool
