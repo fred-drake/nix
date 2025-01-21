@@ -63,6 +63,7 @@
     aider-chat # AI Chat client
     age # Modern encryption tool
     bat # Cat clone with syntax highlighting
+    btop # System monitor
     # bitwarden-cli   # Command-line interface for Bitwarden
     chafa # Image resizer
     chezmoi # Dotfiles manager
