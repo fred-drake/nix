@@ -71,6 +71,7 @@
     direnv # Environment variable manager
     discord # Voice and text chat app
     docker-compose # Compose multiple containers
+    duf # Disk usage analyzer
     fd # Fast directory walker
     fzf # Command-line fuzzy finder
     gcc # C compiler
@@ -94,6 +95,7 @@
     slack # Team communication tool
     sops # Secret management tool
     spotify # Music streaming service
+    tldr # Documentation tool
     tmux # Terminal multiplexer
     tokei # Code statistics tool
     wget # Network downloader
@@ -148,6 +150,7 @@
 
   programs.fish.shellAbbrs = {
     cm = "chezmoi";
+    du = "duf";
     mc = "ranger";
     telnet = "nc -zv";
   };
