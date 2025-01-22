@@ -104,6 +104,7 @@
     wget # Network downloader
     wireguard-tools # VPN tools
     yq-go # YAML processor
+    yt-dlp # Video downloader
     #z-lua # Directory jumper
     zoxide # Directory jumper
     # zed-editor    # Broken on Darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
