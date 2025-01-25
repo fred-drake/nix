@@ -15,5 +15,6 @@
   targets.darwin.defaults."com.apple.desktopservices".DSDontWriteUSBStores =
     true;
   targets.darwin.defaults."com.apple.finder".FXRemoveOldTrashItems = true;
+  targets.darwin.defaults."com.microsoft.VSCode".ApplePressAndHoldEnabled = false;
   targets.darwin.search = "Google";
 }
