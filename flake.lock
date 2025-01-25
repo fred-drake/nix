@@ -51,11 +51,11 @@
       },
       "locked": {
         "dir": "pkgs/firefox-addons",
-        "lastModified": 1737765090,
-        "narHash": "sha256-MPOsQAAjeh3KT1zjaoQbYZrYDZM3+m8Q7vcfeAwp5rE=",
+        "lastModified": 1737777799,
+        "narHash": "sha256-YDDKpj1j9MqGZgrugfu8mQWjpiy4r7fZ1FMJL58NasM=",
         "owner": "rycee",
         "repo": "nur-expressions",
-        "rev": "5c8d7b3f055f8fef157f7c9913b15806ee4520cc",
+        "rev": "9a96d7b0485be4654b6f2237efeccb1144d1ba54",
         "type": "gitlab"
       },
       "original": {
@@ -537,11 +537,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1737773207,
-        "narHash": "sha256-Da18qoBmVMrt8M1Jvd7VKcw6zJGyYgvmWYjoaLANxuQ=",
+        "lastModified": 1737840598,
+        "narHash": "sha256-qTL7f2HfHERzeXhWqHwH3wvPwugSTehuq7zTJDCwyyE=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "71660ced11f70df17d6acab8254af2d8977a79c9",
+        "rev": "99c172d7771b71d00f7f4fe75767d8f31a33db8d",
         "type": "github"
       },
       "original": {
@@ -552,11 +552,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1737632463,
-        "narHash": "sha256-38J9QfeGSej341ouwzqf77WIHAScihAKCt8PQJ+NH28=",
+        "lastModified": 1737746512,
+        "narHash": "sha256-nU6AezEX4EuahTO1YopzueAXfjFfmCHylYEFCagduHU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "0aa475546ed21629c4f5bbf90e38c846a99ec9e9",
+        "rev": "825479c345a7f806485b7f00dbe3abb50641b083",
         "type": "github"
       },
       "original": {
@@ -631,11 +631,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1737770193,
-        "narHash": "sha256-ETCmtb/yyMPore4j+/10VhrBYeGeJ0F8hHmLnkVMToc=",
+        "lastModified": 1737837057,
+        "narHash": "sha256-43BvWCrN5ViZ93fAhcMILwqM/wDYxw3FlUTXEz3N114=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "75843579756b6fdc0e89c6e3e58b38aa44915ddc",
+        "rev": "4a6b776db0b963d28aa73f293d9976d9b5a55d00",
         "type": "github"
       },
       "original": {
@@ -814,11 +814,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1737773660,
-        "narHash": "sha256-ly/LQEaxVGercVElz0Lem7cAHsi5GsUEK3fgsjg+MZE=",
+        "lastModified": 1737840599,
+        "narHash": "sha256-itDWlS1zpImtw2aWaLldBpO+qd/vYUX6hy1BGpx48Js=",
         "owner": "fred-drake",
         "repo": "vscode",
-        "rev": "f58400753e8936b23062d034cf3a5c5aa8455ef5",
+        "rev": "3469a93009ae07024a01c7cc42fa53cd7913fb89",
         "type": "github"
       },
       "original": {
