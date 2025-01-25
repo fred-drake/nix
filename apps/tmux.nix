@@ -81,9 +81,6 @@
       setw -g monitor-activity off
       set -g bell-action none
 
-      # clock mode
-      setw -g clock-mode-colour yellow
-
       # copy mode
       setw -g mode-style 'fg=black bg=red bold'
 
@@ -96,22 +93,25 @@
       # statusbar
       set -g status-position bottom
       set -g status-justify left
-      set -g status-style 'fg=red'
+      set -g status-style 'fg=red bg=#333333'
 
       set -g status-left ""
       set -g status-right ""
       set -g status-left-length 10
 
-      setw -g window-status-current-style 'fg=white bg=#003399'
-      setw -g window-status-current-format ' #I #W #F '
+      setw -g window-status-current-format '#[fg=#003399,bg=#333333]#[fg=white,bg=#003399] #I #W #F #[fg=#003399,bg=#333333]'
 
-      setw -g window-status-style 'fg=gray bg=black'
-      setw -g window-status-format ' #I #[fg=white]#W #[fg=yellow]#F '
+      setw -g window-status-format '#[fg=black,bg=#333334]#[fg=gray,bg=black] #I #[fg=white]#W #[fg=yellow]#F #[fg=black,bg=#333333]'
 
       setw -g window-status-bell-style 'fg=yellow bg=red bold'
 
       # messages
       set -g message-style 'fg=black bg=red bold'
+
+      # memory and cpu usage
+      set -g status-interval 2
+      set -g status-right '#[fg=#222222,bg=#333333]#[fg=green,bg=#222222] #(tmux-mem-cpu-load --interval 2)'
+      set -g status-right-length 80
     '';
   };
 }

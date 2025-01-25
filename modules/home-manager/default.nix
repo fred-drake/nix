@@ -100,6 +100,7 @@
     syncthing # File synchronization tool
     tldr # Documentation tool
     tmux # Terminal multiplexer
+    tmux-mem-cpu-load # CPU and memory usage monitor
     tokei # Code statistics tool
     wget # Network downloader
     wireguard-tools # VPN tools
