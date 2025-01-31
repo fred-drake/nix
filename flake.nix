@@ -171,6 +171,26 @@
             }
           ];
         };
+        laisa-mac-mini = darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          pkgs = import nixpkgs {
+            system = "aarch64-darwin";
+            config.allowUnfree = true; # Allow unfree packages
+            overlays = [overlayPackages];
+          };
+          specialArgs = {inherit inputs outputs nixpkgs;};
+          modules = [
+            ./modules/darwin
+            ./modules/darwin/laisa-mac-mini
+            home-manager.darwinModules.home-manager
+            {
+              home-manager = mkHomeManager [
+                ./modules/home-manager/os/darwin
+                ./modules/home-manager/host/laisa-mac-mini
+              ];
+            }
+          ];
+        };
       };
     };
 }

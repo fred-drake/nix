@@ -86,6 +86,7 @@
     inetutils # Network utilities
     inkscape # Vector graphics editor
     jq # Command-line JSON processor
+    llama-cpp # Text generation
     meld # Visual diff and merge tool
     fastfetch # System information tool
     oh-my-posh # Prompt theme engine
