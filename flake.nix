@@ -171,7 +171,7 @@
             }
           ];
         };
-        laisas-mac-mini = darwin.lib.darwinSystem {
+        Laisas-Mac-mini = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
