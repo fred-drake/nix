@@ -58,6 +58,18 @@
   } @ inputs: let
     inherit (self) outputs;
 
+    # Some casks take space on a limited Mac Mini, so only install them
+    # on Mac Studio and MacBook Pro.
+    non-mac-mini-casks = [
+      "godot-mono"
+      "steam"
+      "transmission"
+      "ultimaker-cura"
+      "wine-stable"
+      "winbox"
+      "zed"
+    ];
+
     # Function to create Neovim packages with unique names
     mkNeovimPackages = pkgs: neovimPkgs: let
       mkNeovimAlias = name: pkg:
@@ -138,7 +150,7 @@
             config.allowUnfree = true; # Allow unfree packages
             overlays = [overlayPackages];
           };
-          specialArgs = {inherit inputs outputs nixpkgs;};
+          specialArgs = {inherit inputs outputs nixpkgs non-mac-mini-casks;};
           modules = [
             ./modules/darwin
             ./modules/darwin/mac-studio
@@ -158,7 +170,7 @@
             config.allowUnfree = true; # Allow unfree packages
             overlays = [overlayPackages];
           };
-          specialArgs = {inherit inputs outputs nixpkgs;};
+          specialArgs = {inherit inputs outputs nixpkgs non-mac-mini-casks;};
           modules = [
             ./modules/darwin
             ./modules/darwin/macbook-pro

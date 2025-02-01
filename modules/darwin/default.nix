@@ -58,7 +58,6 @@
       "daisydisk"
       "finicky"
       "ghostty"
-      "godot-mono"
       "google-drive"
       "krita"
       "macdown"
@@ -67,12 +66,6 @@
       "obsidian"
       "raycast"
       "sourcetree"
-      "steam"
-      "transmission"
-      "ultimaker-cura"
-      "wine-stable"
-      "winbox"
-      "zed"
     ];
     taps = ["fred-drake/tap"]; # Additional Homebrew taps
     brews = [

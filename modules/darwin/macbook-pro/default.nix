@@ -1,6 +1,6 @@
 # Configuration specific to the MacBook Pro device.
-{...}: {
-  homebrew.casks = ["xp-pen"]; # Install XP-Pen driver for digital drawing tablet
+{non-mac-mini-casks, ...}: {
+  homebrew.casks = ["xp-pen"] ++ non-mac-mini-casks;
   system.keyboard = {
     enableKeyMapping = true;
     remapCapsLockToControl = true; # Remap Caps Lock to Control

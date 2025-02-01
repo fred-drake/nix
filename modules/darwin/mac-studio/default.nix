@@ -1,7 +1,7 @@
 # Configuration specific to the Mac Studio machine
-{...}: {
+{non-mac-mini-casks, ...}: {
   homebrew = {
-    casks = ["mutedeck" "proxy-audio-device" "elgato-stream-deck"];
+    casks = ["mutedeck" "proxy-audio-device" "elgato-stream-deck"] ++ non-mac-mini-casks;
     masApps = {
       "iWallpaper - Live Wallpaper" = 1552826194;
     };
