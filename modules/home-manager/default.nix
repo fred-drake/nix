@@ -157,6 +157,7 @@
   programs.fish.shellAbbrs = {
     cm = "chezmoi";
     du = "duf";
+    k = "kubectl";
     mc = "ranger";
     telnet = "nc -zv";
   };
