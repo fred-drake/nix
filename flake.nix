@@ -41,6 +41,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Declarative disk partitioning
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # My custom neovim configuration
     neovim.url = "github:fred-drake/neovim";
 
@@ -54,6 +60,7 @@
     nixpkgs,
     home-manager,
     darwin,
+    disko,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -137,6 +144,13 @@
             {
               home-manager = mkHomeManager [./modules/home-manager/linux];
             }
+          ];
+        };
+        forgejo = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            disko.nixosModules.disko
+            ./modules/nixos/forgejo/configuration.nix
           ];
         };
       };
