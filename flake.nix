@@ -146,6 +146,14 @@
             }
           ];
         };
+        nixoswinvm = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            disko.nixosModules.disko
+            ./modules/nixos/nixoswinvm/configuration.nix
+            ./modules/nixos/nixoswinvm/hardware-configuration.nix
+          ];
+        };
         forgejo = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
