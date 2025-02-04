@@ -151,6 +151,7 @@
           modules = [
             disko.nixosModules.disko
             ./modules/nixos/forgejo/configuration.nix
+            ./modules/nixos/forgejo/hardware-configuration.nix
           ];
         };
       };
