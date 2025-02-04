@@ -22,6 +22,21 @@
     pkgs.gitMinimal
   ];
 
+  networking = {
+    hostName = "forgejo";
+    # domain = "internal.freddrake.com";
+    # dhcpcd.enable = false;
+    # interfaces.ens18.
+  };
+  users.users.fdrake = {
+    isNormalUser = true;
+    home = "/home/fdrake";
+    description = "Fred Drake";
+    extraGroups = ["wheel"];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
+    ];
+  };
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
   ];
