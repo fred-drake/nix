@@ -97,6 +97,15 @@
     in
       builtins.mapAttrs mkVSCodeAlias vscodePkgs;
 
+    mkVSCodeModule = {
+      pkgs,
+      inputs,
+    }: {
+      home.packages =
+        (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
+        ++ [inputs.vscode.packages.${pkgs.system}.default];
+    };
+
     overlayPackages = final: prev: {
       wireguard-tools = inputs.nixpkgs-stable.legacyPackages.${prev.system}.wireguard-tools;
     };
@@ -113,11 +122,6 @@
             home.packages =
               (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
               ++ [inputs.neovim.packages.${pkgs.system}.default];
-          })
-          ({pkgs, ...}: {
-            home.packages =
-              (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
-              ++ [inputs.vscode.packages.${pkgs.system}.default];
           })
         ]
         ++ imports;
@@ -142,16 +146,21 @@
             inputs.nixos-hardware.nixosModules.apple-t2
             home-manager.nixosModules.home-manager
             {
-              home-manager = mkHomeManager [./modules/home-manager/linux];
+              home-manager = mkHomeManager [./modules/home-manager/desktop ./modules/home-manager/linux-desktop (mkVSCodeModule {inherit inputs;})];
             }
           ];
         };
         nixoswinvm = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = {inherit inputs outputs nixpkgs;};
           modules = [
             disko.nixosModules.disko
             ./modules/nixos/nixoswinvm/configuration.nix
             ./modules/nixos/nixoswinvm/hardware-configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = mkHomeManager [];
+            }
           ];
         };
         forgejo = nixpkgs.lib.nixosSystem {
@@ -160,6 +169,10 @@
             disko.nixosModules.disko
             ./modules/nixos/forgejo/configuration.nix
             ./modules/nixos/forgejo/hardware-configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = mkHomeManager [];
+            }
           ];
         };
       };
@@ -180,8 +193,9 @@
             home-manager.darwinModules.home-manager
             {
               home-manager = mkHomeManager [
-                ./modules/home-manager/os/darwin
-                ./modules/home-manager/host/mac-studio
+                ./modules/home-manager/desktop
+                ./modules/home-manager/darwin
+                (mkVSCodeModule {inherit inputs;})
               ];
             }
           ];
@@ -200,8 +214,9 @@
             home-manager.darwinModules.home-manager
             {
               home-manager = mkHomeManager [
-                ./modules/home-manager/os/darwin
-                ./modules/home-manager/host/macbook-pro
+                ./modules/home-manager/desktop
+                ./modules/home-manager/darwin
+                (mkVSCodeModule {inherit inputs;})
               ];
             }
           ];
@@ -220,8 +235,9 @@
             home-manager.darwinModules.home-manager
             {
               home-manager = mkHomeManager [
-                ./modules/home-manager/os/darwin
-                ./modules/home-manager/host/laisas-mac-mini
+                ./modules/home-manager/desktop
+                ./modules/home-manager/darwin
+                (mkVSCodeModule {inherit inputs;})
               ];
             }
           ];
