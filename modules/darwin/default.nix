@@ -65,6 +65,7 @@
       "obs"
       "obsidian"
       "raycast"
+      "rubymine"
       "sourcetree"
     ];
     taps = ["fred-drake/tap"]; # Additional Homebrew taps
