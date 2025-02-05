@@ -149,7 +149,11 @@
               inputs.nixos-hardware.nixosModules.apple-t2
               home-manager.nixosModules.home-manager
               {
-                home-manager = mkHomeManager [./modules/home-manager/desktop ./modules/home-manager/linux-desktop (mkVSCodeModule {inherit pkgs inputs;})];
+                home-manager = mkHomeManager [
+                  ./modules/home-manager/desktop.nix
+                  ./modules/home-manager/linux-desktop.nix
+                  (mkVSCodeModule {inherit pkgs inputs;})
+                ];
               }
             ];
           };
@@ -202,8 +206,8 @@
               home-manager.darwinModules.home-manager
               {
                 home-manager = mkHomeManager [
-                  ./modules/home-manager/desktop
-                  ./modules/home-manager/darwin
+                  ./modules/home-manager/desktop.nix
+                  ./modules/home-manager/darwin.nix
                   (mkVSCodeModule {inherit pkgs inputs;})
                 ];
               }
@@ -226,8 +230,8 @@
               home-manager.darwinModules.home-manager
               {
                 home-manager = mkHomeManager [
-                  ./modules/home-manager/desktop
-                  ./modules/home-manager/darwin
+                  ./modules/home-manager/desktop.nix
+                  ./modules/home-manager/darwin.nix
                   (mkVSCodeModule {inherit pkgs inputs;})
                 ];
               }
@@ -250,8 +254,8 @@
               home-manager.darwinModules.home-manager
               {
                 home-manager = mkHomeManager [
-                  ./modules/home-manager/desktop
-                  ./modules/home-manager/darwin
+                  ./modules/home-manager/desktop.nix
+                  ./modules/home-manager/darwin.nix
                   (mkVSCodeModule {inherit pkgs inputs;})
                 ];
               }
