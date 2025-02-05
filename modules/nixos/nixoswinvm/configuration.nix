@@ -1,4 +1,5 @@
 {
+  inputs,
   modulesPath,
   lib,
   pkgs,
@@ -38,6 +39,12 @@
     # interfaces.ens18.
   };
 
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
+
+  programs.zsh.enable = true;
+
   security.sudo.wheelNeedsPassword = false;
 
   users.users.fdrake = {
@@ -48,6 +55,8 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
     ];
+    packages = with pkgs; [direnv git just inputs.neovim.packages.${pkgs.system}.default];
+    shell = pkgs.zsh;
   };
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"

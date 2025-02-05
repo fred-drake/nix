@@ -46,71 +46,33 @@
       recursive = true;
     };
 
-    "Pictures" = {
-      source = ../../homefiles/Pictures;
-      recursive = true;
-    };
-
-    ".finicky.js" = {source = ../../homefiles/finicky.js;};
-
     ".hgignore_global" = {source = ../../homefiles/hgignore_global;};
-
-    ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
   };
 
   # Install packages using Home Manager
   home.packages = with pkgs; [
-    aider-chat # AI Chat client
     age # Modern encryption tool
     bat # Cat clone with syntax highlighting
     btop # System monitor
-    # bitwarden-cli   # Command-line interface for Bitwarden
-    chafa # Image resizer
     chezmoi # Dotfiles manager
     curl # URL retrieval utility
     delta # Syntax-highlighting pager
     direnv # Environment variable manager
-    discord # Voice and text chat app
-    docker-compose # Compose multiple containers
     duf # Disk usage analyzer
     fd # Fast directory walker
     fzf # Command-line fuzzy finder
-    gcc # C compiler
-    ghq # Remote repository management
     git # Version control system
     gnupg # GNU Privacy Guard
-    google-chrome # Web browser
-    hclfmt # HCL formatter
-    imagemagick # Image manipulation tools
-    imgcat # Image viewer
     inetutils # Network utilities
-    inkscape # Vector graphics editor
     jq # Command-line JSON processor
-    llama-cpp # Text generation
-    meld # Visual diff and merge tool
     fastfetch # System information tool
     oh-my-posh # Prompt theme engine
-    podman
-    podman-tui
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
-    slack # Team communication tool
     sops # Secret management tool
-    spotify # Music streaming service
-    stc-cli # Syncthing CLI
-    syncthing # File synchronization tool
-    tldr # Documentation tool
-    tmux # Terminal multiplexer
-    tmux-mem-cpu-load # CPU and memory usage monitor
-    tokei # Code statistics tool
     wget # Network downloader
-    wireguard-tools # VPN tools
     yq-go # YAML processor
-    yt-dlp # Video downloader
-    #z-lua # Directory jumper
     zoxide # Directory jumper
-    # zed-editor    # Broken on Darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
-    zoom-us # Video conferencing tool
   ];
   # Set session variables
   home.sessionVariables = {
