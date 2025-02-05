@@ -13,13 +13,13 @@
 {pkgs, ...}: {
   home.file = {
     "Pictures" = {
-      source = ../../../homefiles/Pictures;
+      source = ../../homefiles/Pictures;
       recursive = true;
     };
 
-    ".finicky.js" = {source = ../../../homefiles/finicky.js;};
+    ".finicky.js" = {source = ../../homefiles/finicky.js;};
 
-    ".ideavimrc" = {source = ../../../homefiles/ideavimrc;};
+    ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
   };
 
   # Install packages using Home Manager
