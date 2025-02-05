@@ -77,6 +77,10 @@
       "zed"
     ];
 
+    overlayPackages = final: prev: {
+      wireguard-tools = inputs.nixpkgs-stable.legacyPackages.${prev.system}.wireguard-tools;
+    };
+
     # Function to create Neovim packages with unique names
     mkNeovimPackages = pkgs: neovimPkgs: let
       mkNeovimAlias = name: pkg:
@@ -106,10 +110,6 @@
         ++ [inputs.vscode.packages.${pkgs.system}.default];
     };
 
-    overlayPackages = final: prev: {
-      wireguard-tools = inputs.nixpkgs-stable.legacyPackages.${prev.system}.wireguard-tools;
-    };
-
     # Create a home manager configuration, with additional imports specific to the configuration
     mkHomeManager = imports: {
       useGlobalPkgs = true;
@@ -132,26 +132,32 @@
     // {
       # NixOS configurations
       nixosConfigurations = {
-        macbookx86 = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+        macbookx86 = let
           pkgs = import nixpkgs {
             system = "x86_64-linux";
             config.allowUnfree = true;
             overlays = [overlayPackages];
           };
-          specialArgs = {inherit inputs outputs nixpkgs;};
-          modules = [
-            inputs.nur.nixosModules.nur
-            ./modules/nixos/macbookx86/configuration.nix
-            inputs.nixos-hardware.nixosModules.apple-t2
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = mkHomeManager [./modules/home-manager/desktop ./modules/home-manager/linux-desktop (mkVSCodeModule {inherit inputs;})];
-            }
-          ];
-        };
+        in
+          nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            pkgs = pkgs;
+            specialArgs = {inherit inputs outputs nixpkgs;};
+            modules = [
+              inputs.nur.nixosModules.nur
+              ./modules/nixos/macbookx86/configuration.nix
+              inputs.nixos-hardware.nixosModules.apple-t2
+              home-manager.nixosModules.home-manager
+              {
+                home-manager = mkHomeManager [./modules/home-manager/desktop ./modules/home-manager/linux-desktop (mkVSCodeModule {inherit pkgs inputs;})];
+              }
+            ];
+          };
         nixoswinvm = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+          };
           specialArgs = {inherit inputs outputs nixpkgs;};
           modules = [
             disko.nixosModules.disko
@@ -179,69 +185,78 @@
 
       # Darwin (macOS) configurations
       darwinConfigurations = {
-        mac-studio = darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
+        mac-studio = let
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
             overlays = [overlayPackages];
           };
-          specialArgs = {inherit inputs outputs nixpkgs non-mac-mini-casks;};
-          modules = [
-            ./modules/darwin
-            ./modules/darwin/mac-studio
-            home-manager.darwinModules.home-manager
-            {
-              home-manager = mkHomeManager [
-                ./modules/home-manager/desktop
-                ./modules/home-manager/darwin
-                (mkVSCodeModule {inherit inputs;})
-              ];
-            }
-          ];
-        };
-        macbook-pro = darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
+        in
+          darwin.lib.darwinSystem {
+            system = "aarch64-darwin";
+            pkgs = pkgs;
+            specialArgs = {inherit inputs outputs nixpkgs non-mac-mini-casks;};
+            modules = [
+              ./modules/darwin
+              ./modules/darwin/mac-studio
+              home-manager.darwinModules.home-manager
+              {
+                home-manager = mkHomeManager [
+                  ./modules/home-manager/desktop
+                  ./modules/home-manager/darwin
+                  (mkVSCodeModule {inherit pkgs inputs;})
+                ];
+              }
+            ];
+          };
+        macbook-pro = let
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
             overlays = [overlayPackages];
           };
-          specialArgs = {inherit inputs outputs nixpkgs non-mac-mini-casks;};
-          modules = [
-            ./modules/darwin
-            ./modules/darwin/macbook-pro
-            home-manager.darwinModules.home-manager
-            {
-              home-manager = mkHomeManager [
-                ./modules/home-manager/desktop
-                ./modules/home-manager/darwin
-                (mkVSCodeModule {inherit inputs;})
-              ];
-            }
-          ];
-        };
-        Laisas-Mac-mini = darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
+        in
+          darwin.lib.darwinSystem {
+            system = "aarch64-darwin";
+            pkgs = pkgs;
+            specialArgs = {inherit inputs outputs nixpkgs non-mac-mini-casks;};
+            modules = [
+              ./modules/darwin
+              ./modules/darwin/macbook-pro
+              home-manager.darwinModules.home-manager
+              {
+                home-manager = mkHomeManager [
+                  ./modules/home-manager/desktop
+                  ./modules/home-manager/darwin
+                  (mkVSCodeModule {inherit pkgs inputs;})
+                ];
+              }
+            ];
+          };
+        Laisas-Mac-mini = let
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
             overlays = [overlayPackages];
           };
-          specialArgs = {inherit inputs outputs nixpkgs;};
-          modules = [
-            ./modules/darwin
-            ./modules/darwin/laisas-mac-mini
-            home-manager.darwinModules.home-manager
-            {
-              home-manager = mkHomeManager [
-                ./modules/home-manager/desktop
-                ./modules/home-manager/darwin
-                (mkVSCodeModule {inherit inputs;})
-              ];
-            }
-          ];
-        };
+        in
+          darwin.lib.darwinSystem {
+            system = "aarch64-darwin";
+            pkgs = pkgs;
+            specialArgs = {inherit inputs outputs nixpkgs;};
+            modules = [
+              ./modules/darwin
+              ./modules/darwin/laisas-mac-mini
+              home-manager.darwinModules.home-manager
+              {
+                home-manager = mkHomeManager [
+                  ./modules/home-manager/desktop
+                  ./modules/home-manager/darwin
+                  (mkVSCodeModule {inherit pkgs inputs;})
+                ];
+              }
+            ];
+          };
       };
     };
 }
