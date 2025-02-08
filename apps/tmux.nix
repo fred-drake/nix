@@ -5,7 +5,6 @@
     shell = "${pkgs.fish}/bin/fish";
     terminal = "tmux-256color";
     plugins = with pkgs; [
-      tmuxPlugins.resurrect
       tmuxPlugins.continuum
       tmuxPlugins.tmux-fzf
     ];
