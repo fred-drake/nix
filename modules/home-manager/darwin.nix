@@ -2,6 +2,7 @@
   home.packages = with pkgs; [
     bartender
     mas # Mac App Store command-line interface
+    yabai # MacOS tiling window manager
   ];
 
   # macOS-specific settings
