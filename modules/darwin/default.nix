@@ -71,7 +71,7 @@
     taps = ["fred-drake/tap"]; # Additional Homebrew taps
     brews = [
       "openssh"
-      "rubyfmt"
+      "ruby-install"
       "watch"
     ]; # Homebrew formulae
     onActivation = {
