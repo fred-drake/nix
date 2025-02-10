@@ -52,6 +52,7 @@
 
     # My custom vscode configuration
     vscode.url = "github:fred-drake/vscode";
+    # vscode.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/vscode"; # For locally testing my contributions
   };
 
   # Output configuration
