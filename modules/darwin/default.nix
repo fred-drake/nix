@@ -62,6 +62,7 @@
       "krita"
       "macdown"
       "maestral"
+      "mouseless"
       "obs"
       "obsidian"
       "raycast"
