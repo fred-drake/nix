@@ -216,7 +216,7 @@ run = "move-node-to-workspace O"
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari'
-run = "move-node-to-workspace A"
+run = "move-node-to-workspace F"
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
