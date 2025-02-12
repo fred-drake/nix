@@ -233,3 +233,11 @@ run = "move-node-to-workspace S"
 [[on-window-detected]]
 if.app-id = 'com.microsoft.VSCode'
 run = "move-node-to-workspace C"
+
+[[on-window-detected]]
+if.app-id = 'com.apple.FaceTime'
+run = "move-node-to-workspace G"
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ScreenContinuity'
+run = "move-node-to-workspace G"
