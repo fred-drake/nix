@@ -57,6 +57,7 @@
     chezmoi # Dotfiles manager
     curl # URL retrieval utility
     delta # Syntax-highlighting pager
+    devenv # Development environment manager
     direnv # Environment variable manager
     duf # Disk usage analyzer
     fd # Fast directory walker
