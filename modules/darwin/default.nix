@@ -113,9 +113,6 @@
   # Security configuration
   security.pam.enableSudoTouchIdAuth = true; # Enable Touch ID for sudo
 
-  # Enable Nix daemon service
-  services.nix-daemon.enable = true;
-
   # System configuration
   system = {
     # Activation script to install Rosetta 2 for x86 app compatibility

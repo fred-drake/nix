@@ -49,6 +49,7 @@
 
     # My custom neovim configuration
     neovim.url = "github:fred-drake/neovim";
+    # neovim.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/neovim"; # For locally testing my contributions
 
     # My custom vscode configuration
     vscode.url = "github:fred-drake/vscode";
