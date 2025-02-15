@@ -239,7 +239,7 @@
               }
             ];
           };
-        Laisas-Mac-mini = let
+        laisas-mac-mini = let
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
