@@ -60,13 +60,15 @@
     devenv # Development environment manager
     direnv # Environment variable manager
     duf # Disk usage analyzer
+    fastfetch # System information tool
     fd # Fast directory walker
     fzf # Command-line fuzzy finder
     git # Version control system
     gnupg # GNU Privacy Guard
     inetutils # Network utilities
     jq # Command-line JSON processor
-    fastfetch # System information tool
+    kind # Kubernetes cluster manager
+    kubectl # Kubernetes command-line tool
     oh-my-posh # Prompt theme engine
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
