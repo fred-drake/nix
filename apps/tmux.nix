@@ -26,6 +26,8 @@
       # reorder windows if one closes
       set-option -g renumber-windows on
 
+      set-option -g allow-passthrough on
+
       # reload config file (change file location to your the tmux.conf you want to use)
       bind r source-file ~/.config/tmux/tmux.conf \; display "Configuration reloaded!"
 
