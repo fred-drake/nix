@@ -59,6 +59,7 @@
     delta # Syntax-highlighting pager
     devenv # Development environment manager
     direnv # Environment variable manager
+    dua
     duf # Disk usage analyzer
     fastfetch # System information tool
     fd # Fast directory walker
