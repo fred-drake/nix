@@ -74,6 +74,7 @@
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
     sops # Secret management tool
+    spotify-player # Spotify client
     tmuxinator # Tmux session manager
     wget # Network downloader
     yq-go # YAML processor
