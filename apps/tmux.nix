@@ -111,8 +111,8 @@
 
       # memory and cpu usage
       set -g status-interval 2
-      set -g status-right '#[fg=#222222,bg=#333333]#[fg=green,bg=#222222] #(tmux-mem-cpu-load --interval 2)'
-      set -g status-right-length 80
+      set -g status-right '#[fg=yellow]#(hostname --short) #[fg=#222222,bg=#333333]#[fg=green,bg=#222222] #(tmux-mem-cpu-load --interval 2)'
+      set -g status-right-length 100
     '';
   };
 }
