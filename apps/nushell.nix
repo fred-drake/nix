@@ -23,7 +23,6 @@
       man = "batman";
       lg = "lazygit";
       ranger = "yy";
-      cat = "bat --paging=never --style=plain";
     };
     extraConfig = ''
       # Plugins
