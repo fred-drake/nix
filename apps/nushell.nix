@@ -16,6 +16,7 @@
     shellAliases = {
       cm = "chezmoi";
       df = "duf";
+      docker = "podman";
       k = "kubectl";
       mc = "yy";
       t = "tmuxinator";
@@ -41,6 +42,7 @@
       def lart [] { ls -a | sort-by modified | reverse }
       def llart [] { ls -la | sort-by modified | reverse }
 
+      $env.DOCKER_HOST = $"unix://(podman machine inspect | from json | get ConnectionInfo | get PodmanSocket | get Path | to text | str trim)"
 
       let carapace_completer = {|spans|
       carapace $spans.0 nushell ...$spans | from json

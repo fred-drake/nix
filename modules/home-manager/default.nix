@@ -70,7 +70,9 @@
     inetutils # Network utilities
     jq # Command-line JSON processor
     kind # Kubernetes cluster manager
+    kondo # Cleans node_modules, target, build, and friends from your projects.
     kubectl # Kubernetes command-line tool
+    lazydocker # Docker CLI with auto-completion and syntax highlighting
     oh-my-posh # Prompt theme engine
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
