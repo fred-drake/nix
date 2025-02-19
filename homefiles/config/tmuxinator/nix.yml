@@ -44,5 +44,4 @@ root: ~/nix
 # attach: false
 windows:
   - nix: nvim
-  - nix-run:
-  - git: lazygit
+  - shell:

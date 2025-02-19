@@ -45,5 +45,4 @@ root: ~/Source/incubator/netminder
 windows:
   - nvim: nvim-rust
   - aider: aider
-  - fish:
-  - git: lazygit
+  - shell:

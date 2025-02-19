@@ -44,5 +44,4 @@ root: ~/Source/github.com/fred-drake/neovim
 # attach: false
 windows:
   - nvim: nvim
-  - nvim-run:
-  - git: lazygit
+  - shell:

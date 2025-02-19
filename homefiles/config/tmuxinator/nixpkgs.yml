@@ -1,7 +1,7 @@
 # /Users/fdrake/.config/tmuxinator/nix.yml
 
-name: infrastructure
-root: ~/Source/github.com/fred-drake/infrastructure
+name: nixpkgs
+root: ~/Source/github.com/fred-drake/nixpkgs
 # Optional tmux socket
 # socket_name: foo
 
@@ -43,5 +43,5 @@ root: ~/Source/github.com/fred-drake/infrastructure
 # Controls whether the tmux session should be attached to automatically. Defaults to true.
 # attach: false
 windows:
-  - nvim: nvim
+  - nix: nvim
   - shell:
