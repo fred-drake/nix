@@ -15,6 +15,7 @@
       bash
       zsh
       fish
+      nushell
     ]; # Available shells
     systemPackages = [pkgs.coreutils]; # Core utilities package
     systemPath = [
@@ -40,7 +41,7 @@
       # Mac App Store applications
       "Bitwarden" = 1352778147;
       "Microsoft Remote Desktop" = 1295203466;
-      "OneDrive" = 823766827;
+      # "OneDrive" = 823766827;
       "Pages" = 409201541;
       "RunCat" = 1429033973;
       "The Unarchiver" = 425424353;

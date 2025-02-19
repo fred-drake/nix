@@ -12,7 +12,7 @@
 # Home Manager configuration for macOS
 {pkgs, ...}: {
   # Import additional configuration files
-  imports = [../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix ../../apps/tmux.nix];
+  imports = [../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix ../../apps/nushell.nix ../../apps/tmux.nix];
 
   # Enable and configure EditorConfig
   editorconfig.enable = true;
@@ -66,6 +66,7 @@
     fzf # Command-line fuzzy finder
     git # Version control system
     gnupg # GNU Privacy Guard
+    highlight # Syntax highlighting
     inetutils # Network utilities
     jq # Command-line JSON processor
     kind # Kubernetes cluster manager
@@ -73,12 +74,12 @@
     oh-my-posh # Prompt theme engine
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
+    skim # Fuzzy finder
     sops # Secret management tool
     spotify-player # Spotify client
     tmuxinator # Tmux session manager
     wget # Network downloader
     yq-go # YAML processor
-    zoxide # Directory jumper
   ];
   # Set session variables
   home.sessionVariables = {
@@ -97,11 +98,11 @@
   # Define shell aliases
   home.shellAliases = {
     man = "batman";
-    llat = "eza -la --sort=modified";
-    llart = "eza -lar --sort=modified";
+    # llat = "eza -la --sort=modified";
+    # llart = "eza -lar --sort=modified";
     lg = "lazygit";
-    ranger = "yazi";
-    cat = "bat --paging=never --style=plain";
+    ranger = "yy";
+    # cat = "bat --paging=never --style=plain";
   };
 
   # Set Home Manager state version
@@ -117,10 +118,12 @@
     prettybat
   ];
   programs.bottom.enable = true; # System monitor
-  programs.eza.enable = true; # Modern ls replacement
-  programs.eza.extraOptions = ["--group-directories-first" "--header"];
-  programs.eza.git = true;
-  programs.eza.icons = "auto";
+  programs.carapace.enable = true;
+  programs.direnv.enable = true;
+  # programs.eza.enable = true; # Modern ls replacement
+  # programs.eza.extraOptions = ["--group-directories-first" "--header"];
+  # programs.eza.git = true;
+  # programs.eza.icons = "auto";
 
   programs.fish.shellAbbrs = {
     cm = "chezmoi";
@@ -183,6 +186,12 @@
   # We pull neovim through github:fred-drake/neovim now
   programs.neovim.enable = false;
 
+  programs.oh-my-posh.enable = true;
+
+  # programs.pay-respects.enable = true;
+
   # Yazi file manager
   programs.yazi.enable = true;
+
+  programs.zoxide.enable = true;
 }
