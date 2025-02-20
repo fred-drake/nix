@@ -1,6 +1,6 @@
-# Home Manager Configuration for macOS
+# Home Manager Configuration for Workstations
 #
-# This file defines the Home Manager configuration for macOS systems.
+# This file defines the Home Manager configuration for all workstation systems.
 # It includes:
 #   - Package installations
 #   - Program configurations (git, kitty, neovim, zsh, etc.)
@@ -16,8 +16,6 @@
       source = ../../homefiles/Pictures;
       recursive = true;
     };
-
-    ".finicky.js" = {source = ../../homefiles/finicky.js;};
 
     ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
   };
@@ -35,6 +33,10 @@
     hclfmt # HCL formatter imagemagick # Image manipulation tools
     imgcat # Image viewer
     inkscape # Vector graphics editor
+    kind # Kubernetes cluster manager
+    kondo # Cleans node_modules, target, build, and friends from your projects.
+    kubectl # Kubernetes command-line tool
+    lazydocker # Docker CLI with auto-completion and syntax highlighting
     llama-cpp # Text generation
     meld # Visual diff and merge tool
     oh-my-posh # Prompt theme engine
@@ -42,10 +44,12 @@
     podman-tui
     slack # Team communication tool
     spotify # Music streaming service
+    spotify-player # Spotify client
     stc-cli # Syncthing CLI
     syncthing # File synchronization tool
     tldr # Documentation tool
     tmux # Terminal multiplexer
+    tmuxinator # Tmux session manager
     tmux-mem-cpu-load # CPU and memory usage monitor
     tokei # Code statistics tool
     wireguard-tools # VPN tools
@@ -55,6 +59,8 @@
 
   # Set session variables
   home.sessionVariables = {
+    GHQ_ROOT = "$HOME/Source";
+    PODMAN_COMPOSE_WARNING_LOGS = "false";
   };
 
   # Define shell aliases

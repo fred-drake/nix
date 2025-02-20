@@ -152,7 +152,7 @@
               home-manager.nixosModules.home-manager
               {
                 home-manager = mkHomeManager [
-                  ./modules/home-manager/desktop.nix
+                  ./modules/home-manager/workstation.nix
                   ./modules/home-manager/linux-desktop.nix
                   (mkVSCodeModule {inherit pkgs inputs;})
                 ];
@@ -208,7 +208,7 @@
               home-manager.darwinModules.home-manager
               {
                 home-manager = mkHomeManager [
-                  ./modules/home-manager/desktop.nix
+                  ./modules/home-manager/workstation.nix
                   ./modules/home-manager/darwin.nix
                   (mkVSCodeModule {inherit pkgs inputs;})
                 ];
@@ -232,7 +232,7 @@
               home-manager.darwinModules.home-manager
               {
                 home-manager = mkHomeManager [
-                  ./modules/home-manager/desktop.nix
+                  ./modules/home-manager/workstation.nix
                   ./modules/home-manager/darwin.nix
                   (mkVSCodeModule {inherit pkgs inputs;})
                 ];
@@ -256,7 +256,7 @@
               home-manager.darwinModules.home-manager
               {
                 home-manager = mkHomeManager [
-                  ./modules/home-manager/desktop.nix
+                  ./modules/home-manager/workstation.nix
                   ./modules/home-manager/darwin.nix
                   (mkVSCodeModule {inherit pkgs inputs;})
                 ];

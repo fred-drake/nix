@@ -69,17 +69,11 @@
     highlight # Syntax highlighting
     inetutils # Network utilities
     jq # Command-line JSON processor
-    kind # Kubernetes cluster manager
-    kondo # Cleans node_modules, target, build, and friends from your projects.
-    kubectl # Kubernetes command-line tool
-    lazydocker # Docker CLI with auto-completion and syntax highlighting
     oh-my-posh # Prompt theme engine
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
     skim # Fuzzy finder
     sops # Secret management tool
-    spotify-player # Spotify client
-    tmuxinator # Tmux session manager
     wget # Network downloader
     yq-go # YAML processor
   ];
@@ -89,22 +83,14 @@
     PAGER = "less";
     CLICOLOR = 1;
     EDITOR = "nvim";
-    HOMEBREW_PREFIX = "/opt/homebrew";
-    HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
-    HOMEBREW_REPOSITORY = "/opt/homebrew";
-    GHQ_ROOT = "$HOME/Source";
     SOPS_AGE_KEY_FILE = "$HOME/.age/personal-key.txt";
-    PODMAN_COMPOSE_WARNING_LOGS = "false";
   };
 
   # Define shell aliases
   home.shellAliases = {
     man = "batman";
-    # llat = "eza -la --sort=modified";
-    # llart = "eza -lar --sort=modified";
     lg = "lazygit";
     ranger = "yy";
-    # cat = "bat --paging=never --style=plain";
   };
 
   # Set Home Manager state version
@@ -122,19 +108,6 @@
   programs.bottom.enable = true; # System monitor
   programs.carapace.enable = true;
   programs.direnv.enable = true;
-  # programs.eza.enable = true; # Modern ls replacement
-  # programs.eza.extraOptions = ["--group-directories-first" "--header"];
-  # programs.eza.git = true;
-  # programs.eza.icons = "auto";
-
-  programs.fish.shellAbbrs = {
-    cm = "chezmoi";
-    du = "duf";
-    k = "kubectl";
-    mc = "ranger";
-    t = "tmuxinator";
-    telnet = "nc -zv";
-  };
 
   programs.fzf = {
     enable = true; # Fuzzy finder

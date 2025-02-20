@@ -1,10 +1,20 @@
 {pkgs, ...}: {
+  home.file = {
+    ".finicky.js" = {source = ../../homefiles/finicky.js;};
+  };
   home.packages = with pkgs; [
     bartender
     mas # Mac App Store command-line interface
     aerospace # MacOS tiling window manager
     skhd # Application hotkeys
   ];
+
+  # Set session variables
+  home.sessionVariables = {
+    HOMEBREW_PREFIX = "/opt/homebrew";
+    HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
+    HOMEBREW_REPOSITORY = "/opt/homebrew";
+  };
 
   # macOS-specific settings
   targets.darwin.currentHostDefaults."com.apple.controlcenter".BatteryShowPercentage =

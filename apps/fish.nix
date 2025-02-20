@@ -98,5 +98,14 @@
         };
       }
     ];
+
+    shellAbbrs = {
+      cm = "chezmoi";
+      du = "duf";
+      k = "kubectl";
+      mc = "ranger";
+      t = "tmuxinator";
+      telnet = "nc -zv";
+    };
   };
 }
