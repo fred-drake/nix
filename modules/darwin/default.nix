@@ -56,6 +56,7 @@
       "balenaetcher"
       "brave-browser"
       "bruno"
+      "calibre"
       "daisydisk"
       "finicky"
       "ghostty"
