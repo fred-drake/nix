@@ -35,6 +35,7 @@
             just
             aider-chat
             alejandra
+            nixos-anywhere
           ]);
 
         shellHook = ''
