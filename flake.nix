@@ -175,6 +175,21 @@
             }
           ];
         };
+        nixosaarch64vm = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          pkgs = import nixpkgs {
+            system = "aarch64-linux";
+          };
+          specialArgs = {inherit inputs outputs nixpkgs;};
+          modules = [
+            disko.nixosModules.disko
+            ./modules/nixos/nixosaarch64vm/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = mkHomeManager [];
+            }
+          ];
+        };
         forgejo = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
