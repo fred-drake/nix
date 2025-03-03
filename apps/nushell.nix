@@ -42,7 +42,10 @@
       def lart [] { ls -a | sort-by modified | reverse }
       def llart [] { ls -la | sort-by modified | reverse }
 
-      $env.DOCKER_HOST = $"unix://(podman machine inspect | from json | get ConnectionInfo | get PodmanSocket | get Path | to text | str trim)"
+      let hostname = (sys host | get hostname)
+      if $hostname != "nixosaarch64vm" {
+        $env.DOCKER_HOST = "unix:///var/run/docker.sock"
+      }
 
       let carapace_completer = {|spans|
       carapace $spans.0 nushell ...$spans | from json
