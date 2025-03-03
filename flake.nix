@@ -184,10 +184,10 @@
           modules = [
             disko.nixosModules.disko
             ./modules/nixos/nixosaarch64vm/configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = mkHomeManager [];
-            }
+            # home-manager.nixosModules.home-manager
+            # {
+            #   home-manager = mkHomeManager [];
+            # }
           ];
         };
         forgejo = nixpkgs.lib.nixosSystem {
