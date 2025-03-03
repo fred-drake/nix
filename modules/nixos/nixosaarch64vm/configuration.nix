@@ -7,8 +7,9 @@
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    (modulesPath + "/profiles/qemu-guest.nix")
+    # (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-config.nix
+    ./hardware-configuration.nix
   ];
 
   boot.loader.grub = {
@@ -26,7 +27,7 @@
 
   networking = {
     hostName = "nixosaarch64vm";
-    interfaces.enp0s1.useDHCP = true;
+    interfaces."ens160".useDHCP = true;
   };
 
   nix.extraOptions = ''
