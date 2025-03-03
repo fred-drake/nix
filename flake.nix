@@ -120,11 +120,11 @@
       users.fdrake.imports =
         [
           ./modules/home-manager
-          # ({pkgs, ...}: {
-          #   home.packages =
-          #     (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
-          #     ++ [inputs.neovim.packages.${pkgs.system}.default];
-          # })
+          ({pkgs, ...}: {
+            home.packages =
+              (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
+              ++ [inputs.neovim.packages.${pkgs.system}.default];
+          })
         ]
         ++ imports;
       extraSpecialArgs = {inherit inputs;};
@@ -186,7 +186,9 @@
             ./modules/nixos/nixosaarch64vm/configuration.nix
             home-manager.nixosModules.home-manager
             {
-              home-manager = mkHomeManager [];
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.fdrake = import ./modules/home-manager;
             }
           ];
         };
