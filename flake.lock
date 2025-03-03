@@ -394,11 +394,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1739751097,
-        "narHash": "sha256-625KAZBxaDKzD5x4vXZSspO4wN1k/MAenVNiLXqUTCI=",
+        "lastModified": 1740964945,
+        "narHash": "sha256-OAbIDp2QyipGdiNVWv2N2+WOQXXt9LuG5krNODqAgh0=",
         "owner": "fred-drake",
         "repo": "neovim",
-        "rev": "7043eac8ba5bf573948fde4f3118f52adac58a5f",
+        "rev": "85377801b248f43b4e754fae440175ff2fbf3e4c",
         "type": "github"
       },
       "original": {
