@@ -239,6 +239,15 @@
             modules = [
               ./modules/darwin
               ./modules/darwin/mac-studio
+              nix-homebrew.darwinModules.nix-homebrew
+              {
+                nix-homebrew = {
+                  enable = true;
+                  enableRosetta = true;
+                  user = "fdrake";
+                  autoMigrate = true;
+                };
+              }
               home-manager.darwinModules.home-manager
               {
                 home-manager = mkHomeManager [
@@ -303,6 +312,15 @@
             modules = [
               ./modules/darwin
               ./modules/darwin/laisas-mac-mini
+              nix-homebrew.darwinModules.nix-homebrew
+              {
+                nix-homebrew = {
+                  enable = true;
+                  enableRosetta = true;
+                  user = "fdrake";
+                  autoMigrate = true;
+                };
+              }
               home-manager.darwinModules.home-manager
               {
                 home-manager = mkHomeManager [
