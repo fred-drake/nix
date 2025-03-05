@@ -70,6 +70,7 @@
       "raycast"
       "rubymine"
       "sourcetree"
+      "zen-browser"
     ];
     taps = ["fred-drake/tap"]; # Additional Homebrew taps
     brews = [
@@ -116,7 +117,7 @@
   };
 
   # Security configuration
-  security.pam.enableSudoTouchIdAuth = true; # Enable Touch ID for sudo
+  security.pam.services.sudo_local.touchIdAuth = true; # Enable Touch ID for sudo
 
   # System configuration
   system = {
