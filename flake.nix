@@ -34,6 +34,8 @@
       inputs.nixpkgs.follows = "nixpkgs"; # Use the same nixpkgs as above
     };
 
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+
     # Nix User Repository: User contributed nix packages
     nur.url = "github:nix-community/NUR";
     firefox-addons = {
@@ -63,6 +65,7 @@
     home-manager,
     darwin,
     disko,
+    nix-homebrew,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -175,10 +178,24 @@
             }
           ];
         };
+        aarch64-initial = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          pkgs = import nixpkgs {
+            system = "aarch64-linux";
+          };
+          specialArgs = {inherit inputs outputs nixpkgs;};
+          modules = [
+            disko.nixosModules.disko
+            ./modules/nixos/aarch64-initial/configuration.nix
+          ];
+        };
         nixosaarch64vm = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
           pkgs = import nixpkgs {
             system = "aarch64-linux";
+            crossSystem = {
+              config = "aarch64-darwin";
+            };
           };
           specialArgs = {inherit inputs outputs nixpkgs;};
           modules = [
@@ -246,6 +263,15 @@
             modules = [
               ./modules/darwin
               ./modules/darwin/macbook-pro
+              nix-homebrew.darwinModules.nix-homebrew
+              {
+                nix-homebrew = {
+                  enable = true;
+                  enableRosetta = true;
+                  user = "fdrake";
+                  autoMigrate = true;
+                };
+              }
               home-manager.darwinModules.home-manager
               {
                 home-manager = mkHomeManager [
@@ -254,6 +280,13 @@
                   (mkVSCodeModule {inherit pkgs inputs;})
                 ];
               }
+              ({pkgs, ...}: {
+                nix = {
+                  extraOptions = ''
+                    extra-platforms = aarch64-linux
+                  '';
+                };
+              })
             ];
           };
         laisas-mac-mini = let
