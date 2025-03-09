@@ -159,7 +159,7 @@
   };
 
   # We pull neovim through github:fred-drake/neovim now
-  programs.neovim.enable = true;
+  programs.neovim.enable = false;
 
   programs.oh-my-posh.enable = true;
 
