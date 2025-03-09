@@ -7,7 +7,7 @@ _rebuild-pre:
 
 # Rebuild the system in its current form
 rebuild: _rebuild-pre
-    development/scripts/system-flake-rebuild.sh
+    system-flake-rebuild
 
 # Update input definitions from remote resources
 update:
