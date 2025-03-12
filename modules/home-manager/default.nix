@@ -10,9 +10,24 @@
 # The configuration uses the Nix package manager and various Nix-related tools
 # to manage the user environment in a declarative and reproducible manner.
 # Home Manager configuration for macOS
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
+  home = config.home.homeDirectory;
+in {
   # Import additional configuration files
-  imports = [../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix ../../apps/nushell.nix ../../apps/tmux.nix];
+  imports = [../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix ../../apps/nushell.nix ../../apps/tmux.nix ./secrets.nix];
+
+  # Ensure .ssh directory has correct permissions
+  home.activation = {
+    ssh-restrict = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      mkdir -p ${home}/.ssh
+      chmod 700 ${home}/.ssh
+    '';
+  };
 
   # Enable and configure EditorConfig
   editorconfig.enable = true;
@@ -31,6 +46,14 @@
   };
 
   home.file = {
+    "ssh-authorized-keys" = {
+      text = config.soft-secrets.workstation.ssh.authorized-keys;
+      target = ".ssh/authorized_keys";
+    };
+    "ssh-config" = {
+      text = config.soft-secrets.workstation.ssh.config;
+      target = ".ssh/config";
+    };
     "bin" = {
       source = ../../homefiles/bin;
       recursive = true;

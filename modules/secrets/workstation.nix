@@ -1,0 +1,7 @@
+{
+  secrets,
+  user,
+  group,
+  home,
+}: {
+}

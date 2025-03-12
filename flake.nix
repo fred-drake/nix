@@ -13,6 +13,10 @@
     # nixpkgs.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/nixpkgs"; # For locally testing my contributions
     # nixpkgs.url = "github:fred-drake/nixpkgs"; # My fork of nixpkgs, for when I am waiting for my contributions to be merged
 
+    # Secrets inputs
+    secrets.url = "git+ssh://git@github.com/fred-drake/nix-secrets.git";
+    sops-nix.url = "github:Mic92/sops-nix";
+
     # Nix stable channel, for packages that break with nixpkgs-unstable
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
 
@@ -66,6 +70,8 @@
     darwin,
     disko,
     nix-homebrew,
+    secrets,
+    sops-nix,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -123,6 +129,9 @@
       users.fdrake.imports =
         [
           ./modules/home-manager
+          sops-nix.homeManagerModules.sops
+          secrets.nixosModules.soft-secrets
+          secrets.nixosModules.secrets
           ({pkgs, ...}: {
             home.packages =
               (builtins.attrValues (mkNeovimPackages pkgs inputs.neovim.packages.${pkgs.system}))
@@ -130,7 +139,7 @@
           })
         ]
         ++ imports;
-      extraSpecialArgs = {inherit inputs;};
+      extraSpecialArgs = {inherit inputs secrets;};
     };
   in
     inputs.flake-utils.lib.eachDefaultSystem (system: {})
@@ -268,8 +277,10 @@
           darwin.lib.darwinSystem {
             system = "aarch64-darwin";
             pkgs = pkgs;
-            specialArgs = {inherit inputs outputs nixpkgs non-mac-mini-casks;};
+            specialArgs = {inherit inputs outputs nixpkgs secrets non-mac-mini-casks;};
             modules = [
+              secrets.nixosModules.soft-secrets
+              sops-nix.darwinModules.sops
               ./modules/darwin
               ./modules/darwin/macbook-pro
               nix-homebrew.darwinModules.nix-homebrew
@@ -282,19 +293,13 @@
                 };
               }
               home-manager.darwinModules.home-manager
-              {
+              ({pkgs, ...}: {
                 home-manager = mkHomeManager [
                   ./modules/home-manager/workstation.nix
                   ./modules/home-manager/darwin.nix
+                  ./modules/home-manager/host/macbook-pro.nix
                   (mkVSCodeModule {inherit pkgs inputs;})
                 ];
-              }
-              ({pkgs, ...}: {
-                nix = {
-                  extraOptions = ''
-                    extra-platforms = aarch64-linux
-                  '';
-                };
               })
             ];
           };
