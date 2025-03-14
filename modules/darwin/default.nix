@@ -70,6 +70,7 @@
       "raycast"
       "rubymine"
       "sourcetree"
+      "vlc"
       "zen-browser"
     ];
     taps = ["fred-drake/tap"]; # Additional Homebrew taps
