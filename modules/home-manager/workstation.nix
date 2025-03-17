@@ -10,20 +10,47 @@
 # The configuration uses the Nix package manager and various Nix-related tools
 # to manage the user environment in a declarative and reproducible manner.
 # Home Manager configuration for macOS
-{pkgs, ...}: {
-  home.file = {
-    "Pictures" = {
-      source = ../../homefiles/Pictures;
-      recursive = true;
-    };
+{
+  pkgs,
+  lib,
+  ...
+}: let
+  cursor-config = (import ../cursor/global-configuration.nix) {inherit pkgs lib;};
+in {
+  home.file =
+    {
+      "Pictures" = {
+        source = ../../homefiles/Pictures;
+        recursive = true;
+      };
 
-    ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
-  };
+      ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
+    }
+    // (
+      if pkgs.stdenv.isDarwin
+      then {
+        "Library/Application Support/Cursor/User/settings.json" = {
+          text = builtins.toJSON cursor-config.globalSettings;
+        };
+        "Library/Application Support/Cursor/User/keybindings.json" = {
+          text = builtins.toJSON cursor-config.globalKeyBindings;
+        };
+      }
+      else {
+        ".config/cursor/user/settings.json" = {
+          text = builtins.toJSON cursor-config.globalSettings;
+        };
+        ".config/cursor/user/keybindings.json" = {
+          text = builtins.toJSON cursor-config.globalKeyBindings;
+        };
+      }
+    );
 
   # Install packages using Home Manager
   home.packages = with pkgs; [
     aider-chat # AI Chat client
     chafa # Image resizer
+    code-cursor
     discord # Voice and text chat app
     docker-compose # Compose multiple containers
     duf # Disk usage analyzer
@@ -55,6 +82,14 @@
     wireguard-tools # VPN tools
     yt-dlp # Video downloader
     zoom-us # Video conferencing tool
+    (pkgs.writeShellScriptBin "ide" ''
+      EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
+      exec ${pkgs.code-cursor}/bin/cursor --extensions-dir $EXT_DIR "$@"
+    '')
+
+    (pkgs.vscode-with-extensions.override {
+      vscodeExtensions = cursor-config.globalExtensions;
+    })
   ];
 
   # Set session variables
@@ -70,4 +105,19 @@
   # Enable and configure various programs
   programs.fish.shellAbbrs = {
   };
+
+  # jsonSettings = pkgs.writeTextFile {
+  #   name = "vscode-${name}-settings";
+  #   text = builtins.toJSON cursor-config.globalSettings;
+  #   destination = "/user/settings.json";
+  # };
+  # jsonKeyBindings = pkgs.writeTextFile {
+  #   name = "vscode-${name}-keybindings";
+  #   text = builtins.toJSON cursor-config.globalSettings;
+  #   destination = "/user/keybindings.json";
+  # };
+
+  # code-with-extensions = pkgs.vscode-with-extensions.override {
+  #   vscodeExtensions = cursor-config.globalExtensions;
+  # };
 }

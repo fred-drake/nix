@@ -13,6 +13,10 @@ rebuild: _rebuild-pre
 update:
     nix flake update
 
+# Refresh Cursor Extensions
+update-cursor-extensions:
+    update-cursor-extensions
+
 # Rebuild the system with updated input definitions from remote resources
 update-rebuild: update && rebuild
 

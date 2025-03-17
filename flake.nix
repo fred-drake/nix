@@ -58,7 +58,7 @@
     # neovim.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/neovim"; # For locally testing my contributions
 
     # My custom vscode configuration
-    vscode.url = "github:fred-drake/vscode";
+    # vscode.url = "github:fred-drake/vscode";
     # vscode.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/vscode"; # For locally testing my contributions
   };
 
@@ -103,23 +103,23 @@
       builtins.mapAttrs mkNeovimAlias neovimPkgs;
 
     # Function to create VSCode packages with unique names
-    mkVSCodePackages = pkgs: vscodePkgs: let
-      mkVSCodeAlias = name: pkg:
-        pkgs.runCommand "vscode-${name}" {} ''
-          mkdir -p $out/bin
-          ln -s ${pkg}/bin/code $out/bin/code-${name}
-        '';
-    in
-      builtins.mapAttrs mkVSCodeAlias vscodePkgs;
+    # mkVSCodePackages = pkgs: vscodePkgs: let
+    #   mkVSCodeAlias = name: pkg:
+    #     pkgs.runCommand "vscode-${name}" {} ''
+    #       mkdir -p $out/bin
+    #       ln -s ${pkg}/bin/code $out/bin/code-${name}
+    #     '';
+    # in
+    #   builtins.mapAttrs mkVSCodeAlias vscodePkgs;
 
-    mkVSCodeModule = {
-      pkgs,
-      inputs,
-    }: {
-      home.packages =
-        (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
-        ++ [inputs.vscode.packages.${pkgs.system}.default];
-    };
+    # mkVSCodeModule = {
+    #   pkgs,
+    #   inputs,
+    # }: {
+    #   home.packages =
+    #     (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
+    #     ++ [inputs.vscode.packages.${pkgs.system}.default];
+    # };
 
     # Create a home manager configuration, with additional imports specific to the configuration
     mkHomeManager = imports: {
@@ -166,7 +166,7 @@
                 home-manager = mkHomeManager [
                   ./modules/home-manager/workstation.nix
                   ./modules/home-manager/linux-desktop.nix
-                  (mkVSCodeModule {inherit pkgs inputs;})
+                  # (mkVSCodeModule {inherit pkgs inputs;})
                 ];
               }
             ];
@@ -262,7 +262,7 @@
                 home-manager = mkHomeManager [
                   ./modules/home-manager/workstation.nix
                   ./modules/home-manager/darwin.nix
-                  (mkVSCodeModule {inherit pkgs inputs;})
+                  # (mkVSCodeModule {inherit pkgs inputs;})
                 ];
               }
             ];
@@ -298,9 +298,10 @@
                   ./modules/home-manager/workstation.nix
                   ./modules/home-manager/darwin.nix
                   ./modules/home-manager/host/macbook-pro.nix
-                  (mkVSCodeModule {inherit pkgs inputs;})
+                  # (mkVSCodeModule {inherit pkgs inputs;})
                 ];
               })
+              # ./modules/cursor
             ];
           };
         laisas-mac-mini = let
@@ -331,7 +332,7 @@
                 home-manager = mkHomeManager [
                   ./modules/home-manager/workstation.nix
                   ./modules/home-manager/darwin.nix
-                  (mkVSCodeModule {inherit pkgs inputs;})
+                  # (mkVSCodeModule {inherit pkgs inputs;})
                 ];
               }
             ];
