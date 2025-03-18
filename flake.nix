@@ -102,25 +102,6 @@
     in
       builtins.mapAttrs mkNeovimAlias neovimPkgs;
 
-    # Function to create VSCode packages with unique names
-    # mkVSCodePackages = pkgs: vscodePkgs: let
-    #   mkVSCodeAlias = name: pkg:
-    #     pkgs.runCommand "vscode-${name}" {} ''
-    #       mkdir -p $out/bin
-    #       ln -s ${pkg}/bin/code $out/bin/code-${name}
-    #     '';
-    # in
-    #   builtins.mapAttrs mkVSCodeAlias vscodePkgs;
-
-    # mkVSCodeModule = {
-    #   pkgs,
-    #   inputs,
-    # }: {
-    #   home.packages =
-    #     (builtins.attrValues (mkVSCodePackages pkgs inputs.vscode.packages.${pkgs.system}))
-    #     ++ [inputs.vscode.packages.${pkgs.system}.default];
-    # };
-
     # Create a home manager configuration, with additional imports specific to the configuration
     mkHomeManager = imports: {
       useGlobalPkgs = true;
@@ -234,7 +215,7 @@
 
       # Darwin (macOS) configurations
       darwinConfigurations = {
-        mac-studio = let
+        freds-mac-studio = let
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true; # Allow unfree packages
@@ -246,6 +227,8 @@
             pkgs = pkgs;
             specialArgs = {inherit inputs outputs nixpkgs non-mac-mini-casks;};
             modules = [
+              secrets.nixosModules.soft-secrets
+              sops-nix.darwinModules.sops
               ./modules/darwin
               ./modules/darwin/mac-studio
               nix-homebrew.darwinModules.nix-homebrew
@@ -262,7 +245,6 @@
                 home-manager = mkHomeManager [
                   ./modules/home-manager/workstation.nix
                   ./modules/home-manager/darwin.nix
-                  # (mkVSCodeModule {inherit pkgs inputs;})
                 ];
               }
             ];
@@ -316,6 +298,8 @@
             pkgs = pkgs;
             specialArgs = {inherit inputs outputs nixpkgs;};
             modules = [
+              secrets.nixosModules.soft-secrets
+              sops-nix.darwinModules.sops
               ./modules/darwin
               ./modules/darwin/laisas-mac-mini
               nix-homebrew.darwinModules.nix-homebrew
