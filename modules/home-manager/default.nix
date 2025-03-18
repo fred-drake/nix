@@ -19,7 +19,7 @@
   home = config.home.homeDirectory;
 in {
   # Import additional configuration files
-  imports = [../../apps/kitty.nix ../../apps/zsh.nix ../../apps/fish.nix ../../apps/nushell.nix ../../apps/tmux.nix ./secrets.nix];
+  imports = [../../apps/zsh.nix ../../apps/fish.nix ../../apps/nushell.nix ../../apps/tmux.nix ./secrets.nix];
 
   # Ensure .ssh directory has correct permissions
   home.activation = {
