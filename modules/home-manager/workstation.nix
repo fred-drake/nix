@@ -50,7 +50,6 @@ in {
   home.packages = with pkgs; [
     aider-chat # AI Chat client
     chafa # Image resizer
-    code-cursor
     discord # Voice and text chat app
     docker-compose # Compose multiple containers
     duf # Disk usage analyzer
@@ -82,7 +81,7 @@ in {
     wireguard-tools # VPN tools
     yt-dlp # Video downloader
     zoom-us # Video conferencing tool
-    (pkgs.writeShellScriptBin "ide" ''
+    (pkgs.writeShellScriptBin "cursor" ''
       EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
       exec ${pkgs.code-cursor}/bin/cursor --extensions-dir $EXT_DIR "$@"
     '')
