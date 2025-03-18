@@ -1,10 +1,4 @@
-{
-  pkgs,
-  lib,
-  config,
-  inputs,
-  ...
-}: let
+{pkgs, ...}: let
   nix4vscode = pkgs.callPackage ./nix4vscode.nix {};
 in {
   # https://devenv.sh/basics/
@@ -18,7 +12,6 @@ in {
     just
     alejandra
     nixos-anywhere
-    nix4vscode
     nixd
   ];
 
@@ -55,14 +48,14 @@ in {
   '';
 
   scripts.update-cursor-extensions.exec = ''
-    TOML_FILE=./modules/cursor/extensions.toml
-    EXTENSIONS_PATH=./modules/cursor/extensions.nix
+    TOML_FILE=$DEVENV_ROOT/modules/cursor/extensions.toml
+    EXTENSIONS_PATH=$DEVENV_ROOT/modules/cursor/extensions.nix
     echo "Updating Cursor extensions..."
     echo "####################################" > $EXTENSIONS_PATH
     echo "# Auto-generated -- do not modify! #" >> $EXTENSIONS_PATH
     echo "####################################" >> $EXTENSIONS_PATH
-    nix4vscode $TOML_FILE >> $EXTENSIONS_PATH
-    alejandra $EXTENSIONS_PATH
+    ${nix4vscode}/bin/nix4vscode $TOML_FILE >> $EXTENSIONS_PATH
+    ${pkgs.alejandra}/bin/alejandra $EXTENSIONS_PATH
   '';
 
   enterShell = ''
