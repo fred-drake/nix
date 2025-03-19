@@ -18,6 +18,8 @@
     secrets.url = "git+ssh://git@github.com/fred-drake/nix-secrets.git";
     sops-nix.url = "github:Mic92/sops-nix";
 
+    colmena.url = "github:zhaofengli/colmena";
+
     # A collection of NixOS modules covering hardware quirks.
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
@@ -59,6 +61,7 @@
   # Output configuration
   outputs = {
     self,
+    colmena,
     nixpkgs,
     nixpkgs-stable,
     nixpkgs-unstable,
@@ -81,6 +84,7 @@
         inherit
           inputs
           outputs
+          colmena
           nixpkgs
           nixpkgs-stable
           nixpkgs-unstable

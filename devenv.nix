@@ -8,6 +8,7 @@ in {
 
   # https://devenv.sh/packages/
   packages = with pkgs; [
+    colmena
     git
     just
     alejandra
