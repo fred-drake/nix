@@ -883,11 +883,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1741823239,
-        "narHash": "sha256-7ht4QSa0UIWHguYs8DONX93tAqH6S6TBG9nYheiiDdQ=",
+        "lastModified": 1742421731,
+        "narHash": "sha256-hnOCjbvnZiv5jgyb1Rk84wXJKdol6iPanCttK2SVO1Q=",
         "ref": "refs/heads/master",
-        "rev": "7143d0d62b6180f1247cac97a44342fdd7734b74",
-        "revCount": 1,
+        "rev": "5b2e3d5d84b78fa34a90f7b4c43c715beaa0de69",
+        "revCount": 3,
         "type": "git",
         "url": "ssh://git@github.com/fred-drake/nix-secrets.git"
       },
@@ -901,11 +901,11 @@
         "nixpkgs": "nixpkgs_10"
       },
       "locked": {
-        "lastModified": 1742239755,
-        "narHash": "sha256-ptn8dR4Uat3UUadGYNnB7CIH9SQm8mK69D2A/twBUXQ=",
+        "lastModified": 1742406979,
+        "narHash": "sha256-r0aq70/3bmfjTP+JZs4+XV5SgmCtk1BLU4CQPWGtA7o=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "787afce414bcce803b605c510b60bf43c11f4b55",
+        "rev": "1770be8ad89e41f1ed5a60ce628dd10877cb3609",
         "type": "github"
       },
       "original": {
