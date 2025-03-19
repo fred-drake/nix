@@ -463,6 +463,37 @@
         "type": "github"
       }
     },
+    "nixpkgs-fred-testing": {
+      "locked": {
+        "lastModified": 1742345650,
+        "narHash": "sha256-Ypngu0qFE4DiHzSUfHaMYPTSO2oJ0iRDJn97dlGmpy8=",
+        "ref": "refs/heads/fred-unstable",
+        "rev": "f88a223845951a5c5150d955a4771c07f7396166",
+        "revCount": 770387,
+        "type": "git",
+        "url": "file:///Users/fdrake/Source/github.com/fred-drake/nixpkgs"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///Users/fdrake/Source/github.com/fred-drake/nixpkgs"
+      }
+    },
+    "nixpkgs-fred-unstable": {
+      "locked": {
+        "lastModified": 1742345650,
+        "narHash": "sha256-Ypngu0qFE4DiHzSUfHaMYPTSO2oJ0iRDJn97dlGmpy8=",
+        "owner": "fred-drake",
+        "repo": "nixpkgs",
+        "rev": "f88a223845951a5c5150d955a4771c07f7396166",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fred-drake",
+        "ref": "fred-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1738452942,
@@ -477,16 +508,32 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1735563628,
-        "narHash": "sha256-OnSAY7XDSx7CtDoqNh8jwVwh4xNL/2HaJxGjryLWzX8=",
+        "lastModified": 1742268799,
+        "narHash": "sha256-IhnK4LhkBlf14/F8THvUy3xi/TxSQkp9hikfDZRD4Ic=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "b134951a4c9f3c995fd7be05f3243f8ecd65d798",
+        "rev": "da044451c6a70518db5b730fe277b70f494188f1",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-24.05",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1742237028,
+        "narHash": "sha256-xlpHmgBxUnvHo8FNnju0sgnEyasb4gC607b+keqjmX8=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "9bc8a90931262245919a26f995c1f24c6c70d3fe",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -712,7 +759,10 @@
         "nix-homebrew": "nix-homebrew",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_6",
+        "nixpkgs-fred-testing": "nixpkgs-fred-testing",
+        "nixpkgs-fred-unstable": "nixpkgs-fred-unstable",
         "nixpkgs-stable": "nixpkgs-stable",
+        "nixpkgs-unstable": "nixpkgs-unstable",
         "nur": "nur",
         "secrets": "secrets",
         "sops-nix": "sops-nix_2"

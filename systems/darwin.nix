@@ -2,6 +2,10 @@
   inputs,
   outputs,
   nixpkgs,
+  nixpkgs-stable,
+  nixpkgs-unstable,
+  nixpkgs-fred-unstable,
+  nixpkgs-fred-testing,
   secrets,
   ...
 }: let
@@ -24,10 +28,22 @@
     hostname,
     extraModules ? [],
     pkgs ? null,
+    pkgs-stable ? null,
+    pkgs-unstable ? null,
+    pkgs-fred-unstable ? null,
+    pkgs-fred-testing ? null,
   }: let
     systemPkgs =
       if pkgs != null
       then pkgs
+      else if pkgs-stable != null
+      then pkgs-stable
+      else if pkgs-unstable != null
+      then pkgs-unstable
+      else if pkgs-fred-unstable != null
+      then pkgs-fred-unstable
+      else if pkgs-fred-testing != null
+      then pkgs-fred-testing
       else
         import nixpkgs {
           system = "aarch64-darwin";
@@ -38,7 +54,18 @@
     darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       pkgs = systemPkgs;
-      specialArgs = {inherit inputs outputs nixpkgs non-mac-mini-casks;};
+      specialArgs = {
+        inherit
+          inputs
+          outputs
+          nixpkgs
+          nixpkgs-stable
+          nixpkgs-unstable
+          nixpkgs-fred-testing
+          nixpkgs-fred-unstable
+          non-mac-mini-casks
+          ;
+      };
       modules =
         [
           secrets.nixosModules.soft-secrets
