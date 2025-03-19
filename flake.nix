@@ -115,6 +115,7 @@
         };
         "adguard1" = {
           nixpkgs.system = "aarch64-linux";
+          specialArgs = {inherit inputs outputs nixpkgs;};
           imports = [
             secrets.nixosModules.soft-secrets
             nixos-hardware.nixosModules.raspberry-pi-4
