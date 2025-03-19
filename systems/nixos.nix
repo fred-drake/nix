@@ -115,12 +115,15 @@ in {
 
   adguard1 = nixpkgs.lib.nixosSystem {
     system = "aarch64-linux";
+    pkgs = import nixpkgs {
+      system = "aarch64-linux";
+    };
     specialArgs = {inherit inputs outputs nixpkgs;};
     modules = [
       secrets.nixosModules.soft-secrets
       nixos-hardware.nixosModules.raspberry-pi-4
       "${nixpkgs}/nixos/modules/profiles/minimal.nix"
-      ./configuration.nix
+      ../modules/nixos/adguard1/configuration.nix
     ];
   };
 }
