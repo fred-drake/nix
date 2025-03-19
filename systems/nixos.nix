@@ -122,24 +122,4 @@ in {
       ./configuration.nix
     ];
   };
-
-  colmena = {
-    meta = {
-      nixpkgs = import nixpkgs {system = "aarch64-linux";};
-    };
-    "adguard1" = {
-      nixpkgs.system = "aarch64-linux";
-      imports = [
-        secrets.nixosModules.soft-secrets
-        nixos-hardware.nixosModules.raspberry-pi-4
-        "${nixpkgs}/nixos/modules/profiles/minimal.nix"
-        ../modules/nixos/adguard1/configuration.nix
-      ];
-      deployment = {
-        buildOnTarget = false;
-        targetHost = "192.168.208.7";
-        targetUser = "default";
-      };
-    };
-  };
 }

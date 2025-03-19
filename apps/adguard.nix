@@ -368,7 +368,7 @@
         blocking_mode = "default";
         parental_block_host = "family-block.dns.adguard.com";
         safebrowsing_block_host = "standard-block.dns.adguard.com";
-        rewrites = [];
+        rewrites = config.soft-secrets.adguard.rewrites;
         safe_fs_patterns = ["/var/lib/private/AdGuardHome/userfilters/*"];
         safebrowsing_cache_size = 1048576;
         safesearch_cache_size = 1048576;
