@@ -5,7 +5,6 @@
   ...
 }: {
   imports = [
-    secrets.nixosModules.soft-secrets
     ../../../apps/adguard.nix
   ];
 
