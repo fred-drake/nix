@@ -2,10 +2,9 @@
   inputs,
   outputs,
   nixpkgs,
-  secrets,
   ...
 }: let
-  inherit (inputs) home-manager disko nixos-hardware;
+  inherit (inputs) home-manager disko nixos-hardware secrets sops-nix;
   inherit (inputs.self) lib;
 in {
   macbookx86 = let
@@ -21,15 +20,17 @@ in {
       specialArgs = {inherit inputs outputs nixpkgs;};
       modules = [
         inputs.nur.nixosModules.nur
-        ./modules/nixos/macbookx86/configuration.nix
+        secrets.nixosModules.soft-secrets
+        sops-nix.nixosModules.sops
+        ../modules/nixos/macbookx86/configuration.nix
         nixos-hardware.nixosModules.apple-t2
         home-manager.nixosModules.home-manager
         {
           home-manager = lib.mkHomeManager {
             inherit inputs secrets;
             imports = [
-              ./modules/home-manager/workstation.nix
-              ./modules/home-manager/linux-desktop.nix
+              ../modules/home-manager/workstation.nix
+              ../modules/home-manager/linux-desktop.nix
             ];
           };
         }
@@ -44,8 +45,10 @@ in {
     specialArgs = {inherit inputs outputs nixpkgs;};
     modules = [
       disko.nixosModules.disko
-      ./modules/nixos/nixoswinvm/configuration.nix
-      ./modules/nixos/nixoswinvm/hardware-configuration.nix
+      secrets.nixosModules.soft-secrets
+      sops-nix.nixosModules.sops
+      ../modules/nixos/nixoswinvm/configuration.nix
+      ../modules/nixos/nixoswinvm/hardware-configuration.nix
       home-manager.nixosModules.home-manager
       {
         home-manager = lib.mkHomeManager {
@@ -64,7 +67,9 @@ in {
     specialArgs = {inherit inputs outputs nixpkgs;};
     modules = [
       disko.nixosModules.disko
-      ./modules/nixos/aarch64-initial/configuration.nix
+      secrets.nixosModules.soft-secrets
+      sops-nix.nixosModules.sops
+      ../modules/nixos/aarch64-initial/configuration.nix
     ];
   };
 
@@ -72,19 +77,22 @@ in {
     system = "aarch64-linux";
     pkgs = import nixpkgs {
       system = "aarch64-linux";
-      crossSystem = {
-        config = "aarch64-darwin";
-      };
     };
     specialArgs = {inherit inputs outputs nixpkgs;};
     modules = [
       disko.nixosModules.disko
-      ./modules/nixos/nixosaarch64vm/configuration.nix
+      secrets.nixosModules.soft-secrets
+      sops-nix.nixosModules.sops
+      ../modules/nixos/nixosaarch64vm/configuration.nix
       home-manager.nixosModules.home-manager
       {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.users.fdrake = import ./modules/home-manager;
+        # home-manager.useGlobalPkgs = true;
+        # home-manager.useUserPackages = true;
+        # home-manager.users.fdrake = import ../modules/home-manager;
+        home-manager = lib.mkHomeManager {
+          inherit inputs secrets;
+          imports = [];
+        };
       }
     ];
   };
@@ -93,8 +101,8 @@ in {
     system = "x86_64-linux";
     modules = [
       disko.nixosModules.disko
-      ./modules/nixos/forgejo/configuration.nix
-      ./modules/nixos/forgejo/hardware-configuration.nix
+      ../modules/nixos/forgejo/configuration.nix
+      ../modules/nixos/forgejo/hardware-configuration.nix
       home-manager.nixosModules.home-manager
       {
         home-manager = lib.mkHomeManager {
