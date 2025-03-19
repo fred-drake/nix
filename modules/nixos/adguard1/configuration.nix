@@ -1,9 +1,11 @@
 {
   pkgs,
   lib,
+  secrets,
   ...
 }: {
   imports = [
+    secrets.nixosModules.soft-secrets
     ../../../apps/adguard.nix
   ];
 
