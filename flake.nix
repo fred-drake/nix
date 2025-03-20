@@ -113,20 +113,7 @@
         meta = {
           nixpkgs = import nixpkgs {system = "aarch64-linux";};
         };
-        "adguard1" = let
-          config =
-            (import "${nixpkgs}/nixos/lib/eval-config.nix" {
-              system = "aarch64-linux";
-              modules = [
-                secrets.nixosModules.soft-secrets
-                nixos-hardware.nixosModules.raspberry-pi-4
-                "${nixpkgs}/nixos/modules/profiles/minimal.nix"
-                ./modules/nixos/adguard1/configuration.nix
-              ];
-              specialArgs = {inherit secrets;};
-            })
-            .config;
-        in {
+        "adguard1" = {
           nixpkgs.system = "aarch64-linux";
           nixpkgs.overlays = [];
           nixpkgs.config = {};
@@ -138,7 +125,7 @@
           ];
           deployment = {
             buildOnTarget = false;
-            targetHost = config.soft-secrets.host.adguard1.admin_ip_address;
+            targetHost = (import "${secrets}/soft-secrets").host.adguard1.admin_ip_address;
             targetUser = "default";
           };
         };
