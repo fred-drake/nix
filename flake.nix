@@ -129,6 +129,22 @@
             targetUser = "default";
           };
         };
+        "adguard2" = {
+          nixpkgs.system = "aarch64-linux";
+          nixpkgs.overlays = [];
+          nixpkgs.config = {};
+          imports = [
+            secrets.nixosModules.soft-secrets
+            nixos-hardware.nixosModules.raspberry-pi-4
+            "${nixpkgs}/nixos/modules/profiles/minimal.nix"
+            ./modules/nixos/adguard2/configuration.nix
+          ];
+          deployment = {
+            buildOnTarget = false;
+            targetHost = "192.168.208.9";
+            targetUser = "default";
+          };
+        };
       };
 
       # Library functions

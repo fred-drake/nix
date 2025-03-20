@@ -17,19 +17,19 @@
   environment.systemPackages = with pkgs; [neovim git kea];
   services = {
     adguardhome = {
-      host = "192.168.208.7";
-      settings.dns.bind_hosts = ["192.168.40.4"];
+      host = "192.168.208.9";
+      settings.dns.bind_hosts = ["192.168.40.6"];
     };
     openssh = {
       enable = true;
       settings = {
         PasswordAuthentication = false;
         PermitRootLogin = "no";
-        ListenAddress = "192.168.208.7";
+        ListenAddress = "192.168.208.9";
       };
     };
   };
-  networking.hostName = "adguard1";
+  networking.hostName = "adguard2";
   users.users.default = {
     isNormalUser = true;
     password = "";
@@ -53,7 +53,7 @@
       ipv4 = {
         addresses = [
           {
-            address = "192.168.208.7";
+            address = "192.168.208.9";
             prefixLength = 24;
           }
         ];
@@ -69,7 +69,7 @@
 
     interfaces."end0.40".ipv4.addresses = [
       {
-        address = "192.168.40.4";
+        address = "192.168.40.6";
         prefixLength = 24;
       }
     ];
