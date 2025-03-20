@@ -77,6 +77,7 @@
     ...
   } @ inputs: let
     inherit (self) outputs;
+    soft-secrets = import "${secrets}/soft-secrets";
   in
     inputs.flake-utils.lib.eachDefaultSystem (system: {})
     // {
@@ -125,7 +126,7 @@
           ];
           deployment = {
             buildOnTarget = false;
-            targetHost = (import "${secrets}/soft-secrets").host.adguard1.admin_ip_address;
+            targetHost = soft-secrets.host.adguard1.admin_ip_address;
             targetUser = "default";
           };
         };
@@ -141,7 +142,7 @@
           ];
           deployment = {
             buildOnTarget = false;
-            targetHost = "192.168.208.9";
+            targetHost = soft-secrets.host.adguard2.admin_ip_address;
             targetUser = "default";
           };
         };
