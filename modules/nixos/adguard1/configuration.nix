@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   secrets,
   ...
 }: {
@@ -17,15 +18,15 @@
   environment.systemPackages = with pkgs; [neovim git kea];
   services = {
     adguardhome = {
-      host = "192.168.208.7";
-      settings.dns.bind_hosts = ["192.168.40.4"];
+      host = config.soft-secrets.host.adguard1.admin_ip_address;
+      settings.dns.bind_hosts = [config.soft-secrets.host.adguard1.iot_ip_address];
     };
     openssh = {
       enable = true;
       settings = {
         PasswordAuthentication = false;
         PermitRootLogin = "no";
-        ListenAddress = "192.168.208.7";
+        ListenAddress = config.soft-secrets.host.adguard1.admin_ip_address;
       };
     };
   };
@@ -53,7 +54,7 @@
       ipv4 = {
         addresses = [
           {
-            address = "192.168.208.7";
+            address = config.soft-secrets.host.adguard1.admin_ip_address;
             prefixLength = 24;
           }
         ];
@@ -67,29 +68,30 @@
       };
     };
 
-    interfaces."end0.40".ipv4.addresses = [
-      {
-        address = "192.168.40.4";
-        prefixLength = 24;
-      }
-    ];
-
-    interfaces."end0.40".ipv4.routes = [
-      {
-        address = "0.0.0.0";
-        prefixLength = 0;
-        via = "192.168.40.1";
-      }
-    ];
+    interfaces."end0.40".ipv4 = {
+      addresses = [
+        {
+          address = config.soft-secrets.host.adguard1.iot_ip_address;
+          prefixLength = 24;
+        }
+      ];
+      routes = [
+        {
+          address = "0.0.0.0";
+          prefixLength = 0;
+          via = config.soft-secrets.networking.gateway.iot;
+        }
+      ];
+    };
 
     defaultGateway = {
-      address = "192.168.208.1";
+      address = config.soft-secrets.networking.gateway.admin;
       interface = "end0";
     };
 
     interfaces."wlan0".useDHCP = false;
 
-    nameservers = ["8.8.8.8" "8.8.4.4"];
+    nameservers = config.soft-secrets.networking.nameservers.public;
   };
 
   fileSystems = {
