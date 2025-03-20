@@ -2,12 +2,22 @@
   pkgs,
   lib,
   config,
+  sops-nix,
   secrets,
   ...
 }: {
   imports = [
+    sops-nix.nixosModules.sops
     ../../../apps/adguard.nix
   ];
+
+  sops.age.sshKeyPaths = ["/home/default/.ssh/infrastructure"];
+  sops.defaultSopsFile = config.secrets.sopsYaml;
+  sops.secrets.cloudflare-api-key = {
+    sopsFile = config.secrets.cloudflare.letsencrypt-token;
+    mode = "0400";
+    key = "data";
+  };
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
@@ -27,6 +37,43 @@
         PasswordAuthentication = false;
         PermitRootLogin = "no";
         ListenAddress = config.soft-secrets.host.adguard1.admin_ip_address;
+      };
+    };
+    nginx = {
+      enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+      virtualHosts = {
+        "adguard1.internal.freddrake.com" = {
+          enableACME = true;
+          forceSSL = true;
+          locations."/" = {
+            proxyPass = "http://192.168.208.7:80";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+            '';
+          };
+        };
+      };
+    };
+    acme = {
+      acceptTerms = true;
+      defaults = {
+        email = config.soft-secrets.acme.email;
+        dnsProvider = "cloudflare";
+        credentialsFile = config.sops.secrets.cloudflare-api-key.path;
+      };
+      certs = {
+        "adguard1.internal.freddrake.com" = {
+          domain = "adguard1.internal.freddrake.com";
+          dnsProvider = "cloudflare";
+        };
       };
     };
   };
