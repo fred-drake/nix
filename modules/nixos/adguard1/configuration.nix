@@ -7,7 +7,6 @@
   ...
 }: {
   imports = [
-    sops-nix.nixosModules.sops
     ../../../apps/adguard.nix
   ];
 
