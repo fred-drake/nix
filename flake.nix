@@ -125,7 +125,7 @@
           ];
           deployment = {
             buildOnTarget = false;
-            targetHost = "192.168.208.7";
+            targetHost = config.soft-secrets.host.adguard1.admin_ip_address;
             targetUser = "default";
           };
         };
