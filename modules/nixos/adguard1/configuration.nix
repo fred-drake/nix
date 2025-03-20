@@ -18,19 +18,26 @@
     sopsFile = config.secrets.cloudflare.letsencrypt-token;
     mode = "0400";
     key = "data";
+    # path = "/var/lib/acme/cloudflare-api-key";
   };
+
   security = {
     acme = {
       acceptTerms = true;
       defaults = {
         email = config.soft-secrets.acme.email;
         dnsProvider = "cloudflare";
-        credentialsFile = config.sops.secrets.cloudflare-api-key.path;
+        # credentialsFile = "/var/lib/acme/cloudflare-api-key";
+        # credentialsFile = config.sops.secrets.cloudflare-api-key.path;
+        environmentFile = config.sops.secrets.cloudflare-api-key.path;
       };
       certs = {
         "adguard1.internal.freddrake.com" = {
           domain = "adguard1.internal.freddrake.com";
           dnsProvider = "cloudflare";
+          webroot = null;
+          listenHTTP = null;
+          s3Bucket = null;
         };
       };
     };

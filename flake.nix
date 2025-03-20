@@ -120,6 +120,7 @@
           nixpkgs.config = {};
           imports = [
             secrets.nixosModules.soft-secrets
+            secrets.nixosModules.secrets
             sops-nix.nixosModules.sops
             nixos-hardware.nixosModules.raspberry-pi-4
             "${nixpkgs}/nixos/modules/profiles/minimal.nix"
