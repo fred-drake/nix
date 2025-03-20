@@ -24,7 +24,7 @@
     "net.ipv4.conf.default.rp_filter" = 0;
   };
   boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-  environment.systemPackages = with pkgs; [neovim git kea];
+  environment.systemPackages = with pkgs; [acme neovim git kea];
   services = {
     adguardhome = {
       host = config.soft-secrets.host.adguard1.admin_ip_address;
