@@ -7,6 +7,9 @@
   nixpkgs-fred-unstable,
   nixpkgs-fred-testing,
   secrets,
+  homebrew-core,
+  homebrew-cask,
+  homebrew-bundle,
   ...
 }: let
   inherit (inputs) darwin home-manager nix-homebrew secrets sops-nix;
@@ -78,7 +81,12 @@
               enable = true;
               enableRosetta = true;
               user = "fdrake";
-              autoMigrate = true;
+              taps = {
+                "homebrew/homebrew-core" = homebrew-core;
+                "homebrew/homebrew-cask" = homebrew-cask;
+                "homebrew/homebrew-bundle" = homebrew-bundle;
+              };
+              mutableTaps = false;
             };
           }
           home-manager.darwinModules.home-manager

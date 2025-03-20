@@ -38,7 +38,20 @@
       inputs.nixpkgs.follows = "nixpkgs"; # Use the same nixpkgs as above
     };
 
-    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew"; # Nix Homebrew integration
+    # nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew"; # Nix Homebrew integration
+    nix-homebrew.url = "git+https://github.com/zhaofengli/nix-homebrew?ref=refs/pull/71/merge";
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+    homebrew-bundle = {
+      url = "github:homebrew/homebrew-bundle";
+      flake = false;
+    };
 
     # Nix User Repository: User contributed nix packages
     nur.url = "github:nix-community/NUR";
@@ -72,6 +85,9 @@
     darwin,
     disko,
     nix-homebrew,
+    homebrew-core,
+    homebrew-cask,
+    homebrew-bundle,
     secrets,
     sops-nix,
     ...
@@ -107,6 +123,9 @@
           nixpkgs-fred-unstable
           nixpkgs-fred-testing
           secrets
+          homebrew-core
+          homebrew-cask
+          homebrew-bundle
           ;
       };
 

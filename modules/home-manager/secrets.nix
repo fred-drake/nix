@@ -21,6 +21,13 @@ in {
   };
   home.file.".ssh/id_ansible".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.ssh-id-ansible.path;
 
+  sops.secrets.ssh-id-infrastructure = {
+    sopsFile = config.secrets.workstation.ssh.id_infrastructure;
+    mode = "0400";
+    key = "data";
+  };
+  home.file.".ssh/id_infrastructure".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.ssh-id-ansible.path;
+
   sops.secrets.git-credentials = {
     sopsFile = config.secrets.workstation.git-credentials;
     mode = "0400";

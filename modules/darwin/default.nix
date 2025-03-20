@@ -73,7 +73,7 @@
       "vlc"
       "zen-browser"
     ];
-    taps = ["fred-drake/tap"]; # Additional Homebrew taps
+    # taps = ["fred-drake/tap"]; # Additional Homebrew taps
     brews = [
       "openssh"
       "ruby-install"
