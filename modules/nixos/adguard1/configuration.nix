@@ -9,7 +9,6 @@
 }: {
   imports = [
     ../../../apps/adguard.nix
-    (modulesPath + "/services/security/acme.nix")
   ];
 
   sops.age.sshKeyPaths = ["/home/default/.ssh/infrastructure"];
@@ -18,6 +17,22 @@
     sopsFile = config.secrets.cloudflare.letsencrypt-token;
     mode = "0400";
     key = "data";
+  };
+  security = {
+    acme = {
+      acceptTerms = true;
+      defaults = {
+        email = config.soft-secrets.acme.email;
+        dnsProvider = "cloudflare";
+        credentialsFile = config.sops.secrets.cloudflare-api-key.path;
+      };
+      certs = {
+        "adguard1.internal.freddrake.com" = {
+          domain = "adguard1.internal.freddrake.com";
+          dnsProvider = "cloudflare";
+        };
+      };
+    };
   };
 
   boot.kernel.sysctl = {
@@ -60,20 +75,6 @@
               proxy_set_header X-Forwarded-Proto $scheme;
             '';
           };
-        };
-      };
-    };
-    acme = {
-      acceptTerms = true;
-      defaults = {
-        email = config.soft-secrets.acme.email;
-        dnsProvider = "cloudflare";
-        credentialsFile = config.sops.secrets.cloudflare-api-key.path;
-      };
-      certs = {
-        "adguard1.internal.freddrake.com" = {
-          domain = "adguard1.internal.freddrake.com";
-          dnsProvider = "cloudflare";
         };
       };
     };
