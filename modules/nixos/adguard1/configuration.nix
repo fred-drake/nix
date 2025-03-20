@@ -14,6 +14,7 @@
   sops.age.sshKeyPaths = ["/home/default/.ssh/infrastructure"];
   sops.defaultSopsFile = config.secrets.sopsYaml;
   sops.secrets.cloudflare-api-key = {
+    # sopsFile = config.secrets.host.macbookpro.wireguard-office-admin;
     sopsFile = config.secrets.cloudflare.letsencrypt-token;
     mode = "0400";
     key = "data";
