@@ -20,10 +20,6 @@ update-cursor-extensions:
 # Rebuild the system with updated input definitions from remote resources
 update-rebuild: update && rebuild
 
-# Update VSCode input definition only
-update-vscode:
-    nix flake update vscode
-
-# Update input definitions of our development flake from remote resources
-devflake-update:
-    cd development && nix flake update
+# Run colmena remote switch on given host
+colmena HOST:
+    colmena apply --on {{ HOST }} --impure
