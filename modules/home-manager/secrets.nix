@@ -26,7 +26,7 @@ in {
     mode = "0400";
     key = "data";
   };
-  home.file.".ssh/id_infrastructure".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.ssh-id-ansible.path;
+  home.file.".ssh/id_infrastructure".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.ssh-id-infrastructure.path;
 
   sops.secrets.git-credentials = {
     sopsFile = config.secrets.workstation.git-credentials;
