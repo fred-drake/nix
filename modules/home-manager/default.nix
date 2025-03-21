@@ -102,7 +102,7 @@ in {
   ];
   # Set session variables
   home.sessionVariables = {
-    TERM = "xterm-kitty";
+    TERM = "xterm-256color";
     PAGER = "less";
     CLICOLOR = 1;
     EDITOR = "nvim";

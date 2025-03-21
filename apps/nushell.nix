@@ -27,11 +27,11 @@
     };
     extraConfig = ''
       # Plugins
-      plugin add ${pkgs.nushellPlugins.skim}/bin/nu_plugin_skim
-      plugin add ${pkgs.nushellPlugins.query}/bin/nu_plugin_query
-      plugin add ${pkgs.nushellPlugins.gstat}/bin/nu_plugin_gstat
-      plugin add ${pkgs.nushellPlugins.formats}/bin/nu_plugin_formats
-      plugin add ${pkgs.nushellPlugins.highlight}/bin/nu_plugin_highlight
+      # plugin add ${pkgs.nushellPlugins.skim}/bin/nu_plugin_skim
+      # plugin add ${pkgs.nushellPlugins.query}/bin/nu_plugin_query
+      # plugin add ${pkgs.nushellPlugins.gstat}/bin/nu_plugin_gstat
+      # plugin add ${pkgs.nushellPlugins.formats}/bin/nu_plugin_formats
+      # plugin add ${pkgs.nushellPlugins.highlight}/bin/nu_plugin_highlight
 
       # function aliases
       def la [] { ls -a }

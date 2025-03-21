@@ -2,7 +2,8 @@
   # Tmux multiplexer configuration
   programs.tmux = {
     enable = true;
-    shell = "${pkgs.nushell}/bin/nu";
+    # shell = "${pkgs.nushell}/bin/nu";
+    shell = "${pkgs.fish}/bin/fish";
     terminal = "tmux-256color";
     plugins = with pkgs; [
       tmuxPlugins.continuum
