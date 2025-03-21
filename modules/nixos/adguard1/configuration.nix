@@ -11,7 +11,7 @@
     ../../../apps/adguard.nix
   ];
 
-  sops.age.sshKeyPaths = ["/home/default/.ssh/infrastructure"];
+  sops.age.sshKeyPaths = ["/home/default/id_infrastructure"];
   sops.defaultSopsFile = config.secrets.sopsYaml;
   sops.secrets.cloudflare-api-key = {
     # sopsFile = config.secrets.host.macbookpro.wireguard-office-admin;
@@ -24,20 +24,22 @@
   security = {
     acme = {
       acceptTerms = true;
+      preliminarySelfsigned = false;
       defaults = {
         email = config.soft-secrets.acme.email;
         dnsProvider = "cloudflare";
-        # credentialsFile = "/var/lib/acme/cloudflare-api-key";
-        # credentialsFile = config.sops.secrets.cloudflare-api-key.path;
         environmentFile = config.sops.secrets.cloudflare-api-key.path;
       };
       certs = {
         "adguard1.internal.freddrake.com" = {
           domain = "adguard1.internal.freddrake.com";
           dnsProvider = "cloudflare";
+          dnsResolver = "1.1.1.1:53";
           webroot = null;
           listenHTTP = null;
           s3Bucket = null;
+          # environmentFile = "/home/default/envfile";
+          environmentFile = config.sops.secrets.cloudflare-api-key.path;
         };
       };
     };
@@ -52,7 +54,7 @@
   environment.systemPackages = with pkgs; [neovim git kea];
   services = {
     adguardhome = {
-      host = config.soft-secrets.host.adguard1.admin_ip_address;
+      # host = config.soft-secrets.host.adguard1.admin_ip_address;
       settings.dns.bind_hosts = [config.soft-secrets.host.adguard1.iot_ip_address];
     };
     openssh = {
@@ -65,18 +67,24 @@
     };
     nginx = {
       enable = true;
-      recommendedGzipSettings = true;
-      recommendedOptimisation = true;
-      recommendedProxySettings = true;
-      recommendedTlsSettings = true;
+      # recommendedGzipSettings = true;
+      # recommendedOptimisation = true;
+      # recommendedProxySettings = true;
+      # recommendedTlsSettings = true;
       virtualHosts = {
         "adguard1.internal.freddrake.com" = {
           enableACME = true;
           forceSSL = true;
           locations."/" = {
-            proxyPass = "http://192.168.208.7:80";
+            proxyPass = "http://127.0.0.1:2500";
             proxyWebsockets = true;
             extraConfig = ''
+              # Increase the maximum size of the hash table
+              proxy_headers_hash_max_size 1024;
+
+              # Increase the bucket size of the hash table
+              proxy_headers_hash_bucket_size 128;
+
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

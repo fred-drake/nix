@@ -1,12 +1,44 @@
 {
   pkgs,
   lib,
+  config,
   secrets,
   ...
 }: {
   imports = [
     ../../../apps/adguard.nix
   ];
+
+  sops.age.sshKeyPaths = ["/home/default/id_infrastructure"];
+  sops.defaultSopsFile = config.secrets.sopsYaml;
+  sops.secrets.cloudflare-api-key = {
+    sopsFile = config.secrets.cloudflare.letsencrypt-token;
+    mode = "0400";
+    key = "data";
+  };
+
+  security = {
+    acme = {
+      acceptTerms = true;
+      preliminarySelfsigned = false;
+      defaults = {
+        email = config.soft-secrets.acme.email;
+        dnsProvider = "cloudflare";
+        environmentFile = config.sops.secrets.cloudflare-api-key.path;
+      };
+      certs = {
+        "adguard2.internal.freddrake.com" = {
+          domain = "adguard2.internal.freddrake.com";
+          dnsProvider = "cloudflare";
+          dnsResolver = "1.1.1.1:53";
+          webroot = null;
+          listenHTTP = null;
+          s3Bucket = null;
+          environmentFile = config.sops.secrets.cloudflare-api-key.path;
+        };
+      };
+    };
+  };
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
@@ -17,7 +49,6 @@
   environment.systemPackages = with pkgs; [neovim git kea];
   services = {
     adguardhome = {
-      host = "192.168.208.9";
       settings.dns.bind_hosts = ["192.168.40.6"];
     };
     openssh = {
@@ -26,6 +57,35 @@
         PasswordAuthentication = false;
         PermitRootLogin = "no";
         ListenAddress = "192.168.208.9";
+      };
+    };
+    nginx = {
+      enable = true;
+      # recommendedGzipSettings = true;
+      # recommendedOptimisation = true;
+      # recommendedProxySettings = true;
+      # recommendedTlsSettings = true;
+      virtualHosts = {
+        "adguard2.internal.freddrake.com" = {
+          enableACME = true;
+          forceSSL = true;
+          locations."/" = {
+            proxyPass = "http://127.0.0.1:2500";
+            proxyWebsockets = true;
+            extraConfig = ''
+              # Increase the maximum size of the hash table
+              proxy_headers_hash_max_size 1024;
+
+              # Increase the bucket size of the hash table
+              proxy_headers_hash_bucket_size 128;
+
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+            '';
+          };
+        };
       };
     };
   };

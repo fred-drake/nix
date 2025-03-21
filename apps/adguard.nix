@@ -3,7 +3,8 @@
     enable = true;
     mutableSettings = false;
     allowDHCP = false;
-    port = 80;
+    host = "127.0.0.1";
+    port = 2500;
     settings = {
       http = {
         pprof = {
