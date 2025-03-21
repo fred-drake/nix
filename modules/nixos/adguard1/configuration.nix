@@ -2,9 +2,6 @@
   pkgs,
   lib,
   config,
-  sops-nix,
-  secrets,
-  modulesPath,
   ...
 }: {
   imports = [
@@ -14,11 +11,9 @@
   sops.age.sshKeyPaths = ["/home/default/id_infrastructure"];
   sops.defaultSopsFile = config.secrets.sopsYaml;
   sops.secrets.cloudflare-api-key = {
-    # sopsFile = config.secrets.host.macbookpro.wireguard-office-admin;
     sopsFile = config.secrets.cloudflare.letsencrypt-token;
     mode = "0400";
     key = "data";
-    # path = "/var/lib/acme/cloudflare-api-key";
   };
 
   security = {
@@ -38,7 +33,6 @@
           webroot = null;
           listenHTTP = null;
           s3Bucket = null;
-          # environmentFile = "/home/default/envfile";
           environmentFile = config.sops.secrets.cloudflare-api-key.path;
         };
       };
@@ -67,10 +61,6 @@
     };
     nginx = {
       enable = true;
-      # recommendedGzipSettings = true;
-      # recommendedOptimisation = true;
-      # recommendedProxySettings = true;
-      # recommendedTlsSettings = true;
       virtualHosts = {
         "adguard1.internal.freddrake.com" = {
           enableACME = true;

@@ -49,22 +49,18 @@
   environment.systemPackages = with pkgs; [neovim git kea];
   services = {
     adguardhome = {
-      settings.dns.bind_hosts = ["192.168.40.6"];
+      settings.dns.bind_hosts = [config.soft-secrets.host.adguard2.iot_ip_address];
     };
     openssh = {
       enable = true;
       settings = {
         PasswordAuthentication = false;
         PermitRootLogin = "no";
-        ListenAddress = "192.168.208.9";
+        ListenAddress = config.soft-secrets.host.adguard2.admin_ip_address;
       };
     };
     nginx = {
       enable = true;
-      # recommendedGzipSettings = true;
-      # recommendedOptimisation = true;
-      # recommendedProxySettings = true;
-      # recommendedTlsSettings = true;
       virtualHosts = {
         "adguard2.internal.freddrake.com" = {
           enableACME = true;
@@ -113,7 +109,7 @@
       ipv4 = {
         addresses = [
           {
-            address = "192.168.208.9";
+            address = config.soft-secrets.host.adguard2.admin_ip_address;
             prefixLength = 24;
           }
         ];
@@ -127,29 +123,30 @@
       };
     };
 
-    interfaces."end0.40".ipv4.addresses = [
-      {
-        address = "192.168.40.6";
-        prefixLength = 24;
-      }
-    ];
-
-    interfaces."end0.40".ipv4.routes = [
-      {
-        address = "0.0.0.0";
-        prefixLength = 0;
-        via = "192.168.40.1";
-      }
-    ];
+    interfaces."end0.40".ipv4 = {
+      addresses = [
+        {
+          address = config.soft-secrets.host.adguard2.iot_ip_address;
+          prefixLength = 24;
+        }
+      ];
+      routes = [
+        {
+          address = "0.0.0.0";
+          prefixLength = 0;
+          via = config.soft-secrets.networking.gateway.iot;
+        }
+      ];
+    };
 
     defaultGateway = {
-      address = "192.168.208.1";
+      address = config.soft-secrets.networking.gateway.admin;
       interface = "end0";
     };
 
     interfaces."wlan0".useDHCP = false;
 
-    nameservers = ["8.8.8.8" "8.8.4.4"];
+    nameservers = config.soft-secrets.networking.nameservers.public;
   };
 
   fileSystems = {
