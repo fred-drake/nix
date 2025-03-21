@@ -422,6 +422,38 @@
         "type": "github"
       }
     },
+    "homebrew-fdrake": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1725065312,
+        "narHash": "sha256-CSWswgzwoy8gazG8XXVk5FWyVW/3Po6zU2J+/z/87/M=",
+        "owner": "fred-drake",
+        "repo": "homebrew-tap",
+        "rev": "9c52c1179a7fdb77ef9081182a6fdc602885a334",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fred-drake",
+        "repo": "homebrew-tap",
+        "type": "github"
+      }
+    },
+    "homebrew-nikitabobko": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1740311806,
+        "narHash": "sha256-IW8C2HtlLLGTylUou6OcLW2juLe1yNX+Ikj0yQPfa48=",
+        "owner": "nikitabobko",
+        "repo": "homebrew-tap",
+        "rev": "f48b006349858421c650551034c2c3beaea2936b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nikitabobko",
+        "repo": "homebrew-tap",
+        "type": "github"
+      }
+    },
     "ixx": {
       "inputs": {
         "flake-utils": [
@@ -899,6 +931,8 @@
         "homebrew-bundle": "homebrew-bundle",
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",
+        "homebrew-fdrake": "homebrew-fdrake",
+        "homebrew-nikitabobko": "homebrew-nikitabobko",
         "neovim": "neovim",
         "nix-homebrew": "nix-homebrew",
         "nixos-hardware": "nixos-hardware",

@@ -53,6 +53,14 @@
       url = "github:homebrew/homebrew-bundle";
       flake = false;
     };
+    homebrew-fdrake = {
+      url = "github:fred-drake/homebrew-tap";
+      flake = false;
+    };
+    homebrew-nikitabobko = {
+      url = "github:nikitabobko/homebrew-tap";
+      flake = false;
+    };
 
     # Nix User Repository: User contributed nix packages
     nur.url = "github:nix-community/NUR";
@@ -89,6 +97,8 @@
     homebrew-core,
     homebrew-cask,
     homebrew-bundle,
+    homebrew-fdrake,
+    homebrew-nikitabobko,
     secrets,
     sops-nix,
     ...
@@ -127,6 +137,8 @@
           homebrew-core
           homebrew-cask
           homebrew-bundle
+          homebrew-fdrake
+          homebrew-nikitabobko
           ;
       };
 

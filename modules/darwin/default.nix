@@ -53,6 +53,7 @@
     casks = [
       # Homebrew casks (GUI applications)
       # Using zed in homebrew because nix pkg is currently broken for Darwin
+      "nikitabobko/tap/aerospace"
       "balenaetcher"
       "brave-browser"
       "bruno"
@@ -68,7 +69,6 @@
       "obs"
       "obsidian"
       "raycast"
-      "rubymine"
       "sourcetree"
       "vlc"
       "zen-browser"

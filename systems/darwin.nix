@@ -10,6 +10,8 @@
   homebrew-core,
   homebrew-cask,
   homebrew-bundle,
+  homebrew-nikitabobko,
+  homebrew-fdrake,
   ...
 }: let
   inherit (inputs) darwin home-manager nix-homebrew secrets sops-nix;
@@ -85,6 +87,8 @@
                 "homebrew/homebrew-core" = homebrew-core;
                 "homebrew/homebrew-cask" = homebrew-cask;
                 "homebrew/homebrew-bundle" = homebrew-bundle;
+                "nikitabobko/homebrew-tap" = homebrew-nikitabobko;
+                "fred-drake/homebrew-tap" = homebrew-fdrake;
               };
               mutableTaps = false;
             };

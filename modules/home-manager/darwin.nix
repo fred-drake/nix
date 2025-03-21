@@ -3,10 +3,7 @@
     ".finicky.js" = {source = ../../homefiles/finicky.js;};
   };
   home.packages = with pkgs; [
-    bartender
     mas # Mac App Store command-line interface
-    aerospace # MacOS tiling window manager
-    skhd # Application hotkeys
   ];
 
   # Set session variables
