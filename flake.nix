@@ -12,7 +12,8 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Typically 3-4 days behind master
     nixpkgs.url = "github:nixos/nixpkgs"; # Absolutely bleeding edge
     nixpkgs-fred-unstable.url = "github:fred-drake/nixpkgs/fred-unstable"; # Modules that have not yet been pulled into upstream
-    nixpkgs-fred-testing.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/nixpkgs"; # For locally testing my contributions
+    nixpkgs-fred-testing.url = "github:fred-drake/nixpkgs/fred-unstable"; # Modules that have not yet been pulled into upstream
+    # nixpkgs-fred-testing.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/nixpkgs"; # For locally testing my contributions
 
     # Secrets inputs
     secrets.url = "git+ssh://git@github.com/fred-drake/nix-secrets.git";
