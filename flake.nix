@@ -132,7 +132,7 @@
 
       colmena = {
         meta = {
-          nixpkgs = import nixpkgs {system = "aarch64-linux";};
+          nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
         };
         "adguard1" = {
           nixpkgs.system = "aarch64-linux";
@@ -143,7 +143,7 @@
             secrets.nixosModules.secrets
             sops-nix.nixosModules.sops
             nixos-hardware.nixosModules.raspberry-pi-4
-            "${nixpkgs}/nixos/modules/profiles/minimal.nix"
+            "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
             ./modules/nixos/adguard1/configuration.nix
           ];
           deployment = {
@@ -161,7 +161,7 @@
             secrets.nixosModules.secrets
             sops-nix.nixosModules.sops
             nixos-hardware.nixosModules.raspberry-pi-4
-            "${nixpkgs}/nixos/modules/profiles/minimal.nix"
+            "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
             ./modules/nixos/adguard2/configuration.nix
           ];
           deployment = {
