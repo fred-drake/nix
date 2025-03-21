@@ -29,6 +29,10 @@ in {
       };
 
       ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
+
+      ".config/glance/glance.yaml" = {
+        text = builtins.toJSON (import ./files/glance-config.nix);
+      };
     }
     // (
       if pkgs.stdenv.isDarwin

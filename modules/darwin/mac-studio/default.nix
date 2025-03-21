@@ -1,5 +1,9 @@
 # Configuration specific to the Mac Studio machine
-{non-mac-mini-casks, ...}: {
+{
+  pkgs,
+  non-mac-mini-casks,
+  ...
+}: {
   homebrew = {
     casks = ["mutedeck" "proxy-audio-device" "elgato-stream-deck" "vmware-fusion"] ++ non-mac-mini-casks;
     masApps = {
@@ -19,5 +23,21 @@
         HIDKeyboardModifierMappingDst = 1095216660483;
       }
     ];
+  };
+
+  environment.systemPackages = with pkgs; [
+    glance # Dashboard
+  ];
+
+  launchd.user.agents.glance = {
+    serviceConfig = {
+      ProgramArguments = [
+        "${pkgs.glance}/bin/glance"
+        "-config"
+        "/Users/fdrake/Downloads/glance.yml"
+      ];
+      RunAtLoad = true;
+      KeepAlive = true;
+    };
   };
 }
