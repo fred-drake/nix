@@ -11,6 +11,13 @@
 {pkgs, ...}: {
   # Environment configuration
   environment = {
+    etc = {
+      "pam.d/sudo_local" = {
+        text = ''
+          auth       optional       /opt/homebrew/lib/pam/pam_reattach.so
+        '';
+      };
+    };
     shells = with pkgs; [
       bash
       zsh
@@ -80,6 +87,8 @@
       "watch"
       # Prepend the following to /etc/pam.d/sudo:
       # auth       optional       /opt/homebrew/lib/pam/pam_reattach.so
+      #
+      # Will probably need to do this after every OS upgrade
       "pam-reattach"
     ]; # Homebrew formulae
     onActivation = {
