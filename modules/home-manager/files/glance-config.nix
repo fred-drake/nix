@@ -6,9 +6,6 @@
   pages = [
     {
       name = "Home";
-      # Commented out in the original YAML
-      # hide-desktop-navigation = true;
-
       columns = [
         {
           size = "small";
@@ -27,20 +24,6 @@
                   url = "https://selfh.st/rss/";
                   title = "selfh.st";
                   limit = 4;
-                }
-                {
-                  url = "https://ciechanow.ski/atom.xml";
-                }
-                {
-                  url = "https://www.joshwcomeau.com/rss.xml";
-                  title = "Josh Comeau";
-                }
-                {
-                  url = "https://samwho.dev/rss.xml";
-                }
-                {
-                  url = "https://ishadeed.com/feed.xml";
-                  title = "Ahmad Shadeed";
                 }
               ];
             }
@@ -61,20 +44,49 @@
           size = "full";
           widgets = [
             {
-              type = "group";
-              widgets = [
-                {type = "hacker-news";}
-                {type = "lobsters";}
-              ];
-            }
-            {
               type = "videos";
               channels = [
-                "UCXuqSBlHAE6Xw-yeJA0Tunw" # Linus Tech Tips
+                "UCkVfrGwV-iG9bSsgCbrNPxQ" # Better Stack
+                "UCuCkxoKLYO_EQ2GeFtbM_bw" # Half as Interesting
+                "UCsWaVYzOFvEWDsEuvuZJ-8A" # EmergentMind
                 "UCR-DXc1voovS8nhAvccRZhg" # Jeff Geerling
                 "UCsBjURrPoezykLs9EqgamOA" # Fireship
-                "UCBJycsmduvYEL83R_U4JriQ" # Marques Brownlee
                 "UCHnyfMqiRRG1u-2MsSQLbXA" # Veritasium
+                "UCiT_r1GD7JSftnbViKHcOtQ" # Jeremy Chone
+                "UCqAL_b-jUOTPjrTSNl2SNaQ" # Software Developer Diaries
+                "UCHsSnExLE-YAhIz0-i3aWDw" # Action RPG
+                "UCOk-gHyjcWZNj3Br4oxwh0A" # Techno Tim
+                "UC_zBdZ0_H_jn41FDRG7q4Tw" # Vimjoyer
+                "UCuGS5mN1_CpPzuOUAu2LluA" # Nixhero
+                "UCVy16RS5eEDh8anP8j94G2A" # DB Tech
+                "UCWI-ohtRu8eEeDj93hmUsUQ" # Coding With Lewis
+                "UCg6gPGh8HU2U01vaFCAsvmQ" # Chris Titus Tech
+                "UC1Zfv1Zrp1q5lKgBomzOyCA" # Melkey
+                "UCo71RUe6DX4w-Vd47rFLXPg" # Typecraft
+                "UCHaF9kM2wn8C3CLRwLkC2GQ" # Matt Williams
+                "UCp3yVOm6A55nx65STpm3tXQ" # Craft Computing
+                "UCcxQHI0pPuOQWLaTJJZoBIQ" # ReYOUniverse
+                "UCWam55wUh-OOcvrGJisq0zA" # Seth Phaeno
+                "UCwFpzG5MK5Shg_ncAhrgr9g" # Awesome Open Source
+                "UCdngmbVKX1Tgre699-XLlUA" # TechWorld With Nana
+                "UCS97tchJDq17Qms3cux8wcA" # chris@machine
+                "UCxQKHvKbmSzGMvUrVtJYnUA" # Learn Linux TV
+                "UCuCuEKq1xuRA0dFQj1qg9-Q" # Knowledgia
+                "UCzumJvwc0KBrdq4jpvOR7RA" # Frontend Masters
+                "UClq6aPav-cAmFwAqjAjAOWA" # Cloudy With Arnold
+                "UCVVuMYbE98poTzS5Ohmz2DA" # Sidequest - Animated History
+                "UCwcTeMUlBWbPcgRlFWMHn0g" # Green Tea Coding
+                "UCGtVGfQUDGW_plNH7ITSMTQ" # The Dev Method
+                "UCngN46PGiqmlUeyPbHKg5zg" # Nick Skriabin
+                "UCwSmf8fUX-rZuBlYxb54ayw" # Gotta Know
+                "UCGpEkSD7ATju4d_oA6-E1Uw" # Average Neovim Enjoyer
+                "UCEEVcDuBRDiwxfXAgQjLGug" # Dreams of Autonomy
+                "UCcN3IuIAR6Fn74FWMQf6lFA" # Science ABC
+                "UCx3Vist13GWLzRPvhUxQ3Jg" # Andrew Courter
+                "UCDiFRMQWpcp8_KD4vwIVicw" # Emergency Awesome
+              ];
+              playlists = [
+                "PL7B_esJLNuKPxfC2osxUsQAPDrKMNewDd" # Rangsk Sudoku
               ];
             }
             {
@@ -90,6 +102,21 @@
                   subreddit = "selfhosted";
                   show-thumbnails = true;
                 }
+                {
+                  type = "reddit";
+                  subreddit = "homelab";
+                  show-thumbnails = true;
+                }
+                {
+                  type = "reddit";
+                  subreddit = "GitOps";
+                  show-thumbnails = true;
+                }
+                {
+                  type = "reddit";
+                  subreddit = "NixOS";
+                  show-thumbnails = true;
+                }
               ];
             }
           ];
@@ -99,45 +126,70 @@
           widgets = [
             {
               type = "weather";
-              location = "Tampa, FL";
+              location = "\${GLANCE_ZIPCODE}";
               units = "imperial";
               hour-format = "12h";
             }
             {
-              type = "markets";
-              markets = [
+              type = "monitor";
+              cache = "1m";
+              title = "Backbone";
+              style = "compact";
+              sites = [
                 {
-                  symbol = "SPY";
-                  name = "S&P 500";
+                  title = "Dalaran";
+                  url = "http://dalaran.internal.freddrake.com";
+                  allow-insecure = true;
                 }
                 {
-                  symbol = "BTC-USD";
-                  name = "Bitcoin";
-                }
-                {
-                  symbol = "NVDA";
-                  name = "NVIDIA";
-                }
-                {
-                  symbol = "AAPL";
-                  name = "Apple";
-                }
-                {
-                  symbol = "MSFT";
-                  name = "Microsoft";
+                  title = "Orgrimmar";
+                  url = "http://orgrimmar.internal.freddrake.com";
+                  allow-insecure = true;
                 }
               ];
             }
             {
-              type = "releases";
-              cache = "1d";
-              # Commented out in the original YAML
-              # token = "...";
-              repositories = [
-                "glanceapp/glance"
-                "go-gitea/gitea"
-                "immich-app/immich"
-                "syncthing/syncthing"
+              type = "monitor";
+              cache = "1m";
+              title = "Hypervisor";
+              style = "compact";
+              sites = [
+                {
+                  title = "Thrall";
+                  url = "https://thrall.internal.freddrake.com:8006";
+                }
+                {
+                  title = "Anduin";
+                  url = "https://anduin.internal.freddrake.com:8006";
+                }
+                {
+                  title = "Baine";
+                  url = "https://baine.internal.freddrake.com:8006";
+                }
+                {
+                  title = "Medivh";
+                  url = "https://medivh.internal.freddrake.com:8006";
+                }
+              ];
+            }
+            {
+              type = "monitor";
+              cache = "1m";
+              title = "Services";
+              style = "compact";
+              sites = [
+                {
+                  title = "Proxmox Backup Server";
+                  url = "https://backup.internal.freddrake.com:8007";
+                }
+                {
+                  title = "Adguard1";
+                  url = "https://adguard1.\${GLANCE_DOMAIN}";
+                }
+                {
+                  title = "Adguard2";
+                  url = "https://adguard2.\${GLANCE_DOMAIN}";
+                }
               ];
             }
           ];

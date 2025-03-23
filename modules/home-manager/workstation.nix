@@ -30,7 +30,16 @@ in {
 
       ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
 
-      ".config/glance/glance.yaml" = {
+      "bin/glance" = {
+        text = ''
+          #!/usr/bin/env bash
+          source ~/.config/glance/glance.env
+          ${pkgs.glance}/bin/glance -config ~/.config/glance/glance.json
+        '';
+        executable = true;
+      };
+
+      ".config/glance/glance.json" = {
         text = builtins.toJSON (import ./files/glance-config.nix);
       };
     }

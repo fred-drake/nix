@@ -32,9 +32,7 @@
   launchd.user.agents.glance = {
     serviceConfig = {
       ProgramArguments = [
-        "${pkgs.glance}/bin/glance"
-        "-config"
-        "/Users/fdrake/Downloads/glance.yml"
+        "/Users/fdrake/bin/glance"
       ];
       RunAtLoad = true;
       KeepAlive = true;
