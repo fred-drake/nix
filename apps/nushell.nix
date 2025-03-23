@@ -41,6 +41,7 @@
       def llat [] { ls -la | sort-by modified }
       def lart [] { ls -a | sort-by modified | reverse }
       def llart [] { ls -la | sort-by modified | reverse }
+      def glance-restart [] { ps | where name == "glance" | get pid.0 | kill -s 1 $in }
 
       let hostname = (sys host | get hostname)
       if $hostname != "nixosaarch64vm" {
