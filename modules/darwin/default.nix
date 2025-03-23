@@ -80,15 +80,10 @@
       "vlc"
       "zen-browser"
     ];
-    # taps = ["fred-drake/tap"]; # Additional Homebrew taps
     brews = [
       "openssh"
       "ruby-install"
       "watch"
-      # Prepend the following to /etc/pam.d/sudo:
-      # auth       optional       /opt/homebrew/lib/pam/pam_reattach.so
-      #
-      # Will probably need to do this after every OS upgrade
       "pam-reattach"
     ]; # Homebrew formulae
     onActivation = {
