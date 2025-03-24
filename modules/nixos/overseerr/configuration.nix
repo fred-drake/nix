@@ -41,7 +41,7 @@
       };
     };
   };
-  networking.hostName = "nixos-testing";
+  networking.hostName = "overseerr";
   users.users.default = {
     isNormalUser = true;
     password = "";
