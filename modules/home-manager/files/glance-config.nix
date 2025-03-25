@@ -86,7 +86,6 @@
                 "UCDiFRMQWpcp8_KD4vwIVicw" # Emergency Awesome
               ];
               playlists = [
-                "PL7B_esJLNuKPxfC2osxUsQAPDrKMNewDd" # Rangsk Sudoku
               ];
             }
             {
@@ -156,19 +155,19 @@
               sites = [
                 {
                   title = "Thrall";
-                  url = "https://thrall.internal.freddrake.com:8006";
+                  url = "https://thrall.\${GLANCE_DOMAIN}:8006";
                 }
                 {
                   title = "Anduin";
-                  url = "https://anduin.internal.freddrake.com:8006";
+                  url = "https://anduin.\${GLANCE_DOMAIN}:8006";
                 }
                 {
                   title = "Baine";
-                  url = "https://baine.internal.freddrake.com:8006";
+                  url = "https://baine.\${GLANCE_DOMAIN}:8006";
                 }
                 {
                   title = "Medivh";
-                  url = "https://medivh.internal.freddrake.com:8006";
+                  url = "https://medivh.\${GLANCE_DOMAIN}:8006";
                 }
               ];
             }
@@ -180,7 +179,7 @@
               sites = [
                 {
                   title = "Proxmox Backup Server";
-                  url = "https://backup.internal.freddrake.com:8007";
+                  url = "https://backup.\${GLANCE_DOMAIN}:8007";
                 }
                 {
                   title = "Adguard1";
@@ -189,6 +188,10 @@
                 {
                   title = "Adguard2";
                   url = "https://adguard2.\${GLANCE_DOMAIN}";
+                }
+                {
+                  title = "Overseerr";
+                  url = "https://overseerr.\${GLANCE_DOMAIN}";
                 }
               ];
             }
