@@ -199,6 +199,25 @@
             targetUser = "default";
           };
         };
+        "sonarr" = {
+          nixpkgs.system = "x86_64-linux";
+          nixpkgs.overlays = [];
+          nixpkgs.config = {};
+          imports = [
+            secrets.nixosModules.soft-secrets
+            secrets.nixosModules.secrets
+            sops-nix.nixosModules.sops
+            "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
+            ./modules/nixos/sonarr/configuration.nix
+          ];
+          deployment = {
+            buildOnTarget = false;
+            targetHost = "192.168.208.242";
+            # targetHost = soft-secrets.host.overseerr.admin_ip_address;
+            # targetUser = "default";
+            targetUser = "root";
+          };
+        };
       };
 
       # Library functions
