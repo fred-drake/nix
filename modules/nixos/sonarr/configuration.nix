@@ -104,5 +104,18 @@
     trusted-users = ["root" "@wheel"];
   };
 
+  # NFS mount configurations
+  fileSystems."/mnt/downloads" = {
+    device = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/downloads";
+    fsType = "nfs";
+    options = ["nfsvers=4" "async"];
+  };
+
+  fileSystems."/mnt/videos" = {
+    device = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/videos";
+    fsType = "nfs";
+    options = ["nfsvers=4" "async"];
+  };
+
   system.stateVersion = "24.11";
 }
