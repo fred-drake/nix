@@ -5,17 +5,8 @@
   ...
 }: {
   imports = [
-    ../../../apps/adguard.nix
+    ../../secrets/cloudflare.nix
   ];
-
-  sops.age.sshKeyPaths = ["/home/default/id_infrastructure"];
-  sops.defaultSopsFile = config.secrets.sopsYaml;
-  sops.secrets.cloudflare-api-key = {
-    sopsFile = config.secrets.cloudflare.letsencrypt-token;
-    mode = "0400";
-    key = "data";
-  };
-
   security = {
     acme = {
       acceptTerms = true;
@@ -26,8 +17,8 @@
         environmentFile = config.sops.secrets.cloudflare-api-key.path;
       };
       certs = {
-        "adguard1.internal.freddrake.com" = {
-          domain = "adguard1.internal.freddrake.com";
+        "adguard1.${config.soft-secrets.networking.domain}" = {
+          domain = "adguard1.${config.soft-secrets.networking.domain}";
           dnsProvider = "cloudflare";
           dnsResolver = "1.1.1.1:53";
           webroot = null;
@@ -62,7 +53,7 @@
     nginx = {
       enable = true;
       virtualHosts = {
-        "adguard1.internal.freddrake.com" = {
+        "adguard1.${config.soft-secrets.networking.domain}" = {
           enableACME = true;
           forceSSL = true;
           locations."/" = {
