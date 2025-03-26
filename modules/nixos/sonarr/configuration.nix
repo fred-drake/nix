@@ -25,6 +25,7 @@
 
   environment.systemPackages = with pkgs; [
     podman-tui # status of containers in the terminal
+    nfs-utils # NFS client utilities
   ];
 
   services = {
@@ -36,16 +37,9 @@
         ListenAddress = config.soft-secrets.host.sonarr.admin_ip_address;
       };
     };
-    nfs = {
-      server = {
-        enable = false;
-      };
-      client = {
-        enable = true;
-        statdPort = null;
-        lockdPort = null;
-      };
-    };
+    # Correct NFS client configuration
+    rpcbind.enable = true; # Required for NFS
+    nfs.server.enable = false;
   };
   networking.hostName = "sonarr";
   users.users.default = {
