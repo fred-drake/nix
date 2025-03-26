@@ -36,6 +36,16 @@
         ListenAddress = config.soft-secrets.host.sonarr.admin_ip_address;
       };
     };
+    nfs = {
+      server = {
+        enable = false;
+      };
+      client = {
+        enable = true;
+        statdPort = null;
+        lockdPort = null;
+      };
+    };
   };
   networking.hostName = "sonarr";
   users.users.default = {
@@ -108,14 +118,20 @@
   fileSystems."/mnt/downloads" = {
     device = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/downloads";
     fsType = "nfs";
-    options = ["nfsvers=4" "async"];
+    options = ["nfsvers=4" "async" "noauto" "x-systemd.automount" "x-systemd.requires=network-online.target"];
   };
 
   fileSystems."/mnt/videos" = {
     device = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/videos";
     fsType = "nfs";
-    options = ["nfsvers=4" "async"];
+    options = ["nfsvers=4" "async" "noauto" "x-systemd.automount" "x-systemd.requires=network-online.target"];
   };
+
+  # Ensure the mount directories exist
+  systemd.tmpfiles.rules = [
+    "d /mnt/downloads 0755 root root -"
+    "d /mnt/videos 0755 root root -"
+  ];
 
   system.stateVersion = "24.11";
 }
