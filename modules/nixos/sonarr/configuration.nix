@@ -13,7 +13,11 @@
   ];
 
   # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-  boot.isContainer = true;
+  boot = {
+    isContainer = true;
+    kernelModules = ["nfs"];
+    supportedFilesystems = ["nfs"];
+  };
   # boot.initrd = {
   #   supportedFilesystems = ["nfs"];
   #   kernelModules = ["nfs"];
@@ -41,9 +45,34 @@
         ListenAddress = config.soft-secrets.host.sonarr.admin_ip_address;
       };
     };
-    # Correct NFS client configuration
-    rpcbind.enable = true; # Required for NFS
+    # NFS client configuration
+    rpcbind.enable = true;
+    nfs.server.enable = false;
   };
+
+  # Configure NFS mounts with simpler options
+  fileSystems = {
+    "/mnt/downloads" = {
+      device = "192.168.50.51:/downloads";
+      fsType = "nfs";
+      options = [
+        "defaults"
+        "nfsvers=4"
+        "_netdev"
+      ];
+    };
+
+    "/mnt/videos" = {
+      device = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/videos";
+      fsType = "nfs";
+      options = [
+        "defaults"
+        "nfsvers=4"
+        "_netdev"
+      ];
+    };
+  };
+
   networking.hostName = "sonarr";
   users.users.default = {
     isNormalUser = true;
@@ -111,25 +140,34 @@
     trusted-users = ["root" "@wheel"];
   };
 
-  # NFS mount configurations
-  fileSystems."/mnt/downloads" = {
-    device = "192.168.50.51:/downloads";
-    # device = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/downloads";
-    fsType = "nfs";
-    options = ["nfsvers=4" "async"];
+  # Ensure all required systemd services are enabled
+  systemd = {
+    services = {
+      network-online.enable = true;
+      NetworkManager-wait-online.enable = true;
+    };
+    # Add mount dependencies
+    mounts = [
+      {
+        what = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/downloads";
+        where = "/mnt/downloads";
+        type = "nfs";
+        wants = ["network-online.target"];
+        after = ["network-online.target"];
+      }
+      {
+        what = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/videos";
+        where = "/mnt/videos";
+        type = "nfs";
+        wants = ["network-online.target"];
+        after = ["network-online.target"];
+      }
+    ];
+    tmpfiles.rules = [
+      "d /mnt/downloads 0755 root root -"
+      "d /mnt/videos 0755 root root -"
+    ];
   };
-
-  fileSystems."/mnt/videos" = {
-    device = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/videos";
-    fsType = "nfs";
-    options = ["nfsvers=4" "async"];
-  };
-
-  # Ensure the mount directories exist
-  systemd.tmpfiles.rules = [
-    "d /mnt/downloads 0755 root root -"
-    "d /mnt/videos 0755 root root -"
-  ];
 
   system.stateVersion = "24.11";
 }
