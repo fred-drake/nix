@@ -52,8 +52,17 @@
 
   # Configure NFS mounts with simpler options
   fileSystems = {
-    "/mnt/downloads" = {
-      device = "192.168.50.51:/downloads";
+    "/mnt/sabnzbd_downloads" = {
+      device = "192.168.50.51:/sabnzbd_downloads";
+      fsType = "nfs";
+      options = [
+        "defaults"
+        "nfsvers=4"
+        "_netdev"
+      ];
+    };
+    "/mnt/sabnzbd_downloads_incomplete" = {
+      device = "192.168.50.51:/sabnzbd_downloads_incomplete";
       fsType = "nfs";
       options = [
         "defaults"
@@ -139,15 +148,23 @@
     # Add mount dependencies
     mounts = [
       {
-        what = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/downloads";
-        where = "/mnt/downloads";
+        what = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/sabnzbd_downloads";
+        where = "/mnt/sabnzbd_downloads";
+        type = "nfs";
+        wants = ["network-online.target"];
+        after = ["network-online.target"];
+      }
+      {
+        what = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/sabnzbd_downloads_incomplete";
+        where = "/mnt/sabnzbd_downloads_incomplete";
         type = "nfs";
         wants = ["network-online.target"];
         after = ["network-online.target"];
       }
     ];
     tmpfiles.rules = [
-      "d /mnt/downloads 0755 root root -"
+      "d /mnt/sabnzbd_downloads 0755 root root -"
+      "d /mnt/sabnzbd_downloads_incomplete 0755 root root -"
     ];
   };
 

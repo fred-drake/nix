@@ -72,8 +72,8 @@ in {
         ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
         volumes = [
           "/var/sabnzbd/config:/config"
-          "/mnt/downloads/usenet/complete:/downloads"
-          "/mnt/downloads/usenet/incomplete:/incomplete-downloads"
+          "/mnt/sabnzbd_downloads:/downloads"
+          "/mnt/sabnzbd_downloads_incomplete:/incomplete-downloads"
         ];
         environment = {
           PUID = "1000";
