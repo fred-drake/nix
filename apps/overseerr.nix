@@ -2,10 +2,6 @@
   host = "overseerr";
   proxyPort = "5055";
 in {
-  imports = [
-    ../../secrets/cloudflare.nix
-  ];
-
   security = {
     acme = {
       acceptTerms = true;
