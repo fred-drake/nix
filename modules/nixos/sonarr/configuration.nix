@@ -14,6 +14,10 @@
 
   # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
   boot.isContainer = true;
+  boot.initrd = {
+    supportedFilesystems = ["nfs"];
+    kernelModules = ["nfs"];
+  };
 
   # Supress systemd units that don't work because of LXC.
   # https://blog.xirion.net/posts/nixos-proxmox-lxc/#configurationnix-tweak
@@ -38,8 +42,7 @@
       };
     };
     # Correct NFS client configuration
-    rpcbind.enable = true; # Required for NFS
-    nfs.server.enable = false;
+    # rpcbind.enable = true; # Required for NFS
   };
   networking.hostName = "sonarr";
   users.users.default = {
@@ -112,13 +115,13 @@
   fileSystems."/mnt/downloads" = {
     device = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/downloads";
     fsType = "nfs";
-    options = ["nfsvers=4" "async" "noauto" "x-systemd.automount" "x-systemd.requires=network-online.target"];
+    options = ["nfsvers=4" "async" "noauto" "x-systemd.automount"];
   };
 
   fileSystems."/mnt/videos" = {
     device = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/videos";
     fsType = "nfs";
-    options = ["nfsvers=4" "async" "noauto" "x-systemd.automount" "x-systemd.requires=network-online.target"];
+    options = ["nfsvers=4" "async" "noauto" "x-systemd.automount"];
   };
 
   # Ensure the mount directories exist
