@@ -61,6 +61,10 @@ in {
     };
   };
 
+  systemd.tmpfiles.rules = [
+    "d /var/sonarr/config 0755 root root -"
+  ];
+
   virtualisation.containers.enable = true;
   virtualisation.podman = {
     enable = true;
@@ -70,7 +74,7 @@ in {
   virtualisation.oci-containers = {
     backend = "podman";
     containers = {
-      my-container = {
+      sonarr = {
         image = "lscr.io/linuxserver/sonarr:latest";
         autoStart = true;
         ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
