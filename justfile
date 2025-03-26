@@ -20,6 +20,10 @@ update-cursor-extensions:
 # Rebuild the system with updated input definitions from remote resources
 update-rebuild: update && rebuild
 
+# Update the secrets flake
+update-secrets:
+    nix flake update secrets
+
 # Run colmena remote switch on given host
 colmena HOST:
     colmena apply --on {{ HOST }} --impure

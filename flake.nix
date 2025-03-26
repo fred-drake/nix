@@ -212,10 +212,8 @@
           ];
           deployment = {
             buildOnTarget = false;
-            targetHost = "192.168.208.242";
-            # targetHost = soft-secrets.host.overseerr.admin_ip_address;
-            # targetUser = "default";
-            targetUser = "root";
+            targetHost = soft-secrets.host.sonarr.admin_ip_address;
+            targetUser = "default";
           };
         };
       };
