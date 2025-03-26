@@ -30,5 +30,7 @@ mkdir -p ~/.ssh && curl "https://github.com/fred-drake.keys" > ~/.ssh/authorized
 - In the init version of the colmena configuration, set `colmena.deployment.targetHost` to the IP address that it loads up with, and `colmena.deployment.targetUser` to `root`.
 - Run the init version of the colmena target with `just colmena <TARGET_NAME>-init`. This is because secrets must be pushed before any applications are deployed.
 - If your IP address is changing, it will hang while restarting services at the very end. Just hit `CTRL-C`.
-- Upon success, change the `targetHost` and `targetUser` back to their permanent settings, and run the regular colmena target to ensure everything works idempotently.
-- Push your `id_infrastructure` key to `/home/default`, so secrets will work.
+- At this point you will have the base installation complete, with IP addresses, default user and its public keys for authentication.
+- Copy over your `id_infrastructure` key to `/home/default`.  This key is used to decrypt secrets in the secrets repository.
+- Change the `targetHost` and `targetUser` back to their permanent settings, and re-run the init colmena target.  This will push the necessary secrets to the server.
+- Finally, run the regular colmena target, which will install the necessary applications.  You will use this target for all subsequent updates.  Note that if your server uses podman containers, you might get an error with the service.  This should be a one time timing error, just re-run the target.
