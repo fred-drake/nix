@@ -190,8 +190,25 @@
                   url = "https://adguard2.\${GLANCE_DOMAIN}";
                 }
                 {
+                  title = "Unraid";
+                  url = "https://larussa.\${GLANCE_DOMAIN}";
+                  allow-insecure = true;
+                }
+                {
                   title = "Overseerr";
                   url = "https://overseerr.\${GLANCE_DOMAIN}";
+                }
+                {
+                  title = "Sonarr";
+                  url = "https://sonarr.\${GLANCE_DOMAIN}";
+                }
+                {
+                  title = "Radarr";
+                  url = "https://radarr.\${GLANCE_DOMAIN}";
+                }
+                {
+                  title = "SABNzbd";
+                  url = "https://sabnzbd.\${GLANCE_DOMAIN}";
                 }
               ];
             }
