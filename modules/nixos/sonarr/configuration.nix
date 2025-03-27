@@ -53,7 +53,7 @@
   # Configure NFS mounts with simpler options
   fileSystems = {
     "/mnt/downloads" = {
-      device = "192.168.50.51:/downloads";
+      device = "192.168.50.51:/sabnzbd_downloads";
       fsType = "nfs";
       options = [
         "defaults"
@@ -149,7 +149,7 @@
     # Add mount dependencies
     mounts = [
       {
-        what = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/downloads";
+        what = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/sabnzbd_downloads";
         where = "/mnt/downloads";
         type = "nfs";
         wants = ["network-online.target"];

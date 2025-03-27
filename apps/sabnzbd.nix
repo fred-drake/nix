@@ -72,6 +72,7 @@ in {
         ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
         volumes = [
           "/var/sabnzbd/config:/config"
+          "${config.sops.templates.sabnzbd-config.path}:/config/sabnzbd.ini"
           "/mnt/sabnzbd_downloads:/downloads"
           "/mnt/sabnzbd_downloads_incomplete:/incomplete-downloads"
         ];
