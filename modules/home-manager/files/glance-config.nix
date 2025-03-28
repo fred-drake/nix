@@ -210,6 +210,16 @@
                   title = "SABNzbd";
                   url = "https://sabnzbd.\${GLANCE_DOMAIN}";
                 }
+                {
+                  title = "Plex";
+                  url = "http://plex-app.\${GLANCE_DOMAIN}:32400";
+                  allow-insecure = true;
+                }
+                {
+                  title = "Jellyfin";
+                  url = "http://jellyfin.\${GLANCE_DOMAIN}:8096";
+                  allow-insecure = true;
+                }
               ];
             }
           ];
