@@ -16,6 +16,7 @@
   radarr = import ./hosts/radarr.nix {inherit self nixpkgs-stable secrets sops-nix;};
   prowlarr = import ./hosts/prowlarr.nix {inherit self nixpkgs-stable secrets sops-nix;};
   sabnzbd = import ./hosts/sabnzbd.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  n8n = import ./hosts/n8n.nix {inherit self nixpkgs-stable secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -30,6 +31,7 @@ in {
   _radarr = radarr._radarr;
   _prowlarr = prowlarr._prowlarr;
   _sabnzbd = sabnzbd._sabnzbd;
+  _n8n = n8n._n8n;
 
   # Init configurations
   "adguard1-init" = adguard1."adguard1-init";
@@ -39,6 +41,7 @@ in {
   "radarr-init" = radarr."radarr-init";
   "prowlarr-init" = prowlarr."prowlarr-init";
   "sabnzbd-init" = sabnzbd."sabnzbd-init";
+  "n8n-init" = n8n."n8n-init";
 
   # Full configurations
   "adguard1" = adguard1."adguard1";
@@ -48,4 +51,5 @@ in {
   "radarr" = radarr."radarr";
   "prowlarr" = prowlarr."prowlarr";
   "sabnzbd" = sabnzbd."sabnzbd";
+  "n8n" = n8n."n8n";
 }
