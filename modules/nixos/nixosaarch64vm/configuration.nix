@@ -46,7 +46,7 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
     ];
-    packages = with pkgs; [direnv git just inputs.neovim.packages.${pkgs.system}.default];
+    packages = with pkgs; [direnv git just];
     shell = pkgs.zsh;
   };
 
