@@ -20,6 +20,7 @@
     pkgs.ghostty
     pkgs.alsa-tools
     pkgs.alsa-utils
+    pkgs.bitwarden-desktop
   ];
 
   networking = {
@@ -61,6 +62,29 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+  };
+
+  programs.dconf.enable = true;
+  programs.dconf.profiles = {
+    uesr.databases = [
+      {
+        settings = with lib.gvariant; {
+          "org/gnome/desktop/wm/preferences" = {
+            workspace-only-on-primary = true;
+          };
+          "org/gnome/mutter" = {
+            edge-tiling = true;
+          };
+          "org/gnome/shell" = {
+            keyboard-shortcuts = ["<Super>q" "close-window"];
+          };
+          "org/gnome/settings-daemon/plugins/power" = {
+            sleep-inactive-ac-type = "nothing";
+            power-button-action = "interactive";
+          };
+        };
+      }
+    ];
   };
 
   system.stateVersion = "24.11";
