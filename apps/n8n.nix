@@ -74,6 +74,11 @@ in {
         environment = {
           PUID = "1000";
           PGID = "1000";
+          N8N_HOST = "${host}.${config.soft-secrets.networking.domain}";
+          N8N_URL = "https://${host}.${config.soft-secrets.networking.domain}";
+          N8N_PROTOCL = "https";
+          N8N_WEBHOOK = "https://${host}.${config.soft-secrets.networking.domain}/";
+          N8N_EDITOR_BASE_URL = "https://${host}.${config.soft-secrets.networking.domain}/";
           N8N_RUNNERS_ENABLED = "true";
           TZ = "America/New_York";
         };
