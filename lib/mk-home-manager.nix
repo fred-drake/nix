@@ -12,14 +12,15 @@
       inputs.sops-nix.homeManagerModules.sops
       inputs.secrets.nixosModules.soft-secrets
       inputs.secrets.nixosModules.secrets
-      ({pkgs, ...}: {
-        home.packages =
-          (builtins.attrValues (import ./mk-neovim-packages.nix {
-            inherit pkgs;
-            neovimPkgs = inputs.neovim.packages.${pkgs.system};
-          }))
-          ++ [inputs.neovim.packages.${pkgs.system}.default];
-      })
+      inputs.nixvim.homeManagerModules.nixvim
+      # ({pkgs, ...}: {
+      #   home.packages =
+      #     (builtins.attrValues (import ./mk-neovim-packages.nix {
+      #       inherit pkgs;
+      #       neovimPkgs = inputs.neovim.packages.${pkgs.system};
+      #     }))
+      #     ++ [inputs.neovim.packages.${pkgs.system}.default];
+      # })
     ]
     ++ imports;
   extraSpecialArgs = {inherit inputs secrets;};

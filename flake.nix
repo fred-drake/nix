@@ -75,7 +75,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    neovim.url = "github:fred-drake/neovim"; # My custom neovim configuration
+    # neovim.url = "github:fred-drake/neovim"; # My custom neovim configuration
+    nixvim.url = "github:nix-community/nixvim";
 
     # vscode.url = "github:fred-drake/vscode"; # My custom vscode configuration
   };
@@ -101,6 +102,7 @@
     homebrew-nikitabobko,
     secrets,
     sops-nix,
+    nixvim,
     ...
   } @ inputs: let
     inherit (self) outputs;
