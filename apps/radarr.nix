@@ -72,7 +72,7 @@ in {
         ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
         volumes = [
           "/var/radarr/config:/config"
-          "/mnt/downloads:/downloads"
+          "/mnt/sabnzbd_downloads:/downloads"
           "/mnt/videos/Movies:/movies"
         ];
         environment = {
