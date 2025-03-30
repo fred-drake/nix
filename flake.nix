@@ -78,6 +78,13 @@
     # neovim.url = "github:fred-drake/neovim"; # My custom neovim configuration
     nixvim.url = "github:nix-community/nixvim";
 
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      # IMPORTANT: we're using "libgbm" and is only available in unstable so ensure
+      # to have it up to date or simply don't specify the nixpkgs input
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # vscode.url = "github:fred-drake/vscode"; # My custom vscode configuration
   };
 

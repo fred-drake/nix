@@ -58,6 +58,27 @@ in {
       }
     ];
   };
+  
+  fredpc = nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {
+      system = "x86_64-linux";
+    };
+    specialArgs = {inherit inputs outputs nixpkgs;};
+    modules = [
+      secrets.nixosModules.soft-secrets
+      sops-nix.nixosModules.sops
+      ../modules/nixos/fredpc/configuration.nix
+      ../modules/nixos/fredpc/hardware-configuration.nix
+      home-manager.nixosModules.home-manager
+      {
+        home-manager = lib.mkHomeManager {
+          inherit inputs secrets;
+          imports = [];
+        };
+      }
+    ];
+  };
 
   aarch64-initial = nixpkgs.lib.nixosSystem {
     system = "aarch64-linux";
