@@ -719,7 +719,8 @@
         "nixvim": "nixvim",
         "nur": "nur",
         "secrets": "secrets",
-        "sops-nix": "sops-nix_2"
+        "sops-nix": "sops-nix_2",
+        "zen-browser": "zen-browser"
       }
     },
     "secrets": {
@@ -728,11 +729,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1743348546,
-        "narHash": "sha256-zRQYNWFfGcyIcTRuMNWHQDomceCkiBZ48Cx7jpRkx+4=",
+        "lastModified": 1743355176,
+        "narHash": "sha256-J+T9uGHY3kM/PTvXuX9AbHv8DnZt3g6TPrnXPPsyu+w=",
         "ref": "refs/heads/master",
-        "rev": "112b247e19a0ccead5663ec3f3da2941334b727c",
-        "revCount": 47,
+        "rev": "68366e9ad4abc92bf0c303241124d0e698437b9b",
+        "revCount": 48,
         "type": "git",
         "url": "ssh://git@github.com/fred-drake/nix-secrets.git"
       },
@@ -841,6 +842,26 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "zen-browser": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1743216975,
+        "narHash": "sha256-29xgm8F3DCcTNrQZ9V3Pwj6BkjalkKvGyjd+sF9/+3k=",
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake",
+        "rev": "165ee672e6b17a8bcc0a3fb51fab3f79715cc1f3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake",
         "type": "github"
       }
     }
