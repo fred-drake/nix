@@ -66,7 +66,6 @@ in {
   # Install packages using Home Manager
   home.packages =
     (with pkgs; [
-      aider-chat # AI Chat client
       chafa # Image resizer
       discord # Voice and text chat app
       docker-compose # Compose multiple containers
