@@ -39,8 +39,7 @@
       inputs.nixpkgs.follows = "nixpkgs"; # Use the same nixpkgs as above
     };
 
-    # nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew"; # Nix Homebrew integration
-    nix-homebrew.url = "git+https://github.com/zhaofengli/nix-homebrew?ref=refs/pull/71/merge";
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew"; # Nix Homebrew integration
     homebrew-core = {
       url = "github:homebrew/homebrew-core";
       flake = false;
