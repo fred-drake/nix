@@ -25,6 +25,17 @@
 
   networking = {
     hostName = "fredpc";
+    firewall.enable = false;
+
+    interfaces = {
+      enp5s0.useDHCP = true;
+      admin.useDHCP = true;
+    };
+
+    vlans.admin = {
+      id = 1;
+      interface = "enp5s0";
+    };
   };
 
   nix.extraOptions = ''
