@@ -18,6 +18,9 @@ in {
 
   # https://devenv.sh/languages/
   # languages.rust.enable = true;
+  languages.python.enable = true;
+  languages.python.version = "3.12";
+  languages.python.uv.enable = true;
 
   # https://devenv.sh/processes/
   # processes.cargo-watch.exec = "cargo-watch";
@@ -60,6 +63,8 @@ in {
   '';
 
   enterShell = ''
+    uv tool install --force --python python3.12 aider-chat@latest
+    uv tool upgrade aider-chat
   '';
 
   # https://devenv.sh/tasks/
