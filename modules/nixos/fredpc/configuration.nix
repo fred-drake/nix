@@ -21,6 +21,15 @@
     pkgs.alsa-tools
     pkgs.alsa-utils
     pkgs.bitwarden-desktop
+
+    pkgs.waybar
+    (pkgs.waybar.overrideAttrs (oldAttrs: {
+      mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
+    }))
+    pkgs.dunst
+    pkgs.libnotify
+    pkgs.swww
+    pkgs.rofi-wayland
   ];
 
   networking = {
@@ -66,37 +75,59 @@
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
+    #   desktopManager.gnome.enable = true;
   };
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    jack.enable = true;
   };
 
-  programs.dconf.enable = true;
-  programs.dconf.profiles = {
-    uesr.databases = [
-      {
-        settings = with lib.gvariant; {
-          "org/gnome/desktop/wm/preferences" = {
-            workspace-only-on-primary = true;
-          };
-          "org/gnome/mutter" = {
-            edge-tiling = true;
-          };
-          "org/gnome/shell" = {
-            keyboard-shortcuts = ["<Super>q" "close-window"];
-          };
-          "org/gnome/settings-daemon/plugins/power" = {
-            sleep-inactive-ac-type = "nothing";
-            power-button-action = "interactive";
-          };
-        };
-      }
-    ];
+  # programs.dconf.enable = true;
+  # programs.dconf.profiles = {
+  #   uesr.databases = [
+  #     {
+  #       settings = with lib.gvariant; {
+  #         "org/gnome/desktop/wm/preferences" = {
+  #           workspace-only-on-primary = true;
+  #         };
+  #         "org/gnome/mutter" = {
+  #           edge-tiling = true;
+  #         };
+  #         "org/gnome/shell" = {
+  #           keyboard-shortcuts = ["<Super>q" "close-window"];
+  #         };
+  #         "org/gnome/settings-daemon/plugins/power" = {
+  #           sleep-inactive-ac-type = "nothing";
+  #           power-button-action = "interactive";
+  #         };
+  #       };
+  #     }
+  #   ];
+  # };
+
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
   };
+
+  environment.sessionVariables = {
+    # If your cursor becomes invisible
+    WLR_NO_HARDWARE_CURSORS = "1";
+    # Hint electron apps to use wayland
+    NIXOS_OZONE_WL = "1";
+  };
+
+  hardware = {
+    graphics.enable = true;
+    nvidia.modesetting.enable = true;
+  };
+
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
 
   system.stateVersion = "24.11";
 }
