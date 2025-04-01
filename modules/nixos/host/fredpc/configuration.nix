@@ -86,31 +86,8 @@
     jack.enable = true;
   };
 
-  # programs.dconf.enable = true;
-  # programs.dconf.profiles = {
-  #   uesr.databases = [
-  #     {
-  #       settings = with lib.gvariant; {
-  #         "org/gnome/desktop/wm/preferences" = {
-  #           workspace-only-on-primary = true;
-  #         };
-  #         "org/gnome/mutter" = {
-  #           edge-tiling = true;
-  #         };
-  #         "org/gnome/shell" = {
-  #           keyboard-shortcuts = ["<Super>q" "close-window"];
-  #         };
-  #         "org/gnome/settings-daemon/plugins/power" = {
-  #           sleep-inactive-ac-type = "nothing";
-  #           power-button-action = "interactive";
-  #         };
-  #       };
-  #     }
-  #   ];
-  # };
-
   programs.hyprland = {
-    enable = false;
+    enable = true;
     xwayland.enable = true;
   };
 
@@ -123,7 +100,12 @@
 
   hardware = {
     graphics.enable = true;
-    nvidia.modesetting.enable = true;
+  };
+  services.xserver.videoDrivers = ["nvidia"];
+  hardware.nvidia = {
+    modesetting.enable = true;
+    nvidiaSettings = true;
+    open = true;
   };
 
   xdg.portal.enable = true;
