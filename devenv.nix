@@ -63,7 +63,6 @@ in {
   '';
 
   enterShell = ''
-    source ~/.llm_api_keys.env
     uv tool install --force --python python3.12 aider-chat@latest
     uv tool upgrade aider-chat
   '';

@@ -72,6 +72,8 @@
       append /usr/bin/env |
       append ~/.local/bin
       )
+
+      source-env ~/.llm_api_keys.nu
     '';
     settings = {
       edit_mode = "vi";
