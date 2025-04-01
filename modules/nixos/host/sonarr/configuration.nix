@@ -52,7 +52,7 @@
 
   # Configure NFS mounts with simpler options
   fileSystems = {
-    "/mnt/downloads" = {
+    "/mnt/sabnzbd_downloads" = {
       device = "192.168.50.51:/sabnzbd_downloads";
       fsType = "nfs";
       options = [
@@ -150,7 +150,7 @@
     mounts = [
       {
         what = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/sabnzbd_downloads";
-        where = "/mnt/downloads";
+        where = "/mnt/sabnzbd_downloads";
         type = "nfs";
         wants = ["network-online.target"];
         after = ["network-online.target"];
@@ -164,7 +164,7 @@
       }
     ];
     tmpfiles.rules = [
-      "d /mnt/downloads 0755 root root -"
+      "d /mnt/sabnzbd_downloads 0755 root root -"
       "d /mnt/videos 0755 root root -"
     ];
   };
