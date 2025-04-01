@@ -5,7 +5,7 @@
   ...
 }: {
   imports = [
-    ../../secrets/cloudflare.nix
+    ../../../secrets/cloudflare.nix
   ];
   security = {
     acme = {
@@ -17,8 +17,8 @@
         environmentFile = config.sops.secrets.cloudflare-api-key.path;
       };
       certs = {
-        "adguard2.${config.soft-secrets.networking.domain}" = {
-          domain = "adguard2.${config.soft-secrets.networking.domain}";
+        "adguard1.${config.soft-secrets.networking.domain}" = {
+          domain = "adguard1.${config.soft-secrets.networking.domain}";
           dnsProvider = "cloudflare";
           dnsResolver = "1.1.1.1:53";
           webroot = null;
@@ -39,20 +39,21 @@
   environment.systemPackages = with pkgs; [neovim git kea];
   services = {
     adguardhome = {
-      settings.dns.bind_hosts = [config.soft-secrets.host.adguard2.iot_ip_address];
+      # host = config.soft-secrets.host.adguard1.admin_ip_address;
+      settings.dns.bind_hosts = [config.soft-secrets.host.adguard1.iot_ip_address];
     };
     openssh = {
       enable = true;
       settings = {
         PasswordAuthentication = false;
         PermitRootLogin = "no";
-        ListenAddress = config.soft-secrets.host.adguard2.admin_ip_address;
+        ListenAddress = config.soft-secrets.host.adguard1.admin_ip_address;
       };
     };
     nginx = {
       enable = true;
       virtualHosts = {
-        "adguard2.${config.soft-secrets.networking.domain}" = {
+        "adguard1.${config.soft-secrets.networking.domain}" = {
           enableACME = true;
           forceSSL = true;
           locations."/" = {
@@ -75,7 +76,7 @@
       };
     };
   };
-  networking.hostName = "adguard2";
+  networking.hostName = "adguard1";
   users.users.default = {
     isNormalUser = true;
     password = "";
@@ -99,7 +100,7 @@
       ipv4 = {
         addresses = [
           {
-            address = config.soft-secrets.host.adguard2.admin_ip_address;
+            address = config.soft-secrets.host.adguard1.admin_ip_address;
             prefixLength = 24;
           }
         ];
@@ -116,7 +117,7 @@
     interfaces."end0.40".ipv4 = {
       addresses = [
         {
-          address = config.soft-secrets.host.adguard2.iot_ip_address;
+          address = config.soft-secrets.host.adguard1.iot_ip_address;
           prefixLength = 24;
         }
       ];

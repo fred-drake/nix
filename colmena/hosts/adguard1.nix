@@ -19,7 +19,8 @@ in {
       sops-nix.nixosModules.sops
       nixos-hardware.nixosModules.raspberry-pi-4
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
-      ../../modules/nixos/adguard1/configuration.nix
+      ../../modules/nixos
+      ../../modules/nixos/host/adguard1/configuration.nix
     ];
     deployment = {
       buildOnTarget = false;

@@ -9,11 +9,13 @@
     # Include the default lxc/lxd configuration.
     # "${modulesPath}/virtualisation/lxc-container.nix"
     "${modulesPath}/virtualisation/proxmox-lxc.nix"
-    ../../secrets/cloudflare.nix
+    ../../../secrets/cloudflare.nix
   ];
 
   # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-  boot.isContainer = true;
+  boot = {
+    isContainer = true;
+  };
 
   # Supress systemd units that don't work because of LXC.
   # https://blog.xirion.net/posts/nixos-proxmox-lxc/#configurationnix-tweak
@@ -28,20 +30,17 @@
   ];
 
   services = {
-    #   adguardhome = {
-    #     # host = config.soft-secrets.host.adguard1.admin_ip_address;
-    #     settings.dns.bind_hosts = [config.soft-secrets.host.adguard1.iot_ip_address];
-    #   };
     openssh = {
       enable = true;
       settings = {
         PasswordAuthentication = false;
         PermitRootLogin = "no";
-        ListenAddress = config.soft-secrets.host.overseerr.admin_ip_address;
+        ListenAddress = config.soft-secrets.host.prowlarr.admin_ip_address;
       };
     };
   };
-  networking.hostName = "overseerr";
+
+  networking.hostName = "prowlarr";
   users.users.default = {
     isNormalUser = true;
     password = "";
@@ -65,7 +64,7 @@
       ipv4 = {
         addresses = [
           {
-            address = config.soft-secrets.host.overseerr.admin_ip_address;
+            address = config.soft-secrets.host.prowlarr.admin_ip_address;
             prefixLength = 24;
           }
         ];
@@ -82,7 +81,7 @@
     interfaces."eth0.50".ipv4 = {
       addresses = [
         {
-          address = config.soft-secrets.host.overseerr.service_ip_address;
+          address = config.soft-secrets.host.prowlarr.service_ip_address;
           prefixLength = 24;
         }
       ];

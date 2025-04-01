@@ -1,7 +1,0 @@
-{
-  secrets,
-  user,
-  group,
-  home,
-}: {
-}

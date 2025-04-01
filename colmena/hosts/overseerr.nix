@@ -17,6 +17,7 @@ in {
       secrets.nixosModules.secrets
       sops-nix.nixosModules.sops
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
+      ../../modules/nixos
       ../../modules/nixos/overseerr/configuration.nix
     ];
     deployment = {

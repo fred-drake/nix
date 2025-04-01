@@ -17,7 +17,8 @@ in {
       secrets.nixosModules.secrets
       sops-nix.nixosModules.sops
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
-      ../../modules/nixos/sonarr/configuration.nix
+      ../../modules/nixos
+      ../../modules/nixos/host/sonarr/configuration.nix
     ];
     deployment = {
       buildOnTarget = false;

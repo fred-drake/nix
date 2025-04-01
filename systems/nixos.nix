@@ -22,7 +22,7 @@ in {
         inputs.nur.nixosModules.nur
         secrets.nixosModules.soft-secrets
         sops-nix.nixosModules.sops
-        ../modules/nixos/macbookx86/configuration.nix
+        ../modules/nixos/host/macbookx86/configuration.nix
         nixos-hardware.nixosModules.apple-t2
         home-manager.nixosModules.home-manager
         {
@@ -47,8 +47,9 @@ in {
       disko.nixosModules.disko
       secrets.nixosModules.soft-secrets
       sops-nix.nixosModules.sops
-      ../modules/nixos/nixoswinvm/configuration.nix
-      ../modules/nixos/nixoswinvm/hardware-configuration.nix
+      ../modules/nixos
+      ../modules/nixos/host/nixoswinvm/configuration.nix
+      ../modules/nixos/host/nixoswinvm/hardware-configuration.nix
       home-manager.nixosModules.home-manager
       {
         home-manager = lib.mkHomeManager {
@@ -69,8 +70,9 @@ in {
     modules = [
       secrets.nixosModules.soft-secrets
       sops-nix.nixosModules.sops
-      ../modules/nixos/fredpc/configuration.nix
-      ../modules/nixos/fredpc/hardware-configuration.nix
+      ../modules/nixos
+      ../modules/nixos/host/fredpc/configuration.nix
+      ../modules/nixos/host/fredpc/hardware-configuration.nix
       home-manager.nixosModules.home-manager
       {
         home-manager = lib.mkHomeManager {
@@ -94,7 +96,8 @@ in {
       disko.nixosModules.disko
       secrets.nixosModules.soft-secrets
       sops-nix.nixosModules.sops
-      ../modules/nixos/aarch64-initial/configuration.nix
+      ../modules/nixos
+      ../modules/nixos/host/aarch64-initial/configuration.nix
     ];
   };
 
@@ -108,7 +111,8 @@ in {
       disko.nixosModules.disko
       secrets.nixosModules.soft-secrets
       sops-nix.nixosModules.sops
-      ../modules/nixos/nixosaarch64vm/configuration.nix
+      ../modules/nixos
+      ../modules/nixos/host/nixosaarch64vm/configuration.nix
       home-manager.nixosModules.home-manager
       {
         # home-manager.useGlobalPkgs = true;
@@ -126,8 +130,9 @@ in {
     system = "x86_64-linux";
     modules = [
       disko.nixosModules.disko
-      ../modules/nixos/forgejo/configuration.nix
-      ../modules/nixos/forgejo/hardware-configuration.nix
+      ../modules/nixos
+      ../modules/nixos/host/forgejo/configuration.nix
+      ../modules/nixos/host/forgejo/hardware-configuration.nix
       home-manager.nixosModules.home-manager
       {
         home-manager = lib.mkHomeManager {
@@ -148,7 +153,8 @@ in {
       secrets.nixosModules.soft-secrets
       nixos-hardware.nixosModules.raspberry-pi-4
       "${nixpkgs}/nixos/modules/profiles/minimal.nix"
-      ../modules/nixos/adguard1/configuration.nix
+      ../modules/nixos
+      ../modules/nixos/host/adguard1/configuration.nix
     ];
   };
 }

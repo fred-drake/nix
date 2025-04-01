@@ -9,19 +9,11 @@
     # Include the default lxc/lxd configuration.
     # "${modulesPath}/virtualisation/lxc-container.nix"
     "${modulesPath}/virtualisation/proxmox-lxc.nix"
-    ../../secrets/cloudflare.nix
+    ../../../secrets/cloudflare.nix
   ];
 
   # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-  boot = {
-    isContainer = true;
-    kernelModules = ["nfs"];
-    supportedFilesystems = ["nfs"];
-  };
-  # boot.initrd = {
-  #   supportedFilesystems = ["nfs"];
-  #   kernelModules = ["nfs"];
-  # };
+  boot.isContainer = true;
 
   # Supress systemd units that don't work because of LXC.
   # https://blog.xirion.net/posts/nixos-proxmox-lxc/#configurationnix-tweak
@@ -33,47 +25,23 @@
 
   environment.systemPackages = with pkgs; [
     podman-tui # status of containers in the terminal
-    nfs-utils # NFS client utilities
   ];
 
   services = {
+    #   adguardhome = {
+    #     # host = config.soft-secrets.host.adguard1.admin_ip_address;
+    #     settings.dns.bind_hosts = [config.soft-secrets.host.adguard1.iot_ip_address];
+    #   };
     openssh = {
       enable = true;
       settings = {
         PasswordAuthentication = false;
         PermitRootLogin = "no";
-        ListenAddress = config.soft-secrets.host.sonarr.admin_ip_address;
+        ListenAddress = config.soft-secrets.host.overseerr.admin_ip_address;
       };
     };
-    # NFS client configuration
-    rpcbind.enable = true;
-    nfs.server.enable = false;
   };
-
-  # Configure NFS mounts with simpler options
-  fileSystems = {
-    "/mnt/downloads" = {
-      device = "192.168.50.51:/sabnzbd_downloads";
-      fsType = "nfs";
-      options = [
-        "defaults"
-        "nfsvers=4"
-        "_netdev"
-      ];
-    };
-
-    "/mnt/videos" = {
-      device = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/videos";
-      fsType = "nfs";
-      options = [
-        "defaults"
-        "nfsvers=4"
-        "_netdev"
-      ];
-    };
-  };
-
-  networking.hostName = "sonarr";
+  networking.hostName = "overseerr";
   users.users.default = {
     isNormalUser = true;
     password = "";
@@ -97,7 +65,7 @@
       ipv4 = {
         addresses = [
           {
-            address = config.soft-secrets.host.sonarr.admin_ip_address;
+            address = config.soft-secrets.host.overseerr.admin_ip_address;
             prefixLength = 24;
           }
         ];
@@ -114,7 +82,7 @@
     interfaces."eth0.50".ipv4 = {
       addresses = [
         {
-          address = config.soft-secrets.host.sonarr.service_ip_address;
+          address = config.soft-secrets.host.overseerr.service_ip_address;
           prefixLength = 24;
         }
       ];
@@ -138,35 +106,6 @@
   nix.settings = {
     experimental-features = lib.mkDefault "nix-command flakes";
     trusted-users = ["root" "@wheel"];
-  };
-
-  # Ensure all required systemd services are enabled
-  systemd = {
-    services = {
-      network-online.enable = true;
-      NetworkManager-wait-online.enable = true;
-    };
-    # Add mount dependencies
-    mounts = [
-      {
-        what = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/sabnzbd_downloads";
-        where = "/mnt/downloads";
-        type = "nfs";
-        wants = ["network-online.target"];
-        after = ["network-online.target"];
-      }
-      {
-        what = "${config.soft-secrets.host.nas-nfs.service_ip_address}:/videos";
-        where = "/mnt/videos";
-        type = "nfs";
-        wants = ["network-online.target"];
-        after = ["network-online.target"];
-      }
-    ];
-    tmpfiles.rules = [
-      "d /mnt/downloads 0755 root root -"
-      "d /mnt/videos 0755 root root -"
-    ];
   };
 
   system.stateVersion = "24.11";
