@@ -11,7 +11,7 @@ in {
   _sabnzbd = {
     nixpkgs.system = "x86_64-linux";
     nixpkgs.overlays = [];
-    nixpkgs.config = {};
+    nixpkgs.config.allowUnfree = true;
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets

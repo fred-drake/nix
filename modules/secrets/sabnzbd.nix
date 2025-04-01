@@ -6,26 +6,32 @@
   sops.secrets.sabnzbd-api-key = {
     sopsFile = config.secrets.host.sabnzbd;
     mode = "0400";
+    owner = "sabnzbd";
     key = "api-key";
   };
   sops.secrets.sabnzbd-nzb-key = {
     sopsFile = config.secrets.host.sabnzbd;
     mode = "0400";
+    owner = "sabnzbd";
     key = "nzb-key";
   };
   sops.secrets.sabnzbd-newsdemon-username = {
     sopsFile = config.secrets.host.sabnzbd;
     mode = "0400";
+    owner = "sabnzbd";
     key = "newsdemon-username";
   };
   sops.secrets.sabnzbd-newsdemon-password = {
     sopsFile = config.secrets.host.sabnzbd;
     mode = "0400";
+    owner = "sabnzbd";
     key = "newsdemon-password";
   };
 
   sops.templates."sabnzbd-config" = {
     mode = "0600"; # Need writable or else sabnzbd just throws errors
+    owner = "sabnzbd";
+    path = "/var/lib/sabnzbd/sabnzbd.ini";
     content = ''
       __version__ = 19
       __encoding__ = utf-8
@@ -46,7 +52,7 @@
       auto_browser = 0
       language = en
       enable_https_verification = 1
-      host = ${config.soft-secrets.host.sabnzbd.service_ip_address}
+      host = 127.0.0.1
       port = 8080
       https_port = ""
       username = ""
@@ -64,19 +70,19 @@
       nzb_key = ${config.sops.placeholder.sabnzbd-nzb-key}
       socks5_proxy_url = ""
       permissions = ""
-      download_dir = /incomplete-downloads
+      download_dir = /mnt/sabnzbd_downloads_incomplete
       download_free = ""
-      complete_dir = /downloads
+      complete_dir = /mnt/sabnzbd_downloads
       complete_free = ""
       fulldisk_autoresume = 0
       script_dir = ""
-      nzb_backup_dir = ""
-      admin_dir = admin
-      backup_dir = ""
+      nzb_backup_dir = /var/lib/sabnzbd/nzb_backup
+      admin_dir = /var/lib/sabnzbd/admin
+      backup_dir = /var/lib/sabnzbd/backup
       dirscan_dir = ""
       dirscan_speed = 5
       password_file = ""
-      log_dir = logs
+      log_dir = /var/lib/sabnzbd/log
       max_art_tries = 3
       top_only = 0
       sfv_check = 1
@@ -145,7 +151,7 @@
       enable_tsjoin = 1
       overwrite_files = 0
       ignore_unrar_dates = 0
-      backup_for_duplicates = 1
+      backup_for_duplicates = 0
       empty_postproc = 0
       wait_for_dfolder = 0
       rss_filenames = 0

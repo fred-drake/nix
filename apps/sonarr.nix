@@ -51,36 +51,13 @@ in {
         };
       };
     };
+    sonarr = {
+      enable = true;
+      dataDir = "/var/sonarr/config";
+    };
   };
 
   systemd.tmpfiles.rules = [
-    "d /var/sonarr/config 0755 root root -"
+    "d /var/sonarr/config 0755 sonarr sonarr -"
   ];
-
-  virtualisation.containers.enable = true;
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      sonarr = {
-        image = "lscr.io/linuxserver/sonarr:latest";
-        autoStart = true;
-        ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
-        volumes = [
-          "/var/sonarr/config:/config"
-          "/mnt/downloads:/downloads"
-          "/mnt/videos/Episodic:/tv"
-        ];
-        environment = {
-          PUID = "1000";
-          PGID = "1000";
-          TZ = "America/New_York";
-        };
-      };
-    };
-  };
 }

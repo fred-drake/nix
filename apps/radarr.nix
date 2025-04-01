@@ -51,36 +51,14 @@ in {
         };
       };
     };
+
+    radarr = {
+      enable = true;
+      dataDir = "/var/radarr/config";
+    };
   };
 
   systemd.tmpfiles.rules = [
-    "d /var/radarr/config 0755 root root -"
+    "d /var/radarr/config 0755 radarr radarr -"
   ];
-
-  virtualisation.containers.enable = true;
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      radarr = {
-        image = "lscr.io/linuxserver/radarr:latest";
-        autoStart = true;
-        ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
-        volumes = [
-          "/var/radarr/config:/config"
-          "/mnt/sabnzbd_downloads:/downloads"
-          "/mnt/videos/Movies:/movies"
-        ];
-        environment = {
-          PUID = "1000";
-          PGID = "1000";
-          TZ = "America/New_York";
-        };
-      };
-    };
-  };
 }

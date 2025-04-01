@@ -51,34 +51,8 @@ in {
         };
       };
     };
-  };
-
-  systemd.tmpfiles.rules = [
-    "d /var/prowlarr/config 0755 root root -"
-  ];
-
-  virtualisation.containers.enable = true;
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      prowlarr = {
-        image = "lscr.io/linuxserver/prowlarr:latest";
-        autoStart = true;
-        ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
-        volumes = [
-          "/var/prowlarr/config:/config"
-        ];
-        environment = {
-          PUID = "1000";
-          PGID = "1000";
-          TZ = "America/New_York";
-        };
-      };
+    prowlarr = {
+      enable = true;
     };
   };
 }

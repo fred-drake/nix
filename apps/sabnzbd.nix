@@ -51,37 +51,11 @@ in {
         };
       };
     };
-  };
 
-  systemd.tmpfiles.rules = [
-    "d /var/sabnzbd/config 0755 root root -"
-  ];
-
-  virtualisation.containers.enable = true;
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      sabnzbd = {
-        image = "lscr.io/linuxserver/sabnzbd:latest";
-        autoStart = true;
-        ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
-        volumes = [
-          "/var/sabnzbd/config:/config"
-          "${config.sops.templates.sabnzbd-config.path}:/config/sabnzbd.ini"
-          "/mnt/sabnzbd_downloads:/downloads"
-          "/mnt/sabnzbd_downloads_incomplete:/incomplete-downloads"
-        ];
-        environment = {
-          PUID = "1000";
-          PGID = "1000";
-          TZ = "America/New_York";
-        };
-      };
+    sabnzbd = {
+      enable = true;
+      configFile = "/var/lib/sabnzbd/sabnzbd.ini";
+      openFirewall = true;
     };
   };
 }
