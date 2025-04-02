@@ -14,7 +14,6 @@ in {
     alejandra
     nixos-anywhere
     nixd
-    aider-chat
     nurl
     tomlq
     statix
@@ -85,10 +84,10 @@ in {
   env.AIDER_LINT = "true";
   env.AIDER_LINT_CMD = "statix check";
 
-  # enterShell = ''
-  #   uv tool install --force --python python3.12 aider-chat@latest
-  #   uv tool upgrade aider-chat
-  # '';
+  enterShell = ''
+    uv tool install --force --python python3.12 aider-chat@latest
+    uv tool upgrade aider-chat
+  '';
 
   # https://devenv.sh/tasks/
   # tasks = {
