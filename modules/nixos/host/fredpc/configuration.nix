@@ -21,15 +21,24 @@
     pkgs.alsa-tools
     pkgs.alsa-utils
     pkgs.bitwarden-desktop
+    pkgs.usbutils
 
-    pkgs.waybar
-    (pkgs.waybar.overrideAttrs (oldAttrs: {
-      mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
-    }))
-    pkgs.dunst
-    pkgs.libnotify
-    pkgs.swww
-    pkgs.rofi-wayland
+    # Wayland apps
+    # pkgs.waybar
+    # (pkgs.waybar.overrideAttrs (oldAttrs: {
+    #   mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
+    # }))
+    # pkgs.dunst
+    # pkgs.libnotify
+    # pkgs.swww
+    # pkgs.rofi-wayland
+    # pkgs.bluez
+    # pkgs.bluez-tools
+    # pkgs.blueman
+
+    pkgs.steam
+    pkgs.steamcmd
+    pkgs.steam-tui
   ];
 
   networking = {
@@ -72,11 +81,15 @@
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
+
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
-    #   desktopManager.gnome.enable = true;
+    desktopManager.gnome.enable = true;
   };
+
+  # Sound
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -84,13 +97,15 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
+    wireplumber.enable = true;
   };
+  services.pulseaudio.enable = false;
 
+  # Hyprland -- Disabled when using Gnome
   programs.hyprland = {
-    enable = true;
+    enable = false;
     xwayland.enable = true;
   };
-
   environment.sessionVariables = {
     # If your cursor becomes invisible
     WLR_NO_HARDWARE_CURSORS = "1";
@@ -98,6 +113,7 @@
     NIXOS_OZONE_WL = "1";
   };
 
+  # NVidia
   hardware = {
     graphics.enable = true;
   };
@@ -110,6 +126,14 @@
 
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
+
+  # Steam
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true;
+  };
 
   system.stateVersion = "24.11";
 }

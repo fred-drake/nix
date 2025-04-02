@@ -39,7 +39,8 @@
         # Add pkgs.networkmanagerapplet for this
         # nm-applet --indicator &
         "waybar &"
-        "dunst"
+        "dunst &"
+        "tmux setenv -g HYPRLAND_INSTANCE_SIGNATURE $HYPRLAND_INSTANCE_SIGNATURE"
       ];
 
       #############################
