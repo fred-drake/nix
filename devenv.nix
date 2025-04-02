@@ -52,19 +52,24 @@ in {
 
     system-flake-rebuild.exec = ''
       if [ ! -z "$1" ]; then
-          export HOST="$1"
+          export CMD="$1"
+      else
+          export CMD=switch
+      fi
+      if [ ! -z "$2" ]; then
+          export HOST="$2"
       else
           export HOST=$(hostname --short)
       fi
 
       if [ "$(uname -s)" = "Darwin" ]; then
           if [ "$HOST" = "freds-macbook-pro" ] || [ "$HOST" = "fred-macbook-pro-wireless" ]; then
-              darwin-rebuild --show-trace --flake .#macbook-pro switch
+              darwin-rebuild --show-trace --flake .#macbook-pro $CMD
           else
-              darwin-rebuild --show-trace --flake .#"$HOST" switch
+              darwin-rebuild --show-trace --flake .#"$HOST" $CMD
           fi
       else
-          sudo nixos-rebuild --show-trace --flake .#"$HOST" switch
+          sudo nixos-rebuild --show-trace --flake .#"$HOST" $CMD
       fi
     '';
 
@@ -82,6 +87,7 @@ in {
 
   # Aider assistance
   env.AIDER_LINT_CMD = "statix check";
+  env.AIDER_TEST_CMD = "just build";
 
   enterShell = ''
     uv tool install --force --python python3.12 aider-chat@latest
