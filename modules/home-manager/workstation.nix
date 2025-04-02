@@ -95,6 +95,7 @@ in {
       tmuxinator # Tmux session manager
       tmux-mem-cpu-load # CPU and memory usage monitor
       tokei # Code statistics tool
+      uv # Python package installer and runner
       wireguard-tools # VPN tools
       yt-dlp # Video downloader
       zoom-us # Video conferencing tool
