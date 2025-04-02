@@ -17,6 +17,7 @@ in {
     aider-chat
     nurl
     tomlq
+    statix
   ];
 
   # https://devenv.sh/languages/
@@ -79,6 +80,10 @@ in {
     ${nix4vscode}/bin/nix4vscode $TOML_FILE >> $EXTENSIONS_PATH
     ${pkgs.alejandra}/bin/alejandra $EXTENSIONS_PATH
   '';
+
+  # Aider assistance
+  env.AIDER_LINT = "true";
+  env.AIDER_LINT_CMD = "statix check";
 
   # enterShell = ''
   #   uv tool install --force --python python3.12 aider-chat@latest
