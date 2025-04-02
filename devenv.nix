@@ -81,7 +81,6 @@ in {
   '';
 
   # Aider assistance
-  env.AIDER_LINT = "true";
   env.AIDER_LINT_CMD = "statix check";
 
   enterShell = ''
