@@ -1,19 +1,13 @@
 {pkgs, ...}: let
-  plugins-src = import ./plugins-src.nix {inherit pkgs;};
+  repos-src = import ../fetcher/repos-src.nix {inherit pkgs;};
   outline-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "outline-nvim";
-    src = plugins-src.outline-src;
+    src = repos-src.outline-nvim-src;
     nvimSkipModule = "outline.providers.norg";
   };
   augment-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "augment-nvim";
-    src = plugins-src.augment-src;
-    # src = pkgs.fetchFromGitHub {
-    #   owner = "augmentcode";
-    #   repo = "augment.vim";
-    #   rev = "e14cbe9fdc33dff1a4b55c0fc858b94f5e833862";
-    #   hash = "sha256-VzHFmt8uOsZEYqIGAbwSrmGLlOfTnL7QvsRB5yMpSG0=";
-    # };
+    src = repos-src.augment-nvim-src;
     nvimSkipModule = "outline.providers.norg";
   };
 in {

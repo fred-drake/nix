@@ -21,8 +21,9 @@ update:
 update-cursor-extensions:
     update-cursor-extensions
 
-update-nvim-plugins:
-    update-nvim-plugins
+# Pull the latest hashes and shas from the repos in apps/fetcher/repos.toml
+update-repos:
+    update-fetcher-repos
 
 # Rebuild the system with updated input definitions from remote resources
 update-switch: update && switch

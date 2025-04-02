@@ -34,17 +34,18 @@ in {
   # https://devenv.sh/scripts/
   # Example: scripts.ide.exec = ''nvim --cmd "let g:augment_workspace_folders = [\"$DEVENV_ROOT\"]"'';
   scripts = {
-    update-nvim-plugins.exec = ''
-      SRCFILE=$DEVENV_ROOT/apps/nixvim/plugins/plugins-src.nix
+    update-fetcher-repos.exec = ''
+      SRCFILE=$DEVENV_ROOT/apps/fetcher/repos-src.nix
+      TOMLFILE=$DEVENV_ROOT/apps/fetcher/repos.toml
       echo "####################################" > $SRCFILE
       echo "# Auto-generated -- do not modify! #" >> $SRCFILE
       echo "####################################" >> $SRCFILE
       echo "{pkgs, ...}: {" >> $SRCFILE
-      ${pkgs.tomlq}/bin/tq --file apps/nixvim/plugins/plugins.toml --output json '.plugins' | \
+      ${pkgs.tomlq}/bin/tq --file $TOMLFILE --output json '.repos' | \
       ${pkgs.jq}/bin/jq -r '.[] | "\(.name) = \(.url)"' | \
       while IFS== read -r name url; do
-        processed_url=pkgs.$(nurl "''${url# }" | tr -d '\n')  # Added pkgs. before nurl
-        echo "  ''${name} = ''${processed_url};"  # Maintained semicolon and indentation
+        processed_url=pkgs.$(nurl "''${url# }" | tr -d '\n')
+        echo "  ''${name} = ''${processed_url};"
       done >> $SRCFILE
       echo "}" >> $SRCFILE
       ${pkgs.alejandra}/bin/alejandra --quiet $SRCFILE

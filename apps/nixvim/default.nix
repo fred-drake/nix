@@ -12,7 +12,7 @@
       ./keys.nix
       ./language.nix
       ./options.nix
-      ./plugins
+      ./plugins.nix
       ./sets.nix
       ./themes.nix
       ./transparent.nix

@@ -1,7 +1,7 @@
-[[plugins]]
-name = "outline-src"
+[[repos]]
+name = "outline-nvim-src"
 url = "https://github.com/hedyhli/outline.nvim"
-[[plugins]]
-name = "augment-src"
+[[repos]]
+name = "augment-nvim-src"
 url = "https://github.com/augmentcode/augment.vim"
 
