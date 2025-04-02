@@ -1,0 +1,157 @@
+# Available Tools
+  
+  When this prompt is loaded, always say to the user EXACTLY THIS:
+  "I am aware of MCP Tools!"
+  (You can also mention the tools you are aware of)
+  
+  ## *Usage*
+  If you decide to call a function of a tool, please execute this bash command.
+  **Do not include ' or line breaks in <parameters as jsonstring> to not break the json in this one-liner.**
+  
+  ```bash
+  mcpm-aider call <tool> <function> '<parameters as jsonstring>'
+  ```
+  
+  ## *Example*
+  ```bash
+  
+  mcpm-aider call @calclavia/mcp-obsidian read_notes '{"paths": ["path/to/notes"]}'
+  
+  ```
+    
+  ## tool: @modelcontextprotocol/brave-search
+
+### function: brave_web_search
+Performs a web search using the Brave Search API, ideal for general queries, news, articles, and online content. Use this for broad information gathering, recent events, or when you need diverse web sources. Supports pagination, content filtering, and freshness controls. Maximum 20 results per request, with offset for pagination. 
+**Parameters**:
+{"type":"object","properties":{"query":{"type":"string","description":"Search query (max 400 chars, 50 words)"},"count":{"type":"number","description":"Number of results (1-20, default 10)","default":10},"offset":{"type":"number","description":"Pagination offset (max 9, default 0)","default":0}},"required":["query"]}
+
+### function: brave_local_search
+Searches for local businesses and places using Brave's Local Search API. Best for queries related to physical locations, businesses, restaurants, services, etc. Returns detailed information including:
+- Business names and addresses
+- Ratings and review counts
+- Phone numbers and opening hours
+Use this when the query implies 'near me' or mentions specific locations. Automatically falls back to web search if no local results are found.
+**Parameters**:
+{"type":"object","properties":{"query":{"type":"string","description":"Local search query (e.g. 'pizza near Central Park')"},"count":{"type":"number","description":"Number of results (1-20, default 5)","default":5}},"required":["query"]}
+
+
+
+---
+## tool: nixos
+
+### function: nixos_search
+
+    Search for NixOS packages, options, or programs.
+    ... (Args/Returns docstring) ...
+    
+**Parameters**:
+{"type":"object","properties":{"query":{"title":"Query","type":"string"},"type":{"default":"packages","title":"Type","type":"string"},"limit":{"default":20,"title":"Limit","type":"integer"},"channel":{"default":"unstable","title":"Channel","type":"string"},"context":{"default":null,"title":"context","type":"string"}},"required":["query"],"title":"nixos_searchArguments"}
+
+### function: nixos_info
+
+    Get detailed information about a NixOS package or option.
+    ... (Args/Returns docstring) ...
+    
+**Parameters**:
+{"type":"object","properties":{"name":{"title":"Name","type":"string"},"type":{"default":"package","title":"Type","type":"string"},"channel":{"default":"unstable","title":"Channel","type":"string"},"context":{"default":null,"title":"context","type":"string"}},"required":["name"],"title":"nixos_infoArguments"}
+
+### function: nixos_stats
+
+    Get statistics about available NixOS packages and options.
+    ... (Args/Returns docstring) ...
+    
+**Parameters**:
+{"type":"object","properties":{"channel":{"default":"unstable","title":"Channel","type":"string"},"context":{"default":null,"title":"context","type":"string"}},"title":"nixos_statsArguments"}
+
+### function: home_manager_search
+
+    Search for Home Manager options.
+
+    Args:
+        query: The search term
+        limit: Maximum number of results to return (default: 20)
+        context: Optional context object for dependency injection in tests
+
+    Returns:
+        Results formatted as text
+    
+**Parameters**:
+{"type":"object","properties":{"query":{"title":"Query","type":"string"},"limit":{"default":20,"title":"Limit","type":"integer"},"context":{"default":null,"title":"context","type":"string"}},"required":["query"],"title":"home_manager_searchArguments"}
+
+### function: home_manager_info
+
+    Get detailed information about a Home Manager option.
+
+    Args:
+        name: The name of the option
+        context: Optional context object for dependency injection in tests
+
+    Returns:
+        Detailed information formatted as text
+    
+**Parameters**:
+{"type":"object","properties":{"name":{"title":"Name","type":"string"},"context":{"default":null,"title":"context","type":"string"}},"required":["name"],"title":"home_manager_infoArguments"}
+
+### function: home_manager_stats
+
+    Get statistics about Home Manager options.
+
+    Args:
+        context: Optional context object for dependency injection in tests
+
+    Returns:
+        Statistics about Home Manager options
+    
+**Parameters**:
+{"type":"object","properties":{"context":{"default":null,"title":"context","type":"string"}},"title":"home_manager_statsArguments"}
+
+### function: home_manager_list_options
+
+    List all top-level Home Manager option categories.
+
+    Args:
+        context: Optional context object for dependency injection in tests
+
+    Returns:
+        Formatted list of top-level option categories and their statistics
+    
+**Parameters**:
+{"type":"object","properties":{"context":{"default":null,"title":"context","type":"string"}},"title":"home_manager_list_optionsArguments"}
+
+### function: home_manager_options_by_prefix
+
+    Get all Home Manager options under a specific prefix.
+
+    Args:
+        option_prefix: The option prefix to search for (e.g., "programs", "programs.git")
+        context: Optional context object for dependency injection in tests
+
+    Returns:
+        Formatted list of options under the given prefix
+    
+**Parameters**:
+{"type":"object","properties":{"option_prefix":{"title":"Option Prefix","type":"string"},"context":{"default":null,"title":"context","type":"string"}},"required":["option_prefix"],"title":"home_manager_options_by_prefixArguments"}
+
+### function: darwin_search
+**Parameters**:
+{"type":"object","properties":{"query":{"title":"Query","type":"string"},"limit":{"default":20,"title":"Limit","type":"integer"}},"required":["query"],"title":"darwin_search_handlerArguments"}
+
+### function: darwin_info
+**Parameters**:
+{"type":"object","properties":{"name":{"title":"Name","type":"string"}},"required":["name"],"title":"darwin_info_handlerArguments"}
+
+### function: darwin_stats
+**Parameters**:
+{"type":"object","properties":{},"title":"darwin_stats_handlerArguments"}
+
+### function: darwin_list_options
+**Parameters**:
+{"type":"object","properties":{},"title":"darwin_list_options_handlerArguments"}
+
+### function: darwin_options_by_prefix
+**Parameters**:
+{"type":"object","properties":{"option_prefix":{"title":"Option Prefix","type":"string"}},"required":["option_prefix"],"title":"darwin_options_by_prefix_handlerArguments"}
+
+
+

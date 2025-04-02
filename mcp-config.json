@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "@modelcontextprotocol/brave-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "**BRAVE_API_KEY**"
+      }
+    },
+    "nixos": {
+      "command": "uvx",
+      "args": [
+        "mcp-nixos"
+      ]
+    }
+  }
+}
