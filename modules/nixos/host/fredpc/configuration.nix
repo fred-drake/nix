@@ -15,7 +15,8 @@
 
   environment.systemPackages = map lib.lowPrio [
     pkgs.curl
-    pkgs.gitMinimal
+    pkgs.file
+    pkgs.git
     inputs.zen-browser.packages."x86_64-linux".default
     pkgs.ghostty
     pkgs.alsa-tools
@@ -23,22 +24,16 @@
     pkgs.bitwarden-desktop
     pkgs.usbutils
 
-    # Wayland apps
-    # pkgs.waybar
-    # (pkgs.waybar.overrideAttrs (oldAttrs: {
-    #   mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
-    # }))
-    # pkgs.dunst
-    # pkgs.libnotify
-    # pkgs.swww
-    # pkgs.rofi-wayland
-    # pkgs.bluez
-    # pkgs.bluez-tools
-    # pkgs.blueman
-
+    # Gaming
     pkgs.steam
     pkgs.steamcmd
     pkgs.steam-tui
+
+    # CUDA
+    pkgs.cudaPackages.cudatoolkit
+    pkgs.cudaPackages.cudnn
+
+    pkgs.zed-editor
   ];
 
   networking = {
@@ -122,6 +117,18 @@
     modesetting.enable = true;
     nvidiaSettings = true;
     open = true;
+  };
+
+  services.ollama = {
+    enable = true;
+    acceleration = "cuda";
+    openFirewall = true;
+    host = "0.0.0.0";
+    port = 11434;
+    environmentVariables = {
+      CUDA_VISIBLE_DEVICES = "0,1";
+      OLLAMA_MODELS = "/storage1/models";
+    };
   };
 
   xdg.portal.enable = true;
