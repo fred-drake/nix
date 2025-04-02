@@ -32,53 +32,53 @@ in {
   # services.postgres.enable = true;
 
   # https://devenv.sh/scripts/
-  # scripts.ide.exec = ''
-  #   nvim --cmd "let g:augment_workspace_folders = [\"$DEVENV_ROOT\"]"
-  # '';
-  scripts.update-nvim-plugins.exec = ''
-    SRCFILE=$DEVENV_ROOT/apps/nixvim/plugins/plugins-src.nix
-    echo "####################################" > $SRCFILE
-    echo "# Auto-generated -- do not modify! #" >> $SRCFILE
-    echo "####################################" >> $SRCFILE
-    echo "{pkgs, ...}: {" >> $SRCFILE
-    ${pkgs.tomlq}/bin/tq --file apps/nixvim/plugins/plugins.toml --output json '.plugins' | \
-    ${pkgs.jq}/bin/jq -r '.[] | "\(.name) = \(.url)"' | \
-    while IFS== read -r name url; do
-      processed_url=pkgs.$(nurl "''${url# }" | tr -d '\n')  # Added pkgs. before nurl
-      echo "  ''${name} = ''${processed_url};"  # Maintained semicolon and indentation
-    done >> $SRCFILE
-    echo "}" >> $SRCFILE
-    ${pkgs.alejandra}/bin/alejandra --quiet $SRCFILE
-  '';
+  # Example: scripts.ide.exec = ''nvim --cmd "let g:augment_workspace_folders = [\"$DEVENV_ROOT\"]"'';
+  scripts = {
+    update-nvim-plugins.exec = ''
+      SRCFILE=$DEVENV_ROOT/apps/nixvim/plugins/plugins-src.nix
+      echo "####################################" > $SRCFILE
+      echo "# Auto-generated -- do not modify! #" >> $SRCFILE
+      echo "####################################" >> $SRCFILE
+      echo "{pkgs, ...}: {" >> $SRCFILE
+      ${pkgs.tomlq}/bin/tq --file apps/nixvim/plugins/plugins.toml --output json '.plugins' | \
+      ${pkgs.jq}/bin/jq -r '.[] | "\(.name) = \(.url)"' | \
+      while IFS== read -r name url; do
+        processed_url=pkgs.$(nurl "''${url# }" | tr -d '\n')  # Added pkgs. before nurl
+        echo "  ''${name} = ''${processed_url};"  # Maintained semicolon and indentation
+      done >> $SRCFILE
+      echo "}" >> $SRCFILE
+      ${pkgs.alejandra}/bin/alejandra --quiet $SRCFILE
+    '';
 
-  scripts.system-flake-rebuild.exec = ''
-    if [ ! -z "$1" ]; then
-        export HOST="$1"
-    else
-        export HOST=$(hostname --short)
-    fi
+    system-flake-rebuild.exec = ''
+      if [ ! -z "$1" ]; then
+          export HOST="$1"
+      else
+          export HOST=$(hostname --short)
+      fi
 
-    if [ "$(uname -s)" = "Darwin" ]; then
-        if [ "$HOST" = "freds-macbook-pro" ] || [ "$HOST" = "fred-macbook-pro-wireless" ]; then
-            darwin-rebuild --show-trace --flake .#macbook-pro switch
-        else
-            darwin-rebuild --show-trace --flake .#"$HOST" switch
-        fi
-    else
-        sudo nixos-rebuild --show-trace --flake .#"$HOST" switch
-    fi
-  '';
+      if [ "$(uname -s)" = "Darwin" ]; then
+          if [ "$HOST" = "freds-macbook-pro" ] || [ "$HOST" = "fred-macbook-pro-wireless" ]; then
+              darwin-rebuild --show-trace --flake .#macbook-pro switch
+          else
+              darwin-rebuild --show-trace --flake .#"$HOST" switch
+          fi
+      else
+          sudo nixos-rebuild --show-trace --flake .#"$HOST" switch
+      fi
+    '';
 
-  scripts.update-cursor-extensions.exec = ''
-    TOML_FILE=$DEVENV_ROOT/modules/cursor/extensions.toml
-    EXTENSIONS_PATH=$DEVENV_ROOT/modules/cursor/extensions.nix
-    echo "Updating Cursor extensions..."
-    echo "####################################" > $EXTENSIONS_PATH
-    echo "# Auto-generated -- do not modify! #" >> $EXTENSIONS_PATH
-    echo "####################################" >> $EXTENSIONS_PATH
-    ${nix4vscode}/bin/nix4vscode $TOML_FILE >> $EXTENSIONS_PATH
-    ${pkgs.alejandra}/bin/alejandra $EXTENSIONS_PATH
-  '';
+    update-cursor-extensions.exec = ''
+      TOML_FILE=$DEVENV_ROOT/modules/cursor/extensions.toml
+      EXTENSIONS_PATH=$DEVENV_ROOT/modules/cursor/extensions.nix
+      echo "Updating Cursor extensions..."
+      echo "####################################" > $EXTENSIONS_PATH
+      echo "# Auto-generated -- do not modify! #" >> $EXTENSIONS_PATH
+      echo "####################################" >> $EXTENSIONS_PATH
+      ${nix4vscode}/bin/nix4vscode $TOML_FILE >> $EXTENSIONS_PATH
+      ${pkgs.alejandra}/bin/alejandra $EXTENSIONS_PATH
+    '';
+  };
 
   # Aider assistance
   env.AIDER_LINT_CMD = "statix check";
