@@ -88,6 +88,7 @@ in {
   # Aider assistance
   env.AIDER_LINT_CMD = "statix check";
   env.AIDER_TEST_CMD = "just build";
+  env.AIDER_AUTO_TEST = "true";
 
   enterShell = ''
     uv tool install --force --python python3.12 aider-chat@latest

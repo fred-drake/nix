@@ -73,6 +73,10 @@
       append ~/.local/bin
       )
 
+      # Aider defaults
+      $env.AIDER_MODEL = "deepseek/deepseek-reasoner"
+      $env.AIDER_DARK_MODE = "True"
+
       source-env ~/.llm_api_keys.nu
     '';
     settings = {
