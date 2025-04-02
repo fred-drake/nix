@@ -17,6 +17,9 @@ update:
 update-cursor-extensions:
     update-cursor-extensions
 
+update-nvim-plugins:
+    update-nvim-plugins
+
 # Rebuild the system with updated input definitions from remote resources
 update-rebuild: update && rebuild
 

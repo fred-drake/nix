@@ -14,13 +14,16 @@ in {
     alejandra
     nixos-anywhere
     nixd
+    aider-chat
+    nurl
+    tomlq
   ];
 
   # https://devenv.sh/languages/
   # languages.rust.enable = true;
-  languages.python.enable = true;
-  languages.python.version = "3.12";
-  languages.python.uv.enable = true;
+  # languages.python.enable = true;
+  # languages.python.version = "3.12";
+  # languages.python.uv.enable = true;
 
   # https://devenv.sh/processes/
   # processes.cargo-watch.exec = "cargo-watch";
@@ -32,6 +35,21 @@ in {
   # scripts.ide.exec = ''
   #   nvim --cmd "let g:augment_workspace_folders = [\"$DEVENV_ROOT\"]"
   # '';
+  scripts.update-nvim-plugins.exec = ''
+    SRCFILE=$DEVENV_ROOT/apps/nixvim/plugins/plugins-src.nix
+    echo "####################################" > $SRCFILE
+    echo "# Auto-generated -- do not modify! #" >> $SRCFILE
+    echo "####################################" >> $SRCFILE
+    echo "{pkgs, ...}: {" >> $SRCFILE
+    ${pkgs.tomlq}/bin/tq --file apps/nixvim/plugins/plugins.toml --output json '.plugins' | \
+    ${pkgs.jq}/bin/jq -r '.[] | "\(.name) = \(.url)"' | \
+    while IFS== read -r name url; do
+      processed_url=pkgs.$(nurl "''${url# }" | tr -d '\n')  # Added pkgs. before nurl
+      echo "  ''${name} = ''${processed_url};"  # Maintained semicolon and indentation
+    done >> $SRCFILE
+    echo "}" >> $SRCFILE
+    ${pkgs.alejandra}/bin/alejandra --quiet $SRCFILE
+  '';
 
   scripts.system-flake-rebuild.exec = ''
     if [ ! -z "$1" ]; then
@@ -62,10 +80,10 @@ in {
     ${pkgs.alejandra}/bin/alejandra $EXTENSIONS_PATH
   '';
 
-  enterShell = ''
-    uv tool install --force --python python3.12 aider-chat@latest
-    uv tool upgrade aider-chat
-  '';
+  # enterShell = ''
+  #   uv tool install --force --python python3.12 aider-chat@latest
+  #   uv tool upgrade aider-chat
+  # '';
 
   # https://devenv.sh/tasks/
   # tasks = {
