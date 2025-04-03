@@ -36,11 +36,6 @@
           icon = "";
         }
         {
-          __unkeyed-1 = "<leader>O";
-          group = "Obsidian";
-          icon = "󰎚";
-        }
-        {
           __unkeyed-1 = "<leader>d";
           group = "Debug";
           icon = "";
@@ -386,56 +381,6 @@
       key = "<leader>Se";
       action = "<CMD>!sops -e -i %<CR><CR>";
       options.desc = "Encrypt SOPS File";
-    }
-
-    # Obsidian
-    {
-      mode = "n";
-      key = "<leader>On";
-      action = "<CMD>ObsidianNew<CR>";
-      options.desc = "New Note";
-    }
-    {
-      mode = "n";
-      key = "<leader>Oo";
-      action = "<CMD>ObsidianQuickSwitch<CR>";
-      options.desc = "Open Note";
-    }
-    {
-      mode = "n";
-      key = "<leader>Ol";
-      action = "<CMD>ObsidianBacklinks<CR>";
-      options.desc = "Backlinks";
-    }
-    {
-      mode = "n";
-      key = "<leader>Ot";
-      action = "<CMD>ObsidianTags<CR>";
-      options.desc = "Tags";
-    }
-    {
-      mode = "n";
-      key = "<leader>Ow";
-      action = "<CMD>ObsidianWorkspace<CR>";
-      options.desc = "Change workspace";
-    }
-    {
-      mode = "n";
-      key = "<leader>Op";
-      action = "<CMD>ObsidianPasteImg<CR>";
-      options.desc = "Paste image";
-    }
-    {
-      mode = "n";
-      key = "<leader>Oc";
-      action = "<CMD>ObsidianToggleCheckbox<CR>";
-      options.desc = "Toggle checkbox";
-    }
-    {
-      mode = "n";
-      key = "<leader>Of";
-      action = "<CMD>ObsidianSearch<CR>";
-      options.desc = "Find notes";
     }
 
     # Git
