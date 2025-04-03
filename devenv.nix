@@ -82,7 +82,7 @@ in {
       echo "# Auto-generated -- do not modify! #" >> $EXTENSIONS_PATH
       echo "####################################" >> $EXTENSIONS_PATH
       ${nix4vscode}/bin/nix4vscode $TOML_FILE >> $EXTENSIONS_PATH
-      ${pkgs.alejandra}/bin/alejandra $EXTENSIONS_PATH
+      ${pkgs.alejandra}/bin/alejandra --quiet $EXTENSIONS_PATH
     '';
   };
 

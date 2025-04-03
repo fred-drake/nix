@@ -28,9 +28,6 @@ extension_name = "format-comment"
 publisher_name = "signageos"
 extension_name = "signageos-vscode-sops"
 [[extensions]]
-publisher_name = "continue"
-extension_name = "continue"
-[[extensions]]
 publisher_name = "mkhl"
 extension_name = "direnv"
 [[extensions]]
@@ -110,14 +107,8 @@ extension_name = "go"
 publisher_name = "neikeq"
 extension_name = "godot-csharp-vscode"
 [[extensions]]
-publisher_name = "RooVeterinaryInc"
-extension_name = "roo-cline"
-[[extensions]]
 publisher_name = "gaborv"
 extension_name = "flatbuffers"
 [[extensions]]
 publisher_name = "vscodevim"
 extension_name = "vim"
-[[extensions]]
-publisher_name = "augment"
-extension_name = "vscode-augment"

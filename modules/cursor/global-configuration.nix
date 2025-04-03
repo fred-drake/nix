@@ -9,7 +9,6 @@
 in {
   # VSCode Extensions that are to be installed
   globalExtensions = with extensions; [
-    ms-vscode-remote.remote-ssh # Enables remote development over SSH
     mikestead.dotenv # Support for .env file syntax highlighting and autocompletion
     vscodevim.vim # Vim emulation for VSCode
     mobalic.jetbrains-dark-theme # Dark theme inspired by JetBrains IDEs
@@ -34,7 +33,6 @@ in {
     usernamehw.errorlens # Error Lens - Improve highlighting of errors, warnings and other language diagnostics
     gruntfuggly.todo-tree # Todo Tree - Show TODO, FIXME and other markers in the file explorer
     gaborv.flatbuffers # FlatBuffers syntax highlighting and autocompletion
-    vscodevim.vim # Vim emulation for Visual Studio Code
     ms-dotnettools.csdevkit
     ms-dotnettools.csharp
     ms-dotnettools.vscode-dotnet-runtime

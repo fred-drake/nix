@@ -103,6 +103,10 @@ in {
         EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
         exec ${pkgs.code-cursor}/bin/cursor --extensions-dir $EXT_DIR "$@"
       '')
+      (pkgs.writeShellScriptBin "windsurf" ''
+        EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
+        exec ${pkgs.windsurf}/bin/windsurf --extensions-dir $EXT_DIR "$@"
+      '')
 
       (pkgs.vscode-with-extensions.override {
         vscodeExtensions = cursor-config.globalExtensions;
