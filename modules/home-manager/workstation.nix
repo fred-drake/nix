@@ -42,6 +42,10 @@ in {
       ".config/glance/glance.json" = {
         text = builtins.toJSON (import ./files/glance-config.nix);
       };
+
+      ".cursor/mcp.json" = {
+        text = builtins.toJSON (import ./files/mcp-server-config.nix);
+      };
     }
     // (
       if pkgs.stdenv.isDarwin
@@ -82,6 +86,7 @@ in {
       lazydocker # Docker CLI with auto-completion and syntax highlighting
       llama-cpp # Text generation
       meld # Visual diff and merge tool
+      nodejs_22
       oh-my-posh # Prompt theme engine
       podman
       podman-tui
