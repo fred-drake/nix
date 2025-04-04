@@ -29,8 +29,8 @@ in
           "pkief"."material-icon-theme" = vscode-utils.extensionFromVscodeMarketplace {
             name = "material-icon-theme";
             publisher = "pkief";
-            version = "5.21.0";
-            sha256 = "0ycmmznf0v1qxnv4h8k3ljgw3d555vj7qk3bwvrwz1wzq4br0vk8";
+            version = "5.21.2";
+            sha256 = "00p10xzccy6y3qk2fsa21jibkq9335ac9sl9abwwg8l2wimhaiqw";
           };
           "ms-vscode-remote"."remote-ssh" = vscode-utils.extensionFromVscodeMarketplace {
             name = "remote-ssh";
@@ -225,8 +225,8 @@ in
           "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
             name = "rust-analyzer";
             publisher = "rust-lang";
-            version = "0.4.2365";
-            sha256 = "0kpn2ba5cnpm8k6429h23pbs599rb3viz52iv75lh6bzk30x1r7v";
+            version = "0.4.2366";
+            sha256 = "1jq4abhprsvv9xb6bic1kxkh5cl5jrywqjzyffvhj43qbqjnnkns";
             arch = "linux-x64";
           };
         }))
@@ -248,8 +248,8 @@ in
         "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
           name = "rust-analyzer";
           publisher = "rust-lang";
-          version = "0.4.2365";
-          sha256 = "1vd6v0bzc7mdxcfn8ygp4n26549w7hy97i0gvni11326c5w07hz9";
+          version = "0.4.2366";
+          sha256 = "07y6717bp9hizhns73g13ixp44ygy1qkrx2y1p0v4aiigc9c7aj0";
           arch = "linux-arm64";
         };
       }))
@@ -271,8 +271,8 @@ in
       "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
         name = "rust-analyzer";
         publisher = "rust-lang";
-        version = "0.4.2365";
-        sha256 = "094jyzchhgdiicjnm3jipfi7d149y97wflxi9risd1yn59mimqp6";
+        version = "0.4.2366";
+        sha256 = "0c60i06z6lfk2k2nn7dw79542mkxhrnv98inp4ssynq3zsljplqk";
         arch = "darwin-x64";
       };
     }))
@@ -294,8 +294,8 @@ in
     "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
       name = "rust-analyzer";
       publisher = "rust-lang";
-      version = "0.4.2365";
-      sha256 = "08hizm6ip31y6lgnxbv3l2yr7arsigxnqfa9zw1x49259jf8y4ri";
+      version = "0.4.2366";
+      sha256 = "0r0j13wkay14z6fyvajq847ihz3215ifd2rsxh78lk6rib35cch6";
       arch = "darwin-arm64";
     };
   })
