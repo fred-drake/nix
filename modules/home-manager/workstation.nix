@@ -76,7 +76,6 @@ in {
       duf # Disk usage analyzer
       gcc # C compiler
       ghq # Remote repository management
-      google-chrome # Web browser
       hclfmt # HCL formatter imagemagick # Image manipulation tools
       imgcat # Image viewer
       inkscape # Vector graphics editor
