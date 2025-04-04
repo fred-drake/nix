@@ -151,7 +151,7 @@
       };
 
       colmena = import ./colmena {
-        inherit self nixpkgs-stable nixpkgs-unstable nixos-hardware secrets sops-nix;
+        inherit self nixpkgs-stable nixos-hardware secrets sops-nix;
       };
 
       # Library functions

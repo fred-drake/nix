@@ -1,31 +1,24 @@
 {
   self,
   nixpkgs-stable,
-  nixpkgs-unstable,
   secrets,
   sops-nix,
   ...
 }: let
   soft-secrets = import "${secrets}/soft-secrets";
-  system = "x86_64-linux";
-  pkgs = import nixpkgs-unstable {
-    inherit system;
-    config = {};
-  };
 in {
   # Base configuration for Overseerr
   _overseerr = {
-    nixpkgs.system = system;
+    nixpkgs.system = "x86_64-linux";
     nixpkgs.overlays = [];
     nixpkgs.config = {};
-    nixpkgs.pkgs = pkgs;
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets
       sops-nix.nixosModules.sops
-      "${nixpkgs-unstable}/nixos/modules/profiles/minimal.nix"
+      "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
       ../../modules/nixos
-      ../../modules/nixos/host/overseerr/configuration.nix
+      ../../modules/nixos/overseerr/configuration.nix
     ];
     deployment = {
       buildOnTarget = false;
