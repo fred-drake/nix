@@ -1,4 +1,8 @@
-{config, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   host = "overseerr";
   proxyPort = "5055";
 in {
@@ -28,6 +32,7 @@ in {
   services = {
     nginx = {
       enable = true;
+      package = pkgs.nginx;
       virtualHosts = {
         "${host}.${config.soft-secrets.networking.domain}" = {
           enableACME = true;
@@ -53,6 +58,7 @@ in {
     };
     jellyseerr = {
       enable = true;
+      package = pkgs.jellyseerr;
     };
   };
 
