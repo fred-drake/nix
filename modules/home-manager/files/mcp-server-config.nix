@@ -28,5 +28,9 @@
       command = "uvx";
       args = ["mac-messages-mcp"];
     };
+    probe = {
+      command = "npx";
+      args = ["-y" "@buger/probe-mcp"];
+    };
   };
 }
