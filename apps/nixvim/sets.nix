@@ -34,16 +34,6 @@
       };
     };
 
-    harpoon = {
-      enable = true;
-      settings = {
-        saveOnToggle = true;
-        saveOnChange = true;
-        enterOnSendcmd = false;
-        markBranch = true;
-      };
-    };
-
     hop.enable = true;
     illuminate.enable = true;
     image.enable = true;

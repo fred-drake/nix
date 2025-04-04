@@ -21,8 +21,6 @@ in {
   ];
 
   extraConfigLua = ''
-    require("telescope").load_extension('harpoon')
-
     require("notify").setup({
       background_colour = "#000000",
     })
