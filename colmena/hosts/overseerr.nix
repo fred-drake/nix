@@ -8,22 +8,22 @@
 }: let
   soft-secrets = import "${secrets}/soft-secrets";
   system = "x86_64-linux";
-  pkgs = import nixpkgs-unstable {
-    inherit system;
-    config = {};
+
+  # Create an overlay that prefers unstable packages
+  unstableOverlay = final: prev: {
+    inherit (import nixpkgs-unstable {inherit system;}) jellyseerr nginx;
   };
 in {
   # Base configuration for Overseerr
   _overseerr = {
     nixpkgs.system = system;
-    nixpkgs.overlays = [];
-    nixpkgs.config = {};
-    nixpkgs.pkgs = pkgs;
+    nixpkgs.overlays = [unstableOverlay];
+    nixpkgs.config.allowUnfree = true;
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets
       sops-nix.nixosModules.sops
-      "${nixpkgs-unstable}/nixos/modules/profiles/minimal.nix"
+      "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
       ../../modules/nixos
       ../../modules/nixos/host/overseerr/configuration.nix
     ];
