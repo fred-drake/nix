@@ -24,6 +24,7 @@
       man = "batman";
       lg = "lazygit";
       ranger = "yy";
+      zed = "`/Applications/Zed Preview.app/Contents/MacOS/cli`";
     };
     extraConfig = ''
       # Plugins
