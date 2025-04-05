@@ -14,6 +14,7 @@ in {
     alejandra
     nixos-anywhere
     nixd
+    nil
     nurl
     tomlq
     statix

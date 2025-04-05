@@ -10,13 +10,6 @@
   "features": {
     "edit_prediction_provider": "supermaven"
   },
-  "assistant": {
-    "default_model": {
-      "provider": "openai",
-      "model": "Meta-Llama-3.1-405B-Instruct"
-    },
-    "version": "2"
-  },
   "autosave": "on_focus_change",
   "auto_update": true,
   "ui_font_size": 16,
@@ -36,6 +29,16 @@
   },
   "tabs": {
     "git_status": false
+  },
+  "languages": {
+    "Nix": {
+      "formatter": {
+        "external": {
+          "command": "alejandra", // or "nixfmt"
+          "arguments": ["--quiet", "--"]
+        }
+      }
+    }
   },
   "lsp": {
     "rust-analyzer": {
