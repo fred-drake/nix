@@ -5,7 +5,10 @@
     carapace.enableNushellIntegration = true;
     direnv.enableNushellIntegration = true;
     # eza.enableNushellIntegration = true;
-    oh-my-posh.enableNushellIntegration = true;
+    oh-my-posh = {
+      enableNushellIntegration = true;
+      useTheme = "craver";
+    };
     # pay-respects.enableNushellIntegration = true;
     yazi.enableNushellIntegration = true;
     zoxide.enableNushellIntegration = true;
