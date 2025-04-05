@@ -25,7 +25,7 @@
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "New Darcula"
+    "dark": "One Dark"
   },
   "terminal": {
     "font_family": "MesloLGS Nerd Font"
