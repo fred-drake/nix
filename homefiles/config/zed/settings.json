@@ -8,7 +8,7 @@
 // command palette
 {
   "features": {
-    "inline_completion_provider": "supermaven"
+    "edit_prediction_provider": "supermaven"
   },
   "assistant": {
     "default_model": {
