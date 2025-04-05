@@ -26,7 +26,7 @@
     "ultimaker-cura"
     "wine-stable"
     "winbox"
-    "zed"
+    # "zed"  # Temporary disable to run the pre-release
   ];
 
   mkDarwinSystem = {
