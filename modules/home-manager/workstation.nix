@@ -74,7 +74,6 @@ in {
       discord # Voice and text chat app
       docker-compose # Compose multiple containers
       duf # Disk usage analyzer
-      gcc # C compiler
       ghq # Remote repository management
       hclfmt # HCL formatter imagemagick # Image manipulation tools
       imgcat # Image viewer

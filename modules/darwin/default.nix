@@ -81,6 +81,7 @@
       "zen-browser"
     ];
     brews = [
+      "cmake"
       "openssh"
       "ruby-install"
       "watch"

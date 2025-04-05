@@ -72,7 +72,8 @@
       $env.PATH = ($env.PATH |
       split row (char esep) |
       append /usr/bin/env |
-      append ~/.local/bin
+      append ~/.local/bin |
+      append ~/.cargo/bin
       )
 
       # Aider defaults
