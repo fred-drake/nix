@@ -34,6 +34,9 @@ in {
       mkdir -p ${home}/.ssh
       chmod 700 ${home}/.ssh
     '';
+    zed-settings-copy = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      cp -f ${config.sops.secrets.zed-settings.path} ${home}/.config/zed/settings.json
+    '';
   };
 
   # Enable and configure EditorConfig

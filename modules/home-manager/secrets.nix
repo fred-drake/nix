@@ -62,4 +62,10 @@ in {
     key = "data";
   };
   home.file.".config/glance/glance.env".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.glance.path;
+
+  sops.secrets.zed-settings = {
+    sopsFile = config.secrets.workstation.zed-settings;
+    mode = "0400";
+    key = "data";
+  };
 }
