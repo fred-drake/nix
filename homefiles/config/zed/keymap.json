@@ -14,13 +14,28 @@
   {
     "context": "GitPanel",
     "bindings": {
-      "space g": "workspace::ToggleLeftDock"
+      // "space g": "workspace::ToggleLeftDock",
+      "ctrl-d": "git::RestoreFile",
+      "ctrl-a": "git::Add",
+      "ctrl-space": "git::StageFile"
     }
   },
   {
     "context": "!GitPanel && vim_mode == normal",
     "bindings": {
       "space g": "git_panel::ToggleFocus"
+    }
+  },
+  {
+    "context": "OutlinePanel",
+    "bindings": {
+      "space o": "workspace::ToggleLeftDock"
+    }
+  },
+  {
+    "context": "!OutlinePanel && vim_mode == normal",
+    "bindings": {
+      "space o": "outline_panel::ToggleFocus"
     }
   },
   {
@@ -33,7 +48,31 @@
     "context": "vim_mode == normal || vim_mode == visual",
     "bindings": {
       "s": "vim::PushSneak",
-      "shift-s": "vim::PushSneakBackward"
+      "shift-s": "vim::PushSneakBackward",
+      "space c r": "editor::Rename",
+      "space c a": "editor::ToggleCodeActions",
+      "space b p": "pane::TogglePinTab",
+      "space b d": ["pane::CloseActiveItem", { "close_pinned": false }],
+      "space a": "workspace::ToggleRightDock",
+      "space b P": ["pane::CloseAllItems", { "close_pinned": false }],
+      "space b b": ["editor::SelectPrevious", { "replace_newest": true }],
+      "space t": "terminal_panel::ToggleFocus",
+      "space /": "pane::DeploySearch",
+      "space f f": "file_finder::Toggle",
+      "space f r": "file_finder::Toggle",
+      "space c d": "diagnostics::Deploy"
+    }
+  },
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      "g c c": ["editor::ToggleComments", { "advance_downwards": false }]
+    }
+  },
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "g c": ["editor::ToggleComments", { "advance_downwards": false }]
     }
   },
   {
@@ -42,6 +81,6 @@
       "ctrl-l": "workspace::ActivatePaneRight",
       "ctrl-k": "workspace::ActivatePaneUp",
       "ctrl-j": "workspace::ActivatePaneDown"
-   }
+    }
   }
 ]
