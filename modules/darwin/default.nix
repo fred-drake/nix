@@ -44,19 +44,15 @@
     enable = true;
     caskArgs.no_quarantine = true; # Disable quarantine for casks
     global.brewfile = true; # Use a global Brewfile
-    masApps = {
-      # Mac App Store applications
-      "Bitwarden" = 1352778147;
-      "Microsoft Remote Desktop" = 1295203466;
-      # "OneDrive" = 823766827;
-      "Pages" = 409201541;
-      "RunCat" = 1429033973;
-      "The Unarchiver" = 425424353;
-      "Unsplash Wallpapers" = 1284863847;
-      "UTM Virtual Machines" = 1538878817;
-      "Xcode" = 497799835;
-      "WireGuard" = 1451685025;
-    };
+    # masApps = {
+    #   # Mac App Store applications
+    #   "Bitwarden" = 1352778147;
+    #   "Pages" = 409201541;
+    #   "RunCat" = 1429033973;
+    #   "The Unarchiver" = 425424353;
+    #   "Xcode" = 497799835;
+    #   "WireGuard" = 1451685025;
+    # };
     casks = [
       # Homebrew casks (GUI applications)
       # Using zed in homebrew because nix pkg is currently broken for Darwin
@@ -114,7 +110,10 @@
     settings = {
       cores = 0; # Set Nix to use all available cores
       sandbox = false;
+      trusted-users = ["root" "fdrake"];
     };
+    # extra-substituters = "https://devenv.cachix.org";
+    # extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
   };
   # Program configurations
   programs = {
