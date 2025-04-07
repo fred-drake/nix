@@ -35,7 +35,8 @@ in {
       chmod 700 ${home}/.ssh
     '';
     zed-settings-copy = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      cp -f ${config.sops.secrets.zed-settings.path} ${home}/.config/zed/settings.json
+      cp -f ${home}/.config/zed/settings-original.json ${home}/.config/zed/settings.json
+      cp -f ${home}/.config/zed/keymap-original.json ${home}/.config/zed/keymap.json
     '';
   };
 

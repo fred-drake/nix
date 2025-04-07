@@ -1,0 +1,178 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette
+{
+  "context_servers": {
+    "time": {
+      "command": {
+        "path": "uvx",
+        "args": ["mcp-server-time", "--local-timezone=America/New_York"],
+        "env": null
+      },
+      "settings": {}
+    },
+    "sequential-thinking": {
+      "command": {
+        "path": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+        "env": null
+      },
+      "settings": {}
+    },
+    "nixos": {
+      "command": {
+        "path": "uvx",
+        "args": ["mcp-nixos"],
+        "env": null
+      },
+      "settings": {}
+    },
+    "brave-search": {
+      "command": {
+        "path": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+        "env": null
+      },
+      "settings": {}
+    }
+  },
+  "features": {
+    "edit_prediction_provider": "supermaven"
+  },
+  "autosave": "on_focus_change",
+  "auto_update": true,
+  "ui_font_size": 16,
+  "buffer_font_size": 16,
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark"
+  },
+  "terminal": {
+    "font_family": "MesloLGS Nerd Font"
+  },
+  "load_direnv": "shell_hook",
+  "scrollbar": {
+    "show": "system"
+  },
+  "tabs": {
+    "git_status": false
+  },
+  "languages": {
+    "Nix": {
+      "formatter": {
+        "external": {
+          "command": "alejandra", // or "nixfmt"
+          "arguments": ["--quiet", "--"]
+        }
+      }
+    }
+  },
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "check": {
+          "command": "clippy"
+        }
+      }
+    },
+    "ansible-language-server": {
+      "settings": {
+        "ansible": {
+          "path": "ansible"
+        },
+        "executionEnvironment": {
+          "enabled": false
+        },
+        "python": {
+          "interpreterPath": "python3"
+        },
+        "validation": {
+          "enabled": true,
+          "lint": {
+            "enabled": true,
+            "path": "ansible-lint"
+          }
+        }
+      }
+    },
+    "omnisharp": {
+      "binary": {
+        "path": "OmniSharp",
+        "args": ["optional", "additional", "args", "-lsp"]
+      }
+    }
+  },
+  "git": {
+    "inline_blame": {
+      "enabled": true,
+      "delay_ms": 1000
+    }
+  },
+  "soft_wrap": "editor_width",
+  "vim_mode": true,
+  "language_models": {
+    "ollama": {
+      "api_url": "http://192.168.30.58:11434",
+      "available_models": [
+        {
+          "provider": "ollama",
+          "name": "deepseek-coder-v2:16b",
+          "max_tokens": 1024,
+          "keep_alive": "3m"
+        }
+      ]
+    },
+    // "openai": {
+    //   // "api_url": "https://api.deepseek.com",
+    //   "api_url": "https://fast-api.snova.ai",
+    //   "version": "1",
+    //   "available_models": [
+    //     {
+    //       "provider": "deepseek",
+    //       "name": "deepseek-chat",
+    //       "max_tokens": 128000
+    //     }
+    //   ]
+    // }
+    "openai": {
+      "api_url": "https://api.sambanova.ai/v1",
+      "version": "1",
+      "available_models": [
+        {
+          "provider": "sambanova",
+          "name": "Meta-Llama-3.1-405B-Instruct",
+          "max_tokens": 128000
+        }
+      ]
+    }
+  },
+  "vim": {
+    "toggle_relative_line_numbers": true,
+    "use_system_clipboard": "always"
+  },
+  "file_types": {
+    "Ansible": [
+      "**.ansible.yml",
+      "**/defaults/**.yml",
+      "**/defaults/**.yaml",
+      "**/meta/**.yml",
+      "**/meta/**.yaml",
+      "**/tasks/**.yml",
+      "**/tasks/*.yml",
+      "**/tasks/*.yaml",
+      "**/handlers/*.yml",
+      "**/handlers/*.yaml",
+      "**/group_vars/**.yml",
+      "**/group_vars/**.yaml",
+      "**playbook*.yaml",
+      "**playbook*.yml"
+    ]
+  }
+}
