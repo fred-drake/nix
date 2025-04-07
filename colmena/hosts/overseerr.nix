@@ -18,7 +18,7 @@ in {
       sops-nix.nixosModules.sops
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
       ../../modules/nixos
-      ../../modules/nixos/overseerr/configuration.nix
+      ../../modules/nixos/host/overseerr/configuration.nix
     ];
     deployment = {
       buildOnTarget = false;
