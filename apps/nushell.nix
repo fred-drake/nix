@@ -83,6 +83,9 @@
       $env.AIDER_DARK_MODE = "True"
 
       source-env ~/.llm_api_keys.nu
+
+      # Completions
+      source ~/.config/nushell/completions/uv.nu
     '';
     settings = {
       edit_mode = "vi";
