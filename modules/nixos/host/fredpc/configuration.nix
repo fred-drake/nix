@@ -34,6 +34,7 @@
     pkgs.cudaPackages.cudnn
 
     pkgs.zed-editor
+    pkgs.docker-compose
   ];
 
   networking = {
@@ -141,6 +142,14 @@
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
     localNetworkGameTransfers.openFirewall = true;
+  };
+
+  # Podman
+  virtualisation.containers.enable = true;
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    dockerSocket.enable = true;
   };
 
   system.stateVersion = "24.11";
