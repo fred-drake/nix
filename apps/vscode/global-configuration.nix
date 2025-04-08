@@ -42,6 +42,8 @@ in {
     fill-labs.dependi
     golang.go
     gofenix.go-lines
+    rooveterinaryinc.roo-cline
+    github.copilot
   ];
 
   # VSCode Settings that are to be applied in every configuration.  Configuration-specific settings will

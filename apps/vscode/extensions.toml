@@ -1,4 +1,4 @@
-vscode_version = "1.96.2"
+vscode_version = "1.99.0"
 
 [[extensions]]
 publisher_name = "ms-vscode-remote"
@@ -112,3 +112,10 @@ extension_name = "flatbuffers"
 [[extensions]]
 publisher_name = "vscodevim"
 extension_name = "vim"
+[[extensions]]
+publisher_name = "RooVeterinaryInc"
+extension_name = "roo-cline"
+[[extensions]]
+publisher_name = "GitHub"
+extension_name = "copilot"
+

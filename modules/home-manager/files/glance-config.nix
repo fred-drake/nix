@@ -19,6 +19,8 @@
                   repository = "zed-industries/zed";
                   include-prereleases = true;
                 }
+                "microsoft/vscode"
+                "RooVetGit/Roo-Code"
                 "zen-browser/desktop"
               ];
             }

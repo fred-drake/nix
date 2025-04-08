@@ -14,7 +14,6 @@ in {
     alejandra
     nixos-anywhere
     nixd
-    nil
     nurl
     tomlq
     statix
@@ -75,10 +74,10 @@ in {
       fi
     '';
 
-    update-cursor-extensions.exec = ''
-      TOML_FILE=$DEVENV_ROOT/modules/cursor/extensions.toml
-      EXTENSIONS_PATH=$DEVENV_ROOT/modules/cursor/extensions.nix
-      echo "Updating Cursor extensions..."
+    update-vscode-extensions.exec = ''
+      TOML_FILE=$DEVENV_ROOT/apps/vscode/extensions.toml
+      EXTENSIONS_PATH=$DEVENV_ROOT/apps/vscode/extensions.nix
+      echo "Updating VSCode extensions..."
       echo "####################################" > $EXTENSIONS_PATH
       echo "# Auto-generated -- do not modify! #" >> $EXTENSIONS_PATH
       echo "####################################" >> $EXTENSIONS_PATH

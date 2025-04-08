@@ -14,15 +14,15 @@ build: _rebuild-pre
     system-flake-rebuild build
 
 # Update everything
-update-all: update update-cursor-extensions update-repos update-secrets
+update-all: update update-vscode-extensions update-repos update-secrets
 
 # Update input definitions from remote resources
 update:
     nix flake update
 
-# Refresh Cursor Extensions
-update-cursor-extensions:
-    update-cursor-extensions
+# Refresh VSCode Extensions
+update-vscode-extensions:
+    update-vscode-extensions
 
 # Pull the latest hashes and shas from the repos in apps/fetcher/repos.toml
 update-repos:

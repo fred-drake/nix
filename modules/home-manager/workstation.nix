@@ -19,7 +19,7 @@
   lib,
   ...
 }: let
-  cursor-config = (import ../cursor/global-configuration.nix) {inherit pkgs lib;};
+  vscode-config = (import ../../apps/vscode/global-configuration.nix) {inherit pkgs lib;};
 in {
   home.file =
     {
@@ -50,19 +50,19 @@ in {
     // (
       if pkgs.stdenv.isDarwin
       then {
-        "Library/Application Support/Cursor/User/settings.json" = {
-          text = builtins.toJSON cursor-config.globalSettings;
+        "Library/Application Support/Code/User/settings.json" = {
+          text = builtins.toJSON vscode-config.globalSettings;
         };
-        "Library/Application Support/Cursor/User/keybindings.json" = {
-          text = builtins.toJSON cursor-config.globalKeyBindings;
+        "Library/Application Support/Code/User/keybindings.json" = {
+          text = builtins.toJSON vscode-config.globalKeyBindings;
         };
       }
       else {
-        ".config/cursor/user/settings.json" = {
-          text = builtins.toJSON cursor-config.globalSettings;
+        ".config/Code/User/settings.json" = {
+          text = builtins.toJSON vscode-config.globalSettings;
         };
-        ".config/cursor/user/keybindings.json" = {
-          text = builtins.toJSON cursor-config.globalKeyBindings;
+        ".config/Code/User/keybindings.json" = {
+          text = builtins.toJSON vscode-config.globalKeyBindings;
         };
       }
     );
@@ -112,7 +112,7 @@ in {
       '')
 
       (pkgs.vscode-with-extensions.override {
-        vscodeExtensions = cursor-config.globalExtensions;
+        vscodeExtensions = vscode-config.globalExtensions;
       })
     ])
     ++ (with pkgs-unstable; [])
@@ -133,19 +133,4 @@ in {
   # Enable and configure various programs
   programs.fish.shellAbbrs = {
   };
-
-  # jsonSettings = pkgs.writeTextFile {
-  #   name = "vscode-${name}-settings";
-  #   text = builtins.toJSON cursor-config.globalSettings;
-  #   destination = "/user/settings.json";
-  # };
-  # jsonKeyBindings = pkgs.writeTextFile {
-  #   name = "vscode-${name}-keybindings";
-  #   text = builtins.toJSON cursor-config.globalSettings;
-  #   destination = "/user/keybindings.json";
-  # };
-
-  # code-with-extensions = pkgs.vscode-with-extensions.override {
-  #   vscodeExtensions = cursor-config.globalExtensions;
-  # };
 }
