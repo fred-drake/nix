@@ -73,6 +73,7 @@
       "obsidian"
       "raycast"
       "sourcetree"
+      "visual-studio-code"
       "vlc"
       "zen-browser"
     ];
