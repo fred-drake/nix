@@ -131,8 +131,8 @@ in
           "rooveterinaryinc"."roo-cline" = vscode-utils.extensionFromVscodeMarketplace {
             name = "roo-cline";
             publisher = "rooveterinaryinc";
-            version = "3.11.9";
-            sha256 = "145xgb6sm9r8iab3yhv628lbmm3f0a6z5lpl3a592papfjfbs67q";
+            version = "3.11.10";
+            sha256 = "0rnd3f6qb50biq79bzhr6rfnqd1svh9s1dsqrzfqc85xa6qwz2b6";
           };
           "fill-labs"."dependi" = vscode-utils.extensionFromVscodeMarketplace {
             name = "dependi";
