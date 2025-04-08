@@ -11,8 +11,16 @@
           size = "small";
           widgets = [
             {
-              type = "calendar";
-              first-day-of-week = "sunday";
+              type = "releases";
+              show-source-icon = true;
+              repositories = [
+                "glanceapp/glance"
+                {
+                  repository = "zed-industries/zed";
+                  include-prereleases = true;
+                }
+                "zen-browser/desktop"
+              ];
             }
             {
               type = "rss";
@@ -103,11 +111,6 @@
                 }
                 {
                   type = "reddit";
-                  subreddit = "homelab";
-                  show-thumbnails = true;
-                }
-                {
-                  type = "reddit";
                   subreddit = "GitOps";
                   show-thumbnails = true;
                 }
@@ -137,12 +140,12 @@
               sites = [
                 {
                   title = "Dalaran";
-                  url = "http://dalaran.internal.freddrake.com";
+                  url = "http://dalaran.\${GLANCE_DOMAIN}";
                   allow-insecure = true;
                 }
                 {
                   title = "Orgrimmar";
-                  url = "http://orgrimmar.internal.freddrake.com";
+                  url = "http://orgrimmar.\${GLANCE_DOMAIN}";
                   allow-insecure = true;
                 }
               ];
@@ -209,11 +212,6 @@
                 {
                   title = "SABNzbd";
                   url = "https://sabnzbd.\${GLANCE_DOMAIN}";
-                }
-                {
-                  title = "Plex";
-                  url = "http://plex-app.\${GLANCE_DOMAIN}:32400";
-                  allow-insecure = true;
                 }
                 {
                   title = "Jellyfin";
