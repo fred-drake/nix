@@ -12,6 +12,7 @@
   homebrew-bundle,
   homebrew-nikitabobko,
   homebrew-fdrake,
+  nix-jetbrains-plugins,
   ...
 }: let
   inherit (inputs) darwin home-manager nix-homebrew secrets sops-nix;
@@ -68,6 +69,7 @@
           nixpkgs-unstable
           nixpkgs-fred-testing
           nixpkgs-fred-unstable
+          nix-jetbrains-plugins
           non-mac-mini-casks
           ;
       };

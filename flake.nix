@@ -84,6 +84,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-jetbrains-plugins.url = "github:theCapypara/nix-jetbrains-plugins";
+
     # vscode.url = "github:fred-drake/vscode"; # My custom vscode configuration
   };
 
@@ -109,6 +111,7 @@
     secrets,
     sops-nix,
     nixvim,
+    nix-jetbrains-plugins,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -128,6 +131,7 @@
           nixpkgs-fred-unstable
           nixpkgs-fred-testing
           secrets
+          nix-jetbrains-plugins
           ;
       };
 
@@ -142,6 +146,7 @@
           nixpkgs-fred-unstable
           nixpkgs-fred-testing
           secrets
+          nix-jetbrains-plugins
           homebrew-core
           homebrew-cask
           homebrew-bundle

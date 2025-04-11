@@ -1,4 +1,164 @@
-" Lots of inspiration here: https://github.com/danidiaz/miscellany/blob/master/windows/.ideavimrc
 set relativenumber
 set number
+
+let mapleader = " "
+
+set visualbell
+
+" Allow copying to system clipboard
+set clipboard+=unnamedplus
+
+" Ignore case when searching
+set ignorecase
+
+" Easymotion jump to any character on screen
+set easymotion
+map m <Plug>(easymotion-s)
+let g:WhichKeyDesc_easymotion = "m Jump to any character on screen"
+
+set NERDTree
+map <Leader>e :NERDTreeToggle<CR>
+let g:WhichKeyDesc_treetoggle = "<leader>e Toggle NERDTree"
+
+set which-key
+set timeoutlen=5000
+
+set ideamarks
+
+" https://github.com/JetBrains/ideavim/wiki/%60ideajoin%60-examples
+set ideajoin
+
+set commentary
+
+" dia daa cia caa
+set argtextobj
+
+" die dae cie cae
+set textobj-entire
+
+inoremap jk <Esc>
+
+
+" remember to assing to Vim the following shortcuts!
+" C-h
+" C-l
+" C-o
+" C-i
+" C-v
+" C-w Vim uses it to switch windows, the IDE behaviour is mapped to C-k instead
+" C-k
+" C-m Enter alternative
+" C-[ A great Esc key alternative! In the ide, moves caret to code block start.
+" C-] Go to definition. In the ide, moves caret to code block end.
+
+" consider NOT assigning to Vim the following shortcuts:
+" C-e recent files popup window is very useful
+" C-b find occurrences in file popup
+" C-u go to super method
+" C-q info popup
+" C-j We already have j in Vim, better use it for Insert Live Template
+" C-n class search
+
+" unsure about assigning to Vim or to IDE
+" C-f find or move forward?
+" C-r replace or redo?
+" C-y
+" C-c We already have C-[, don't we?
+" C-p kind of not very used withou C-n
+" C-s doesn't seem very useful in Vim
+" C-t update project in IDEA, something something tag stack in Vim
+" C-a I don't use it that much in Vim
+" C-x same as above
+
+" https://github.com/JetBrains/ideavim/wiki/sethandler
+" To be able to say 'same as regular Idea behaviour, but only on insert mode'.
+"
+" Same as default IDEA action, but only in normal mode. Delete previous char
+" in insert mode.
+" See also Ctrl + Shift + H for method hierarchy, Ctrl + Alt + H for call
+" hierarchy.
+sethandler <C-h> n:ide
+" Same as default IDEA action, but only in insert mode. Enter block-visual
+" mode in normal mode.
+sethandler <C-v> i:ide
+
+map <Leader>fr <Action>(RecentFiles)
+
+
+" https://github.com/JetBrains/ideavim/wiki/Select-mode
+" set selectmode-=template
+
+"  Mouseless Driven Development by Hadi Hariri https://www.youtube.com/watch?v=UH6YVv9js3s
+" https://github.com/JetBrains/ideavim
+" https://github.com/Valloric/dotfiles/blob/master/intellij/ideavimrc
+" https://resources.jetbrains.com/storage/products/intellij-idea/docs/IntelliJIDEA_ReferenceCard.pdf
+
+" These are leader-based alternative shortcuts for actions whose corresponding
+" idea shortcuts require hand-stretching combinations, function keys, Home or
+" Insert.
+"
+" Shift + F6 in idea.
+" Alt + R, then R (through the menu bar) also seems to work fine.
+" map <Leader>r :action RenameElement<CR>
+" Ctrl + F12 in idea.
+" map <Leader>s Action(FileStructurePopup)
+map s <Action>(SelectIn)
+" Perhaps a bit useless compared to search anything.
+"map s <Action>(GotoSymbol)
+map <Leader>s <Action>(FileStructurePopup)
+map <Leader>S <Action>(StructuralSearchActions)
+" Perhaps just use the Idea shortcut Ctrl-Alt-B
+" Alt + N, then m (through the menu bar) also seems to work, but it is
+" non-unique.
+map <Leader>i <Action>(GotoImplementation)
+map <Leader>m <Action>(GotoImplementation)
+map <Leader>d <Action>(GotoImplementation)
+" Jump to next/previous error, show error description
+" https://stackoverflow.com/questions/13346245/keyboard-shortcut-to-display-error-in-intellij
+"map <Leader>e <Action>(ShowErrorDescription)
+" Alt + F7 in idea.
+" Find usages in file is Ctrl + F7.
+" Alt + E, then F, then U (through the menu bar) also seems to work fine.
+"map <Leader>f <Action>(FindUsages)
+map <Leader>F <Action>(HighlightUsagesInFile)
+" Alt + Insert in idea.
+map <Leader>g <Action>(Generate)
+" F12
+map <Leader>w <Action>(HideAllWindows)
+map <Leader>W <Action>(JumpToLastWindow)
+" Possibly redundant given "Run Anything" DoubleCtrl
+map <Leader>r <Action>(ChooseRunConfiguration)
+map <Leader>R <Action>(Refactorings.QuickListPopupAction)
+map <Leader>a <Action>(AnalyzeActionsPopup)
+
+" I like using space for jumping to the next error or issue
+map , <Action>(GotoNextError)
+map <BS> <Action>(GotoRelated)
+
+
+map g; <Action>(JumpToLastChange)
+map g, <Action>(JumpToNextChange)
+
+"
+" Here are mappings about which I'm less sure.
+
+" This is for going to related symbols. I can't find any effect in the community edition.
+" map <Leader>g :action GotoRelated<CR>
+
+" uppercase last inserted text. Perhpas just use gU`[ instead.
+" map <Leader>u `[v`]~`]
+
+" Can also use Ctrl-Shift-[
+map <Leader>[ <Action>(EditorCodeBlockStart)
+" Can also use Ctrl-Shift-]
+map <Leader>] <Action>(EditorCodeBlockEnd)
+
+" This is Ctrl-W in the default keymap, but we are using it for Vim.
+" map <C-s> :action EditorSelectWord<CR> " somewhat unconfrotable to type
+" map <C-d> :action EditorSelectWord<CR> " ditto
+" better to use your two hands!
+map <C-k> <Action>(EditorSelectWord)
+
+" uppercase last inserted word
+imap <C-l> <Esc>bgUawea
 

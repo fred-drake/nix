@@ -8,7 +8,15 @@
 #   - Security settings
 #
 # Individual device-specific configurations should be placed in separate files.
-{pkgs, ...}: {
+{
+  pkgs,
+  nix-jetbrains-plugins,
+  ...
+}: let
+  # pluginList = [
+  #   nix-jetbrains-plugins.plugins."aarch64-darwin".idea-ultimate."2024.3"."IdeaVIM"
+  # ];
+in {
   # Environment configuration
   environment = {
     etc = {
@@ -24,7 +32,20 @@
       fish
       nushell
     ]; # Available shells
-    systemPackages = [pkgs.coreutils]; # Core utilities package
+    systemPackages = [
+      pkgs.coreutils
+      # pluginList
+      (nix-jetbrains-plugins.lib."aarch64-darwin".buildIdeWithPlugins pkgs.jetbrains "pycharm-professional" [
+        "AceJump"
+        "org.jetbrains.IdeaVim-EasyMotion"
+        # "eu.theblob42.idea.whichkey"
+        # "IdeaVIM"
+        # "com.intellij.plugins.vscodekeymap"
+        # "com.github.catppuccin.jetbrains"
+        # "com.koxudaxi.ruff"
+        # "nix-idea"
+      ])
+    ]; # Core utilities package
     systemPath = [
       "/opt/homebrew/bin"
       "/opt/homebrew/sbin"
@@ -73,7 +94,7 @@
       "obsidian"
       "raycast"
       "sourcetree"
-      "visual-studio-code"
+      # "visual-studio-code"
       "vlc"
       "zen-browser"
     ];

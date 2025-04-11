@@ -2,6 +2,7 @@
   inputs,
   outputs,
   nixpkgs,
+  nix-jetbrains-plugins,
   ...
 }: let
   inherit (inputs) home-manager disko nixos-hardware secrets sops-nix;
