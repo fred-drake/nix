@@ -16,9 +16,8 @@
     # Add local bin to path, and ensure that oh-my-posh doesn't get initialized in Apple Terminal
     initExtra = ''
       PATH=~/bin:$PATH
-      source ~/.llm_api_keys.env.backup
       if [ "$TERM_PROGRAM" != "Apple_Terminal" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
-        exec ${pkgs.nushell}/bin/nu
+        # exec ${pkgs.nushell}/bin/nu
       elif [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
         eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/config.toml)"
       fi
