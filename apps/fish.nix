@@ -56,7 +56,7 @@
 
       direnv hook fish | source
 
-      oh-my-posh init fish --config ~/.config/oh-my-posh/config.toml | source
+      # oh-my-posh init fish --config ~/.config/oh-my-posh/config.toml | source
 
       zoxide init fish | source
     '';

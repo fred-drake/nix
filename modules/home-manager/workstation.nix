@@ -21,6 +21,15 @@
 }: let
   vscode-config = (import ../../apps/vscode/global-configuration.nix) {inherit pkgs lib;};
 in {
+  programs = {
+    fish.enable = true;
+    oh-my-posh = {
+      enableNushellIntegration = true;
+      enableZshIntegration = true;
+      enableFishIntegration = true;
+      useTheme = "craver";
+    };
+  };
   home.file =
     {
       "Pictures" = {

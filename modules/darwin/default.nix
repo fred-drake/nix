@@ -141,6 +141,7 @@ in {
   programs = {
     direnv.enable = true; # Enable direnv for directory-specific environments
     zsh.enable = true; # Enable Zsh
+    fish.enable = true;
   };
 
   # Security configuration
@@ -187,7 +188,7 @@ in {
     users.fdrake = {
       uid = 501;
       home = "/Users/fdrake";
-      shell = pkgs.zsh; # Set zsh as the user's shell
+      shell = pkgs.fish; # Set zsh as the user's shell
     };
   };
 }

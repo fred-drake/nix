@@ -92,6 +92,7 @@ in {
   env.AIDER_AUTO_TEST = "true";
 
   enterShell = ''
+    export PATH="$PATH:$HOME/.local/bin"
     export AIDER_READ="$DEVENV_ROOT/mcp-prompt.txt"
     uv tool install --force --python python3.12 aider-chat@latest
     uv tool upgrade aider-chat
