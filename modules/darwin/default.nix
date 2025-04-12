@@ -104,6 +104,7 @@ in {
       "ruby-install"
       "watch"
       "pam-reattach"
+      "poppler"
     ]; # Homebrew formulae
     onActivation = {
       cleanup = "zap";
