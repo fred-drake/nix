@@ -1,4 +1,4 @@
-vscode_version = "1.99.0"
+vscode_version = "1.97.0"
 
 [[extensions]]
 publisher_name = "ms-vscode-remote"
@@ -118,4 +118,7 @@ extension_name = "roo-cline"
 [[extensions]]
 publisher_name = "GitHub"
 extension_name = "copilot"
+[[extensions]]
+publisher_name = "ms-python"
+extension_name = "python"
 

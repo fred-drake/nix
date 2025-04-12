@@ -21,50 +21,75 @@
 }: let
   vscode-config = (import ../../apps/vscode/global-configuration.nix) {inherit pkgs lib;};
 in {
-  home.file = {
-    "Pictures" = {
-      source = ../../homefiles/Pictures;
-      recursive = true;
-    };
+  home.file =
+    {
+      "Pictures" = {
+        source = ../../homefiles/Pictures;
+        recursive = true;
+      };
 
-    ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
+      ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
 
-    "bin/glance" = {
-      text = ''
-        #!/usr/bin/env bash
-        source ~/.config/glance/glance.env
-        ${pkgs.glance}/bin/glance -config ~/.config/glance/glance.json
-      '';
-      executable = true;
-    };
+      "bin/glance" = {
+        text = ''
+          #!/usr/bin/env bash
+          source ~/.config/glance/glance.env
+          ${pkgs.glance}/bin/glance -config ~/.config/glance/glance.json
+        '';
+        executable = true;
+      };
 
-    ".config/glance/glance.json" = {
-      text = builtins.toJSON (import ./files/glance-config.nix);
-    };
+      ".config/glance/glance.json" = {
+        text = builtins.toJSON (import ./files/glance-config.nix);
+      };
 
-    ".cursor/mcp.json" = {
-      text = builtins.toJSON (import ./files/mcp-server-config.nix);
-    };
-  };
-  # // (
-  #   if pkgs.stdenv.isDarwin
-  #   then {
-  #     "Library/Application Support/Code/User/settings.json" = {
-  #       text = builtins.toJSON vscode-config.globalSettings;
-  #     };
-  #     "Library/Application Support/Code/User/keybindings.json" = {
-  #       text = builtins.toJSON vscode-config.globalKeyBindings;
-  #     };
-  #   }
-  #   else {
-  #     ".config/Code/User/settings.json" = {
-  #       text = builtins.toJSON vscode-config.globalSettings;
-  #     };
-  #     ".config/Code/User/keybindings.json" = {
-  #       text = builtins.toJSON vscode-config.globalKeyBindings;
-  #     };
-  #   }
-  # );
+      ".cursor/mcp.json" = {
+        text = builtins.toJSON (import ./files/mcp-server-config.nix);
+      };
+    }
+    // (
+      if pkgs.stdenv.isDarwin
+      then {
+        "Library/Application Support/Code/User/settings.json" = {
+          text = builtins.toJSON vscode-config.globalSettings;
+        };
+        "Library/Application Support/Code/User/keybindings.json" = {
+          text = builtins.toJSON vscode-config.globalKeyBindings;
+        };
+        "Library/Application Support/Cursor/User/settings.json" = {
+          text = builtins.toJSON vscode-config.globalSettings;
+        };
+        "Library/Application Support/Cursor/User/keybindings.json" = {
+          text = builtins.toJSON vscode-config.globalKeyBindings;
+        };
+        "Library/Application Support/Windsurf/User/settings.json" = {
+          text = builtins.toJSON vscode-config.globalSettings;
+        };
+        "Library/Application Support/Windsurf/User/keybindings.json" = {
+          text = builtins.toJSON vscode-config.globalKeyBindings;
+        };
+      }
+      else {
+        ".config/Code/User/settings.json" = {
+          text = builtins.toJSON vscode-config.globalSettings;
+        };
+        ".config/Code/User/keybindings.json" = {
+          text = builtins.toJSON vscode-config.globalKeyBindings;
+        };
+        ".config/Cursor/User/settings.json" = {
+          text = builtins.toJSON vscode-config.globalSettings;
+        };
+        ".config/Cursor/User/keybindings.json" = {
+          text = builtins.toJSON vscode-config.globalKeyBindings;
+        };
+        ".config/Windsurf/User/settings.json" = {
+          text = builtins.toJSON vscode-config.globalSettings;
+        };
+        ".config/Windsurf/User/keybindings.json" = {
+          text = builtins.toJSON vscode-config.globalKeyBindings;
+        };
+      }
+    );
 
   # Install packages using Home Manager
   home.packages =
@@ -110,9 +135,9 @@ in {
         exec ${pkgs.windsurf}/bin/windsurf --extensions-dir $EXT_DIR "$@"
       '')
 
-      # (pkgs.vscode-with-extensions.override {
-      #   vscodeExtensions = vscode-config.globalExtensions;
-      # })
+      (pkgs.vscode-with-extensions.override {
+        vscodeExtensions = vscode-config.globalExtensions;
+      })
     ])
     ++ (with pkgs-unstable; [])
     ++ (with pkgs-fred-unstable; [])

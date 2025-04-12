@@ -44,6 +44,7 @@ in {
     gofenix.go-lines
     rooveterinaryinc.roo-cline
     github.copilot
+    ms-python.python
   ];
 
   # VSCode Settings that are to be applied in every configuration.  Configuration-specific settings will
@@ -131,6 +132,13 @@ in {
     "go-lines.lineLength" = 120;
     "gopls"."ui.semanticTokens" = true;
     "editor.defaultFormatter" = "gofenix.go-lines";
+
+    "windsurf.chatFontSize" = "default";
+    "windsurf.rememberLastModelSelection" = false;
+    "windsurf.openRecentConversation" = false;
+    "windsurf.explainAndFixInCurrentConversation" = false;
+    "windsurf.autocompleteSpeed" = "default";
+    "windsurf.enableTabToJump" = false;
   };
 
   globalKeyBindings = [
