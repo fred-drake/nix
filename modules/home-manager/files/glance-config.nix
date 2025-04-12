@@ -40,6 +40,7 @@
             {
               type = "twitch-channels";
               channels = [
+                "aaronactionrpg"
                 "theprimeagen"
                 "j_blow"
                 "piratesoftware"
