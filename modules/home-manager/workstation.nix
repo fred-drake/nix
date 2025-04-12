@@ -107,6 +107,7 @@ in {
       discord # Voice and text chat app
       docker-compose # Compose multiple containers
       duf # Disk usage analyzer
+      eza # File explorer
       ghq # Remote repository management
       hclfmt # HCL formatter imagemagick # Image manipulation tools
       imgcat # Image viewer

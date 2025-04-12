@@ -101,11 +101,18 @@
 
     shellAbbrs = {
       cm = "chezmoi";
-      du = "duf";
+      df = "duf";
       k = "kubectl";
       mc = "ranger";
       t = "tmuxinator";
       telnet = "nc -zv";
+      la = "eza -a";
+      ll = "eza -l";
+      lla = "eza -la";
+      lat = "eza -a --sort newest";
+      llat = "eza -la --sort newest";
+      lart = "eza -ar --sort newest";
+      llart = "eza -lar --sort newest";
     };
   };
 }
