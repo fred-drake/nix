@@ -28,6 +28,8 @@
     pkgs.steam
     pkgs.steamcmd
     pkgs.steam-tui
+    pkgs.libratbag
+    pkgs.piper
 
     # CUDA
     pkgs.cudaPackages.cudatoolkit
@@ -120,6 +122,8 @@
     nvidiaSettings = true;
     open = true;
   };
+
+  services.ratbagd.enable = true;
 
   services.ollama = {
     enable = true;
