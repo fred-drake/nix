@@ -40,7 +40,7 @@ in {
     mode = "0400";
     key = "data";
   };
-  home.file.".llm_api_keys.nu".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.llm-api-keys.path;
+  home.file.".llm_api_keys.fish".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.llm-api-keys.path;
 
   sops.secrets.continue-config = {
     sopsFile = config.secrets.workstation.continue-config;

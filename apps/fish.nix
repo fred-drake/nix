@@ -54,6 +54,9 @@
        rm -f -- "$tmp"
       end
 
+      # Add LLM API keys to environment
+      source ~/.llm_api_keys.fish
+
       direnv hook fish | source
 
       # oh-my-posh init fish --config ~/.config/oh-my-posh/config.toml | source

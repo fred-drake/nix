@@ -78,8 +78,6 @@
       $env.AIDER_MODEL = "deepseek/deepseek-reasoner"
       $env.AIDER_DARK_MODE = "True"
 
-      source-env ~/.llm_api_keys.nu
-
       # Completions
       source ~/.config/nushell/completions/uv.nu
     '';
