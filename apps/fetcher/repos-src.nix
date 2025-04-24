@@ -5,8 +5,8 @@
   outline-nvim-src = pkgs.fetchFromGitHub {
     owner = "hedyhli";
     repo = "outline.nvim";
-    rev = "ae473fb51b7b6086de0876328c81a63f9c3ecfef";
-    hash = "sha256-XiPWp5ohjmTErMckcX25dstiVmUQbXNjJ6ONiib0qok=";
+    rev = "321f89ef79f168a78685f70d70c52d0e7b563abb";
+    hash = "sha256-fbNVSAOzdmmfTV4CkssTpw54IZbCCLUOguO/huEB6eU=";
   };
   augment-nvim-src = pkgs.fetchFromGitHub {
     owner = "augmentcode";

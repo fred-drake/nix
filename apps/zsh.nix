@@ -14,7 +14,7 @@
       plugins = [];
     };
     # Add local bin to path, and ensure that oh-my-posh doesn't get initialized in Apple Terminal
-    initExtra = ''
+    initContent = ''
       PATH=~/bin:$PATH
       if [ "$TERM_PROGRAM" != "Apple_Terminal" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
         # exec ${pkgs.fish}/bin/fish

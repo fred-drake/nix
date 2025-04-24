@@ -23,8 +23,8 @@ in
           "eamodio"."gitlens" = vscode-utils.extensionFromVscodeMarketplace {
             name = "gitlens";
             publisher = "eamodio";
-            version = "2025.4.905";
-            sha256 = "0sqk73wbcb8k7izbjj8nh005qi8c3h3zqkbsiqpl026fzy99c9rj";
+            version = "2025.4.2219";
+            sha256 = "1lzj1w064glsx94y61g6k5g4dm18qxv36rl55k3q9v2gclv93i81";
           };
           "github"."copilot" = vscode-utils.extensionFromVscodeMarketplace {
             name = "copilot";
@@ -53,8 +53,8 @@ in
           "golang"."go" = vscode-utils.extensionFromVscodeMarketplace {
             name = "go";
             publisher = "golang";
-            version = "0.47.1";
-            sha256 = "0b82wrrn2v2vssgxgbbk0g8q7b23njzhz99dyjnj3v8ffaywz9hl";
+            version = "0.47.2";
+            sha256 = "02afv4k95906mx46xqb76mjkcs8s0yfsbd8wnbbc793plyn5fqkp";
           };
           "donjayamanne"."githistory" = vscode-utils.extensionFromVscodeMarketplace {
             name = "githistory";
@@ -131,8 +131,8 @@ in
           "rooveterinaryinc"."roo-cline" = vscode-utils.extensionFromVscodeMarketplace {
             name = "roo-cline";
             publisher = "rooveterinaryinc";
-            version = "3.11.12";
-            sha256 = "1lpkf661yw5qy7y7xpnrh8ld7hgyam358ckg6aq1qlvzw72hzckz";
+            version = "3.13.2";
+            sha256 = "0ss26fkazzm651g29ssqdbfbm3kbk40p52qbjqm7k8hirr5q2fbv";
           };
           "fill-labs"."dependi" = vscode-utils.extensionFromVscodeMarketplace {
             name = "dependi";
@@ -223,29 +223,29 @@ in
           "ms-python"."python" = vscode-utils.extensionFromVscodeMarketplace {
             name = "python";
             publisher = "ms-python";
-            version = "2025.5.2025041001";
-            sha256 = "04nhfnzgkkr34g77bqb3hsl2wk3qwd8772f0vy8cgnbnzd1f2xsj";
+            version = "2025.5.2025042201";
+            sha256 = "05jkyc4xyyn8q9ff2m3krfq42i4is35s6ymxvghmhpqmw6a6yq39";
             arch = "linux-x64";
           };
           "ms-dotnettools"."csharp" = vscode-utils.extensionFromVscodeMarketplace {
             name = "csharp";
             publisher = "ms-dotnettools";
-            version = "2.73.16";
-            sha256 = "1mbhxmdkmigx52dib5dc1iywjqilplgi5pg817n9pmc26dd8qfky";
+            version = "2.74.24";
+            sha256 = "1r37x9wdz344mh7irxl8a2p0zfa3aw1v89db68iwcgjf77994876";
             arch = "linux-x64";
           };
           "ms-dotnettools"."csdevkit" = vscode-utils.extensionFromVscodeMarketplace {
             name = "csdevkit";
             publisher = "ms-dotnettools";
-            version = "1.19.4";
-            sha256 = "0jj82d585nps306gwx3ar1ar2lankflz4i49kgr4gi456q27v0hp";
+            version = "1.19.35";
+            sha256 = "0cz24gjrpsy7z5fqjzhc84j0jh8zn366awij91rx2zrsxkl3b9jp";
             arch = "linux-x64";
           };
           "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
             name = "rust-analyzer";
             publisher = "rust-lang";
-            version = "0.4.2375";
-            sha256 = "03g1gp752h8kkz2l6fxfff76a47casj0509d7nbd8lf7wbz73ykk";
+            version = "0.4.2436";
+            sha256 = "03r53zpsw1rbyb7xffynzgnqsn61jqz76f9wd0i8lid82x1qs0w4";
             arch = "linux-x64";
           };
         }))
@@ -253,29 +253,29 @@ in
         "ms-python"."python" = vscode-utils.extensionFromVscodeMarketplace {
           name = "python";
           publisher = "ms-python";
-          version = "2025.5.2025041001";
-          sha256 = "0h6dzdr92imnskg0mv08l6c3ni98igb6060pjybhckjpiwg5jgz8";
+          version = "2025.5.2025042201";
+          sha256 = "1k1hbx83hi8lzabzjm0l0wl2zkfjkddy7m385qylvkqw7kvznzmp";
           arch = "linux-arm64";
         };
         "ms-dotnettools"."csharp" = vscode-utils.extensionFromVscodeMarketplace {
           name = "csharp";
           publisher = "ms-dotnettools";
-          version = "2.73.16";
-          sha256 = "0gz59if9r506if6x6b2lzhczbnvbabjdirr9118078gl5rnfpmqz";
+          version = "2.74.24";
+          sha256 = "17qdbqbk447vvd635h80lf8798wv216p4zxf4akanqhr60rymvrs";
           arch = "linux-arm64";
         };
         "ms-dotnettools"."csdevkit" = vscode-utils.extensionFromVscodeMarketplace {
           name = "csdevkit";
           publisher = "ms-dotnettools";
-          version = "1.19.4";
-          sha256 = "072as06k9c1z9pv7aj6ykbi8kf1xxx2vzvhpka45hv21ciyxcpgv";
+          version = "1.19.35";
+          sha256 = "09vp1zm1cb403bh0f3dbg4d2cwx8z65rsikqn7jamr68ipm4ph0f";
           arch = "linux-arm64";
         };
         "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
           name = "rust-analyzer";
           publisher = "rust-lang";
-          version = "0.4.2375";
-          sha256 = "16fnj0m5mfa91hy1nf4p1if2jpaarlld6wyj91gjfsjyl9dfp4rl";
+          version = "0.4.2436";
+          sha256 = "0hqfhllc9jkvp5xy7fg5zw1yfkhr2hsai32r9z8b0p70j318sql7";
           arch = "linux-arm64";
         };
       }))
@@ -283,29 +283,29 @@ in
       "ms-python"."python" = vscode-utils.extensionFromVscodeMarketplace {
         name = "python";
         publisher = "ms-python";
-        version = "2025.5.2025041001";
-        sha256 = "18zyl65xnszbr5il3ird0ma5sqlql1g9l57kfpqj23b0i4r4nzcf";
+        version = "2025.5.2025042201";
+        sha256 = "0b3c7wjbgb2w87qsllb6chfchi7ilsq6q1g3hycmw1zcgqfj4nc0";
         arch = "darwin-x64";
       };
       "ms-dotnettools"."csharp" = vscode-utils.extensionFromVscodeMarketplace {
         name = "csharp";
         publisher = "ms-dotnettools";
-        version = "2.73.16";
-        sha256 = "1p04pcmx3b500jb22w3sy89n9wm09lxccfkplr2w2wypjsghvz3h";
+        version = "2.74.24";
+        sha256 = "1amhsh6yc6i5w6m2hsjfm59az00jv34aq01334j1z0ikhakyhh6v";
         arch = "darwin-x64";
       };
       "ms-dotnettools"."csdevkit" = vscode-utils.extensionFromVscodeMarketplace {
         name = "csdevkit";
         publisher = "ms-dotnettools";
-        version = "1.19.4";
-        sha256 = "02ia55pq87sjyvzffn07i1zyyxfgvlxr9v8z4bv0rc4m4pqmnxds";
+        version = "1.19.35";
+        sha256 = "1a302h3qfvp919nmzw9myrs11b3dfxjckkmzbwgr84yb2gy3bv58";
         arch = "darwin-x64";
       };
       "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
         name = "rust-analyzer";
         publisher = "rust-lang";
-        version = "0.4.2375";
-        sha256 = "140cqyrdnk0rgplycdn0v9q21ilp0hqmyr224i4fnjjiyfyyqlxy";
+        version = "0.4.2436";
+        sha256 = "0cv1k19p70w3y79ax4i32206lc67ipqarrpa4iwhh7nz0axv0gjs";
         arch = "darwin-x64";
       };
     }))
@@ -313,29 +313,29 @@ in
     "ms-python"."python" = vscode-utils.extensionFromVscodeMarketplace {
       name = "python";
       publisher = "ms-python";
-      version = "2025.5.2025041001";
-      sha256 = "06c75i82cr74f4lyzwkq71mhb5dzy8kygil49ihqw240g6kcfqrl";
+      version = "2025.5.2025042201";
+      sha256 = "1jry7qqlcsyjjx319lxx7z222mzasdg1vmp68h47xyrwyzj3y4c0";
       arch = "darwin-arm64";
     };
     "ms-dotnettools"."csharp" = vscode-utils.extensionFromVscodeMarketplace {
       name = "csharp";
       publisher = "ms-dotnettools";
-      version = "2.73.16";
-      sha256 = "0wjjr7s68wdq4djhc0553h7a500m26sq6nd434l80vfj7446713a";
+      version = "2.74.24";
+      sha256 = "0j40sdpkld1zadw6bxghbrqh6lzqglk18zsajbmac676gcrpgfhj";
       arch = "darwin-arm64";
     };
     "ms-dotnettools"."csdevkit" = vscode-utils.extensionFromVscodeMarketplace {
       name = "csdevkit";
       publisher = "ms-dotnettools";
-      version = "1.19.4";
-      sha256 = "17gl22idg1vkc94dgkzi4rqljhmrf2kkxyfr8i75m7h4iaplnj9j";
+      version = "1.19.35";
+      sha256 = "060i066im54h6lp5l721pl3xlc70amm2m4pd7bpsvz59jmgw0104";
       arch = "darwin-arm64";
     };
     "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
       name = "rust-analyzer";
       publisher = "rust-lang";
-      version = "0.4.2375";
-      sha256 = "0bnfr0zhbfbw81lw9v0nfh9dk6bgibk0kxpb9v4fkmlk9v635dp6";
+      version = "0.4.2436";
+      sha256 = "1xk5chi0hg1lhwl87s76l83a03wpdgslgargqnkbb8f3i88g1c0h";
       arch = "darwin-arm64";
     };
   })
