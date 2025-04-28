@@ -72,8 +72,7 @@ in {
     "workbench.startupEditor" = "none";
     "update.mode" = "none";
     "vim.easymotion" = true;
-    # mapping keys on homerow to increase efficiency
-    "vim.easymotionKeys" = "asdfjkl";
+    "vim.easymotionKeys" = "asdfjklqwertyuiopzxcvbnm";
     "vim.enableNeovim" = true;
     "vim.highlightedyank.enable" = true;
     "vim.leader" = "M";
