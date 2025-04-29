@@ -1,9 +1,11 @@
 # Configuration specific to the MacBook Pro device.
 {
   config,
-  pkgs,
+  lib,
   ...
-}: {
+}: let
+  home = config.home.homeDirectory;
+  in {
   # wayland.windowManager.hyprland = {
   #   enable = true;
   #   package = pkgs.hyprland;
@@ -23,5 +25,14 @@
         sleep-inactive-battery-timeout = 0;
       };
     };
+  };
+
+  # Tie Windsurf extensions to the server used for SSH connections
+  home.activation = {
+    windsurf-extensions = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
+      mkdir -p ${home}/.windsurf-server
+      ln -s $EXT_DIR ${home}/.windsurf-server/extensions
+    '';
   };
 }
