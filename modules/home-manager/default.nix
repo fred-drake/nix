@@ -103,6 +103,7 @@ in {
     highlight # Syntax highlighting
     inetutils # Network utilities
     jq # Command-line JSON processor
+    nixd # Nix daemon for IDE
     oh-my-posh # Prompt theme engine
     ripgrep # Fast grep alternative
     rsync # File synchronization tool
