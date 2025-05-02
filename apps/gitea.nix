@@ -68,7 +68,7 @@ in {
     backend = "podman";
     containers = {
       gitea = {
-        image = "docker.gitea.com/gitea/1-rootless";
+        image = "docker.gitea.com/gitea:1-rootless";
         autoStart = true;
         ports = [
           "127.0.0.1:${proxyPort}:${proxyPort}"
@@ -77,8 +77,6 @@ in {
         volumes = [
           "/var/gitea/data:/var/lib/gitea"
           "/var/gitea/config:/etc/gitea"
-          "/etc/timezone:/etc/timezone:ro"
-          "/etc/localtime:/etc/localtime:ro"
         ];
         environment = {
           PUID = "1000";
