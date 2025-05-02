@@ -97,6 +97,7 @@ in {
       # "visual-studio-code"
       "vlc"
       "zen-browser"
+      "zoom"
     ];
     brews = [
       "cmake"

@@ -135,7 +135,6 @@ in {
       uv # Python package installer and runner
       wireguard-tools # VPN tools
       yt-dlp # Video downloader
-      zoom-us # Video conferencing tool
       (pkgs.writeShellScriptBin "cursor" ''
         EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
         exec ${pkgs.code-cursor}/bin/cursor --extensions-dir $EXT_DIR "$@"
