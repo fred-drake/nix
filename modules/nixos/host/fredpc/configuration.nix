@@ -37,6 +37,9 @@
 
     pkgs.zed-editor
     pkgs.docker-compose
+
+    # Development
+    pkgs.alejandra
   ];
 
   networking = {

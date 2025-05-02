@@ -5,7 +5,7 @@
   ...
 }: let
   home = config.home.homeDirectory;
-  in {
+in {
   # wayland.windowManager.hyprland = {
   #   enable = true;
   #   package = pkgs.hyprland;
@@ -32,7 +32,8 @@
     windsurf-extensions = lib.hm.dag.entryAfter ["writeBoundary"] ''
       EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
       mkdir -p ${home}/.windsurf-server
-      ln -s $EXT_DIR ${home}/.windsurf-server/extensions
+      rm -rf ${home}/.windsurf-server/extensions
+      ln -s $EXT_DIR ${home}/.windsurf-server
     '';
   };
 }
