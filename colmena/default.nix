@@ -18,6 +18,7 @@
   sabnzbd = import ./hosts/sabnzbd.nix {inherit self nixpkgs-stable secrets sops-nix;};
   n8n = import ./hosts/n8n.nix {inherit self nixpkgs-stable secrets sops-nix;};
   gitea = import ./hosts/gitea.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  gitea-runner-1 = import ./hosts/gitea-runner-1.nix {inherit self nixpkgs-stable secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -34,6 +35,7 @@ in {
   _sabnzbd = sabnzbd._sabnzbd;
   _n8n = n8n._n8n;
   _gitea = gitea._gitea;
+  _gitea-runner-1 = gitea-runner-1._gitea-runner-1;
 
   # Init configurations
   "adguard1-init" = adguard1."adguard1-init";
@@ -45,6 +47,7 @@ in {
   "sabnzbd-init" = sabnzbd."sabnzbd-init";
   "n8n-init" = n8n."n8n-init";
   "gitea-init" = gitea."gitea-init";
+  "gitea-runner-1-init" = gitea-runner-1."gitea-runner-1-init";
 
   # Full configurations
   "adguard1" = adguard1."adguard1";
@@ -56,4 +59,5 @@ in {
   "sabnzbd" = sabnzbd."sabnzbd";
   "n8n" = n8n."n8n";
   "gitea" = gitea."gitea";
+  "gitea-runner-1" = gitea-runner-1."gitea-runner-1";
 }
