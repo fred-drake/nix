@@ -17,6 +17,7 @@
   prowlarr = import ./hosts/prowlarr.nix {inherit self nixpkgs-stable secrets sops-nix;};
   sabnzbd = import ./hosts/sabnzbd.nix {inherit self nixpkgs-stable secrets sops-nix;};
   n8n = import ./hosts/n8n.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  gitea = import ./hosts/gitea.nix {inherit self nixpkgs-stable secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -32,6 +33,7 @@ in {
   _prowlarr = prowlarr._prowlarr;
   _sabnzbd = sabnzbd._sabnzbd;
   _n8n = n8n._n8n;
+  _gitea = gitea._gitea;
 
   # Init configurations
   "adguard1-init" = adguard1."adguard1-init";
@@ -42,6 +44,7 @@ in {
   "prowlarr-init" = prowlarr."prowlarr-init";
   "sabnzbd-init" = sabnzbd."sabnzbd-init";
   "n8n-init" = n8n."n8n-init";
+  "gitea-init" = gitea."gitea-init";
 
   # Full configurations
   "adguard1" = adguard1."adguard1";
@@ -52,4 +55,5 @@ in {
   "prowlarr" = prowlarr."prowlarr";
   "sabnzbd" = sabnzbd."sabnzbd";
   "n8n" = n8n."n8n";
+  "gitea" = gitea."gitea";
 }
