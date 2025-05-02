@@ -24,6 +24,7 @@ in {
       buildOnTarget = false;
       targetHost = soft-secrets.host.gitea.admin_ip_address;
       targetUser = "default";
+      targetPort = 2222;
     };
   };
 

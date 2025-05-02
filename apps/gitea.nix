@@ -67,7 +67,7 @@ in {
   virtualisation.oci-containers = {
     backend = "podman";
     containers = {
-      n8n = {
+      gitea = {
         image = "docker.gitea.com/gitea/1-rootless";
         autoStart = true;
         ports = [
