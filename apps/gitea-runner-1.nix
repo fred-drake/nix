@@ -20,6 +20,8 @@ in {
         autoStart = true;
         volumes = [
           "${config.sops.secrets.gitea-registration-token.path}:/gitea-registration-token"
+          "/var/gitea-runner-1/config/config.yaml:/config"
+          "/var/gitea-runner-1/data:/data"
           "/var/run/docker.sock:/var/run/docker.sock:ro"
         ];
         environment = {
@@ -29,8 +31,14 @@ in {
           GITEA_INSTANCE_URL = "https://gitea.${config.soft-secrets.networking.domain}";
           GITEA_RUNNER_REGISTRATION_TOKEN_FILE = "/gitea-registration-token";
           GITEA_RUNNER_NAME = "gitea-runner-1";
+          CONFIG_FILE = "/config/config.yaml";
         };
       };
     };
   };
+
+  systemd.tmpfiles.rules = [
+    "d /var/gitea-runner-1/data 0755 1000 1000 -"
+    "d /var/gitea-runner-1/config 0755 1000 1000 -"
+  ];
 }
