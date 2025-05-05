@@ -1,4 +1,6 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  repos-src = import ./fetcher/repos-src.nix {inherit pkgs;};
+in {
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
@@ -66,39 +68,19 @@
     plugins = [
       {
         name = "autopair.fish";
-        src = pkgs.fetchFromGitHub {
-          owner = "jorgebucaran";
-          repo = "autopair.fish";
-          rev = "4d1752ff5b39819ab58d7337c69220342e9de0e2";
-          sha256 = "sha256-qt3t1iKRRNuiLWiVoiAYOu+9E7jsyECyIqZJ/oRIT1A=";
-        };
+        src = repos-src.autopair-fish-src;
       }
       {
         name = "fzf.fish";
-        src = pkgs.fetchFromGitHub {
-          owner = "PatrickF1";
-          repo = "fzf.fish";
-          rev = "8920367cf85eee5218cc25a11e209d46e2591e7a";
-          sha256 = "sha256-T8KYLA/r/gOKvAivKRoeqIwE2pINlxFQtZJHpOy9GMM=";
-        };
+        src = repos-src.fzf-fish-src;
       }
       {
         name = "fish-abbreviation-tips";
-        src = pkgs.fetchFromGitHub {
-          owner = "gazorby";
-          repo = "fish-abbreviation-tips";
-          rev = "8ed76a62bb044ba4ad8e3e6832640178880df485";
-          sha256 = "sha256-F1t81VliD+v6WEWqj1c1ehFBXzqLyumx5vV46s/FZRU=";
-        };
+        src = repos-src.fish-abbreviation-tips-src;
       }
       {
         name = "puffer-fish";
-        src = pkgs.fetchFromGitHub {
-          owner = "nickeb96";
-          repo = "puffer-fish";
-          rev = "12d062eae0ad24f4ec20593be845ac30cd4b5923";
-          sha256 = "sha256-2niYj0NLfmVIQguuGTA7RrPIcorJEPkxhH6Dhcy+6Bk=";
-        };
+        src = repos-src.puffer-fish-src;
       }
     ];
 

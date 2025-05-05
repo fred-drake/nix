@@ -4,4 +4,18 @@ url = "https://github.com/hedyhli/outline.nvim"
 [[repos]]
 name = "augment-nvim-src"
 url = "https://github.com/augmentcode/augment.vim"
-
+[[repos]]
+name = "container-digest-src"
+url = "https://github.com/fred-drake/container-digest"
+[[repos]]
+name = "autopair-fish-src"
+url = "https://github.com/jorgebucaran/autopair.fish"
+[[repos]]
+name = "fzf-fish-src"
+url = "https://github.com/PatrickF1/fzf.fish"
+[[repos]]
+name = "fish-abbreviation-tips-src"
+url = "https://github.com/gazorby/fish-abbreviation-tips"
+[[repos]]
+name = "puffer-fish-src"
+url = "https://github.com/nickeb96/puffer-fish"

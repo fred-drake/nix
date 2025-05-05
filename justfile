@@ -14,7 +14,7 @@ build: _rebuild-pre
     system-flake-rebuild build
 
 # Update everything
-update-all: update update-vscode-extensions update-repos update-secrets
+update-all: update update-vscode-extensions update-repos update-container-digests update-secrets
 
 # Update input definitions from remote resources
 update:
@@ -27,6 +27,10 @@ update-vscode-extensions:
 # Pull the latest hashes and shas from the repos in apps/fetcher/repos.toml
 update-repos:
     update-fetcher-repos
+
+# Update the SHA digests of container images
+update-container-digests:
+    update-container-digests
 
 # Update the secrets flake
 update-secrets:

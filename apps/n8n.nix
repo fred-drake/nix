@@ -1,4 +1,9 @@
-{config, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
+  containers-sha = import ./fetcher/containers-sha.nix {inherit pkgs;};
   host = "n8n";
   proxyPort = "5678";
 in {
@@ -67,7 +72,7 @@ in {
     backend = "podman";
     containers = {
       n8n = {
-        image = "docker.n8n.io/n8nio/n8n:latest";
+        image = containers-sha."docker.n8n.io"."n8nio/n8n"."latest"."linux/amd64";
         autoStart = true;
         ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
         volumes = ["/var/n8n/config:/home/node/.n8n"];

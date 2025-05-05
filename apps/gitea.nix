@@ -1,4 +1,9 @@
-{config, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
+  containers-sha = import ./fetcher/containers-sha.nix {inherit pkgs;};
   host = "gitea";
   proxyPort = "3000";
 in {
@@ -68,7 +73,7 @@ in {
     backend = "podman";
     containers = {
       gitea = {
-        image = "docker.gitea.com/gitea:1-rootless";
+        image = containers-sha."docker.gitea.com"."gitea"."1-rootless"."linux/amd64";
         autoStart = true;
         ports = [
           "127.0.0.1:${proxyPort}:${proxyPort}"

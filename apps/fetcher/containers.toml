@@ -1,0 +1,17 @@
+# The container images used in this Nix configuration repository.
+
+[[containers]]
+repository = "docker.gitea.com"
+name = "gitea"
+tag = "1-rootless"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.gitea.com"
+name = "act_runner"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.n8n.io"
+name = "n8nio/n8n"
+tag = "latest"
+architectures = ["linux/amd64"]

@@ -1,5 +1,6 @@
 {pkgs, ...}: let
   nix4vscode = pkgs.callPackage ./nix4vscode.nix {};
+  container-digest = pkgs.callPackage ./container-digest.nix {};
 in {
   # https://devenv.sh/basics/
 
@@ -83,6 +84,16 @@ in {
       echo "####################################" >> $EXTENSIONS_PATH
       ${nix4vscode}/bin/nix4vscode $TOML_FILE >> $EXTENSIONS_PATH
       ${pkgs.alejandra}/bin/alejandra --quiet $EXTENSIONS_PATH
+    '';
+
+    update-container-digests.exec = ''
+      SHA_FILE=$DEVENV_ROOT/apps/fetcher/containers-sha.nix
+      echo "Updating container digests..."
+      echo "####################################" > $SHA_FILE
+      echo "# Auto-generated -- do not modify! #" >> $SHA_FILE
+      echo "####################################" >> $SHA_FILE
+      ${container-digest}/bin/container-digest --containers $DEVENV_ROOT/apps/fetcher/containers.toml --output-format nix >> $SHA_FILE
+      ${pkgs.alejandra}/bin/alejandra --quiet $SHA_FILE
     '';
   };
 

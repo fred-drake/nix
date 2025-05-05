@@ -1,4 +1,10 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: let
+  containers-sha = import ./fetcher/containers-sha.nix {inherit pkgs;};
+in {
   virtualisation.containers.enable = true;
   virtualisation.podman = {
     enable = true;
@@ -10,7 +16,7 @@
     backend = "podman";
     containers = {
       gitea-runner-1 = {
-        image = "docker.gitea.com/act_runner:latest";
+        image = containers-sha."docker.gitea.com"."act_runner"."latest"."linux/amd64";
         autoStart = true;
         volumes = [
           "${config.sops.secrets.gitea-registration-token.path}:/gitea-registration-token"
