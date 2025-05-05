@@ -17,8 +17,8 @@
   container-digest-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
     repo = "container-digest";
-    rev = "23f6536b70624d22a70d7ad9b95f98aa80fae21e";
-    hash = "sha256-hmH8gwfQnCNymyMxlOgUzzoo3ffr9Vt+oOhlxfjnvYE=";
+    rev = "47ea5137a2f7a2eff863d6d336f613d70edddfbe";
+    hash = "sha256-iGNGpO/6MHlDnhDdttJRxbRINmwmEi7p5AnX5PqHhDc=";
   };
   autopair-fish-src = pkgs.fetchFromGitHub {
     owner = "jorgebucaran";
