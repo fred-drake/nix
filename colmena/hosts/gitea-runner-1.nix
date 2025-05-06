@@ -38,7 +38,7 @@ in {
   "gitea-runner-1" = {
     imports = [
       self.colmena._gitea-runner-1
-      ../../apps/gitea-runner-1.nix
+      ../../apps/gitea-runner-1
     ];
   };
 }

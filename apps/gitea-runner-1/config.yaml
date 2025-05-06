@@ -1,0 +1,16 @@
+log:
+  level: info
+runner:
+  file: .runner
+  capacity: 1
+  labels:
+    - "linux_amd64:host"
+    - "ubuntu-latest:docker://catthehacker/ubuntu:act-latest"
+    - "ubuntu-22.04:docker://catthehacker/ubuntu:act-22.04"
+    - "ubuntu-20.04:docker://catthehacker/ubuntu:act-20.04"
+cache:
+  enabled: false
+container:
+  privileged: false
+  force_pull: true
+  valid_volumes: []

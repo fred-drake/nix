@@ -3,7 +3,8 @@
   pkgs,
   ...
 }: let
-  containers-sha = import ./fetcher/containers-sha.nix {inherit pkgs;};
+  containers-sha = import ../fetcher/containers-sha.nix {inherit pkgs;};
+  configFile = pkgs.writeText "gitea-runner-config" (builtins.readFile ./config.yaml);
 in {
   virtualisation.containers.enable = true;
   virtualisation.podman = {
@@ -20,7 +21,7 @@ in {
         autoStart = true;
         volumes = [
           "${config.sops.secrets.gitea-registration-token.path}:/gitea-registration-token"
-          "/var/gitea-runner-1/config/config.yaml:/config"
+          "${configFile}:/config/config.yaml:ro"
           "/var/gitea-runner-1/data:/data"
           "/var/run/docker.sock:/var/run/docker.sock:ro"
         ];
@@ -39,6 +40,5 @@ in {
 
   systemd.tmpfiles.rules = [
     "d /var/gitea-runner-1/data 0755 1000 1000 -"
-    "d /var/gitea-runner-1/config 0755 1000 1000 -"
   ];
 }
