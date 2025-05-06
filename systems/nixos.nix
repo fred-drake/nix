@@ -38,29 +38,6 @@ in {
       ];
     };
 
-  nixoswinvm = nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    pkgs = import nixpkgs {
-      system = "x86_64-linux";
-    };
-    specialArgs = {inherit inputs outputs nixpkgs;};
-    modules = [
-      disko.nixosModules.disko
-      secrets.nixosModules.soft-secrets
-      sops-nix.nixosModules.sops
-      ../modules/nixos
-      ../modules/nixos/host/nixoswinvm/configuration.nix
-      ../modules/nixos/host/nixoswinvm/hardware-configuration.nix
-      home-manager.nixosModules.home-manager
-      {
-        home-manager = lib.mkHomeManager {
-          inherit inputs secrets;
-          imports = [];
-        };
-      }
-    ];
-  };
-
   fredpc = nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     pkgs = import nixpkgs {
