@@ -72,6 +72,29 @@
       };
     };
 
+    vlans = {
+      "eth0.50" = {
+        id = 50;
+        interface = "eth0";
+      };
+    };
+
+    interfaces."eth0.50".ipv4 = {
+      addresses = [
+        {
+          address = config.soft-secrets.host.gitea-runner-1.service_ip_address;
+          prefixLength = 24;
+        }
+      ];
+      routes = [
+        {
+          address = "0.0.0.0";
+          prefixLength = 0;
+          via = config.soft-secrets.networking.gateway.service;
+        }
+      ];
+    };
+
     defaultGateway = {
       address = config.soft-secrets.networking.gateway.admin;
       interface = "eth0";
