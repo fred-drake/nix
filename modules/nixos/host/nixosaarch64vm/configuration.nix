@@ -39,29 +39,6 @@
       };
     };
 
-    vlans = {
-      "ens160.1" = {
-        id = 1;
-        interface = "ens160";
-      };
-    };
-
-    interfaces."ens160.1".ipv4 = {
-      addresses = [
-        {
-          address = config.soft-secrets.host.nixosaarch64vm.admin_ip_address;
-          prefixLength = 24;
-        }
-      ];
-      routes = [
-        {
-          address = "0.0.0.0";
-          prefixLength = 0;
-          via = config.soft-secrets.networking.gateway.admin;
-        }
-      ];
-    };
-
     defaultGateway = {
       address = config.soft-secrets.networking.gateway.workstation;
       interface = "ens160";
