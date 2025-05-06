@@ -3,11 +3,11 @@
   modulesPath,
   lib,
   pkgs,
+  config,
   ...
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    # (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-config.nix
     ./hardware-configuration.nix
   ];
@@ -27,7 +27,47 @@
 
   networking = {
     hostName = "nixosaarch64vm";
-    interfaces."ens160".useDHCP = true;
+    interfaces."ens160" = {
+      useDHCP = false;
+      ipv4 = {
+        addresses = [
+          {
+            address = config.soft-secrets.host.nixosaarch64vm.workstation_ip_address;
+            prefixLength = 24;
+          }
+        ];
+      };
+    };
+
+    vlans = {
+      "ens160.1" = {
+        id = 1;
+        interface = "ens160";
+      };
+    };
+
+    interfaces."ens160.1".ipv4 = {
+      addresses = [
+        {
+          address = config.soft-secrets.host.nixosaarch64vm.admin_ip_address;
+          prefixLength = 24;
+        }
+      ];
+      routes = [
+        {
+          address = "0.0.0.0";
+          prefixLength = 0;
+          via = config.soft-secrets.networking.gateway.admin;
+        }
+      ];
+    };
+
+    defaultGateway = {
+      address = config.soft-secrets.networking.gateway.workstation;
+      interface = "ens160";
+    };
+
+    nameservers = config.soft-secrets.networking.nameservers.internal;
   };
 
   nix.extraOptions = ''

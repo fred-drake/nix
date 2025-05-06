@@ -84,6 +84,7 @@ in {
     system = "aarch64-linux";
     pkgs = import nixpkgs {
       system = "aarch64-linux";
+      config.allowUnfree = true;
     };
     specialArgs = {inherit inputs outputs nixpkgs;};
     modules = [
@@ -99,7 +100,9 @@ in {
         # home-manager.users.fdrake = import ../modules/home-manager;
         home-manager = lib.mkHomeManager {
           inherit inputs secrets;
-          imports = [];
+          imports = [
+            ../modules/home-manager/workstation.nix
+          ];
         };
       }
     ];

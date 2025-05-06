@@ -104,7 +104,6 @@ in {
   home.packages =
     (with pkgs; [
       chafa # Image resizer
-      discord # Voice and text chat app
       docker-compose # Compose multiple containers
       duf # Disk usage analyzer
       eza # File explorer
@@ -122,8 +121,6 @@ in {
       oh-my-posh # Prompt theme engine
       podman
       podman-tui
-      slack # Team communication tool
-      spotify # Music streaming service
       spotify-player # Spotify client
       stc-cli # Syncthing CLI
       syncthing # File synchronization tool
@@ -135,19 +132,30 @@ in {
       uv # Python package installer and runner
       wireguard-tools # VPN tools
       yt-dlp # Video downloader
-      (pkgs.writeShellScriptBin "cursor" ''
-        EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
-        exec ${pkgs.code-cursor}/bin/cursor --extensions-dir $EXT_DIR "$@"
-      '')
-      (pkgs.writeShellScriptBin "windsurf" ''
-        EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
-        exec ${pkgs.windsurf}/bin/windsurf --extensions-dir $EXT_DIR "$@"
-      '')
-
-      (pkgs.vscode-with-extensions.override {
-        vscodeExtensions = vscode-config.globalExtensions;
-      })
     ])
+    ++ (
+      if !(pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isAarch64)
+      then
+        # Packages that go on all workstations except the linux/aarch64 architectures
+        with pkgs; [
+          discord # Voice and text chat app
+          slack # Team communication tool
+          spotify # Music streaming service
+          (pkgs.writeShellScriptBin "cursor" ''
+            EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
+            exec ${pkgs.code-cursor}/bin/cursor --extensions-dir $EXT_DIR "$@"
+          '')
+          (pkgs.writeShellScriptBin "windsurf" ''
+            EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
+            exec ${pkgs.windsurf}/bin/windsurf --extensions-dir $EXT_DIR "$@"
+          '')
+
+          (pkgs.vscode-with-extensions.override {
+            vscodeExtensions = vscode-config.globalExtensions;
+          })
+        ]
+      else []
+    )
     ++ (with pkgs-unstable; [])
     ++ (with pkgs-fred-unstable; [])
     ++ (with pkgs-fred-testing; [])
