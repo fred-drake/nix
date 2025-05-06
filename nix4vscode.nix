@@ -1,25 +1,22 @@
 {
   lib,
-  fetchFromGitHub,
+  pkgs ? import <nixpkgs> {},
   rustPlatform,
-}:
-rustPlatform.buildRustPackage rec {
-  pname = "nix4vscode";
-  version = "unstable-2014-04-15";
+}: let
+  repos = import ./apps/fetcher/repos-src.nix {inherit pkgs;};
+in
+  rustPlatform.buildRustPackage {
+    pname = "nix4vscode";
+    version = "unstable-2014-04-15";
 
-  src = fetchFromGitHub {
-    owner = "nix-community";
-    repo = pname;
-    rev = "ae9e1f04cd4cd230628f7dd70b41fbdfab040df9";
-    hash = "sha256-Lj+om0JgCEzOlPrj/rZLqvEuTq86gRPvBlSkHWBO6lY=";
-  };
+    src = repos.nix4vscode-src;
 
-  cargoHash = "sha256-4KDQyknEEqElfztvzGWaXICL0fIvPpPL1mSkZDkEY9Q=";
+    cargoHash = "sha256-Kj9Z2qh1VBUyMBNXN260dAK4eVK27hn5iRKzZO79i4E=";
 
-  meta = with lib; {
-    description = "A tool generate nix expression for vscode extensions";
-    homepage = "https://github.com/nix-community/nix4vscode";
-    license = licenses.unlicense;
-    maintainers = [];
-  };
-}
+    meta = with lib; {
+      description = "A tool to generate nix expressions for vscode extensions";
+      homepage = "https://github.com/nix-community/nix4vscode";
+      license = licenses.unlicense;
+      maintainers = [];
+    };
+  }

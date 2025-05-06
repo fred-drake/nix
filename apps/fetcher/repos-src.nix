@@ -44,4 +44,10 @@
     rev = "12d062eae0ad24f4ec20593be845ac30cd4b5923";
     hash = "sha256-2niYj0NLfmVIQguuGTA7RrPIcorJEPkxhH6Dhcy+6Bk=";
   };
+  nix4vscode-src = pkgs.fetchFromGitHub {
+    owner = "nix-community";
+    repo = "nix4vscode";
+    rev = "eadb4fd1878b8a24132f6073de244c2684ecc901";
+    hash = "sha256-bra6KP3L+yyWyWEBPy6RPvuOGws85DRyojXvOnYrVy0=";
+  };
 }
