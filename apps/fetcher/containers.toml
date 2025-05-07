@@ -15,3 +15,8 @@ repository = "docker.n8n.io"
 name = "n8nio/n8n"
 tag = "latest"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "louislam/uptime-kuma"
+tag = "1"
+architectures = ["linux/amd64"]
