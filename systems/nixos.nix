@@ -65,21 +65,6 @@ in {
     ];
   };
 
-  aarch64-initial = nixpkgs.lib.nixosSystem {
-    system = "aarch64-linux";
-    pkgs = import nixpkgs {
-      system = "aarch64-linux";
-    };
-    specialArgs = {inherit inputs outputs nixpkgs;};
-    modules = [
-      disko.nixosModules.disko
-      secrets.nixosModules.soft-secrets
-      sops-nix.nixosModules.sops
-      ../modules/nixos
-      ../modules/nixos/host/aarch64-initial/configuration.nix
-    ];
-  };
-
   nixosaarch64vm = nixpkgs.lib.nixosSystem {
     system = "aarch64-linux";
     pkgs = import nixpkgs {
@@ -105,38 +90,6 @@ in {
           ];
         };
       }
-    ];
-  };
-
-  forgejo = nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    modules = [
-      disko.nixosModules.disko
-      ../modules/nixos
-      ../modules/nixos/host/forgejo/configuration.nix
-      ../modules/nixos/host/forgejo/hardware-configuration.nix
-      home-manager.nixosModules.home-manager
-      {
-        home-manager = lib.mkHomeManager {
-          inherit inputs secrets;
-          imports = [];
-        };
-      }
-    ];
-  };
-
-  adguard1 = nixpkgs.lib.nixosSystem {
-    system = "aarch64-linux";
-    pkgs = import nixpkgs {
-      system = "aarch64-linux";
-    };
-    specialArgs = {inherit inputs outputs nixpkgs;};
-    modules = [
-      secrets.nixosModules.soft-secrets
-      nixos-hardware.nixosModules.raspberry-pi-4
-      "${nixpkgs}/nixos/modules/profiles/minimal.nix"
-      ../modules/nixos
-      ../modules/nixos/host/adguard1/configuration.nix
     ];
   };
 }
