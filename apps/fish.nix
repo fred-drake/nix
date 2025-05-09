@@ -98,6 +98,7 @@ in {
       llat = "eza -la --sort newest";
       lart = "eza -ar --sort newest";
       llart = "eza -lar --sort newest";
+      known-hosts-clear = "ssh-keygen -R";
     };
   };
 }
