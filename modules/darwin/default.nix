@@ -65,15 +65,15 @@ in {
     enable = true;
     caskArgs.no_quarantine = true; # Disable quarantine for casks
     global.brewfile = true; # Use a global Brewfile
-    # masApps = {
-    #   # Mac App Store applications
-    #   "Bitwarden" = 1352778147;
-    #   "Pages" = 409201541;
-    #   "RunCat" = 1429033973;
-    #   "The Unarchiver" = 425424353;
-    #   "Xcode" = 497799835;
-    #   "WireGuard" = 1451685025;
-    # };
+    masApps = {
+      # Mac App Store applications
+      "Bitwarden" = 1352778147;
+      "Pages" = 409201541;
+      "RunCat" = 1429033973;
+      "The Unarchiver" = 425424353;
+      "Xcode" = 497799835;
+      "WireGuard" = 1451685025;
+    };
     casks = [
       # Homebrew casks (GUI applications)
       # Using zed in homebrew because nix pkg is currently broken for Darwin
