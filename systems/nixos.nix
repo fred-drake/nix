@@ -2,7 +2,8 @@
   inputs,
   outputs,
   nixpkgs,
-  nix-jetbrains-plugins,
+  nixpkgs-stable,
+  nixpkgs-unstable,
   ...
 }: let
   inherit (inputs) home-manager disko nixos-hardware secrets sops-nix;
@@ -46,7 +47,19 @@ in {
       config.allowUnfree = true;
       config.cudaSupport = true;
     };
-    specialArgs = {inherit inputs outputs nixpkgs;};
+    specialArgs = {
+      inherit inputs outputs nixpkgs nixpkgs-unstable;
+      pkgsUnstable = import nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        config.cudaSupport = true;
+      };
+      pkgsStable = import nixpkgs-stable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        config.cudaSupport = true;
+      };
+    };
     modules = [
       secrets.nixosModules.soft-secrets
       sops-nix.nixosModules.sops
@@ -73,7 +86,19 @@ in {
       system = "aarch64-linux";
       config.allowUnfree = true;
     };
-    specialArgs = {inherit inputs outputs nixpkgs;};
+    specialArgs = {
+      inherit inputs outputs nixpkgs nixpkgs-unstable;
+      pkgsUnstable = import nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        config.cudaSupport = true;
+      };
+      pkgsStable = import nixpkgs-stable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        config.cudaSupport = true;
+      };
+    };
     modules = [
       disko.nixosModules.disko
       secrets.nixosModules.soft-secrets
@@ -82,9 +107,6 @@ in {
       ../modules/nixos/host/nixosaarch64vm/configuration.nix
       home-manager.nixosModules.home-manager
       {
-        # home-manager.useGlobalPkgs = true;
-        # home-manager.useUserPackages = true;
-        # home-manager.users.fdrake = import ../modules/home-manager;
         home-manager = lib.mkHomeManager {
           inherit inputs secrets;
           imports = [

@@ -1,8 +1,8 @@
 {
   inputs,
-  modulesPath,
-  lib,
   pkgs,
+  pkgsUnstable,
+  pkgsStable,
   ...
 }: {
   boot.loader.grub = {
@@ -13,33 +13,33 @@
   };
   services.openssh.enable = true;
 
-  environment.systemPackages = map lib.lowPrio [
-    pkgs.curl
-    pkgs.file
-    pkgs.git
+  environment.systemPackages = with pkgs; [
+    curl
+    file
+    git
     inputs.zen-browser.packages."x86_64-linux".default
-    pkgs.ghostty
-    pkgs.alsa-tools
-    pkgs.alsa-utils
-    pkgs.bitwarden-desktop
-    pkgs.usbutils
+    ghostty
+    alsa-tools
+    alsa-utils
+    bitwarden-desktop
+    usbutils
 
     # Gaming
-    pkgs.steam
-    pkgs.steamcmd
-    pkgs.steam-tui
-    pkgs.libratbag
-    pkgs.piper
+    steam
+    steamcmd
+    steam-tui
+    libratbag
+    piper
 
     # CUDA
-    pkgs.cudaPackages.cudatoolkit
-    pkgs.cudaPackages.cudnn
+    cudaPackages.cudatoolkit
+    pkgsUnstable.cudaPackages.cudnn
 
-    pkgs.zed-editor
-    pkgs.docker-compose
+    zed-editor
+    docker-compose
 
     # Development
-    pkgs.alejandra
+    alejandra
   ];
 
   networking = {

@@ -99,10 +99,6 @@
     nixpkgs-fred-unstable,
     nixpkgs-fred-testing,
     nixos-hardware,
-    home-manager,
-    darwin,
-    disko,
-    nix-homebrew,
     homebrew-core,
     homebrew-cask,
     homebrew-bundle,
@@ -110,7 +106,6 @@
     homebrew-nikitabobko,
     secrets,
     sops-nix,
-    nixvim,
     nix-jetbrains-plugins,
     ...
   } @ inputs: let
