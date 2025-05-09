@@ -96,7 +96,7 @@ in {
       "sourcetree"
       # "visual-studio-code"
       "vlc"
-      "zen-browser"
+      "zen"
       "zoom"
     ];
     brews = [
