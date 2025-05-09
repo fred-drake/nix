@@ -36,6 +36,7 @@ in {
   # Example: scripts.ide.exec = ''nvim --cmd "let g:augment_workspace_folders = [\"$DEVENV_ROOT\"]"'';
   scripts = {
     update-fetcher-repos.exec = ''
+      DELTA_PAGER=cat
       SRCFILE=$DEVENV_ROOT/apps/fetcher/repos-src.nix
       TOMLFILE=$DEVENV_ROOT/apps/fetcher/repos.toml
       echo "####################################" > $SRCFILE
@@ -50,6 +51,7 @@ in {
       done >> $SRCFILE
       echo "}" >> $SRCFILE
       ${pkgs.alejandra}/bin/alejandra --quiet $SRCFILE
+      git diff $SRCFILE
     '';
 
     system-flake-rebuild.exec = ''
@@ -76,6 +78,7 @@ in {
     '';
 
     update-vscode-extensions.exec = ''
+      export DELTA_PAGER=cat
       TOML_FILE=$DEVENV_ROOT/apps/vscode/extensions.toml
       EXTENSIONS_PATH=$DEVENV_ROOT/apps/vscode/extensions.nix
       echo "Updating VSCode extensions..."
@@ -84,9 +87,11 @@ in {
       echo "####################################" >> $EXTENSIONS_PATH
       ${nix4vscode}/bin/nix4vscode $TOML_FILE >> $EXTENSIONS_PATH
       ${pkgs.alejandra}/bin/alejandra --quiet $EXTENSIONS_PATH
+      git diff $EXTENSIONS_PATH
     '';
 
     update-container-digests.exec = ''
+      DELTA_PAGER=cat
       SHA_FILE=$DEVENV_ROOT/apps/fetcher/containers-sha.nix
       echo "Updating container digests..."
       echo "####################################" > $SHA_FILE
@@ -94,6 +99,7 @@ in {
       echo "####################################" >> $SHA_FILE
       ${container-digest}/bin/container-digest --containers $DEVENV_ROOT/apps/fetcher/containers.toml --output-format nix >> $SHA_FILE
       ${pkgs.alejandra}/bin/alejandra --quiet $SHA_FILE
+      git diff $SHA_FILE
     '';
   };
 
