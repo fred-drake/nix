@@ -55,6 +55,10 @@ in {
       ".cursor/mcp.json" = {
         text = builtins.toJSON (import ./files/mcp-server-config.nix);
       };
+
+      ".codeium/windsurf/mcp_config.json" = {
+        text = builtins.toJSON (import ./files/mcp-server-config.nix);
+      };
     }
     // (
       if pkgs.stdenv.isDarwin
@@ -117,7 +121,6 @@ in {
       lazydocker # Docker CLI with auto-completion and syntax highlighting
       llama-cpp # Text generation
       meld # Visual diff and merge tool
-      nodejs_22
       oh-my-posh # Prompt theme engine
       podman
       podman-tui
@@ -129,7 +132,6 @@ in {
       tmuxinator # Tmux session manager
       tmux-mem-cpu-load # CPU and memory usage monitor
       tokei # Code statistics tool
-      uv # Python package installer and runner
       wireguard-tools # VPN tools
       yt-dlp # Video downloader
     ])
