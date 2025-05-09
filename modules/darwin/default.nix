@@ -11,6 +11,8 @@
 {
   pkgs,
   nix-jetbrains-plugins,
+  pkgsUnstable,
+  pkgsStable,
   ...
 }: let
   # pluginList = [

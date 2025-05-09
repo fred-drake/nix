@@ -6,7 +6,6 @@
   nixpkgs-unstable,
   nixpkgs-fred-unstable,
   nixpkgs-fred-testing,
-  secrets,
   homebrew-core,
   homebrew-cask,
   homebrew-bundle,
@@ -33,45 +32,45 @@
   mkDarwinSystem = {
     hostname,
     extraModules ? [],
-    pkgs ? null,
-    pkgs-stable ? null,
-    pkgs-unstable ? null,
-    pkgs-fred-unstable ? null,
-    pkgs-fred-testing ? null,
+    system ? "aarch64-darwin",
   }: let
-    systemPkgs =
-      if pkgs != null
-      then pkgs
-      else if pkgs-stable != null
-      then pkgs-stable
-      else if pkgs-unstable != null
-      then pkgs-unstable
-      else if pkgs-fred-unstable != null
-      then pkgs-fred-unstable
-      else if pkgs-fred-testing != null
-      then pkgs-fred-testing
-      else
-        import nixpkgs {
-          system = "aarch64-darwin";
-          config.allowUnfree = true;
-          overlays = [(import ../overlays/default.nix {inherit inputs;})];
-        };
+    systemPkgs = import nixpkgs {
+      system = system;
+      config.allowUnfree = true;
+      overlays = [(import ../overlays/default.nix {inherit inputs;})];
+    };
   in
     darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
+      system = system;
       pkgs = systemPkgs;
       specialArgs = {
         inherit
           inputs
           outputs
           nixpkgs
-          nixpkgs-stable
-          nixpkgs-unstable
-          nixpkgs-fred-testing
-          nixpkgs-fred-unstable
           nix-jetbrains-plugins
           non-mac-mini-casks
           ;
+        pkgsUnstable = import nixpkgs-unstable {
+          system = system;
+          config.allowUnfree = true;
+          overlays = [(import ../overlays/default.nix {inherit inputs;})];
+        };
+        pkgsStable = import nixpkgs-stable {
+          system = system;
+          config.allowUnfree = true;
+          overlays = [(import ../overlays/default.nix {inherit inputs;})];
+        };
+        pkgsFredTesting = import nixpkgs-fred-testing {
+          system = system;
+          config.allowUnfree = true;
+          overlays = [(import ../overlays/default.nix {inherit inputs;})];
+        };
+        pkgsFredUnstable = import nixpkgs-fred-unstable {
+          system = system;
+          config.allowUnfree = true;
+          overlays = [(import ../overlays/default.nix {inherit inputs;})];
+        };
       };
       modules =
         [
