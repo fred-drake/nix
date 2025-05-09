@@ -66,8 +66,8 @@ in
           "fill-labs"."dependi" = vscode-utils.extensionFromVscodeMarketplace {
             name = "dependi";
             publisher = "fill-labs";
-            version = "0.7.13";
-            sha256 = "1dsd4qal7wmhhbzv5jmcrf8igm20dnr256s2gp1m5myhj08qlzay";
+            version = "0.7.14";
+            sha256 = "01l7m4lgib50kjmns2xwwjwhmccsanl2nfcb0i4pzhsj329pdcc8";
           };
           "fnando"."linter" = vscode-utils.extensionFromVscodeMarketplace {
             name = "linter";
@@ -84,8 +84,8 @@ in
           "github"."copilot" = vscode-utils.extensionFromVscodeMarketplace {
             name = "copilot";
             publisher = "github";
-            version = "1.314.0";
-            sha256 = "1nkvfjj4mhnxdgr28vqvcxknrbni8vgx46lb0kiry8rnrr385w4z";
+            version = "1.317.0";
+            sha256 = "1dvxwjqn5kccmpw64rynn5ilhd8fzqx8gn1d59pblfp44vbcghf3";
           };
           "gofenix"."go-lines" = vscode-utils.extensionFromVscodeMarketplace {
             name = "go-lines";
@@ -144,8 +144,8 @@ in
           "ms-vscode-remote"."remote-ssh" = vscode-utils.extensionFromVscodeMarketplace {
             name = "remote-ssh";
             publisher = "ms-vscode-remote";
-            version = "0.119.0";
-            sha256 = "0zqw0iq4z6q8p47x01cb3lp5pkmn0fdls9i3mg424da3z4qaxajb";
+            version = "0.120.0";
+            sha256 = "0p8rx867pdwyzx1bcjf069zzi8nfvhb3bjv7q3v8dd43l4n2dmhg";
           };
           "mtxr"."sqltools" = vscode-utils.extensionFromVscodeMarketplace {
             name = "sqltools";
@@ -180,8 +180,8 @@ in
           "rooveterinaryinc"."roo-cline" = vscode-utils.extensionFromVscodeMarketplace {
             name = "roo-cline";
             publisher = "rooveterinaryinc";
-            version = "3.16.0";
-            sha256 = "1bn7qnir3wwrrlra668fn0800xk4rkbqfm7zl6w0vsyf0r1c9i9f";
+            version = "3.16.3";
+            sha256 = "0m36cykhhqrl4y6bkmxqdf2qhhsivdysrids8mfmcsmbv0w38far";
           };
           "signageos"."signageos-vscode-sops" = vscode-utils.extensionFromVscodeMarketplace {
             name = "signageos-vscode-sops";
@@ -238,8 +238,8 @@ in
           "ms-python"."python" = vscode-utils.extensionFromVscodeMarketplace {
             name = "python";
             publisher = "ms-python";
-            version = "2025.4.0";
-            sha256 = "149hpb3927mk0fmx9hj7whgbrfw5g4a38ka583a25c5pwr75rs00";
+            version = "2025.6.0";
+            sha256 = "07hsvf5jdlapbm92g987ggq7wlymyjsb70fzlscfrqm8dnkli39i";
             arch = "linux-x64";
           };
           "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
@@ -268,8 +268,8 @@ in
         "ms-python"."python" = vscode-utils.extensionFromVscodeMarketplace {
           name = "python";
           publisher = "ms-python";
-          version = "2025.4.0";
-          sha256 = "118lq055dxv0j9cv67frayhzmd1w1rq27a34s60i00ljc46vr26h";
+          version = "2025.6.0";
+          sha256 = "01pkn36a5gyv16d7k2jmkl7niihl45pig79w3h6hsbj5qs9wab28";
           arch = "linux-arm64";
         };
         "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
@@ -298,8 +298,8 @@ in
       "ms-python"."python" = vscode-utils.extensionFromVscodeMarketplace {
         name = "python";
         publisher = "ms-python";
-        version = "2025.4.0";
-        sha256 = "1yj06cqaj41apm7gg03csjklr253bsv4fd8bmp0afa8j4mqj744s";
+        version = "2025.6.0";
+        sha256 = "0fx99mxmhxshpz82cm08zyhaj7bqdypnymsls8k88kkkwv7rp8jm";
         arch = "darwin-x64";
       };
       "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
@@ -328,8 +328,8 @@ in
     "ms-python"."python" = vscode-utils.extensionFromVscodeMarketplace {
       name = "python";
       publisher = "ms-python";
-      version = "2025.4.0";
-      sha256 = "16pzq9sm4lmknv960pacr9i90v5mk1zbp2wi2r8i03y32ig489f5";
+      version = "2025.6.0";
+      sha256 = "1w6vzdk5isklkihf4yxnzq7d65h0m6r6vykj5ygrzhgwinl4s0qc";
       arch = "darwin-arm64";
     };
     "rust-lang"."rust-analyzer" = vscode-utils.extensionFromVscodeMarketplace {
