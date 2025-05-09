@@ -12,11 +12,13 @@
 # Home Manager configuration for macOS
 {
   pkgs,
+  hostArgs,
   pkgs-stable,
   pkgs-unstable,
   pkgs-fred-unstable,
   pkgs-fred-testing,
   lib,
+  vars,
   ...
 }: let
   vscode-config = (import ../../apps/vscode/global-configuration.nix) {inherit pkgs lib;};
@@ -136,9 +138,9 @@ in {
       yt-dlp # Video downloader
     ])
     ++ (
+      # Packages that go on all workstations except the linux/aarch64 architectures
       if !(pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isAarch64)
       then
-        # Packages that go on all workstations except the linux/aarch64 architectures
         with pkgs; [
           discord # Voice and text chat app
           slack # Team communication tool
@@ -156,6 +158,12 @@ in {
             vscodeExtensions = vscode-config.globalExtensions;
           })
         ]
+      else []
+    )
+    ++ (
+      # Need npx and uvx at home manager level for remote developing with MCPs
+      if hostArgs.hostName == "fredpc" || hostArgs.hostName == "nixosaarch64vm"
+      then (with pkgs; [nodejs_22 uv])
       else []
     )
     ++ (with pkgs-unstable; [])

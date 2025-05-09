@@ -33,6 +33,7 @@ in {
               ../modules/home-manager/workstation.nix
               ../modules/home-manager/linux-desktop.nix
             ];
+            hostArgs.hostName = "macbookx86";
           };
         }
       ];
@@ -60,6 +61,7 @@ in {
             ../modules/home-manager/workstation.nix
             ../modules/home-manager/host/fredpc.nix
           ];
+          hostArgs.hostName = "fredpc";
         };
       }
     ];
@@ -88,6 +90,7 @@ in {
           imports = [
             ../modules/home-manager/workstation.nix
           ];
+          hostArgs.hostName = "nixosaarch64vm";
         };
       }
     ];

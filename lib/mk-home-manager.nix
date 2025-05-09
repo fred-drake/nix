@@ -2,6 +2,7 @@
   inputs,
   secrets,
   imports ? [],
+  hostArgs ? {},
 }: {
   useGlobalPkgs = true;
   useUserPackages = true;
@@ -23,5 +24,5 @@
       # })
     ]
     ++ imports;
-  extraSpecialArgs = {inherit inputs secrets;};
+  extraSpecialArgs = {inherit inputs secrets hostArgs;};
 }

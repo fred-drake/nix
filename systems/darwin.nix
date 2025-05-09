@@ -110,6 +110,7 @@ in {
             ../modules/home-manager/workstation.nix
             ../modules/home-manager/darwin.nix
           ];
+          hostArgs.hostName = "mac-studio";
         };
       }
     ];
@@ -126,6 +127,7 @@ in {
             ../modules/home-manager/darwin.nix
             ../modules/home-manager/host/macbook-pro.nix
           ];
+          hostArgs.hostName = "macbook-pro";
         };
       }
     ];
@@ -141,6 +143,7 @@ in {
             ../modules/home-manager/workstation.nix
             ../modules/home-manager/darwin.nix
           ];
+          hostArgs.hostName = "laisas-mac-mini";
         };
       }
     ];
