@@ -165,12 +165,19 @@ in {
       if hostArgs.hostName == "fredpc" || hostArgs.hostName == "nixosaarch64vm"
       then
         (with pkgs; [
+          # MCP
           nodejs_22
           uv
+
+          # Go
           go
           gopls
           gotools
           go-tools
+
+          # Nix
+          alejandra
+          nixd
         ])
       else []
     )
