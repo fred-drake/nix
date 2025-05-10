@@ -40,7 +40,8 @@ in {
   "adguard2" = {
     imports = [
       self.colmena._adguard2
-      ../../apps/adguard.nix
+      # ../../apps/adguard.nix
+      ../../apps/blocky.nix
     ];
   };
 }
