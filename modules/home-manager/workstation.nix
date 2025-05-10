@@ -161,9 +161,17 @@ in {
       else []
     )
     ++ (
-      # Need npx and uvx at home manager level for remote developing with MCPs
+      # Development packages -- need these at the home-manager level for remote SSH development
       if hostArgs.hostName == "fredpc" || hostArgs.hostName == "nixosaarch64vm"
-      then (with pkgs; [nodejs_22 uv])
+      then
+        (with pkgs; [
+          nodejs_22
+          uv
+          go
+          gopls
+          gotools
+          go-tools
+        ])
       else []
     )
     ++ (with pkgs-unstable; [])
