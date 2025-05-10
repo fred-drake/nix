@@ -64,6 +64,7 @@ in {
       secrets.nixosModules.soft-secrets
       sops-nix.nixosModules.sops
       ../modules/nixos
+      ../modules/nixos/windsurf-remote-dev.nix
       ../modules/nixos/host/fredpc/configuration.nix
       ../modules/nixos/host/fredpc/hardware-configuration.nix
       home-manager.nixosModules.home-manager
@@ -72,6 +73,7 @@ in {
           inherit inputs secrets;
           imports = [
             ../modules/home-manager/workstation.nix
+            ../modules/home-manager/windsurf-remote-dev.nix
             ../modules/home-manager/host/fredpc.nix
           ];
           hostArgs.hostName = "fredpc";
@@ -104,6 +106,7 @@ in {
       secrets.nixosModules.soft-secrets
       sops-nix.nixosModules.sops
       ../modules/nixos
+      ../modules/nixos/windsurf-remote-dev.nix
       ../modules/nixos/host/nixosaarch64vm/configuration.nix
       home-manager.nixosModules.home-manager
       {
@@ -111,6 +114,7 @@ in {
           inherit inputs secrets;
           imports = [
             ../modules/home-manager/workstation.nix
+            ../modules/home-manager/windsurf-remote-dev.nix
           ];
           hostArgs.hostName = "nixosaarch64vm";
         };

@@ -136,6 +136,9 @@ in {
       tokei # Code statistics tool
       wireguard-tools # VPN tools
       yt-dlp # Video downloader
+      (pkgs.vscode-with-extensions.override {
+        vscodeExtensions = vscode-config.globalExtensions;
+      })
     ])
     ++ (
       # Packages that go on all workstations except the linux/aarch64 architectures
@@ -153,10 +156,6 @@ in {
             EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
             exec ${pkgs.windsurf}/bin/windsurf --extensions-dir $EXT_DIR "$@"
           '')
-
-          (pkgs.vscode-with-extensions.override {
-            vscodeExtensions = vscode-config.globalExtensions;
-          })
         ]
       else []
     )
