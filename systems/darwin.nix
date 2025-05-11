@@ -99,7 +99,7 @@
         ++ extraModules;
     };
 in {
-  freds-mac-studio = mkDarwinSystem {
+  mac-studio = mkDarwinSystem {
     hostname = "mac-studio";
     extraModules = [
       {
