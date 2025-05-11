@@ -58,8 +58,9 @@ in {
     };
     prometheus = {
       enable = true;
+      # extraFlags = ["--web.enable-admin-api"];
       listenAddress = "127.0.0.1";
-      globalConfig.scrape_interval = "1m";
+      globalConfig.scrape_interval = "15s";
       scrapeConfigs = [
         {
           job_name = "node";
@@ -72,6 +73,7 @@ in {
                 "grafana.admin.${config.soft-secrets.networking.domain}:9000"
                 "adguard1.${config.soft-secrets.networking.domain}:9000"
                 "adguard2.${config.soft-secrets.networking.domain}:9000"
+                "gateway.${config.soft-secrets.networking.domain}:9100"
               ];
             }
           ];
