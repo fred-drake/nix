@@ -37,11 +37,13 @@ in {
   };
 
   # Full configuration
-  "adguard2" = {
+  "adguard2" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix { inherit secrets; };
+  in {
     imports = [
       self.colmena._adguard2
       ../../apps/blocky.nix
-      ../../apps/prometheus-client/adguard2.nix
+      (nodeExporter.mkNodeExporter "adguard2")
     ];
 
     # Include the Prometheus modules with proper parameters

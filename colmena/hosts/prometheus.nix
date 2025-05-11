@@ -35,11 +35,13 @@ in {
   };
 
   # Full configuration
-  "prometheus" = {
+  "prometheus" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix { inherit secrets; };
+  in {
     imports = [
       self.colmena._prometheus
       ../../apps/prometheus.nix
-      ../../apps/prometheus-client/prometheus.nix
+      (nodeExporter.mkNodeExporter "prometheus")
     ];
     
     # Include the Prometheus modules with proper parameters

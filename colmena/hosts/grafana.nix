@@ -35,11 +35,13 @@ in {
   };
 
   # Full configuration
-  "grafana" = {
+  "grafana" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix { inherit secrets; };
+  in {
     imports = [
       self.colmena._grafana
       ../../apps/grafana.nix
-      ../../apps/prometheus-client/grafana.nix
+      (nodeExporter.mkNodeExporter "grafana")
     ];
 
     # Include the Grafana modules with proper parameters

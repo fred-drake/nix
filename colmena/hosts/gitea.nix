@@ -36,11 +36,13 @@ in {
   };
 
   # Full configuration
-  "gitea" = {
+  "gitea" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix { inherit secrets; };
+  in {
     imports = [
       self.colmena._gitea
       ../../apps/gitea.nix
-      ../../apps/prometheus-client/gitea.nix
+      (nodeExporter.mkNodeExporter "gitea")
     ];
 
     # Include the Prometheus modules with proper parameters
