@@ -1,11 +1,6 @@
-{
-  config,
-  secrets,
-  ...
-}: let
+{config, ...}: let
   host = "prometheus";
   proxyPort = "9090";
-  soft-secrets = import "${secrets}/soft-secrets";
 in {
   security = {
     acme = {

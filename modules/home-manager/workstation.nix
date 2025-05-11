@@ -13,12 +13,7 @@
 {
   pkgs,
   hostArgs,
-  pkgs-stable,
-  pkgs-unstable,
-  pkgs-fred-unstable,
-  pkgs-fred-testing,
   lib,
-  vars,
   ...
 }: let
   vscode-config = (import ../../apps/vscode/global-configuration.nix) {inherit pkgs lib;};
@@ -179,11 +174,7 @@ in {
           nixd
         ])
       else []
-    )
-    ++ (with pkgs-unstable; [])
-    ++ (with pkgs-fred-unstable; [])
-    ++ (with pkgs-fred-testing; [])
-    ++ (with pkgs-stable; []);
+    );
 
   # Set session variables
   home.sessionVariables = {

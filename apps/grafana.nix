@@ -1,11 +1,6 @@
-{
-  config,
-  secrets,
-  ...
-}: let
+{config, ...}: let
   host = "grafana";
   proxyPort = "3000";
-  soft-secrets = import "${secrets}/soft-secrets";
 in {
   security = {
     acme = {

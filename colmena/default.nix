@@ -6,8 +6,6 @@
   sops-nix,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets";
-
   # Import host configurations
   adguard1 = import ./hosts/adguard1.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   adguard2 = import ./hosts/adguard2.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
