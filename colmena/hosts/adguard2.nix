@@ -40,9 +40,8 @@ in {
   "adguard2" = {
     imports = [
       self.colmena._adguard2
-      # ../../apps/adguard.nix
       ../../apps/blocky.nix
-      ../../apps/prometheus-client/adguard1.nix
+      ../../apps/prometheus-client/adguard2.nix
     ];
 
     # Include the Prometheus modules with proper parameters
