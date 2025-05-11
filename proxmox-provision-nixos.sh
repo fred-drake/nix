@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 PROXMOX_SERVER=thrall
-HOSTNAME=prometheus
-CONTAINER_ID=111
+HOSTNAME=grafana
+CONTAINER_ID=112
 STORAGE=local-lvm
 MEMORY=4096
 DISK_SIZE_IN_GB=100

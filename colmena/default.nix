@@ -21,6 +21,7 @@
   gitea-runner-1 = import ./hosts/gitea-runner-1.nix {inherit self nixpkgs-stable secrets sops-nix;};
   uptime-kuma = import ./hosts/uptime-kuma.nix {inherit self nixpkgs-stable secrets sops-nix;};
   prometheus = import ./hosts/prometheus.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  grafana = import ./hosts/grafana.nix {inherit self nixpkgs-stable secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -40,6 +41,7 @@ in {
   _gitea-runner-1 = gitea-runner-1._gitea-runner-1;
   _uptime-kuma = uptime-kuma._uptime-kuma;
   _prometheus = prometheus._prometheus;
+  _grafana = grafana._grafana;
 
   # Init configurations
   "adguard1-init" = adguard1."adguard1-init";
@@ -54,6 +56,7 @@ in {
   "gitea-runner-1-init" = gitea-runner-1."gitea-runner-1-init";
   "uptime-kuma-init" = uptime-kuma."uptime-kuma-init";
   "prometheus-init" = prometheus."prometheus-init";
+  "grafana-init" = grafana."grafana-init";
 
   # Full configurations
   "adguard1" = adguard1."adguard1";
@@ -68,4 +71,5 @@ in {
   "gitea-runner-1" = gitea-runner-1."gitea-runner-1";
   "uptime-kuma" = uptime-kuma."uptime-kuma";
   "prometheus" = prometheus."prometheus";
+  "grafana" = grafana."grafana";
 }
