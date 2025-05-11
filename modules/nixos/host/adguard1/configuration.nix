@@ -4,32 +4,6 @@
   config,
   ...
 }: {
-  imports = [
-    ../../../secrets/cloudflare.nix
-  ];
-  security = {
-    acme = {
-      acceptTerms = true;
-      preliminarySelfsigned = false;
-      defaults = {
-        email = config.soft-secrets.acme.email;
-        dnsProvider = "cloudflare";
-        environmentFile = config.sops.secrets.cloudflare-api-key.path;
-      };
-      certs = {
-        "adguard1.${config.soft-secrets.networking.domain}" = {
-          domain = "adguard1.${config.soft-secrets.networking.domain}";
-          dnsProvider = "cloudflare";
-          dnsResolver = "1.1.1.1:53";
-          webroot = null;
-          listenHTTP = null;
-          s3Bucket = null;
-          environmentFile = config.sops.secrets.cloudflare-api-key.path;
-        };
-      };
-    };
-  };
-
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
     "net.ipv4.conf.all.rp_filter" = 0;
@@ -38,40 +12,12 @@
   boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
   environment.systemPackages = with pkgs; [neovim git kea];
   services = {
-    adguardhome = {
-      settings.dns.bind_hosts = [config.soft-secrets.host.adguard1.iot_ip_address];
-    };
     openssh = {
       enable = true;
       settings = {
         PasswordAuthentication = false;
         PermitRootLogin = "no";
         ListenAddress = config.soft-secrets.host.adguard1.admin_ip_address;
-      };
-    };
-    nginx = {
-      enable = true;
-      virtualHosts = {
-        "adguard1.${config.soft-secrets.networking.domain}" = {
-          enableACME = true;
-          forceSSL = true;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:2500";
-            proxyWebsockets = true;
-            extraConfig = ''
-              # Increase the maximum size of the hash table
-              proxy_headers_hash_max_size 1024;
-
-              # Increase the bucket size of the hash table
-              proxy_headers_hash_bucket_size 128;
-
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
-            '';
-          };
-        };
       };
     };
   };
