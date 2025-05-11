@@ -35,10 +35,17 @@ in {
   };
 
   # Full configuration
-  "n8n" = {
+  "n8n" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
+  in {
     imports = [
       self.colmena._n8n
       ../../apps/n8n.nix
+      (nodeExporter.mkNodeExporter "n8n")
     ];
+
+    _module.args = {
+      inherit secrets;
+    };
   };
 }

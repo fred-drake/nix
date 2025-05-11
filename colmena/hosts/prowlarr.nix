@@ -31,10 +31,17 @@ in {
   "prowlarr-init" = self.colmena._prowlarr;
 
   # Full configuration with the app
-  "prowlarr" = {
+  "prowlarr" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
+  in {
     imports = [
       self.colmena._prowlarr
       ../../apps/prowlarr.nix
+      (nodeExporter.mkNodeExporter "prowlarr")
     ];
+
+    _module.args = {
+      inherit secrets;
+    };
   };
 }

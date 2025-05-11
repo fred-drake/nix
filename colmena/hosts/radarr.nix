@@ -31,10 +31,17 @@ in {
   "radarr-init" = self.colmena._radarr;
 
   # Full configuration with the app
-  "radarr" = {
+  "radarr" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
+  in {
     imports = [
       self.colmena._radarr
       ../../apps/radarr.nix
+      (nodeExporter.mkNodeExporter "radarr")
     ];
+
+    _module.args = {
+      inherit secrets;
+    };
   };
 }

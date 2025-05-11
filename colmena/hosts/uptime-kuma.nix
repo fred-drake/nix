@@ -35,10 +35,17 @@ in {
   };
 
   # Full configuration
-  "uptime-kuma" = {
+  "uptime-kuma" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
+  in {
     imports = [
       self.colmena._uptime-kuma
       ../../apps/uptime-kuma.nix
+      (nodeExporter.mkNodeExporter "uptime-kuma")
     ];
+
+    _module.args = {
+      inherit secrets;
+    };
   };
 }

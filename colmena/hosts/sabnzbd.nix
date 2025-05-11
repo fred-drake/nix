@@ -31,10 +31,17 @@ in {
   "sabnzbd-init" = self.colmena._sabnzbd;
 
   # Full configuration with the app
-  "sabnzbd" = {
+  "sabnzbd" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
+  in {
     imports = [
       self.colmena._sabnzbd
       ../../apps/sabnzbd.nix
+      (nodeExporter.mkNodeExporter "sabnzbd")
     ];
+
+    _module.args = {
+      inherit secrets;
+    };
   };
 }

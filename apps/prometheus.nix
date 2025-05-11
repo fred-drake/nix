@@ -69,6 +69,13 @@ in {
                 "adguard1.${config.soft-secrets.networking.domain}:9000"
                 "adguard2.${config.soft-secrets.networking.domain}:9000"
                 "gateway.${config.soft-secrets.networking.domain}:9100"
+                "n8n.admin.${config.soft-secrets.networking.domain}:9000"
+                "overseerr.admin.${config.soft-secrets.networking.domain}:9000"
+                "prowlarr.admin.${config.soft-secrets.networking.domain}:9000"
+                "radarr.admin.${config.soft-secrets.networking.domain}:9000"
+                "sabnzbd.admin.${config.soft-secrets.networking.domain}:9000"
+                "sonarr.admin.${config.soft-secrets.networking.domain}:9000"
+                "uptime-kuma.admin.${config.soft-secrets.networking.domain}:9000"
               ];
             }
           ];

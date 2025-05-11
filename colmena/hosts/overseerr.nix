@@ -35,10 +35,17 @@ in {
   };
 
   # Full configuration
-  "overseerr" = {
+  "overseerr" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
+  in {
     imports = [
       self.colmena._overseerr
       ../../apps/overseerr.nix
+      (nodeExporter.mkNodeExporter "overseerr")
     ];
+
+    _module.args = {
+      inherit secrets;
+    };
   };
 }

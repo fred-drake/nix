@@ -31,10 +31,17 @@ in {
   "sonarr-init" = self.colmena._sonarr;
 
   # Full configuration with the app
-  "sonarr" = {
+  "sonarr" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
+  in {
     imports = [
       self.colmena._sonarr
       ../../apps/sonarr.nix
+      (nodeExporter.mkNodeExporter "sonarr")
     ];
+
+    _module.args = {
+      inherit secrets;
+    };
   };
 }
