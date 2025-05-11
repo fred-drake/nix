@@ -42,6 +42,12 @@ in {
       self.colmena._adguard2
       # ../../apps/adguard.nix
       ../../apps/blocky.nix
+      ../../apps/prometheus-client/adguard1.nix
     ];
+
+    # Include the Prometheus modules with proper parameters
+    _module.args = {
+      inherit secrets;
+    };
   };
 }
