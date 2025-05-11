@@ -1,6 +1,11 @@
-{config, ...}: let
+{
+  config,
+  secrets,
+  ...
+}: let
   host = "prometheus";
   proxyPort = "9090";
+  soft-secrets = import "${secrets}/soft-secrets";
 in {
   security = {
     acme = {
@@ -58,16 +63,9 @@ in {
       scrapeConfigs = [
         {
           job_name = "node";
-          static_configs = [{targets = ["localhost:9000"];}];
+          static_configs = [{targets = ["${soft-secrets.host.prometheus.admin_ip_address}:9000"];}];
         }
       ];
-
-      exporters.node = {
-        enable = true;
-        port = 9000;
-        enabledCollectors = ["systemd"];
-        extraFlags = ["--collector.ethtool" "--collector.softirqs" "--collector.tcpstat" "--collector.wifi"];
-      };
     };
   };
 }

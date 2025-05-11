@@ -39,6 +39,12 @@ in {
     imports = [
       self.colmena._prometheus
       ../../apps/prometheus.nix
+      ../../apps/prometheus-client/prometheus.nix
     ];
+    
+    # Include the Prometheus modules with proper parameters
+    _module.args = {
+      inherit secrets;
+    };
   };
 }
