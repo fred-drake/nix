@@ -75,7 +75,55 @@
       };
     };
   };
-  networking.hostName = "adguard1";
+  networking = {
+    hostName = "adguard1";
+    firewall.enable = false;
+    interfaces = {
+      "end0" = {
+        useDHCP = false;
+        ipv4 = {
+          addresses = [
+            {
+              address = config.soft-secrets.host.adguard1.admin_ip_address;
+              prefixLength = 24;
+            }
+          ];
+        };
+      };
+      "end0.40" = {
+        ipv4 = {
+          addresses = [
+            {
+              address = config.soft-secrets.host.adguard1.iot_ip_address;
+              prefixLength = 24;
+            }
+          ];
+          routes = [
+            {
+              address = "0.0.0.0";
+              prefixLength = 0;
+              via = config.soft-secrets.networking.gateway.iot;
+            }
+          ];
+        };
+      };
+      "wlan0" = {
+        useDHCP = false;
+      };
+    };
+    vlans = {
+      "end0.40" = {
+        id = 40;
+        interface = "end0";
+      };
+    };
+    defaultGateway = {
+      address = config.soft-secrets.networking.gateway.admin;
+      interface = "end0";
+    };
+    nameservers = config.soft-secrets.networking.nameservers.public;
+  };
+
   users.users.default = {
     isNormalUser = true;
     password = "";
@@ -90,53 +138,6 @@
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
-  };
-
-  networking = {
-    firewall.enable = false;
-    interfaces."end0" = {
-      useDHCP = false;
-      ipv4 = {
-        addresses = [
-          {
-            address = config.soft-secrets.host.adguard1.admin_ip_address;
-            prefixLength = 24;
-          }
-        ];
-      };
-    };
-
-    vlans = {
-      "end0.40" = {
-        id = 40;
-        interface = "end0";
-      };
-    };
-
-    interfaces."end0.40".ipv4 = {
-      addresses = [
-        {
-          address = config.soft-secrets.host.adguard1.iot_ip_address;
-          prefixLength = 24;
-        }
-      ];
-      routes = [
-        {
-          address = "0.0.0.0";
-          prefixLength = 0;
-          via = config.soft-secrets.networking.gateway.iot;
-        }
-      ];
-    };
-
-    defaultGateway = {
-      address = config.soft-secrets.networking.gateway.admin;
-      interface = "end0";
-    };
-
-    interfaces."wlan0".useDHCP = false;
-
-    nameservers = config.soft-secrets.networking.nameservers.public;
   };
 
   fileSystems = {

@@ -12,7 +12,7 @@ in {
       acceptTerms = true;
       preliminarySelfsigned = false;
       defaults = {
-        email = config.soft-secrets.acme.email;
+        inherit (config.soft-secrets.acme) email;
         dnsProvider = "cloudflare";
         environmentFile = config.sops.secrets.cloudflare-api-key.path;
       };

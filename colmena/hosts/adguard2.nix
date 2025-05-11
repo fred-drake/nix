@@ -10,9 +10,11 @@
 in {
   # Base configuration for AdGuard2
   _adguard2 = {
-    nixpkgs.system = "aarch64-linux";
-    nixpkgs.overlays = [];
-    nixpkgs.config = {};
+    nixpkgs = {
+      system = "aarch64-linux";
+      overlays = [];
+      config = {};
+    };
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets

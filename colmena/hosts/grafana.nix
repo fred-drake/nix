@@ -9,9 +9,11 @@
 in {
   # Base configuration for Grafana
   _grafana = {
-    nixpkgs.system = "x86_64-linux";
-    nixpkgs.overlays = [];
-    nixpkgs.config = {};
+    nixpkgs = {
+      system = "x86_64-linux";
+      overlays = [];
+      config = {};
+    };
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets
