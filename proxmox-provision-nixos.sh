@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 PROXMOX_SERVER=thrall
-HOSTNAME=my-host-name
-CONTAINER_ID=110
+HOSTNAME=prometheus
+CONTAINER_ID=111
 STORAGE=local-lvm
 MEMORY=4096
 DISK_SIZE_IN_GB=100
