@@ -39,6 +39,7 @@ in {
     imports = [
       self.colmena._grafana
       ../../apps/grafana.nix
+      ../../apps/prometheus-client/grafana.nix
     ];
 
     # Include the Grafana modules with proper parameters

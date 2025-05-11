@@ -5,5 +5,7 @@
     sopsFile = config.secrets.host.grafana.admin-password;
     mode = "0400";
     key = "data";
+    owner = "grafana";
+    group = "grafana";
   };
 }

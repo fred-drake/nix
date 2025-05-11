@@ -69,7 +69,7 @@ in {
             {
               name = "Prometheus";
               type = "prometheus";
-              url = "https//${soft-secrets.host.prometheus.admin_ip_address}";
+              url = "https://prometheus.${config.soft-secrets.networking.domain}";
               access = "proxy";
             }
           ];

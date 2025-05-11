@@ -66,8 +66,10 @@ in {
           static_configs = [
             {
               targets = [
-                "${soft-secrets.host.prometheus.admin_ip_address}:9000"
-                "${soft-secrets.host.gitea.admin_ip_address}:9000"
+                "prometheus.${config.soft-secrets.networking.domain}:9000"
+                "gitea.admin.${config.soft-secrets.networking.domain}:9000"
+                "gitea-runner-1.admin.${config.soft-secrets.networking.domain}:9000"
+                "grafana.admin.${config.soft-secrets.networking.domain}:9000"
               ];
             }
           ];

@@ -5,7 +5,7 @@ in {
     enable = true;
     listenAddress = soft-secrets.host.gitea.admin_ip_address;
     port = 9000;
-    enabledCollectors = ["systemd"];
-    extraFlags = ["--collector.ethtool" "--collector.softirqs" "--collector.tcpstat" "--collector.wifi"];
+    enabledCollectors = ["cpu" "systemd" "diskstats" "ethtool" "filesystem" "netdev"];
+    extraFlags = ["--collector.softirqs" "--collector.tcpstat" "--collector.wifi"];
   };
 }

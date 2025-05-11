@@ -39,6 +39,12 @@ in {
     imports = [
       self.colmena._gitea-runner-1
       ../../apps/gitea-runner-1
+      ../../apps/prometheus-client/gitea-runner-1.nix
     ];
+
+    # Include the Prometheus modules with proper parameters
+    _module.args = {
+      inherit secrets;
+    };
   };
 }
