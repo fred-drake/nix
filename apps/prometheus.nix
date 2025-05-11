@@ -63,7 +63,14 @@ in {
       scrapeConfigs = [
         {
           job_name = "node";
-          static_configs = [{targets = ["${soft-secrets.host.prometheus.admin_ip_address}:9000"];}];
+          static_configs = [
+            {
+              targets = [
+                "${soft-secrets.host.prometheus.admin_ip_address}:9000"
+                "${soft-secrets.host.gitea.admin_ip_address}:9000"
+              ];
+            }
+          ];
         }
       ];
     };
