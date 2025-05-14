@@ -1,14 +1,9 @@
 {
   pkgs,
-  modulesPath,
   lib,
   config,
   ...
 }: {
-  imports = [
-    ./disks.nix
-  ];
-
   boot.loader.grub = {
     enable = true;
     device = "/dev/sda";
@@ -22,6 +17,11 @@
     libxfs
     duf
     snapraid
+  ];
+
+  # Needed for NFS server
+  systemd.tmpfiles.rules = [
+    "d /export 0755 root root -"
   ];
 
   services = {

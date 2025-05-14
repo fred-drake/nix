@@ -41,7 +41,8 @@ in {
   in {
     imports = [
       self.colmena._larussa
-      # ../../apps/larussa.nix
+      ../../modules/nixos/host/larussa/disks.nix
+      ../../modules/nixos/host/larussa/nfs-server.nix
       (nodeExporter.mkNodeExporter "larussa")
     ];
 

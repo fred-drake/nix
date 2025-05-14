@@ -78,7 +78,7 @@
   fullPoolDisks = builtins.concatStringsSep ":" ((builtins.attrNames cacheDisks) ++ (builtins.attrNames slowDisks));
 
   # Builds a list of data disks for the snapraid configuration
-  # Example: { "d1" = "/mnt/pool/ata-SAMSUNG_HD204UI_S2H7J1BZ930265-2TB"; "d2" = "/mnt/pool/ata-ST3000DM001-1CH166_W1F4BPQG-3TB"; }
+  # Example: { "d1" = "/mnt/pool/ata-SAM...265-2TB"; "d2" = "/mnt/pool/ata-ST3...PQG-3TB"; }
   snapraidDataDisks = builtins.listToAttrs (
     lib.imap1 (i: key: {
       name = "d${toString (i + 1)}";
@@ -88,7 +88,7 @@
 
   # Builds a list of parity and content files for the snapraid configuration.
   # Each slow disk gets a content file and each parity disk gets a parity file.
-  # Example: [ "/mnt/pool/ata-WDC_WD142KFGX-68AFPN0_6AGDDN7S-14TB/snapraid.parity" "/mnt/pool/ata-WDC_WD140EDGZ-11B1PA0_9MJ2PD2U-14TB/snapraid.parity" ]
+  # Example: [ "/mnt/pool/ata-WDC_WD14...N7S-14TB/snapraid.parity" "/mnt/pool/ata-WDC_WD140...D2U-14TB/snapraid.parity" ]
   snapraidParityFiles = map (key: "${key}/snapraid.parity") (builtins.attrNames parityDisks);
   snapraidContentFiles = map (key: "${key}/snapraid.content") (builtins.attrNames slowDisks);
 in {
