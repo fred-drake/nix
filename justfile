@@ -40,5 +40,5 @@ update-secrets:
 colmena HOST:
     colmena apply --on {{ HOST }} --impure
 
-colmena-dns:
+colmena-dns: update-secrets
     just colmena adguard1,adguard2
