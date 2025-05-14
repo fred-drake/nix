@@ -163,5 +163,16 @@
     dockerSocket.enable = true;
   };
 
+  virtualisation.oci-containers = {
+    backend = "podman";
+    containers = {
+      ipmi = {
+        image = "docker.io/solarkennedy/ipmi-kvm-docker";
+        autoStart = true;
+        ports = ["0.0.0.0:8080:8080"];
+      };
+    };
+  };
+
   system.stateVersion = "24.11";
 }
