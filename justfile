@@ -39,3 +39,6 @@ update-secrets:
 # Run colmena remote switch on given host
 colmena HOST:
     colmena apply --on {{ HOST }} --impure
+
+colmena-dns:
+    just colmena adguard1,adguard2
