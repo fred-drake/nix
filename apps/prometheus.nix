@@ -81,6 +81,18 @@ in {
             }
           ];
         }
+        {
+          job_name = "sabnzbd-exporter";
+          scrape_timeout = "60s";
+          scrape_interval = "5m";
+          static_configs = [
+            {
+              targets = [
+                "sabnzbd-metrics.${config.soft-secrets.networking.domain}:9387"
+              ];
+            }
+          ];
+        }
       ];
     };
   };
