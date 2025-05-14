@@ -76,6 +76,7 @@ in {
                 "sabnzbd.admin.${config.soft-secrets.networking.domain}:9000"
                 "sonarr.admin.${config.soft-secrets.networking.domain}:9000"
                 "uptime-kuma.admin.${config.soft-secrets.networking.domain}:9000"
+                "larussa.${config.soft-secrets.networking.domain}:9000"
               ];
             }
           ];
