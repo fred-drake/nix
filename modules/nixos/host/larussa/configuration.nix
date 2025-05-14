@@ -4,6 +4,10 @@
   config,
   ...
 }: {
+  imports = [
+    ../../../secrets/cloudflare.nix
+  ];
+
   boot.loader.grub = {
     enable = true;
     device = "/dev/sda";
@@ -17,6 +21,9 @@
     libxfs
     duf
     snapraid
+    nvidia-container-toolkit
+    nvidia-vaapi-driver
+    pciutils
   ];
 
   # Needed for NFS server

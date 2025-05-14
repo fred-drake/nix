@@ -170,6 +170,9 @@
         image = "docker.io/solarkennedy/ipmi-kvm-docker";
         autoStart = true;
         ports = ["0.0.0.0:8080:8080"];
+        environment = {
+          RES = "1280x1024x24";
+        };
       };
     };
   };

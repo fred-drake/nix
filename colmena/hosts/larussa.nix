@@ -11,6 +11,7 @@ in {
   _larussa = {
     nixpkgs.system = "x86_64-linux";
     nixpkgs.overlays = [];
+    nixpkgs.config.allowUnfree = true;
     nixpkgs.config = {};
     imports = [
       secrets.nixosModules.soft-secrets
@@ -43,6 +44,7 @@ in {
       self.colmena._larussa
       ../../modules/nixos/host/larussa/disks.nix
       ../../modules/nixos/host/larussa/nfs-server.nix
+      ../../modules/nixos/host/larussa/jellyfin.nix
       (nodeExporter.mkNodeExporter "larussa")
     ];
 
