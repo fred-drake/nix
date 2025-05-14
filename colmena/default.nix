@@ -21,6 +21,7 @@
   prometheus = import ./hosts/prometheus.nix {inherit self nixpkgs-stable secrets sops-nix;};
   grafana = import ./hosts/grafana.nix {inherit self nixpkgs-stable secrets sops-nix;};
   larussa = import ./hosts/larussa.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  external-metrics = import ./hosts/external-metrics.nix {inherit self nixpkgs-stable secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -42,6 +43,7 @@ in {
   _prometheus = prometheus._prometheus;
   _grafana = grafana._grafana;
   _larussa = larussa._larussa;
+  _external-metrics = external-metrics._external-metrics;
 
   # Init configurations
   "adguard1-init" = adguard1."adguard1-init";
@@ -58,6 +60,7 @@ in {
   "prometheus-init" = prometheus."prometheus-init";
   "grafana-init" = grafana."grafana-init";
   "larussa-init" = larussa."larussa-init";
+  "external-metrics-init" = external-metrics."external-metrics-init";
 
   # Full configurations
   "adguard1" = adguard1."adguard1";
@@ -74,4 +77,5 @@ in {
   "prometheus" = prometheus."prometheus";
   "grafana" = grafana."grafana";
   "larussa" = larussa."larussa";
+  "external-metrics" = external-metrics."external-metrics";
 }

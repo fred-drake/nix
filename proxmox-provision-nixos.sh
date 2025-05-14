@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-PROXMOX_SERVER=thrall
-HOSTNAME=grafana
-CONTAINER_ID=112
+PROXMOX_SERVER=khadgar
+HOSTNAME=external-metrics
+CONTAINER_ID=113
 STORAGE=local-lvm
 MEMORY=4096
 DISK_SIZE_IN_GB=100
