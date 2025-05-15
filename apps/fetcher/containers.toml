@@ -40,3 +40,8 @@ repository = "docker.io"
 name = "jellyfin/jellyfin"
 tag = "latest"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "monstermuffin/mergerfs-cache-mover"
+tag = "latest"
+architectures = ["linux/amd64"]

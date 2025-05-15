@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  containers-sha = import ./fetcher/containers-sha.nix {inherit pkgs;};
+  containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};
   host = "jellyfin";
   proxyPort = "8096";
 in {

@@ -1,4 +1,10 @@
-{lib, ...}: let
+{
+  lib,
+  pkgs,
+  ...
+}: let
+  containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};
+
   # Slow HDD spinning disks that are part of the array (not cache disks)
   slowDisks = {
     "/mnt/pool/ata-SAMSUNG_HD204UI_S2H7J1BZ930265-2TB" = {
@@ -53,9 +59,14 @@
     };
   };
 
+  # Disk paths
+  cachePath = "/mnt/cache/ata-CT1000MX500SSD1_2336E87351AC-1TB";
+  storagePath = "/mnt/array/storage1";
+  coldStoragePath = "/mnt/array/slowstorage1";
+
   # Fast SSD cache disks
   cacheDisks = {
-    "/mnt/cache/ata-CT1000MX500SSD1_2336E87351AC-1TB" = {
+    "${cachePath}" = {
       device = "/dev/disk/by-id/ata-CT1000MX500SSD1_2336E87351AC-part1";
       fsType = "xfs";
     };
@@ -97,12 +108,12 @@ in {
     // cacheDisks
     // parityDisks
     // {
-      "/mnt/array/storage1" = {
+      "${storagePath}" = {
         device = fullPoolDisks;
         fsType = "mergerfs";
         options = ["minfreespace=20G" "cache.files=off" "category.create=ff" "func.getattr=newest" "dropcacheonclose=false"];
       };
-      "/mnt/array/slowstorage1" = {
+      "${coldStoragePath}" = {
         device = slowPoolDisks;
         fsType = "mergerfs";
         options = ["minfreespace=20G" "cache.files=off" "category.create=pfrd" "func.getattr=newest" "dropcacheonclose=false"];
@@ -118,5 +129,32 @@ in {
     extraConfig = ''
       autosave 100
     '';
+  };
+
+  # MergerFS Cache Mover
+  config.virtualisation.oci-containers = {
+    containers = {
+      mergerfs-cache-mover = {
+        image = containers-sha."ghcr.io"."monstermuffin/mergerfs-cache-mover"."latest"."linux/amd64";
+        autoStart = true;
+        volumes = [
+          "${cachePath}:/mnt/cache"
+          "${coldStoragePath}:/mnt/cold"
+          "/mnt/pool:/mnt/data-disks"
+        ];
+        environment = {
+          CACHE_PATH = "/mnt/cache";
+          BACKING_PATH = "/mnt/cold";
+          EXCLUDED_DIRS = "sabnzbd_downloads,sabnzbd_downloads_incomplete";
+          SCHEDULE = "0 3 * * *"; # Run at 3 AM daily
+          THRESHOLD_PERCENTAGE = "5";
+          TARGET_PERCENTAGE = "2";
+          LOG_LEVEL = "INFO";
+          MAX_WORKERS = "8";
+          TZ = "America/New_York";
+        };
+        extraOptions = ["--cap-add=SYS_ADMIN" "--cap-add=DAC_READ_SEARCH"];
+      };
+    };
   };
 }
