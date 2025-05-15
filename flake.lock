@@ -664,11 +664,11 @@
     },
     "nixpkgs_8": {
       "locked": {
-        "lastModified": 1746904237,
-        "narHash": "sha256-3e+AVBczosP5dCLQmMoMEogM57gmZ2qrVSrmq9aResQ=",
+        "lastModified": 1747179050,
+        "narHash": "sha256-qhFMmDkeJX9KJwr5H32f1r7Prs7XbQWtO0h3V0a0rFY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d89fc19e405cb2d55ce7cc114356846a0ee5e956",
+        "rev": "adaa24fbf46737f3f1b5497bf64bae750f82942e",
         "type": "github"
       },
       "original": {
@@ -791,11 +791,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1747254592,
-        "narHash": "sha256-RwtIAnwY1uTv/LkIEGLpJypgQfQY3+DTvdMgok0q4KQ=",
+        "lastModified": 1747279248,
+        "narHash": "sha256-QlO5nONmT0i/m24bZgHJ/XphVxuSN7peKDBre3Akj5Y=",
         "ref": "refs/heads/master",
-        "rev": "364b2395a95e68c82091b941cb2d72dfdbf0367b",
-        "revCount": 95,
+        "rev": "1e0ab2b7cd54aee247fb207819c428fe131f6c0a",
+        "revCount": 97,
         "type": "git",
         "url": "ssh://git@github.com/fred-drake/nix-secrets.git"
       },

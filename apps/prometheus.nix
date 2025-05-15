@@ -82,13 +82,37 @@ in {
           ];
         }
         {
-          job_name = "sabnzbd-exporter";
+          job_name = "sabnzbd";
           scrape_timeout = "60s";
           scrape_interval = "5m";
           static_configs = [
             {
               targets = [
                 "sabnzbd-metrics.${config.soft-secrets.networking.domain}:9387"
+              ];
+            }
+          ];
+        }
+        {
+          job_name = "sonarr";
+          scrape_timeout = "60s";
+          scrape_interval = "5m";
+          static_configs = [
+            {
+              targets = [
+                "sonarr-metrics.${config.soft-secrets.networking.domain}:9707"
+              ];
+            }
+          ];
+        }
+        {
+          job_name = "radarr";
+          scrape_timeout = "60s";
+          scrape_interval = "5m";
+          static_configs = [
+            {
+              targets = [
+                "radarr-metrics.${config.soft-secrets.networking.domain}:9708"
               ];
             }
           ];

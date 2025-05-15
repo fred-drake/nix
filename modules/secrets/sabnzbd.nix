@@ -330,7 +330,7 @@
       timeout = 60
       username = ${config.sops.placeholder.sabnzbd-newsdemon-username}
       password = ${config.sops.placeholder.sabnzbd-newsdemon-password}
-      connections = 8
+      connections = 20
       ssl = 1
       ssl_verify = 2
       ssl_ciphers = ""
