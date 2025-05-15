@@ -29,11 +29,11 @@ in {
     };
   };
   # Load the NVIDIA drivers in the initrd
-  boot.initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.initrd.kernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"];
   # Load NVIDIA kernel modules without X server
-  boot.extraModulePackages = [ config.boot.kernelPackages.nvidia_x11 ];
+  boot.extraModulePackages = [config.boot.kernelPackages.nvidia_x11];
   # Make sure the NVIDIA kernel modules are loaded at boot
-  boot.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+  boot.kernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"];
   # Create NVIDIA device nodes at boot
   services.udev.extraRules = ''
     # Create /dev/nvidia-uvm when nvidia_uvm is loaded
@@ -56,9 +56,9 @@ in {
     dockerCompat = true;
     defaultNetwork.settings.dns_enabled = true;
     # Add nvidia-container-toolkit to Podman packages
-    extraPackages = [ pkgs.nvidia-container-toolkit ];
+    extraPackages = [pkgs.nvidia-container-toolkit];
   };
-  
+
   # The NVIDIA Container Toolkit is already enabled in the hardware.nvidia section
 
   systemd.tmpfiles.rules = [
@@ -121,7 +121,7 @@ in {
     backend = "podman";
     containers = {
       jellyfin = {
-        image = "docker.io/jellyfin/jellyfin:latest";
+        image = containers-sha."docker.io"."jellyfin/jellyfin"."latest"."linux/amd64";
         autoStart = true;
         ports = ["127.0.0.1:8096:8096"];
         volumes = [

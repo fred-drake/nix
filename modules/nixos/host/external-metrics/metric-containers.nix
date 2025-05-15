@@ -1,4 +1,10 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: let
+  containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};
+in {
   sops.age.sshKeyPaths = ["/home/default/id_infrastructure"];
   sops.defaultSopsFile = config.secrets.sopsYaml;
   sops.secrets.metrics-sabnzbd-env = {
@@ -28,7 +34,7 @@
     backend = "podman";
     containers = {
       sabnzbd_exporter = {
-        image = "docker.io/msroest/sabnzbd_exporter";
+        image = containers-sha."docker.io"."msroest/sabnzbd_exporter"."latest"."linux/amd64";
         autoStart = true;
         ports = ["${config.soft-secrets.host.external-metrics.admin_ip_address}:9387:9387"];
         environmentFiles = [
@@ -36,7 +42,7 @@
         ];
       };
       sonarr_exporter = {
-        image = "ghcr.io/onedr0p/exportarr:latest";
+        image = containers-sha."ghcr.io"."onedr0p/exportarr"."latest"."linux/amd64";
         autoStart = true;
         ports = ["${config.soft-secrets.host.external-metrics.admin_ip_address}:9707:9707"];
         environment = {
@@ -49,7 +55,7 @@
         cmd = ["sonarr"];
       };
       radarr_exporter = {
-        image = "ghcr.io/onedr0p/exportarr:latest";
+        image = containers-sha."ghcr.io"."onedr0p/exportarr"."latest"."linux/amd64";
         autoStart = true;
         ports = ["${config.soft-secrets.host.external-metrics.admin_ip_address}:9708:9708"];
         environment = {

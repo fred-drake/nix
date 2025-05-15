@@ -4,7 +4,9 @@
   pkgsUnstable,
   pkgsStable,
   ...
-}: {
+}: let
+  containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};
+in {
   boot.loader.grub = {
     enable = true;
     efiSupport = true;
@@ -167,7 +169,7 @@
     backend = "podman";
     containers = {
       ipmi = {
-        image = "docker.io/solarkennedy/ipmi-kvm-docker";
+        image = containers-sha."docker.io"."solarkennedy/ipmi-kvm-docker"."latest"."linux/amd64";
         autoStart = true;
         ports = ["0.0.0.0:8080:8080"];
         environment = {

@@ -20,3 +20,23 @@ repository = "docker.io"
 name = "louislam/uptime-kuma"
 tag = "1"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "onedr0p/exportarr"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "msroest/sabnzbd_exporter"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "solarkennedy/ipmi-kvm-docker"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "jellyfin/jellyfin"
+tag = "latest"
+architectures = ["linux/amd64"]

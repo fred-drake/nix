@@ -99,7 +99,6 @@ in {
       echo "####################################" >> $SHA_FILE
       ${container-digest}/bin/container-digest --containers $DEVENV_ROOT/apps/fetcher/containers.toml --output-format nix >> $SHA_FILE
       ${pkgs.alejandra}/bin/alejandra --quiet $SHA_FILE
-      git diff $SHA_FILE
     '';
   };
 
