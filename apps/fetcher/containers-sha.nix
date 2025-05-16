@@ -1,7 +1,7 @@
 ####################################
 # Auto-generated -- do not modify! #
 ####################################
-{pkgs, ...}: {
+{...}: {
   "docker.gitea.com" = {
     "act_runner" = {
       "latest" = {
@@ -15,6 +15,11 @@
     };
   };
   "docker.io" = {
+    "glanceapp/glance" = {
+      "latest" = {
+        "linux/amd64" = "docker.io/glanceapp/glance@sha256:9839d16e481bb3a389259bdb7645c05311f2d31291a75c09b941c2795e6a5cc9";
+      };
+    };
     "jellyfin/jellyfin" = {
       "latest" = {
         "linux/amd64" = "docker.io/jellyfin/jellyfin@sha256:3b38dae4c3ddd6ebc7378538fba4d3f314070ebefbdb3d688166b7c8658fb123";

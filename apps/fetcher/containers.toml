@@ -45,3 +45,8 @@ repository = "ghcr.io"
 name = "monstermuffin/mergerfs-cache-mover"
 tag = "latest"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "glanceapp/glance"
+tag = "latest"
+architectures = ["linux/amd64"]

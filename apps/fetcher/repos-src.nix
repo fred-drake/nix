@@ -17,8 +17,8 @@
   container-digest-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
     repo = "container-digest";
-    rev = "d1ad376d0a96ebad873e219df965f876efc11531";
-    hash = "sha256-C+eB9e587JDIUmC4fufgWaqFEgkzSIgO7nStCFa25iQ=";
+    rev = "2503196e2be47c54a1a0533a38564076ac3a2ec8";
+    hash = "sha256-8STjBS+ZQYQdREQCqPP4ZZ0/+DiQujI+Pc2bKhZQDGA=";
   };
   autopair-fish-src = pkgs.fetchFromGitHub {
     owner = "jorgebucaran";
@@ -47,7 +47,7 @@
   nix4vscode-src = pkgs.fetchFromGitHub {
     owner = "nix-community";
     repo = "nix4vscode";
-    rev = "59c244d481fa73221b2727472dc105589ded1b50";
-    hash = "sha256-VEGZIAlvokVmKbSF7mVIZio4o158I9S2xc3xCaZurlM=";
+    rev = "3973f4e52a8b2e93e969f720dac204fd56805068";
+    hash = "sha256-Gwf9fifM8ezqa5KH8Xb9Y20ehmjdRlV207yMkaDRjp4=";
   };
 }
