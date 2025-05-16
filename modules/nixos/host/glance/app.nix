@@ -6,10 +6,21 @@
   containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};
   host = "glance";
   proxyPort = "8080";
+  # Create the glance configuration file
+  glanceConfigFile = pkgs.writeTextFile {
+    name = "glance-configuration";
+    text = builtins.toJSON (import ./glance-config.nix);
+    # destination = "/glance.yml";
+  };
 in {
   imports = [
     ../../../secrets/cloudflare.nix
   ];
+  sops.secrets.glance-env = {
+    sopsFile = config.secrets.host.glance;
+    mode = "0400";
+    key = "data";
+  };
 
   security = {
     acme = {
@@ -66,8 +77,9 @@ in {
 
   systemd.tmpfiles.rules = [
     "d /var/glance/assets 0755 99 100 -"
-    "d /var/glance/config 0755 99 100 -"
+    # "d /var/glance/config 0755 99 100 -"
   ];
+  # Tmpfiles rules for glance
 
   virtualisation.containers.enable = true;
   virtualisation.podman = {
@@ -86,13 +98,14 @@ in {
         ];
         volumes = [
           "/var/glance/assets:/app/assets"
-          "/var/glance/config:/app/config"
+          "${glanceConfigFile.outPath}:/app/config/glance.yml"
         ];
         environment = {
           PUID = "99";
           PGID = "100";
           TZ = "America/New_York";
         };
+        environmentFiles = [config.sops.secrets.glance-env.path];
       };
     };
   };

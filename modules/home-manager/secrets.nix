@@ -55,11 +55,4 @@ in {
     key = "data";
   };
   home.file.".bws.env".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.bws.path;
-
-  sops.secrets.glance = {
-    sopsFile = config.secrets.workstation.glance;
-    mode = "0400";
-    key = "data";
-  };
-  home.file.".config/glance/glance.env".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.glance.path;
 }

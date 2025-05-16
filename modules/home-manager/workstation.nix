@@ -45,10 +45,6 @@ in {
         executable = true;
       };
 
-      ".config/glance/glance.json" = {
-        text = builtins.toJSON (import ./files/glance-config.nix);
-      };
-
       ".cursor/mcp.json" = {
         text = builtins.toJSON (import ./files/mcp-server-config.nix);
       };

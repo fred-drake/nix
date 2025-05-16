@@ -1,6 +1,6 @@
 {
   server = {
-    port = 7087;
+    port = 8080;
   };
 
   pages = [
@@ -15,12 +15,7 @@
               show-source-icon = true;
               repositories = [
                 "glanceapp/glance"
-                {
-                  repository = "zed-industries/zed";
-                  include-prereleases = true;
-                }
                 "microsoft/vscode"
-                "RooVetGit/Roo-Code"
                 "zen-browser/desktop"
               ];
             }
@@ -35,18 +30,6 @@
                   title = "selfh.st";
                   limit = 4;
                 }
-              ];
-            }
-            {
-              type = "twitch-channels";
-              channels = [
-                "aaronactionrpg"
-                "theprimeagen"
-                "j_blow"
-                "piratesoftware"
-                "cohhcarnage"
-                "christitustech"
-                "EJ_SA"
               ];
             }
           ];
@@ -136,91 +119,15 @@
               hour-format = "12h";
             }
             {
-              type = "monitor";
-              cache = "1m";
-              title = "Backbone";
-              style = "compact";
-              sites = [
-                {
-                  title = "Dalaran";
-                  url = "http://dalaran.\${GLANCE_DOMAIN}";
-                  allow-insecure = true;
-                }
-                {
-                  title = "Orgrimmar";
-                  url = "http://orgrimmar.\${GLANCE_DOMAIN}";
-                  allow-insecure = true;
-                }
-              ];
-            }
-            {
-              type = "monitor";
-              cache = "1m";
-              title = "Hypervisor";
-              style = "compact";
-              sites = [
-                {
-                  title = "Thrall";
-                  url = "https://thrall.\${GLANCE_DOMAIN}:8006";
-                }
-                {
-                  title = "Anduin";
-                  url = "https://anduin.\${GLANCE_DOMAIN}:8006";
-                }
-                {
-                  title = "Baine";
-                  url = "https://baine.\${GLANCE_DOMAIN}:8006";
-                }
-                {
-                  title = "Medivh";
-                  url = "https://medivh.\${GLANCE_DOMAIN}:8006";
-                }
-              ];
-            }
-            {
-              type = "monitor";
-              cache = "1m";
-              title = "Services";
-              style = "compact";
-              sites = [
-                {
-                  title = "Proxmox Backup Server";
-                  url = "https://backup.\${GLANCE_DOMAIN}:8007";
-                }
-                {
-                  title = "Adguard1";
-                  url = "https://adguard1.\${GLANCE_DOMAIN}";
-                }
-                {
-                  title = "Adguard2";
-                  url = "https://adguard2.\${GLANCE_DOMAIN}";
-                }
-                {
-                  title = "Unraid";
-                  url = "https://larussa.\${GLANCE_DOMAIN}";
-                  allow-insecure = true;
-                }
-                {
-                  title = "Overseerr";
-                  url = "https://overseerr.\${GLANCE_DOMAIN}";
-                }
-                {
-                  title = "Sonarr";
-                  url = "https://sonarr.\${GLANCE_DOMAIN}";
-                }
-                {
-                  title = "Radarr";
-                  url = "https://radarr.\${GLANCE_DOMAIN}";
-                }
-                {
-                  title = "SABNzbd";
-                  url = "https://sabnzbd.\${GLANCE_DOMAIN}";
-                }
-                {
-                  title = "Jellyfin";
-                  url = "http://jellyfin.\${GLANCE_DOMAIN}:8096";
-                  allow-insecure = true;
-                }
+              type = "twitch-channels";
+              channels = [
+                "aaronactionrpg"
+                "theprimeagen"
+                "j_blow"
+                "piratesoftware"
+                "cohhcarnage"
+                "christitustech"
+                "EJ_SA"
               ];
             }
           ];
