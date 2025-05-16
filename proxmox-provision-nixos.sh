@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 PROXMOX_SERVER=khadgar
-HOSTNAME=external-metrics
-CONTAINER_ID=113
+HOSTNAME=glance
+CONTAINER_ID=114
 STORAGE=local-lvm
 MEMORY=4096
 DISK_SIZE_IN_GB=100
