@@ -114,8 +114,8 @@
       replace_underscores = 0
       replace_dots = 0
       safe_postproc = 1
-      pause_on_post_processing = 0
-      enable_all_par = 0
+      pause_on_post_processing = 1
+      enable_all_par = 1
       sanitize_safe = 0
       cleanup_list = ,
       unwanted_extensions = ,
