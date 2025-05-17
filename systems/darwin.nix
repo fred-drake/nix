@@ -6,6 +6,7 @@
   nixpkgs-unstable,
   nixpkgs-fred-unstable,
   nixpkgs-fred-testing,
+  nix4vscode,
   homebrew-core,
   homebrew-cask,
   homebrew-bundle,
@@ -37,7 +38,10 @@
     systemPkgs = import nixpkgs {
       system = system;
       config.allowUnfree = true;
-      overlays = [(import ../overlays/default.nix {inherit inputs;})];
+      overlays = [
+        (import ../overlays/default.nix {inherit inputs;})
+        nix4vscode.overlays.forVscode
+      ];
     };
   in
     darwin.lib.darwinSystem {
@@ -54,22 +58,34 @@
         pkgsUnstable = import nixpkgs-unstable {
           system = system;
           config.allowUnfree = true;
-          overlays = [(import ../overlays/default.nix {inherit inputs;})];
+          overlays = [
+            (import ../overlays/default.nix {inherit inputs;})
+            nix4vscode.overlays.forVscode
+          ];
         };
         pkgsStable = import nixpkgs-stable {
           system = system;
           config.allowUnfree = true;
-          overlays = [(import ../overlays/default.nix {inherit inputs;})];
+          overlays = [
+            (import ../overlays/default.nix {inherit inputs;})
+            nix4vscode.overlays.forVscode
+          ];
         };
         pkgsFredTesting = import nixpkgs-fred-testing {
           system = system;
           config.allowUnfree = true;
-          overlays = [(import ../overlays/default.nix {inherit inputs;})];
+          overlays = [
+            (import ../overlays/default.nix {inherit inputs;})
+            nix4vscode.overlays.forVscode
+          ];
         };
         pkgsFredUnstable = import nixpkgs-fred-unstable {
           system = system;
           config.allowUnfree = true;
-          overlays = [(import ../overlays/default.nix {inherit inputs;})];
+          overlays = [
+            (import ../overlays/default.nix {inherit inputs;})
+            nix4vscode.overlays.forVscode
+          ];
         };
       };
       modules =

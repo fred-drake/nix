@@ -18,6 +18,8 @@ in {
     nurl
     tomlq
     statix
+    nodejs_22
+    uv
   ];
 
   # https://devenv.sh/languages/
@@ -66,9 +68,9 @@ in {
 
       if [ "$(uname -s)" = "Darwin" ]; then
           if [ "$HOST" = "freds-macbook-pro" ] || [ "$HOST" = "fred-macbook-pro-wireless" ]; then
-              darwin-rebuild --show-trace --flake .#macbook-pro $CMD
+              sudo darwin-rebuild --show-trace --flake .#macbook-pro $CMD
           else
-              darwin-rebuild --show-trace --flake .#"$HOST" $CMD
+              sudo darwin-rebuild --show-trace --flake .#"$HOST" $CMD
           fi
       else
           sudo nixos-rebuild --show-trace --flake .#"$HOST" $CMD

@@ -98,6 +98,7 @@ in {
       "sourcetree"
       # "visual-studio-code"
       "vlc"
+      "windsurf"
       "zen"
       "zoom"
     ];
@@ -153,6 +154,8 @@ in {
 
   # System configuration
   system = {
+    primaryUser = "fdrake";
+
     # Activation script to install Rosetta 2 for x86 app compatibility
     activationScripts.extraActivation.text = ''
       softwareupdate --install-rosetta --agree-to-license

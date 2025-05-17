@@ -139,15 +139,17 @@ in {
           discord # Voice and text chat app
           slack # Team communication tool
           spotify # Music streaming service
-          (pkgs.writeShellScriptBin "cursor" ''
-            EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
-            exec ${pkgs.code-cursor}/bin/cursor --extensions-dir $EXT_DIR "$@"
-          '')
-          (pkgs.writeShellScriptBin "windsurf" ''
-            EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
-            exec ${pkgs.windsurf}/bin/windsurf --extensions-dir $EXT_DIR "$@"
-          '')
         ]
+      else []
+    )
+    ++ (
+      if pkgs.stdenv.hostPlatform.isDarwin
+      then [
+        (pkgs.writeShellScriptBin "windsurf-code" ''
+          EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
+          exec /opt/homebrew/bin/windsurf --extensions-dir $EXT_DIR "$@"
+        '')
+      ]
       else []
     )
     ++ (

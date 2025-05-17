@@ -8,7 +8,7 @@
   # Input sources for the flake
   inputs = {
     # Nixpkgs repository, based on my current level of debugging and stability
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11"; # Stable channel
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05"; # Stable channel
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Typically 3-4 days behind master
     nixpkgs.url = "github:nixos/nixpkgs"; # Absolutely bleeding edge
     nixpkgs-fred-unstable.url = "github:fred-drake/nixpkgs/fred-unstable"; # Modules that have not yet been pulled into upstream
@@ -86,6 +86,10 @@
 
     nix-jetbrains-plugins.url = "github:theCapypara/nix-jetbrains-plugins";
 
+    nix4vscode = {
+      url = "github:nix-community/nix4vscode";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # vscode.url = "github:fred-drake/vscode"; # My custom vscode configuration
   };
 
@@ -107,10 +111,10 @@
     secrets,
     sops-nix,
     nix-jetbrains-plugins,
+    nix4vscode,
     ...
   } @ inputs: let
     inherit (self) outputs;
-    soft-secrets = import "${secrets}/soft-secrets";
   in
     inputs.flake-utils.lib.eachDefaultSystem (system: {})
     // {
@@ -127,6 +131,7 @@
           nixpkgs-fred-testing
           secrets
           nix-jetbrains-plugins
+          nix4vscode
           ;
       };
 
@@ -142,6 +147,7 @@
           nixpkgs-fred-testing
           secrets
           nix-jetbrains-plugins
+          nix4vscode
           homebrew-core
           homebrew-cask
           homebrew-bundle

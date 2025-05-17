@@ -1,50 +1,39 @@
-{
-  pkgs,
-  lib,
-}: let
-  extensions = (import ./extensions.nix) {
-    pkgs = pkgs;
-    lib = lib;
-  };
-in {
+{pkgs, ...}: {
   # VSCode Extensions that are to be installed
-  globalExtensions = with extensions; [
-    mikestead.dotenv # Support for .env file syntax highlighting and autocompletion
-    vscodevim.vim # Vim emulation for VSCode
-    mobalic.jetbrains-dark-theme # Dark theme inspired by JetBrains IDEs
-    eamodio.gitlens # Git supercharged - blame, code lens, and powerful comparison commands
-    donjayamanne.githistory # View and search git log, file history, compare branches or commits
-    oderwat.indent-rainbow # Colorizes indentation for improved readability
-    wayou.vscode-todo-highlight # Highlight TODO, FIXME and other annotations in code
-    rodrigocfd.format-comment # Format comments in code
-    signageos.signageos-vscode-sops # Syntax highlighting for SOPS (SecretOps) files
-    pkief.material-icon-theme # Material Icon Theme for VS Code
-    editorconfig.editorconfig # EditorConfig Support for Visual Studio Code
-    be5invis.vscode-custom-css # Custom CSS for Visual Studio Code
-    tamasfe.even-better-toml # Better TOML support for Visual Studio Code
-    kamadorueda.alejandra # Formatter for Nix files
-    jnoortheen.nix-ide # Syntax highlighting for Nix and other languages used in the Nix ecosystem
-    skellock.just # Syntax highlighting for Justfiles
-    arr.marksman # Syntax highlighting for Markdown files with live preview and TOC support
-    fnando.linter # Linter for YAML files
-    bluebrown.yamlfmt # Format YAML files with yamlfmt
-    esbenp.prettier-vscode # Prettier formatter for Visual Studio Code
-    mtxr.sqltools # SQLTools - Query, Connection and IntelliSense for MySQL, PostgreSQL, SQLite, MariaDB, MS SQL, Oracle and IBM DB2 databases
-    usernamehw.errorlens # Error Lens - Improve highlighting of errors, warnings and other language diagnostics
-    gruntfuggly.todo-tree # Todo Tree - Show TODO, FIXME and other markers in the file explorer
-    gaborv.flatbuffers # FlatBuffers syntax highlighting and autocompletion
-    ms-dotnettools.csdevkit
-    ms-dotnettools.csharp
-    ms-dotnettools.vscode-dotnet-runtime
-    csharpier.csharpier-vscode
-    neikeq.godot-csharp-vscode
-    rust-lang.rust-analyzer
-    fill-labs.dependi
-    golang.go
-    gofenix.go-lines
-    rooveterinaryinc.roo-cline
-    github.copilot
-    ms-python.python
+  globalExtensions = pkgs.nix4vscode.forVscode [
+    "mikestead.dotenv" # Support for .env file syntax highlighting and autocompletion
+    "vscodevim.vim" # Vim emulation for VSCode
+    "mobalic.jetbrains-dark-theme" # Dark theme inspired by JetBrains IDEs
+    "eamodio.gitlens" # Git supercharged - blame, code lens, and powerful comparison commands
+    "donjayamanne.githistory" # View and search git log, file history, compare branches or commits
+    "oderwat.indent-rainbow" # Colorizes indentation for improved readability
+    "wayou.vscode-todo-highlight" # Highlight TODO, FIXME and other annotations in code
+    "rodrigocfd.format-comment" # Format comments in code
+    "signageos.signageos-vscode-sops" # Syntax highlighting for SOPS (SecretOps) files
+    "pkief.material-icon-theme" # Material Icon Theme for VS Code
+    "editorconfig.editorconfig" # EditorConfig Support for Visual Studio Code
+    "be5invis.vscode-custom-css" # Custom CSS for Visual Studio Code
+    "tamasfe.even-better-toml" # Better TOML support for Visual Studio Code
+    "kamadorueda.alejandra" # Formatter for Nix files
+    "jnoortheen.nix-ide" # Syntax highlighting for Nix and other languages used in the Nix ecosystem
+    "skellock.just" # Syntax highlighting for Justfiles
+    "arr.marksman" # Syntax highlighting for Markdown files with live preview and TOC support
+    "fnando.linter" # Linter for YAML files
+    "bluebrown.yamlfmt" # Format YAML files with yamlfmt
+    "esbenp.prettier-vscode" # Prettier formatter for Visual Studio Code
+    "mtxr.sqltools" # SQLTools - Query, Connection and IntelliSense for MySQL, PostgreSQL, SQLite, MariaDB, MS SQL, Oracle and IBM DB2 databases
+    "usernamehw.errorlens" # Error Lens - Improve highlighting of errors, warnings and other language diagnostics
+    "gruntfuggly.todo-tree" # Todo Tree - Show TODO, FIXME and other markers in the file explorer
+    "gaborv.flatbuffers" # FlatBuffers syntax highlighting and autocompletion
+    "ms-dotnettools.csdevkit"
+    "ms-dotnettools.csharp"
+    "ms-dotnettools.vscode-dotnet-runtime"
+    "csharpier.csharpier-vscode"
+    "neikeq.godot-csharp-vscode"
+    "rust-lang.rust-analyzer"
+    "fill-labs.dependi"
+    "golang.go"
+    "ms-python.python"
   ];
 
   # VSCode Settings that are to be applied in every configuration.  Configuration-specific settings will
@@ -84,7 +73,6 @@ in {
         "after" = ["<Esc>"];
       }
     ];
-    # "vim.otherModesKeyBindingsNonRecursive" = [
     "vim.normalModeKeyBindings" = [
       {
         "before" = ["m"];
