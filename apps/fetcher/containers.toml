@@ -55,3 +55,14 @@ repository = "ghcr.io"
 name = "linuxserver/sabnzbd"
 tag = "latest"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "linuxserver/radarr"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "linuxserver/sonarr"
+tag = "latest"
+architectures = ["linux/amd64"]
+

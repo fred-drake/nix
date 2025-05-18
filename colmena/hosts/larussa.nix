@@ -45,6 +45,8 @@ in {
       ../../modules/nixos/host/larussa/disks.nix
       ../../modules/nixos/host/larussa/nfs-server.nix
       ../../modules/nixos/host/larussa/jellyfin.nix
+      ../../modules/nixos/host/larussa/radarr.nix
+      ../../modules/nixos/host/larussa/sonarr.nix
       (nodeExporter.mkNodeExporter "larussa")
     ];
 

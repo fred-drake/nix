@@ -185,8 +185,7 @@ in {
           "/var/sabnzbd/admin:/admin"
           "/var/sabnzbd/backup:/backup"
           "/var/sabnzbd/log:/log"
-          "/mnt/array/storage1/sabnzbd_downloads_incomplete:/incomplete-downloads"
-          "/mnt/array/storage1/sabnzbd_downloads:/downloads"
+          "/mnt/array/storage1:/storage"
         ];
         environment = {
           PUID = "99";

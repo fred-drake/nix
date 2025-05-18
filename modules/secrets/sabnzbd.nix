@@ -57,7 +57,7 @@
       https_port = ""
       username = ""
       password = ""
-      bandwidth_max = ""
+      bandwidth_max = 50M
       cache_limit = 977.9 M
       web_dir = Glitter
       web_color = Auto
@@ -70,9 +70,9 @@
       nzb_key = ${config.sops.placeholder.sabnzbd-nzb-key}
       socks5_proxy_url = ""
       permissions = ""
-      download_dir = /incomplete-downloads
+      download_dir = /storage/sabnzbd_downloads_incomplete
       download_free = ""
-      complete_dir = /downloads
+      complete_dir = /storage/sabnzbd_downloads
       complete_free = ""
       fulldisk_autoresume = 0
       script_dir = ""
@@ -330,7 +330,7 @@
       timeout = 60
       username = ${config.sops.placeholder.sabnzbd-newsdemon-username}
       password = ${config.sops.placeholder.sabnzbd-newsdemon-password}
-      connections = 20
+      connections = 50
       ssl = 1
       ssl_verify = 2
       ssl_ciphers = ""
