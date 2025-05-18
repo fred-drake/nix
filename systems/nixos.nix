@@ -4,6 +4,7 @@
   nixpkgs,
   nixpkgs-stable,
   nixpkgs-unstable,
+  nix4vscode,
   ...
 }: let
   inherit (inputs) home-manager disko nixos-hardware secrets sops-nix;
@@ -46,9 +47,12 @@ in {
       system = "x86_64-linux";
       config.allowUnfree = true;
       config.cudaSupport = true;
+      overlays = [
+        nix4vscode.overlays.forVscode
+      ];
     };
     specialArgs = {
-      inherit inputs outputs nixpkgs nixpkgs-unstable;
+      inherit inputs outputs nixpkgs nixpkgs-unstable nix4vscode;
       pkgsUnstable = import nixpkgs-unstable {
         system = "x86_64-linux";
         config.allowUnfree = true;
@@ -89,7 +93,7 @@ in {
       config.allowUnfree = true;
     };
     specialArgs = {
-      inherit inputs outputs nixpkgs nixpkgs-unstable;
+      inherit inputs outputs nixpkgs nixpkgs-unstable nix4vscode;
       pkgsUnstable = import nixpkgs-unstable {
         system = "x86_64-linux";
         config.allowUnfree = true;

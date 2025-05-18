@@ -14,8 +14,7 @@ in {
       modesetting.enable = true;
       nvidiaSettings = true;
       open = false;
-      # Enable nvidia-persistenced for headless operation
-      nvidiaPersistenced = true;
+      nvidiaPersistenced = false;
     };
     opengl = {
       enable = true;
