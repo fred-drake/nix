@@ -50,3 +50,8 @@ repository = "docker.io"
 name = "glanceapp/glance"
 tag = "latest"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "linuxserver/sabnzbd"
+tag = "latest"
+architectures = ["linux/amd64"]

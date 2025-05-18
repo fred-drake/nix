@@ -64,6 +64,11 @@ in {
     "d /var/jellyfin/config 0755 99 100 -"
     "d /var/jellyfin/cache 0755 99 100 -"
     "d /var/jellyfin/log 0755 99 100 -"
+    "d /var/sabnzbd/config 0755 99 100 -"
+    "d /var/sabnzbd/nzb_backup 0755 99 100 -"
+    "d /var/sabnzbd/admin 0755 99 100 -"
+    "d /var/sabnzbd/backup 0755 99 100 -"
+    "d /var/sabnzbd/log 0755 99 100 -"
   ];
 
   security = {
@@ -85,6 +90,15 @@ in {
           s3Bucket = null;
           environmentFile = config.sops.secrets.cloudflare-api-key.path;
         };
+        "sabnzbd.${config.soft-secrets.networking.domain}" = {
+          domain = "sabnzbd.${config.soft-secrets.networking.domain}";
+          dnsProvider = "cloudflare";
+          dnsResolver = "1.1.1.1:53";
+          webroot = null;
+          listenHTTP = null;
+          s3Bucket = null;
+          environmentFile = config.sops.secrets.cloudflare-api-key.path;
+        };
       };
     };
   };
@@ -98,6 +112,26 @@ in {
           forceSSL = true;
           locations."/" = {
             proxyPass = "http://127.0.0.1:${proxyPort}";
+            proxyWebsockets = true;
+            extraConfig = ''
+              # Increase the maximum size of the hash table
+              proxy_headers_hash_max_size 1024;
+
+              # Increase the bucket size of the hash table
+              proxy_headers_hash_bucket_size 128;
+
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+            '';
+          };
+        };
+        "sabnzbd.${config.soft-secrets.networking.domain}" = {
+          enableACME = true;
+          forceSSL = true;
+          locations."/" = {
+            proxyPass = "http://127.0.0.1:8080";
             proxyWebsockets = true;
             extraConfig = ''
               # Increase the maximum size of the hash table
@@ -140,6 +174,25 @@ in {
           "--gpus=all"
           "--security-opt=label=disable"
         ];
+      };
+      sabnzbd = {
+        image = containers-sha."ghcr.io"."linuxserver/sabnzbd"."latest"."linux/amd64";
+        autoStart = true;
+        ports = ["127.0.0.1:8080:8080"];
+        volumes = [
+          "/var/sabnzbd/config:/config"
+          "/var/sabnzbd/nzb_backup:/nzb_backup"
+          "/var/sabnzbd/admin:/admin"
+          "/var/sabnzbd/backup:/backup"
+          "/var/sabnzbd/log:/log"
+          "/mnt/array/storage1/sabnzbd_downloads_incomplete:/incomplete-downloads"
+          "/mnt/array/storage1/sabnzbd_downloads:/downloads"
+        ];
+        environment = {
+          PUID = "99";
+          PGID = "100";
+          TZ = "America/New_York";
+        };
       };
     };
   };

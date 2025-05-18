@@ -5,7 +5,8 @@
   ...
 }: {
   imports = [
-    ../../../secrets/cloudflare.nix
+    # ../../../secrets/cloudflare.nix
+    ../../../secrets/sabnzbd.nix
   ];
 
   boot.loader.grub = {
@@ -29,6 +30,7 @@
   # Needed for NFS server
   systemd.tmpfiles.rules = [
     "d /export 0755 root root -"
+    "C /var/sabnzbd/config/sabnzbd.ini 0660 svcuser users - /var/sabnzbd/config/sabnzbd-orig.ini"
   ];
 
   services = {
@@ -51,6 +53,12 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7sjvSwPCcdgBGhTXz0hpTkZX5PaaLrQMrNob2Eb+BYvQsYZIWFmnecx7sIClaDsSV48QwvXvLGcR7RUwkpRnsH09nabZiz6zMqn4Ice+fU7ZvexPqcwOvc/8nQmDwi9lJ/58UBgkls1gTSbcAESejomVB3CbX9PaiENTQcWcKe24/1US6/0BZk9AHoD5HFBP8oDKFi2TeLHqme2LQhnZ/Rrdr6AdeQe4VutHHPEFnsBRk/ZzLjPIsJX1LxA/0bbkX1sLCzNe6jtOiw5RfH4e2uOoRNypEPJkt7dQclfUy/iNI7vzQod83BE6TCr3d6KF/eur1utP+V9FRRSzUlFL1"
     ];
+  };
+  users.users.svcuser = {
+    isNormalUser = false;
+    isSystemUser = true;
+    uid = 99;
+    group = "users";
   };
 
   security.sudo = {

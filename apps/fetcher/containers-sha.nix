@@ -49,6 +49,11 @@
     };
   };
   "ghcr.io" = {
+    "linuxserver/sabnzbd" = {
+      "latest" = {
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:5c18a77782a36346d78f4b421c7a87c904ccb21570cc1a29f37a9e4e6a0a52fe";
+      };
+    };
     "monstermuffin/mergerfs-cache-mover" = {
       "latest" = {
         "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:a3182b58e604787f0875c63d99bfb5deef261661c51b436f743e98c9cb24902e";

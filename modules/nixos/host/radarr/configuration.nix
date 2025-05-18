@@ -74,6 +74,10 @@
   };
 
   networking.hostName = "radarr";
+  networking.extraHosts = ''
+    192.168.50.2 sabnzbd.internal.freddrake.com
+    192.168.50.2 jellyfin.internal.freddrake.com
+  '';
   users.users.default = {
     isNormalUser = true;
     password = "";

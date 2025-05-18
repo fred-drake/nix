@@ -6,32 +6,32 @@
   sops.secrets.sabnzbd-api-key = {
     sopsFile = config.secrets.host.sabnzbd;
     mode = "0400";
-    owner = "sabnzbd";
+    owner = "root";
     key = "api-key";
   };
   sops.secrets.sabnzbd-nzb-key = {
     sopsFile = config.secrets.host.sabnzbd;
     mode = "0400";
-    owner = "sabnzbd";
+    owner = "root";
     key = "nzb-key";
   };
   sops.secrets.sabnzbd-newsdemon-username = {
     sopsFile = config.secrets.host.sabnzbd;
     mode = "0400";
-    owner = "sabnzbd";
+    owner = "root";
     key = "newsdemon-username";
   };
   sops.secrets.sabnzbd-newsdemon-password = {
     sopsFile = config.secrets.host.sabnzbd;
     mode = "0400";
-    owner = "sabnzbd";
+    owner = "root";
     key = "newsdemon-password";
   };
 
   sops.templates."sabnzbd-config" = {
-    mode = "0600"; # Need writable or else sabnzbd just throws errors
-    owner = "sabnzbd";
-    path = "/var/lib/sabnzbd/sabnzbd.ini";
+    mode = "0660"; # Need writable or else sabnzbd just throws errors
+    owner = "svcuser";
+    path = "/var/sabnzbd/config/sabnzbd-orig.ini";
     content = ''
       __version__ = 19
       __encoding__ = utf-8
@@ -70,19 +70,19 @@
       nzb_key = ${config.sops.placeholder.sabnzbd-nzb-key}
       socks5_proxy_url = ""
       permissions = ""
-      download_dir = /mnt/sabnzbd_downloads_incomplete
+      download_dir = /incomplete-downloads
       download_free = ""
-      complete_dir = /mnt/sabnzbd_downloads
+      complete_dir = /downloads
       complete_free = ""
       fulldisk_autoresume = 0
       script_dir = ""
-      nzb_backup_dir = /var/lib/sabnzbd/nzb_backup
-      admin_dir = /var/lib/sabnzbd/admin
-      backup_dir = /var/lib/sabnzbd/backup
+      nzb_backup_dir = /nzb_backup
+      admin_dir = /admin
+      backup_dir = /backup
       dirscan_dir = ""
       dirscan_speed = 5
       password_file = ""
-      log_dir = /var/lib/sabnzbd/log
+      log_dir = /log
       max_art_tries = 3
       top_only = 0
       sfv_check = 1
