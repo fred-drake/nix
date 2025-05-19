@@ -143,6 +143,21 @@ The homelab uses a comprehensive monitoring strategy to ensure system health and
 - Monitoring dashboards are accessible via the Services network (VLAN 50)
 - Administrative access to monitoring systems is restricted to the Administration network
 
+## Debugging Common Issues
+
+### Missing Nix Files
+
+If you encounter an error indicating that a Nix file does not exist, this is typically because:
+- The file is newly created and not yet tracked by Git
+- The file exists in your working directory but hasn't been staged
+
+**Solution**:
+```bash
+git add /path/to/new/file.nix
+```
+
+This ensures Nix can properly resolve file paths during evaluation. This is particularly important when using `import` statements or file-based configurations.
+
 ## Key Management
 
 This project uses two distinct SSH keys for managing encrypted secrets:
