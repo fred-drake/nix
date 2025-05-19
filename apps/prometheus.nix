@@ -83,8 +83,8 @@ in {
         }
         {
           job_name = "sabnzbd";
-          scrape_timeout = "60s";
-          scrape_interval = "5m";
+          scrape_timeout = "30s";
+          scrape_interval = "1m";
           static_configs = [
             {
               targets = [
@@ -95,9 +95,9 @@ in {
         }
         {
           job_name = "sonarr";
-          scrape_timeout = "60s";
-          scrape_interval = "5m";
-          static_configs = [
+          scrape_timeout = "30s";
+          scrape_interval = "1m";
+          static_configs = [ 
             {
               targets = [
                 "sonarr-metrics.${config.soft-secrets.networking.domain}:9707"
@@ -107,8 +107,8 @@ in {
         }
         {
           job_name = "radarr";
-          scrape_timeout = "60s";
-          scrape_interval = "5m";
+          scrape_timeout = "30s";
+          scrape_interval = "1m";
           static_configs = [
             {
               targets = [
