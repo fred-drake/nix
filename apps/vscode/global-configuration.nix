@@ -25,15 +25,15 @@
     "usernamehw.errorlens" # Error Lens - Improve highlighting of errors, warnings and other language diagnostics
     "gruntfuggly.todo-tree" # Todo Tree - Show TODO, FIXME and other markers in the file explorer
     "gaborv.flatbuffers" # FlatBuffers syntax highlighting and autocompletion
-    "ms-dotnettools.csdevkit"
-    "ms-dotnettools.csharp"
-    "ms-dotnettools.vscode-dotnet-runtime"
-    "csharpier.csharpier-vscode"
-    "neikeq.godot-csharp-vscode"
-    "rust-lang.rust-analyzer"
-    "fill-labs.dependi"
-    "golang.go"
-    "ms-python.python"
+    "ms-dotnettools.csdevkit" # C# Dev Kit - Comprehensive C# development tools and extensions
+    "ms-dotnettools.csharp" # C# language support for Visual Studio Code
+    "ms-dotnettools.vscode-dotnet-runtime" # .NET Runtime installation manager for VS Code
+    "csharpier.csharpier-vscode" # Code formatter for C# files
+    "neikeq.godot-csharp-vscode" # C# language support for Godot Engine projects
+    "rust-lang.rust-analyzer" # Rust language support and analysis
+    "fill-labs.dependi" # Visual dependency explorer for C# projects
+    "golang.go" # Go language support and dev tools for VSCode
+    "ms-python.python" # Python language support with linting, debugging and IntelliSense
   ];
 
   # VSCode Settings that are to be applied in every configuration.  Configuration-specific settings will
