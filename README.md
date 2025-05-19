@@ -45,6 +45,29 @@ The infrastructure uses multiple VLANs for security and organization:
 
 > **Note**: The `id_ed25519` key is used for personal secrets and must be properly secured with 600 permissions.
 
+## Development Environment
+
+This repository uses [devenv](https://devenv.sh/) to provide a consistent development environment. The `devenv.nix` file contains all the libraries and helper scripts needed for processing this repository.
+
+### Features Provided by devenv
+
+- **Development Tools**: Includes tools like `colmena`, `just`, `alejandra`, and other utilities
+- **Helper Scripts**: Automated scripts for updating VSCode extensions, container digests, and more
+- **Consistent Environment**: Ensures all contributors have the same tooling and dependencies
+
+### Using devenv
+
+To enter the development environment:
+
+```bash
+cd ~/nix
+devenv up
+```
+
+This will load all the tools and environment variables defined in `devenv.nix`. Once inside the environment, you can use the helper scripts and tools without additional installation.
+
+If you have [direnv](https://direnv.net/) installed and configured, the development environment will be automatically activated when you enter the repository directory.
+
 ## Just Targets
 
 This project uses `just` for task automation. Here are the available targets:
