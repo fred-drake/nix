@@ -8,8 +8,8 @@
 }: let
   soft-secrets = import "${secrets}/soft-secrets";
 in {
-  # Base configuration for AdGuard1
-  _adguard1 = {
+  # Base configuration
+  _dns1 = {
     nixpkgs = {
       system = "aarch64-linux";
       overlays = [];
@@ -22,30 +22,30 @@ in {
       nixos-hardware.nixosModules.raspberry-pi-4
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
       ../../modules/nixos
-      ../../modules/nixos/host/adguard1/configuration.nix
+      ../../modules/nixos/host/dns1/configuration.nix
     ];
     deployment = {
       buildOnTarget = false;
-      targetHost = soft-secrets.host.adguard1.admin_ip_address;
+      targetHost = soft-secrets.host.dns1.admin_ip_address;
       targetUser = "default";
     };
   };
 
   # Initial setup configuration
-  "adguard1-init" = {
+  "dns1-init" = {
     imports = [
-      self.colmena._adguard1
+      self.colmena._dns1
     ];
   };
 
   # Full configuration
-  "adguard1" = let
-    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix { inherit secrets; };
+  "dns1" = let
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
   in {
     imports = [
-      self.colmena._adguard1
+      self.colmena._dns1
       ../../apps/blocky.nix
-      (nodeExporter.mkNodeExporter "adguard1")
+      (nodeExporter.mkNodeExporter "dns1")
     ];
 
     # Include the Prometheus modules with proper parameters

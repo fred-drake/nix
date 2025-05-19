@@ -7,8 +7,8 @@
   ...
 }: let
   # Import host configurations
-  adguard1 = import ./hosts/adguard1.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
-  adguard2 = import ./hosts/adguard2.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
+  dns1 = import ./hosts/dns1.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
+  dns2 = import ./hosts/dns2.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   overseerr = import ./hosts/overseerr.nix {inherit self nixpkgs-stable secrets sops-nix;};
   prowlarr = import ./hosts/prowlarr.nix {inherit self nixpkgs-stable secrets sops-nix;};
   n8n = import ./hosts/n8n.nix {inherit self nixpkgs-stable secrets sops-nix;};
@@ -27,8 +27,8 @@ in {
 
   # Merge all host configurations
   # Base configurations
-  _adguard1 = adguard1._adguard1;
-  _adguard2 = adguard2._adguard2;
+  _dns1 = dns1._dns1;
+  _dns2 = dns2._dns2;
   _overseerr = overseerr._overseerr;
   _prowlarr = prowlarr._prowlarr;
   _n8n = n8n._n8n;
@@ -42,8 +42,8 @@ in {
   _glance = glance._glance;
 
   # Init configurations
-  "adguard1-init" = adguard1."adguard1-init";
-  "adguard2-init" = adguard2."adguard2-init";
+  "dns1-init" = dns1."dns1-init";
+  "dns2-init" = dns2."dns2-init";
   "overseerr-init" = overseerr."overseerr-init";
   "prowlarr-init" = prowlarr."prowlarr-init";
   "n8n-init" = n8n."n8n-init";
@@ -57,8 +57,8 @@ in {
   "glance-init" = glance."glance-init";
 
   # Full configurations
-  "adguard1" = adguard1."adguard1";
-  "adguard2" = adguard2."adguard2";
+  "dns1" = dns1."dns1";
+  "dns2" = dns2."dns2";
   "overseerr" = overseerr."overseerr";
   "prowlarr" = prowlarr."prowlarr";
   "n8n" = n8n."n8n";

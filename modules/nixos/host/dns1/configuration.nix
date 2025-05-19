@@ -17,12 +17,12 @@
       settings = {
         PasswordAuthentication = false;
         PermitRootLogin = "no";
-        ListenAddress = config.soft-secrets.host.adguard1.admin_ip_address;
+        ListenAddress = config.soft-secrets.host.dns1.admin_ip_address;
       };
     };
   };
   networking = {
-    hostName = "adguard1";
+    hostName = "dns1";
     firewall.enable = false;
     interfaces = {
       "end0" = {
@@ -30,7 +30,7 @@
         ipv4 = {
           addresses = [
             {
-              address = config.soft-secrets.host.adguard1.admin_ip_address;
+              address = config.soft-secrets.host.dns1.admin_ip_address;
               prefixLength = 24;
             }
           ];
@@ -40,7 +40,7 @@
         ipv4 = {
           addresses = [
             {
-              address = config.soft-secrets.host.adguard1.iot_ip_address;
+              address = config.soft-secrets.host.dns1.iot_ip_address;
               prefixLength = 24;
             }
           ];

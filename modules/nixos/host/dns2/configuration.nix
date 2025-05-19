@@ -17,11 +17,11 @@
       settings = {
         PasswordAuthentication = false;
         PermitRootLogin = "no";
-        ListenAddress = config.soft-secrets.host.adguard2.admin_ip_address;
+        ListenAddress = config.soft-secrets.host.dns2.admin_ip_address;
       };
     };
   };
-  networking.hostName = "adguard2";
+  networking.hostName = "dns2";
   users.users.default = {
     isNormalUser = true;
     password = "";
@@ -45,7 +45,7 @@
       ipv4 = {
         addresses = [
           {
-            address = config.soft-secrets.host.adguard2.admin_ip_address;
+            address = config.soft-secrets.host.dns2.admin_ip_address;
             prefixLength = 24;
           }
         ];
@@ -62,7 +62,7 @@
     interfaces."end0.40".ipv4 = {
       addresses = [
         {
-          address = config.soft-secrets.host.adguard2.iot_ip_address;
+          address = config.soft-secrets.host.dns2.iot_ip_address;
           prefixLength = 24;
         }
       ];

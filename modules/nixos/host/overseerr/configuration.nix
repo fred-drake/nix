@@ -28,10 +28,6 @@
   ];
 
   services = {
-    #   adguardhome = {
-    #     # host = config.soft-secrets.host.adguard1.admin_ip_address;
-    #     settings.dns.bind_hosts = [config.soft-secrets.host.adguard1.iot_ip_address];
-    #   };
     openssh = {
       enable = true;
       settings = {
