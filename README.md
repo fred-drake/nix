@@ -45,6 +45,21 @@ The infrastructure uses multiple VLANs for security and organization:
 
 > **Note**: The `id_ed25519` key is used for personal secrets and must be properly secured with 600 permissions.
 
+## Just Targets
+
+This project uses `just` for task automation. Here are the available targets:
+
+- `switch` - Switches the system to the current configuration
+- `build` - Builds the system in its current form
+- `update-all` - Updates everything (runs update, update-vscode-extensions, update-repos, update-container-digests, and update-secrets)
+- `update` - Updates input definitions from remote resources
+- `update-vscode-extensions` - Refreshes VSCode Extensions
+- `update-repos` - Pulls the latest hashes and shas from the repos in `apps/fetcher/repos.toml`
+- `update-container-digests` - Updates the SHA digests of container images
+- `update-secrets` - Updates the secrets flake
+- `colmena HOST` - Runs colmena remote switch on the specified host
+- `colmena-dns` - Runs colmena apply on dns1 and dns2 hosts (runs on nixosaarch64vm under aarch64-linux architecture)
+
 ## Container Management
 
 This project uses Podman for container runtime with the following practices:

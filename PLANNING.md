@@ -158,6 +158,21 @@ git add /path/to/new/file.nix
 
 This ensures Nix can properly resolve file paths during evaluation. This is particularly important when using `import` statements or file-based configurations.
 
+### Git Repository Not Found
+
+If you see an error similar to:
+```
+cannot find Git revision of repository 'ssh://git@github.com/fred-drake/nix-secrets.git'
+```
+
+**Solution**:
+Run the following command to fetch the latest version of the secrets repository:
+```bash
+just update-secrets
+```
+
+This will ensure all required repositories are properly fetched and available for Nix evaluation.
+
 ## Key Management
 
 This project uses two distinct SSH keys for managing encrypted secrets:
