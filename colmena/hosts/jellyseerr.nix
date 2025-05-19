@@ -7,8 +7,8 @@
 }: let
   soft-secrets = import "${secrets}/soft-secrets";
 in {
-  # Base configuration for Overseerr
-  _overseerr = {
+  # Base configuration
+  _jellyseerr = {
     nixpkgs.system = "x86_64-linux";
     nixpkgs.overlays = [];
     nixpkgs.config = {};
@@ -18,30 +18,30 @@ in {
       sops-nix.nixosModules.sops
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
       ../../modules/nixos
-      ../../modules/nixos/host/overseerr/configuration.nix
+      ../../modules/nixos/host/jellyseerr/configuration.nix
     ];
     deployment = {
       buildOnTarget = false;
-      targetHost = soft-secrets.host.overseerr.admin_ip_address;
+      targetHost = soft-secrets.host.jellyseerr.admin_ip_address;
       targetUser = "default";
     };
   };
 
   # Initial setup configuration
-  "overseerr-init" = {
+  "jellyseerr-init" = {
     imports = [
-      self.colmena._overseerr
+      self.colmena._jellyseerr
     ];
   };
 
   # Full configuration
-  "overseerr" = let
+  "jellyseerr" = let
     nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
   in {
     imports = [
-      self.colmena._overseerr
-      ../../apps/overseerr.nix
-      (nodeExporter.mkNodeExporter "overseerr")
+      self.colmena._jellyseerr
+      ../../apps/jellyseerr.nix
+      (nodeExporter.mkNodeExporter "jellyseerr")
     ];
 
     _module.args = {

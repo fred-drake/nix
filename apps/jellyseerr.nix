@@ -1,7 +1,16 @@
-{config, ...}: let
-  host = "overseerr";
+{
+  config,
+  pkgs,
+  ...
+}: let
+  containers-sha = import ./fetcher/containers-sha.nix {inherit pkgs;};
+  host = "jellyseerr";
   proxyPort = "5055";
 in {
+  systemd.tmpfiles.rules = [
+    "d /var/jellyseerr/config 0755 1000 1000 -"
+  ];
+
   security = {
     acme = {
       acceptTerms = true;
@@ -51,31 +60,28 @@ in {
         };
       };
     };
-    jellyseerr = {
-      enable = true;
-    };
   };
 
-  # virtualisation.containers.enable = true;
-  # virtualisation.podman = {
-  #   enable = true;
-  #   dockerCompat = true;
-  #   defaultNetwork.settings.dns_enabled = true;
-  # };
-  # virtualisation.oci-containers = {
-  #   backend = "podman";
-  #   containers = {
-  #     my-container = {
-  #       image = "lscr.io/linuxserver/overseerr:latest";
-  #       autoStart = true;
-  #       ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
-  #       volumes = ["/var/overseerr/config:/config"];
-  #       environment = {
-  #         PUID = "1000";
-  #         PGID = "1000";
-  #         TZ = "America/New_York";
-  #       };
-  #     };
-  #   };
-  # };
+  virtualisation.containers.enable = true;
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    defaultNetwork.settings.dns_enabled = true;
+  };
+  virtualisation.oci-containers = {
+    backend = "podman";
+    containers = {
+      jellyseerr = {
+        image = containers-sha."docker.io"."fallenbagel/jellyseerr"."latest"."linux/amd64";
+        autoStart = true;
+        ports = ["127.0.0.1:${proxyPort}:${proxyPort}"];
+        volumes = ["/var/jellyseerr/config:/app/config"];
+        environment = {
+          PUID = "1000";
+          PGID = "1000";
+          TZ = "America/New_York";
+        };
+      };
+    };
+  };
 }

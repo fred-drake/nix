@@ -15,6 +15,11 @@
     };
   };
   "docker.io" = {
+    "fallenbagel/jellyseerr" = {
+      "latest" = {
+        "linux/amd64" = "docker.io/fallenbagel/jellyseerr@sha256:cf84b74c32d3049554ae02ac1da2e9e5affc693fe4263f859e804da77fe7f98f";
+      };
+    };
     "glanceapp/glance" = {
       "latest" = {
         "linux/amd64" = "docker.io/glanceapp/glance@sha256:9839d16e481bb3a389259bdb7645c05311f2d31291a75c09b941c2795e6a5cc9";

@@ -65,4 +65,8 @@ repository = "ghcr.io"
 name = "linuxserver/sonarr"
 tag = "latest"
 architectures = ["linux/amd64"]
-
+[[containers]]
+repository = "docker.io"
+name = "fallenbagel/jellyseerr"
+tag = "latest"
+architectures = ["linux/amd64"]

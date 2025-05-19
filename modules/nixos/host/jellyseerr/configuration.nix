@@ -33,11 +33,11 @@
       settings = {
         PasswordAuthentication = false;
         PermitRootLogin = "no";
-        ListenAddress = config.soft-secrets.host.overseerr.admin_ip_address;
+        ListenAddress = config.soft-secrets.host.jellyseerr.admin_ip_address;
       };
     };
   };
-  networking.hostName = "overseerr";
+  networking.hostName = "jellyseerr";
   users.users.default = {
     isNormalUser = true;
     password = "";
@@ -61,7 +61,7 @@
       ipv4 = {
         addresses = [
           {
-            address = config.soft-secrets.host.overseerr.admin_ip_address;
+            address = config.soft-secrets.host.jellyseerr.admin_ip_address;
             prefixLength = 24;
           }
         ];
@@ -78,7 +78,7 @@
     interfaces."eth0.50".ipv4 = {
       addresses = [
         {
-          address = config.soft-secrets.host.overseerr.service_ip_address;
+          address = config.soft-secrets.host.jellyseerr.service_ip_address;
           prefixLength = 24;
         }
       ];

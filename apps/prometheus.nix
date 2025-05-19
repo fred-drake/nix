@@ -70,7 +70,7 @@ in {
                 "dns2.${config.soft-secrets.networking.domain}:9000"
                 "gateway.${config.soft-secrets.networking.domain}:9100"
                 "n8n.admin.${config.soft-secrets.networking.domain}:9000"
-                "overseerr.admin.${config.soft-secrets.networking.domain}:9000"
+                "jellyseerr.admin.${config.soft-secrets.networking.domain}:9000"
                 "prowlarr.admin.${config.soft-secrets.networking.domain}:9000"
                 "radarr.admin.${config.soft-secrets.networking.domain}:9000"
                 "sabnzbd.admin.${config.soft-secrets.networking.domain}:9000"

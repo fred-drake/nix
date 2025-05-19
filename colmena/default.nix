@@ -9,7 +9,7 @@
   # Import host configurations
   dns1 = import ./hosts/dns1.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   dns2 = import ./hosts/dns2.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
-  overseerr = import ./hosts/overseerr.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  jellyseerr = import ./hosts/jellyseerr.nix {inherit self nixpkgs-stable secrets sops-nix;};
   prowlarr = import ./hosts/prowlarr.nix {inherit self nixpkgs-stable secrets sops-nix;};
   n8n = import ./hosts/n8n.nix {inherit self nixpkgs-stable secrets sops-nix;};
   gitea = import ./hosts/gitea.nix {inherit self nixpkgs-stable secrets sops-nix;};
@@ -29,7 +29,7 @@ in {
   # Base configurations
   _dns1 = dns1._dns1;
   _dns2 = dns2._dns2;
-  _overseerr = overseerr._overseerr;
+  _jellyseerr = jellyseerr._jellyseerr;
   _prowlarr = prowlarr._prowlarr;
   _n8n = n8n._n8n;
   _gitea = gitea._gitea;
@@ -44,7 +44,7 @@ in {
   # Init configurations
   "dns1-init" = dns1."dns1-init";
   "dns2-init" = dns2."dns2-init";
-  "overseerr-init" = overseerr."overseerr-init";
+  "jellyseerr-init" = jellyseerr."jellyseerr-init";
   "prowlarr-init" = prowlarr."prowlarr-init";
   "n8n-init" = n8n."n8n-init";
   "gitea-init" = gitea."gitea-init";
@@ -59,7 +59,7 @@ in {
   # Full configurations
   "dns1" = dns1."dns1";
   "dns2" = dns2."dns2";
-  "overseerr" = overseerr."overseerr";
+  "jellyseerr" = jellyseerr."jellyseerr";
   "prowlarr" = prowlarr."prowlarr";
   "n8n" = n8n."n8n";
   "gitea" = gitea."gitea";
