@@ -7,6 +7,7 @@ This repository contains Nix configurations for managing both personal workstati
 ## System Architecture
 
 ### Workstations
+
 - **macOS Workstations**: Managed via nix-darwin
   - `fredpc` (Linux with GUI)
   - `mac-studio`
@@ -16,6 +17,7 @@ This repository contains Nix configurations for managing both personal workstati
   - `fredpc` (Linux with GUI)
 
 ### Servers
+
 - **Build Machines**:
   - `fredpc`: Builds x86_64-linux configurations
   - `nixosaarch64vm`: Builds aarch64-linux configurations
@@ -25,7 +27,7 @@ This repository contains Nix configurations for managing both personal workstati
 
 The infrastructure uses multiple VLANs for security and organization:
 
-- **Administration (Untagged)**: Server management and monitoring
+- **Administration (VLAN 1)**: Server management and monitoring
 - **Services (VLAN 50)**: Public-facing services and applications
 - **IoT (VLAN 40)**: Internet of Things devices (isolated)
 - **Workstations (VLAN 30)**: User devices and workstations
@@ -95,16 +97,19 @@ This project uses Podman for container runtime with the following practices:
 ## Initial Setup
 
 1. Install Nix (if not already installed):
+
    ```bash
    sh <(curl -L https://nixos.org/nix/install)
    ```
 
 2. Install Homebrew (required):
+
    ```bash
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    ```
 
 3. Clone this repository:
+
    ```bash
    git clone https://github.com/fred-drake/nix ~/nix
    cd ~/nix
@@ -118,11 +123,13 @@ This project uses Podman for container runtime with the following practices:
 ## Key Management
 
 ### Personal Key (`id_ed25519`)
+
 - Used for personal secrets and configurations
 - Applies to both workstations and servers
 - Manages user-specific settings and access tokens
 
 ### Infrastructure Key
+
 - Dedicated to server infrastructure
 - Manages service credentials and system configurations
 - Separate from personal keys for better security
@@ -130,11 +137,13 @@ This project uses Podman for container runtime with the following practices:
 ## Development Practices
 
 ### Code Organization
+
 - **Modular Design**: Configurations are broken into reusable modules
 - **DRY Principle**: Common patterns are extracted into functions
 - **Naming**: Descriptive and consistent naming conventions are used throughout
 
 ### Nix Best Practices
+
 - **Package References**: Use `outPath` for symlinks to package locations
 - **VS Code Extensions**: Managed through Home Manager configuration
 - **Remote Deployment**: Colmena is used for managing remote server configurations
@@ -142,6 +151,7 @@ This project uses Podman for container runtime with the following practices:
 ## Getting Help
 
 For assistance with Nix configurations:
+
 - Use `nixos` MCP server for NixOS-specific functionality
 - Use `context7` MCP server for general Nix syntax assistance
 
