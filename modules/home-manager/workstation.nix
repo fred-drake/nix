@@ -49,10 +49,6 @@ in {
         text = builtins.toJSON (import ./files/mcp-server-config.nix);
       };
 
-      ".codeium/windsurf/memories/global_rules.md" = {
-        source = ./files/global-llm-rules.md;
-      };
-
       ".codeium/windsurf/mcp_config.json" = {
         text = builtins.toJSON (import ./files/mcp-server-config.nix);
       };
