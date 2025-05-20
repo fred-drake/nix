@@ -35,13 +35,6 @@ in {
   };
   home.file.".git-credentials".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.git-credentials.path;
 
-  sops.secrets.llm-api-keys = {
-    sopsFile = config.secrets.workstation.llm-api-keys;
-    mode = "0400";
-    key = "data";
-  };
-  home.file.".llm_api_keys.fish".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.llm-api-keys.path;
-
   sops.secrets.continue-config = {
     sopsFile = config.secrets.workstation.continue-config;
     mode = "0400";
@@ -55,4 +48,81 @@ in {
     key = "data";
   };
   home.file.".bws.env".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.bws.path;
+
+  sops.secrets.llm-deepseek = {
+    sopsFile = config.secrets.workstation.llm-api-keys;
+    mode = "0400";
+    key = "deepseek";
+  };
+
+  sops.secrets.llm-openai = {
+    sopsFile = config.secrets.workstation.llm-api-keys;
+    mode = "0400";
+    key = "openai";
+  };
+
+  sops.secrets.llm-groq = {
+    sopsFile = config.secrets.workstation.llm-api-keys;
+    mode = "0400";
+    key = "groq";
+  };
+
+  sops.secrets.llm-anthropic = {
+    sopsFile = config.secrets.workstation.llm-api-keys;
+    mode = "0400";
+    key = "anthropic";
+  };
+
+  sops.secrets.llm-gemini = {
+    sopsFile = config.secrets.workstation.llm-api-keys;
+    mode = "0400";
+    key = "gemini";
+  };
+
+  sops.secrets.llm-sambanova = {
+    sopsFile = config.secrets.workstation.llm-api-keys;
+    mode = "0400";
+    key = "sambanova";
+  };
+
+  sops.secrets.llm-openrouter = {
+    sopsFile = config.secrets.workstation.llm-api-keys;
+    mode = "0400";
+    key = "openrouter";
+  };
+
+  sops.secrets.llm-brave = {
+    sopsFile = config.secrets.workstation.llm-api-keys;
+    mode = "0400";
+    key = "brave";
+  };
+
+  sops.templates."mcp-config" = {
+    mode = "0400";
+    path = "${home}/mcp-config.json";
+    content = ''
+      {
+        "mcpServers": {
+          "brave-search": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+            "env": {
+              "BRAVE_API_KEY": "${config.sops.placeholder.llm-brave}"
+            }
+          },
+          "playwright": {
+            "command": "npx",
+            "args": ["@playwright/mcp@latest"]
+          },
+          "context7": {
+            "command": "npx",
+            "args": ["-y", "@upstash/context7-mcp@latest"]
+          }
+        }
+      }
+    '';
+  };
+  home.file.".cursor/mcp.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
+  home.file.".codeium/windsurf/mcp_config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
+  home.file."Library/Application Support/Claude/claude_desktop_config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
 }

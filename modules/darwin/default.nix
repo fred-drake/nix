@@ -84,6 +84,7 @@ in {
       "brave-browser"
       "bruno"
       "calibre"
+      "claude"
       "daisydisk"
       "finicky"
       "ghostty"

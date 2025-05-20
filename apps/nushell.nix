@@ -41,7 +41,6 @@
       def lart [] { ls -a | sort-by modified | reverse }
       def llart [] { ls -la | sort-by modified | reverse }
       def glance-restart [] { ps | where name == "glance" | get pid.0 | kill -s 1 $in }
-      def mcpm-aider [...args] { podman run -i --rm -v ./mcp-config.json:/root/.config/claude/claude_desktop_config.json docker.io/fdrake/mcpm-aider ...$args }
 
       let hostname = (sys host | get hostname)
       if $hostname != "nixosaarch64vm" {
