@@ -173,14 +173,8 @@ in {
   };
 
   # Define shell aliases
-  home.shellAliases =
-    if pkgs.stdenv.hostPlatform.isDarwin
-    then {
-      "claude" = "open -a Claude";
-    }
-    else {};
+  home.shellAliases = {};
 
   # Enable and configure various programs
-  programs.fish.shellAbbrs = {
-  };
+  programs.fish.shellAbbrs = {};
 }
