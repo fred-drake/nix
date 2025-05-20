@@ -106,7 +106,6 @@ in {
       lazydocker # Docker CLI with auto-completion and syntax highlighting
       llama-cpp # Text generation
       meld # Visual diff and merge tool
-      nodejs_22 # Node.js, npx for MCPs
       oh-my-posh # Prompt theme engine
       podman
       podman-tui
@@ -118,7 +117,6 @@ in {
       tmuxinator # Tmux session manager
       tmux-mem-cpu-load # CPU and memory usage monitor
       tokei # Code statistics tool
-      uv # Python package management and running, for MCPs
       wireguard-tools # VPN tools
       yt-dlp # Video downloader
       (pkgs.vscode-with-extensions.override {
