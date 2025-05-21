@@ -15,7 +15,6 @@ in {
       config = {};
     };
 
-    networking.extraHosts = "192.168.50.26 dev.brainrush.ai";
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets

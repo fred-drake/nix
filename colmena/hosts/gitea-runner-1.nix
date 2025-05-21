@@ -12,6 +12,9 @@ in {
     nixpkgs.system = "x86_64-linux";
     nixpkgs.overlays = [];
     nixpkgs.config = {};
+
+    networking.extraHosts = "192.168.50.26 dev.brainrush.ai";
+
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets
@@ -36,7 +39,7 @@ in {
 
   # Full configuration
   "gitea-runner-1" = let
-    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix { inherit secrets; };
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
   in {
     imports = [
       self.colmena._gitea-runner-1
