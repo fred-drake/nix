@@ -20,6 +20,7 @@
   larussa = import ./hosts/larussa.nix {inherit self nixpkgs-stable secrets sops-nix;};
   external-metrics = import ./hosts/external-metrics.nix {inherit self nixpkgs-stable secrets sops-nix;};
   glance = import ./hosts/glance.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  arm64builder = import ./hosts/arm64builder.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -40,6 +41,7 @@ in {
   _larussa = larussa._larussa;
   _external-metrics = external-metrics._external-metrics;
   _glance = glance._glance;
+  _arm64builder = arm64builder._arm64builder;
 
   # Init configurations
   "dns1-init" = dns1."dns1-init";
@@ -55,6 +57,7 @@ in {
   "larussa-init" = larussa."larussa-init";
   "external-metrics-init" = external-metrics."external-metrics-init";
   "glance-init" = glance."glance-init";
+  "arm64builder-init" = arm64builder."arm64builder-init";
 
   # Full configurations
   "dns1" = dns1."dns1";
@@ -70,4 +73,5 @@ in {
   "larussa" = larussa."larussa";
   "external-metrics" = external-metrics."external-metrics";
   "glance" = glance."glance";
+  "arm64builder" = arm64builder."arm64builder";
 }
