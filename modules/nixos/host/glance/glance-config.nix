@@ -15,8 +15,10 @@
               show-source-icon = true;
               repositories = [
                 "glanceapp/glance"
-                "microsoft/vscode"
-                "zen-browser/desktop"
+                "jellyfin/jellyfin"
+                "sabnzbd/sabnzbd"
+                "Sonarr/Sonarr"
+                "Radarr/Radarr"
               ];
             }
             {
@@ -103,6 +105,26 @@
                 {
                   type = "reddit";
                   subreddit = "NixOS";
+                  show-thumbnails = true;
+                }
+                {
+                  type = "reddit";
+                  subreddit = "battlestations";
+                  show-thumbnails = true;
+                }
+                {
+                  type = "reddit";
+                  subreddit = "fishshell";
+                  show-thumbnails = true;
+                }
+                {
+                  type = "reddit";
+                  subreddit = "mcp";
+                  show-thumbnails = true;
+                }
+                {
+                  type = "reddit";
+                  subreddit = "PFSENSE";
                   show-thumbnails = true;
                 }
               ];
