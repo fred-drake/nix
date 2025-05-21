@@ -5,7 +5,7 @@ let
     }
   '';
 in
-  {pkgs, ...}: {
+  {...}: {
     plugins = {
       avante.enable = true;
       cmp = {

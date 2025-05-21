@@ -1,5 +1,4 @@
 {
-  inputs,
   modulesPath,
   lib,
   pkgs,

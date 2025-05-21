@@ -65,10 +65,6 @@ in {
       text = config.soft-secrets.workstation.ssh.config;
       target = ".ssh/config";
     };
-    "bin" = {
-      source = ../../homefiles/bin;
-      recursive = true;
-    };
 
     ".ssh" = {
       source = ../../homefiles/ssh;

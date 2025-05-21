@@ -2,7 +2,6 @@
   inputs,
   pkgs,
   pkgsUnstable,
-  pkgsStable,
   ...
 }: let
   containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};

@@ -1,9 +1,5 @@
 # Configuration specific to the Mac Studio machine
-{
-  pkgs,
-  non-mac-mini-casks,
-  ...
-}: {
+{non-mac-mini-casks, ...}: {
   homebrew = {
     casks = ["mutedeck" "proxy-audio-device" "elgato-stream-deck" "vmware-fusion"] ++ non-mac-mini-casks;
     masApps = {

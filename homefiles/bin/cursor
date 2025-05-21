@@ -1,8 +1,0 @@
-#! /bin/bash -e
-
-# A bit of a hack, used to load cursor through brew with the same extensions
-# as VS Code.  This will go away once cursor gets first class treatment from
-# Nixpkgs.
-CODE_PATH=$(which code)
-SHARE_DIR=$(grep exec $CODE_PATH | cut -f5 -d' ')
-exec "/opt/homebrew/bin/cursor" --new-window --extensions-dir $SHARE_DIR "$@"

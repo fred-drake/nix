@@ -2,7 +2,6 @@
   plugins = {
     auto-save.enable = true;
     bufferline = {
-      # TODO: remove this once you are used to not having it
       enable = false;
       settings = {
         options = {

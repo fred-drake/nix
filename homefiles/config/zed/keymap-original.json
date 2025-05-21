@@ -14,7 +14,6 @@
   {
     "context": "GitPanel",
     "bindings": {
-      // "space g": "workspace::ToggleLeftDock",
       "ctrl-d": "git::RestoreFile",
       "ctrl-a": "git::Add",
       "ctrl-space": "git::StageFile"
