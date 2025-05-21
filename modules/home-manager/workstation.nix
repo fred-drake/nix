@@ -35,15 +35,6 @@ in {
       };
 
       ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
-
-      "bin/glance" = {
-        text = ''
-          #!/usr/bin/env bash
-          source ~/.config/glance/glance.env
-          ${pkgs.glance}/bin/glance -config ~/.config/glance/glance.json
-        '';
-        executable = true;
-      };
     }
     // (
       if pkgs.stdenv.isDarwin

@@ -24,18 +24,4 @@
       }
     ];
   };
-
-  environment.systemPackages = with pkgs; [
-    glance # Dashboard
-  ];
-
-  launchd.user.agents.glance = {
-    serviceConfig = {
-      ProgramArguments = [
-        "/Users/fdrake/bin/glance"
-      ];
-      RunAtLoad = true;
-      KeepAlive = true;
-    };
-  };
 }
