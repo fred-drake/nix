@@ -47,8 +47,8 @@ in {
       ])
     ]; # Core utilities package
     systemPath = [
-      "/opt/homebrew/bin"
-      "/opt/homebrew/sbin"
+      # "/opt/homebrew/bin"
+      # "/opt/homebrew/sbin"
     ]; # Add Homebrew paths
     pathsToLink = ["/Applications"]; # Link Applications directory
   };
