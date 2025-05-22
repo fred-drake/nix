@@ -44,7 +44,7 @@
       address = config.soft-secrets.networking.gateway.admin;
       interface = "end0";
     };
-    nameservers = config.soft-secrets.networking.nameservers.public;
+    nameservers = config.soft-secrets.networking.nameservers.internal;
   };
 
   users.users.default = {
@@ -71,7 +71,9 @@
   virtualisation.podman = {
     enable = true;
     dockerCompat = true;
+    dockerSocket.enable = true;
     defaultNetwork.settings.dns_enabled = true;
+    defaultNetwork.settings.dns = ["192.168.40.4" "192.168.40.6"];
   };
 
   security.sudo = {
