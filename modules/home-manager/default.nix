@@ -25,6 +25,7 @@ in {
     ../../apps/nushell.nix
     ../../apps/tmux.nix
     ../../apps/nixvim
+    ./claude-commands.nix
     ./secrets.nix
   ];
 
