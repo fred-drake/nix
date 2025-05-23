@@ -17,6 +17,7 @@
   ...
 }: let
   vscode-config = (import ../../apps/vscode/global-configuration.nix) {inherit pkgs lib;};
+  claude-code = pkgs.callPackage ../../apps/claude-code {};
 in {
   programs = {
     fish.enable = true;
@@ -113,6 +114,7 @@ in {
       (pkgs.vscode-with-extensions.override {
         vscodeExtensions = vscode-config.globalExtensions;
       })
+      claude-code # Claude Code CLI tool
     ])
     ++ (
       # Packages that go on all workstations except the linux/aarch64 architectures
