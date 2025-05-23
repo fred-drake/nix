@@ -68,12 +68,12 @@ in {
 
       if [ "$(uname -s)" = "Darwin" ]; then
           if [ "$HOST" = "freds-macbook-pro" ] || [ "$HOST" = "fred-macbook-pro-wireless" ]; then
-              sudo darwin-rebuild --show-trace --flake .#macbook-pro $CMD
+              darwin-rebuild --show-trace --flake .#macbook-pro $CMD
           else
-              sudo darwin-rebuild --show-trace --flake .#"$HOST" $CMD
+              darwin-rebuild --show-trace --flake .#"$HOST" $CMD
           fi
       else
-          sudo nixos-rebuild --show-trace --flake .#"$HOST" $CMD
+          nixos-rebuild --show-trace --flake .#"$HOST" $CMD
       fi
     '';
 
