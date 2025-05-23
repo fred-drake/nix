@@ -53,6 +53,10 @@ in {
               proxy_set_header X-Forwarded-Proto $scheme;
               client_max_body_size 0;
               proxy_request_buffering off;
+
+              proxy_read_timeout 3600s;
+              proxy_send_timeout 3600s;
+              proxy_connect_timeout 3600s;
             '';
           };
         };
