@@ -86,9 +86,12 @@
       setw -g mode-style 'fg=black bg=red bold'
 
       # panes
-      set -g pane-border-style 'fg=gray'
-      set -g pane-active-border-style 'fg=green'
-      set -g pane-border-lines "single"
+      set -g pane-border-style 'fg=color240'
+      set -g pane-active-border-style 'fg=color46 bg=color22'
+      set -g pane-border-lines "heavy"
+      
+      # Add spacing between panes for better visibility
+      set -g pane-border-indicators "both"
 
 
       # statusbar
