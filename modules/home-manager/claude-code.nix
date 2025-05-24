@@ -55,9 +55,10 @@ in {
         "Bash(git push:*)"
         "Bash(git show:*)"
         "Bash(go mod tidy)"
+        "Bash(go test)"
         "brave-search:*"
         "context7:*"
-        "rg:*"
+        "Bash(rg:*)"
       ];
     };
     autoUpdaterStatus = "disabled";
