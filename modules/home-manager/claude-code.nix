@@ -54,6 +54,7 @@ in {
         "Bash(git commit:*)"
         "Bash(git push:*)"
         "Bash(git show:*)"
+        "Bash(go mod tidy)"
         "brave-search:*"
         "context7:*"
         "rg:*"
