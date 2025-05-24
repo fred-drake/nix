@@ -43,25 +43,39 @@ in {
   home.file.".claude/settings.json".text = builtins.toJSON {
     permissions = {
       allow = [
-        "Bash(npm run lint)"
-        "Bash(npm run test:*)"
+        # file lookups
         "Bash(grep:*)"
         "Bash(ls:*)"
+        "Bash(rg:*)"
+
+        # npm
+        "Bash(npm run lint)"
+        "Bash(npm run test:*)"
+
+        # non-intrusive just targets
         "Bash(just build)"
         "Bash(just test)"
         "Bash(just integration-test)"
         "Bash(just lint)"
         "Bash(just deps)"
+
+        # git commands
         "Bash(git add:*)"
         "Bash(git commit:*)"
         "Bash(git push:*)"
         "Bash(git show:*)"
+
+        # go commands
         "Bash(go mod tidy)"
+        "Bash(go mod list:*)"
+        "Bash(go list:*)"
+        "Bash(go install:*)"
         "Bash(go test)"
         "Bash(go get)"
-        "brave-search:*"
+
+        # mcp commands
+        "mcp__brave-search__brave_web_search"
         "context7:*"
-        "Bash(rg:*)"
       ];
     };
     autoUpdaterStatus = "disabled";
