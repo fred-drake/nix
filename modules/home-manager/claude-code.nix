@@ -51,7 +51,9 @@ in {
         "Bash(git add:*)"
         "Bash(git commit:*)"
         "Bash(git push:*)"
+        "Bash(git show:*)"
         "brave-search:*"
+        "context7:*"
       ];
     };
     autoUpdaterStatus = "disabled";

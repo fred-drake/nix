@@ -87,11 +87,10 @@
 
       # panes
       set -g pane-border-style 'fg=color240'
-      set -g pane-active-border-style 'fg=color46 bg=color22'
-      set -g pane-border-lines "heavy"
-      
-      # Add spacing between panes for better visibility
-      set -g pane-border-indicators "both"
+      set -g pane-active-border-style 'fg=color46'
+
+      # Remove pane border indicators since we have background styling
+      set -g pane-border-indicators "off"
 
       # Window background styling for visual borders
       set -g window-style 'bg=default'
@@ -105,7 +104,7 @@
 
       set -g status-left ""
       set -g status-right ""
-      set -g status-left-length 10
+      set -g status-left-length 20
 
       setw -g window-status-current-format '#[fg=#003399,bg=#333333]#[fg=white,bg=#003399] #I #W #F #[fg=#003399,bg=#333333]'
 
@@ -118,7 +117,8 @@
 
       # memory and cpu usage
       set -g status-interval 2
-      set -g status-right '#[fg=cyan]#S  #[fg=yellow]#(hostname --short) #[fg=#222222,bg=#333333]#[fg=green,bg=#222222] #(tmux-mem-cpu-load --interval 2)'
+      set -g status-left '  #[fg=cyan]#S'
+      set -g status-right '#[fg=yellow]#(hostname --short) #[fg=#222222,bg=#333333]#[fg=green,bg=#222222] #(tmux-mem-cpu-load --interval 2)'
       set -g status-right-length 100
     '';
   };
