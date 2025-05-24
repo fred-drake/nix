@@ -122,7 +122,6 @@ in {
         home-manager = lib.mkHomeManager {
           inherit inputs secrets;
           imports = [
-            ../modules/home-manager/workstation.nix
             ../modules/home-manager/darwin.nix
           ];
           hostArgs.hostName = "mac-studio";
@@ -138,7 +137,6 @@ in {
         home-manager = lib.mkHomeManager {
           inherit inputs secrets;
           imports = [
-            ../modules/home-manager/workstation.nix
             ../modules/home-manager/darwin.nix
             ../modules/home-manager/host/macbook-pro.nix
           ];
@@ -155,7 +153,6 @@ in {
         home-manager = lib.mkHomeManager {
           inherit inputs secrets;
           imports = [
-            ../modules/home-manager/workstation.nix
             ../modules/home-manager/darwin.nix
           ];
           hostArgs.hostName = "laisas-mac-mini";

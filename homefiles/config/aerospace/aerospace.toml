@@ -251,9 +251,13 @@ if.app-id = 'app.zen-browser.zen'
 run = "move-node-to-workspace Z"
 
 [[on-window-detected]]
-if.app-id = 'com.todesktop.230313mzl4w4u92'
+if.app-id = 'com.todesktop.230313mzl4w4u92' # Cursor
 run = "move-node-to-workspace C"
 
 [[on-window-detected]]
 if.app-id = 'com.exafunction.windsurf'
 run = "move-node-to-workspace W"
+
+[[on-window-detected]]
+if.app-id = 'com.anthropic.claudefordesktop'
+run = "move-node-to-workspace C"

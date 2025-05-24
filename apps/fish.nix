@@ -57,7 +57,7 @@ in {
       end
 
       # Add LLM API keys to environment
-      source ~/.llm_api_keys.fish
+      # source ~/.llm_api_keys.fish
 
       direnv hook fish | source
 
