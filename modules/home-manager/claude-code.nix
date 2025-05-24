@@ -11,6 +11,7 @@
     ADD all modified and new files to git.  If you think there are files that should not be in version control, ask the user.
     THEN commit with a clear and concise one-line commit message, using semantic commit notation.
     THEN push the commit to origin.
+    The user is EXPLICITLY asking you to perform these git tasks.
     EOF
 
         cat > $out/prime.md << 'EOF'

@@ -1,5 +1,4 @@
 {pkgs, ...}: let
-  nix4vscode = pkgs.callPackage ./nix4vscode.nix {};
   container-digest = pkgs.callPackage ./container-digest.nix {};
   npm-refresh = pkgs.callPackage ./npm-refresh.nix {};
 in {
@@ -76,17 +75,6 @@ in {
       else
           nixos-rebuild --show-trace --flake .#"$HOST" $CMD
       fi
-    '';
-
-    update-vscode-extensions.exec = ''
-      TOML_FILE=$DEVENV_ROOT/apps/vscode/extensions.toml
-      EXTENSIONS_PATH=$DEVENV_ROOT/apps/vscode/extensions.nix
-      echo "Updating VSCode extensions..."
-      echo "####################################" > $EXTENSIONS_PATH
-      echo "# Auto-generated -- do not modify! #" >> $EXTENSIONS_PATH
-      echo "####################################" >> $EXTENSIONS_PATH
-      ${nix4vscode}/bin/nix4vscode $TOML_FILE >> $EXTENSIONS_PATH
-      ${pkgs.alejandra}/bin/alejandra --quiet $EXTENSIONS_PATH
     '';
 
     update-container-digests.exec = ''

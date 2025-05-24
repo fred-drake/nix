@@ -14,15 +14,11 @@ build: _rebuild-pre
     system-flake-rebuild build
 
 # Update everything
-update-all: update update-vscode-extensions update-repos update-container-digests update-secrets
+update-all: update update-npm-packages update-repos update-container-digests update-secrets
 
 # Update input definitions from remote resources
 update:
     nix flake update
-
-# Refresh VSCode Extensions
-update-vscode-extensions:
-    update-vscode-extensions
 
 # Pull the latest hashes and shas from the repos in apps/fetcher/repos.toml
 update-repos:

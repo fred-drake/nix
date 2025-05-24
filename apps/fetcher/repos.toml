@@ -22,6 +22,3 @@ url = "https://github.com/gazorby/fish-abbreviation-tips"
 [[repos]]
 name = "puffer-fish-src"
 url = "https://github.com/nickeb96/puffer-fish"
-[[repos]]
-name = "nix4vscode-src"
-url = "https://github.com/nix-community/nix4vscode"
