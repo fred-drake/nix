@@ -20,11 +20,11 @@ in {
   # Environment configuration
   environment = {
     etc = {
-      # "pam.d/sudo_local" = {
-      #   text = ''
-      #     auth       optional       /opt/homebrew/lib/pam/pam_reattach.so
-      #   '';
-      # };
+      "pam.d/sudo_local" = {
+        text = ''
+          auth       optional       /opt/homebrew/lib/pam/pam_reattach.so
+        '';
+      };
     };
     shells = with pkgs; [
       bash
@@ -149,7 +149,7 @@ in {
   };
 
   # Security configuration
-  # security.pam.services.sudo_local.touchIdAuth = true; # Enable Touch ID for sudo
+  security.pam.services.sudo_local.touchIdAuth = true; # Enable Touch ID for sudo
 
   # System configuration
   system = {

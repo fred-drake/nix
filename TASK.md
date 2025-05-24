@@ -111,7 +111,7 @@ _No active tasks at the moment_
 
 ## Technical Debt
 
-- [ ] Fix Touch ID configuration in `darwin/default.nix` (currently commented out)
+- [x] Fix Touch ID configuration in `darwin/default.nix` (currently commented out)
 - [ ] Standardize nixpkgs channel usage across all hosts
 - [ ] Clean up deprecated configurations
 - [ ] Refactor legacy module structures

@@ -142,4 +142,5 @@ with lib;
 
 ## Best Practices
 
+- After modifying code, run `just build` to ensure that everything builds without errors. If there are errors, fix them. Use `brave-search` and `context7` MCPs if you are not confident with the solution.
 - Before modifying any code, use the context7 and brave-search MCP servers to understand syntax and best practices
