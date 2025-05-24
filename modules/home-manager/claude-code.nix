@@ -54,6 +54,7 @@ in {
         "Bash(git show:*)"
         "brave-search:*"
         "context7:*"
+        "rg:*"
       ];
     };
     autoUpdaterStatus = "disabled";

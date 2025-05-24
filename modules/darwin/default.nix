@@ -155,10 +155,6 @@ in {
   system = {
     primaryUser = "fdrake";
 
-    # Activation script to install Rosetta 2 for x86 app compatibility
-    activationScripts.extraActivation.text = ''
-      softwareupdate --install-rosetta --agree-to-license
-    '';
     # System defaults
     defaults = {
       dock.autohide = true; # Auto-hide the Dock
