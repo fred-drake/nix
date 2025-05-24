@@ -35,7 +35,7 @@ in {
         "Bash(ls:*)"
         "Bash(just build)"
         "Bash(just test)"
-        "Bash(git add -A)"
+        "Bash(git add:*)"
         "Bash(git commit:*)"
         "Bash(git push:*)"
       ];
