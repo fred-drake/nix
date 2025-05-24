@@ -96,7 +96,7 @@
 
       # statusbar
       set -g status-position bottom
-      set -g status-justify left
+      set -g status-justify centre
       set -g status-style 'fg=red bg=#333333'
 
       set -g status-left ""
