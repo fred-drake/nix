@@ -76,6 +76,7 @@ flake.nix           # Entry point defining all systems
 - Secrets stored in separate `nix-secrets` repository
 - Decryption key: `~/.ssh/id_ed25519`
 - Personal vs infrastructure keys for different secret types
+- Secrets contain two types: secrets and soft-secrets. Soft secrets are not encrypted but store information that is a bit more personalized, such as IP addresses. Secrets, such as API keys or passwords, are encrypted with sops.
 
 **4. Module Pattern**
 All modules follow this structure:
