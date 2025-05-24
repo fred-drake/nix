@@ -28,7 +28,7 @@ in {
     ../../apps/nushell.nix
     ../../apps/tmux.nix
     ../../apps/nixvim
-    ./claude-commands.nix
+    ./claude-code.nix
     ./tmuxinator-settings.nix
     ./secrets.nix
   ];
@@ -190,7 +190,7 @@ in {
       if
         hostArgs.hostName
         == "fredpc"
-        || hostArgs.hostName == "fred-macbook-pro-wireless"
+        || hostArgs.hostName == "macbook-pro"
         || hostArgs.hostName == "mac-studio"
       then
         with pkgs; [
@@ -252,7 +252,6 @@ in {
     man = "batman";
     lg = "lazygit";
     ranger = "yy";
-    cld = "claude-code";
   };
 
   # Set Home Manager state version -- DONT touch this

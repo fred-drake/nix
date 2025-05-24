@@ -138,3 +138,7 @@ with lib;
 1. Change container tag in configuration
 2. Run `just update-container-digests`
 3. Review and commit the updated SHA files
+
+## Best Practices
+
+- Before modifying any code, use the context7 and brave-search MCP servers to understand syntax and best practices

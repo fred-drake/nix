@@ -34,7 +34,7 @@
       cp -r source/package/* $out/lib/node_modules/@anthropic-ai/claude-code/
 
       # Create a wrapper script for the CLI
-      makeWrapper ${nodejs}/bin/node $out/bin/claude-code \
+      makeWrapper ${nodejs}/bin/node $out/bin/claude \
         --add-flags "$out/lib/node_modules/@anthropic-ai/claude-code/cli.js"
     '';
 

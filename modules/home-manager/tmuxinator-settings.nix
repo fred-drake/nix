@@ -10,35 +10,35 @@ in {
           nix = {
             root = "~/nix";
             layout = "even-horizontal";
-            panes = ["claude-code" "nvim" ""];
+            panes = ["claude" "nvim" ""];
           };
         }
         {
           nix-secrets = {
             root = "~/Source/github.com/fred-drake/nix-secrets/";
             layout = "even-horizontal";
-            panes = ["claude-code" "nvim" ""];
+            panes = ["claude" "nvim" ""];
           };
         }
         {
           brainrush-web = {
             root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/brainrush-web";
             layout = "even-horizontal";
-            panes = ["claude-code" "nvim" ""];
+            panes = ["claude" "nvim" ""];
           };
         }
         {
           brainrush-chat = {
             root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/brainrush-chat";
             layout = "even-horizontal";
-            panes = ["claude-code" "nvim" ""];
+            panes = ["claude" "nvim" ""];
           };
         }
         {
           brainrush-user = {
             root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/brainrush-user";
             layout = "even-horizontal";
-            panes = ["claude-code" "nvim" ""];
+            panes = ["claude" "nvim" ""];
           };
         }
       ];
@@ -48,7 +48,7 @@ in {
       root = "~/nix";
       windows = [
         {nvim = "nvim";}
-        {claude = "claude-code";}
+        {claude = "claude";}
         {shell = "";}
       ];
     };
@@ -57,7 +57,7 @@ in {
       root = "~/Source/github.com/fred-drake/nix-secrets/";
       windows = [
         {nvim = "nvim";}
-        {claude = "claude-code";}
+        {claude = "claude";}
         {shell = "";}
       ];
     };
@@ -66,7 +66,7 @@ in {
       root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/brainrush-web";
       windows = [
         {nvim = "nvim";}
-        {claude = "claude-code";}
+        {claude = "claude";}
         {shell = "";}
       ];
     };
@@ -75,7 +75,7 @@ in {
       root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/brainrush-chat";
       windows = [
         {nvim = "nvim";}
-        {claude = "claude-code";}
+        {claude = "claude";}
         {shell = "";}
       ];
     };
@@ -84,7 +84,7 @@ in {
       root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/brainrush-user";
       windows = [
         {nvim = "nvim";}
-        {claude = "claude-code";}
+        {claude = "claude";}
         {shell = "";}
       ];
     };

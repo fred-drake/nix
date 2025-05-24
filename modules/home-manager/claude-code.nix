@@ -26,4 +26,13 @@ in {
     $DRY_RUN_CMD cp -f ${claude-commands}/* $HOME/${dir}/
     $DRY_RUN_CMD chmod 644 $HOME/${dir}/*
   '';
+
+  home.file.".claude/settings.json".text = builtins.toJSON {
+    permissions = {
+      allow = ["Bash(npm run lint)" "Bash(npm run test:*)" "Bash(grep:*)" "Bash(ls:*)" "Bash(just build)" "Bash(just test)"];
+    };
+    autoUpdaterStatus = "disabled";
+    env = {
+    };
+  };
 }
