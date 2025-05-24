@@ -17,6 +17,7 @@
         cat > $out/prime.md << 'EOF'
     READ the README.md file if it exists, to give you a user-level overview of this project.
     THEN run git ls-files to understand the files in this project.
+    THEN if a PLANNING.md file exists, READ it to understand details about this project.
     THEN if a TASK.md file exists, READ it to understand what has been done and what more we need to do.
     EOF
 
@@ -48,6 +49,7 @@ in {
         "Bash(ls:*)"
         "Bash(just build)"
         "Bash(just test)"
+        "Bash(just integration-test)"
         "Bash(just lint)"
         "Bash(just deps)"
         "Bash(git add:*)"
@@ -56,6 +58,7 @@ in {
         "Bash(git show:*)"
         "Bash(go mod tidy)"
         "Bash(go test)"
+        "Bash(go get)"
         "brave-search:*"
         "context7:*"
         "Bash(rg:*)"
