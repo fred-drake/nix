@@ -64,6 +64,7 @@ in {
   nix.settings.trusted-users = ["root" "fdrake"];
 
   programs.zsh.enable = true;
+  programs.fish.enable = true;
 
   security.sudo.wheelNeedsPassword = false;
 
@@ -76,7 +77,7 @@ in {
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
     ];
     packages = with pkgs; [direnv git just];
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
   };
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"

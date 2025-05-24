@@ -32,7 +32,6 @@ in {
           home-manager = lib.mkHomeManager {
             inherit inputs secrets;
             imports = [
-              ../modules/home-manager/workstation.nix
               ../modules/home-manager/linux-desktop.nix
             ];
             hostArgs.hostName = "macbookx86";
@@ -76,7 +75,6 @@ in {
         home-manager = lib.mkHomeManager {
           inherit inputs secrets;
           imports = [
-            ../modules/home-manager/workstation.nix
             ../modules/home-manager/windsurf-remote-dev.nix
             ../modules/home-manager/host/fredpc.nix
           ];
@@ -117,7 +115,6 @@ in {
         home-manager = lib.mkHomeManager {
           inherit inputs secrets;
           imports = [
-            ../modules/home-manager/workstation.nix
             ../modules/home-manager/windsurf-remote-dev.nix
           ];
           hostArgs.hostName = "nixosaarch64vm";
