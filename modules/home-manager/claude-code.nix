@@ -19,6 +19,18 @@
     THEN run git ls-files to understand the files in this project.
     THEN if a TASK.md file exists, READ it to understand what has been done and what more we need to do.
     EOF
+
+        cat > $out/fix.md << 'EOF'
+    READ the output from the terminal command to understand the error that is being displayed.
+    THEN FIX the error.  Use `context7` and `brave-search` MCPs to understand the error.
+    THEN re-run the command in the terminal.  If there is another error, repeat this debugging process.
+    EOF
+
+        cat > $out/coverage.md << 'EOF'
+    UNDERSTAND the code coverage percentages for each function and method in this codebase.
+    THEN add unit tests to functions and methods without 100% coverage.  This includes negative and edge cases.
+    ALWAYS use mocks for external functionality, such as web services and databases.
+    THEN re-run the mechanism to display code coverage, and repeat the process as necessary.
   '';
 in {
   home.activation.claude-commands = lib.hm.dag.entryAfter ["writeBoundary"] ''
