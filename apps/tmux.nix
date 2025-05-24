@@ -93,8 +93,8 @@
       set -g pane-border-indicators "off"
 
       # Window background styling for visual borders
-      set -g window-style 'bg=default'
-      set -g window-active-style 'bg=#1a1a1a'
+      set -g window-style 'fg=#7a7a7a bg=#3a3a3a'
+      set -g window-active-style 'fg=white bg=#1a1a1a'
 
 
       # statusbar
