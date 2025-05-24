@@ -99,7 +99,7 @@
                 }
                 {
                   type = "reddit";
-                  subreddit = "GitOps";
+                  subreddit = "ClaudeAI";
                   show-thumbnails = true;
                 }
                 {
@@ -109,7 +109,7 @@
                 }
                 {
                   type = "reddit";
-                  subreddit = "battlestations";
+                  subreddit = "windsurf";
                   show-thumbnails = true;
                 }
                 {
