@@ -1,7 +1,16 @@
 {
   config = {
+    autoCmd = [
+      {
+        event = [ "BufEnter" "CursorHold" "CursorHoldI" "FocusGained" ];
+        pattern = "*";
+        command = "if mode() != 'c' | checktime | endif";
+      }
+    ];
+
     opts = {
       updatetime = 100; # faster completion
+      autoread = true; # automatically read file when changed outside vim
       number = true;
       relativenumber = true;
 
