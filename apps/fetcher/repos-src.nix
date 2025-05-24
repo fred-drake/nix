@@ -20,6 +20,12 @@
     rev = "2503196e2be47c54a1a0533a38564076ac3a2ec8";
     hash = "sha256-8STjBS+ZQYQdREQCqPP4ZZ0/+DiQujI+Pc2bKhZQDGA=";
   };
+  npm-refresh-src = pkgs.fetchFromGitHub {
+    owner = "fred-drake";
+    repo = "npm-refresh";
+    rev = "58f0fb1a3a9ea87f8780f4834f78396d4d9ba1b6";
+    hash = "sha256-svg5/+mqBOvZxLLHBvXKmANpuBN+simUIY7QX0Yscz4=";
+  };
   autopair-fish-src = pkgs.fetchFromGitHub {
     owner = "jorgebucaran";
     repo = "autopair.fish";
@@ -47,7 +53,7 @@
   nix4vscode-src = pkgs.fetchFromGitHub {
     owner = "nix-community";
     repo = "nix4vscode";
-    rev = "3973f4e52a8b2e93e969f720dac204fd56805068";
-    hash = "sha256-Gwf9fifM8ezqa5KH8Xb9Y20ehmjdRlV207yMkaDRjp4=";
+    rev = "22638d4aba811a710dfb71eba334e2b9dee66c31";
+    hash = "sha256-CE03l2wBT+szneCyMkA0waiAfBU0/2Ivj7NnX3JcivQ=";
   };
 }

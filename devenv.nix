@@ -1,6 +1,7 @@
 {pkgs, ...}: let
   nix4vscode = pkgs.callPackage ./nix4vscode.nix {};
   container-digest = pkgs.callPackage ./container-digest.nix {};
+  npm-refresh = pkgs.callPackage ./npm-refresh.nix {};
 in {
   # https://devenv.sh/basics/
 
@@ -96,6 +97,14 @@ in {
       echo "####################################" >> $SHA_FILE
       ${container-digest}/bin/container-digest --containers $DEVENV_ROOT/apps/fetcher/containers.toml --output-format nix >> $SHA_FILE
       ${pkgs.alejandra}/bin/alejandra --quiet $SHA_FILE
+    '';
+
+    update-npm-packages.exec = ''
+      TOML_FILE=$DEVENV_ROOT/apps/fetcher/npm-packages.toml
+      NIX_FILE=$DEVENV_ROOT/apps/fetcher/npm-packages.nix
+      echo "Updating NPM packages..."
+      ${npm-refresh}/bin/npm-refresh $TOML_FILE > $NIX_FILE
+      ${pkgs.alejandra}/bin/alejandra --quiet $NIX_FILE
     '';
   };
 

@@ -4,14 +4,16 @@
   nodejs,
   makeWrapper,
 }: let
+  npm-packages = import ../fetcher/npm-packages.nix;
+
   # Main package
   claudeCode = stdenv.mkDerivation rec {
     pname = "claude-code";
-    version = "1.0.2";
+    version = npm-packages.claude-code.version;
 
     src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-      hash = "sha256-pDgWSXXrMrWjKJPxoiuIANEtUP/uL+6esztWe8616b0=";
+      url = npm-packages.claude-code.url;
+      hash = npm-packages.claude-code.url-hash;
     };
 
     nativeBuildInputs = [makeWrapper];

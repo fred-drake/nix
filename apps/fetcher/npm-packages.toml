@@ -1,0 +1,4 @@
+[[npm-repository]]
+name = "claude-code"
+repo = "@anthropic-ai/claude-code"
+

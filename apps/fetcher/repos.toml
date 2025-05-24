@@ -8,6 +8,9 @@ url = "https://github.com/augmentcode/augment.vim"
 name = "container-digest-src"
 url = "https://github.com/fred-drake/container-digest"
 [[repos]]
+name = "npm-refresh-src"
+url = "https://github.com/fred-drake/npm-refresh"
+[[repos]]
 name = "autopair-fish-src"
 url = "https://github.com/jorgebucaran/autopair.fish"
 [[repos]]

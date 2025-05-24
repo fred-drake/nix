@@ -36,9 +36,14 @@ update-container-digests:
 update-secrets:
     nix flake update secrets
 
+# Update NPM packages
+update-npm-packages:
+    update-npm-packages
+
 # Run colmena remote switch on given host
 colmena HOST:
     colmena apply --on {{ HOST }} --impure
 
+# Run colmena on only the DNS hosts
 colmena-dns: update-secrets
     just colmena dns1,dns2
