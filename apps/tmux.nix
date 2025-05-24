@@ -93,6 +93,10 @@
       # Add spacing between panes for better visibility
       set -g pane-border-indicators "both"
 
+      # Window background styling for visual borders
+      set -g window-style 'bg=default'
+      set -g window-active-style 'bg=#1a1a1a'
+
 
       # statusbar
       set -g status-position bottom
