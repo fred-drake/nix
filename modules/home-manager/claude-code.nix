@@ -48,6 +48,8 @@ in {
         "Bash(ls:*)"
         "Bash(just build)"
         "Bash(just test)"
+        "Bash(just lint)"
+        "Bash(just deps)"
         "Bash(git add:*)"
         "Bash(git commit:*)"
         "Bash(git push:*)"
