@@ -15,7 +15,27 @@ in {
         }
         {
           br-infra = {
-            root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/infrastructure";
+            root = "~/Source/gitea.${config.soft-secrets.networking.domain}/BrainRush/infrastructure";
+            layout = "even-horizontal";
+            panes = ["claude" "nvim" ""];
+          };
+        }
+        {
+          br-secrets = {
+            root = "~/Source/gitea.${config.soft-secrets.networking.domain}/BrainRush/nix-secrets";
+            layout = "even-horizontal";
+            panes = ["claude" "nvim" ""];
+          };
+        }
+      ];
+    };
+    "${dir}/nixosaarch64vm.yml".text = builtins.toJSON {
+      name = "nixosaarch64vm";
+      root = "~/";
+      windows = [
+        {
+          nix = {
+            root = "~/nix";
             layout = "even-horizontal";
             panes = ["claude" "nvim" ""];
           };
