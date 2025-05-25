@@ -26,7 +26,24 @@ This repository serves as the single source of truth for infrastructure as code 
    - x86_64-linux: Built on `fredpc`
    - aarch64-linux: Built on `nixosaarch64vm`
 
+### Platform-Specific Notes
+
+#### macOS (Darwin)
+- Uses nix-homebrew for cask management
+- System names match computer names (e.g., "Freds-MacBook-Pro")
+- Homebrew required for initial setup
+
+#### NixOS
+- Direct configurations for local machines
+- Colmena for remote deployments
+- Architecture-specific builders (x86_64 on fredpc, aarch64 on nixosaarch64vm)
+
 ## Nix Versioning
+
+### Multi-Channel Nixpkgs
+- `nixpkgs` (unstable) - Primary for workstations
+- `nixpkgs-stable` - For servers (25.05)
+- `nixpkgs-fred` - Custom fork with specific fixes
 
 ### Workstations
 
@@ -186,21 +203,113 @@ This project uses two distinct SSH keys for managing encrypted secrets:
   - System-level configurations
   - Shared infrastructure secrets
 
+## Essential Commands
+
+### System Management
+```bash
+# Build and switch to new configuration (local)
+just switch
+
+# Build without switching
+just build
+
+# Deploy to remote host via Colmena
+just colmena <hostname>
+
+# Deploy to DNS servers
+just colmena-dns
+```
+
+### Maintenance Commands
+```bash
+# Update everything (flake inputs, extensions, repos, containers, secrets)
+just update-all
+
+# Update individual components
+just update              # Update flake inputs
+just update-secrets      # Update secrets flake (required when secrets change)
+just update-vscode-extensions
+just update-repos       # Update repository hashes in apps/fetcher/repos.toml
+just update-container-digests
+```
+
+### Debugging Git Issues
+```bash
+# Add new Nix files to git (required for import statements)
+git add /path/to/new/file.nix
+
+# If secrets repository is not found
+just update-secrets
+```
+
 ## Development Guidelines
 
 ### Code Organization
+
+- Repository structure follows a clear hierarchy:
+  - `flake.nix` - Entry point defining all systems
+  - `modules/` - Reusable configuration modules
+  - `apps/` - Application-specific configurations
+  - `colmena/` - Remote server deployment definitions
+  - `systems/` - System builder functions
+  - `lib/` - Helper functions
+
+### Module Pattern
+
+All modules follow this structure:
+```nix
+{ config, lib, pkgs, ... }:
+with lib;
+{
+  options = { /* module options */ };
+  config = mkIf config.module.enable { /* implementation */ };
+}
+```
+
+### Helper Functions
+
+- `lib.mkHomeManager` - Creates home-manager configurations
+- `mkDarwinSystem` - Builds Darwin systems with standard setup
+- `mkColmenaSystem` - Defines remote deployments
 
 ### Tooling
 
 - **MCP Servers**:
   - Use `nixos` MCP for NixOS-specific functionality
   - Use `context7` MCP for proper Nix syntax assistance
+- **Development Environment**:
+  - `devenv` provides consistent tooling
+  - Activated automatically with direnv
+  - Includes colmena, just, alejandra formatter
 
 ### Remote Deployment
 
 - Use Colmena for remote configuration management
 - Build artifacts are created locally and pushed to target machines
 - Architecture-specific builds are handled by designated builders
+
+## Common Workflows
+
+### Adding a new package to home-manager
+1. Edit relevant module in `modules/home-manager/`
+2. Add package to `home.packages` or appropriate program config
+3. Run `just switch` to apply
+
+### Creating a new service module
+1. Create module file in appropriate directory
+2. Follow existing module patterns
+3. Import in relevant system configuration
+4. Add to git before building: `git add path/to/module.nix`
+
+### Updating a container version
+1. Change container tag in configuration
+2. Run `just update-container-digests`
+3. Review and commit the updated SHA files
+
+## Best Practices
+
+- After modifying code, run `just build` to ensure that everything builds without errors. If there are errors, fix them. Use `brave-search` and `context7` MCPs if you are not confident with the solution.
+- Before modifying any code, use the context7 and brave-search MCP servers to understand syntax and best practices
 
 ## Secrets Management
 
