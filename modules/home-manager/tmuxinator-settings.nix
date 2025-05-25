@@ -2,6 +2,26 @@
   dir = ".config/tmuxinator";
 in {
   home.file = {
+    "${dir}/fredpc.yml".text = builtins.toJSON {
+      name = "fredpc";
+      root = "~/";
+      windows = [
+        {
+          nix = {
+            root = "~/nix";
+            layout = "even-horizontal";
+            panes = ["claude" "nvim" ""];
+          };
+        }
+        {
+          br-infra = {
+            root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/infrastructure";
+            layout = "even-horizontal";
+            panes = ["claude" "nvim" ""];
+          };
+        }
+      ];
+    };
     "${dir}/ultrawide.yml".text = builtins.toJSON {
       name = "ultrawide";
       root = "~/";
