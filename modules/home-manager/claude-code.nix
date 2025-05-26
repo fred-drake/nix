@@ -15,17 +15,17 @@
     EOF
 
         cat > $out/prime.md << 'EOF'
-    READ and UNDERSTAND the @README.md file in the project's root folder, if it is available.  This will help you understand the project from ther user's perspective.
+    READ and UNDERSTAND the README.md file in the project's root folder, if it is available.  This will help you understand the project from ther user's perspective.
     THEN run git ls-files to understand the files in this project.
-    THEN READ and UNDERSTAND the @PLANNING.md file in the project's root folder, if it is available.  This will give you important context about the project, and instructions on how to build and test.
-    THEN READ and UNDERSTAND the @TASK.md file in the project's root folder, if it is available.  This will give you important context about what tasks have been accomplished, and what work is left to do, to the best of our knowledge.
-    UPDATE the @TASK.md file with each change that you make to the project.  This is important, because it will give you context on future sessions.
-    UPDATE the @PLANNING.md file if our changes have altered the information in that file.
+    THEN READ and UNDERSTAND the PLANNING.md file in the project's root folder, if it is available.  This will give you important context about the project, and instructions on how to build and test.
+    THEN READ and UNDERSTAND the TASK.md file in the project's root folder, if it is available.  This will give you important context about what tasks have been accomplished, and what work is left to do, to the best of our knowledge.
+    UPDATE the TASK.md file with each change that you make to the project.  This is important, because it will give you context on future sessions.
+    UPDATE the PLANNING.md file if our changes have altered the information in that file.
     DO NOT READ any files that are in the project's external/ directory.  Those are files intended to be used elsewhere and either repeat information or would adversely affect your ability to understand the project.
     EOF
 
         cat > $out/build-planning.md << 'EOF'
-    We are going to build a file called @PLANNING.md which lives in the project's root directory.  The objective is to have a document that will give you important context about the project, along with instructions on how to build and test.  Start by building a document with the following categories, that we will initially mark as TBD.  Then we will discuss each of these points together and fill in the document as we go.
+    We are going to build a file called PLANNING.md which lives in the project's root directory.  The objective is to have a document that will give you important context about the project, along with instructions on how to build and test.  Start by building a document with the following categories, that we will initially mark as TBD.  Then we will discuss each of these points together and fill in the document as we go.
         - Project Overview
         - Architecture
           - Core components (API, Data, Service layers, configuration, etc)
@@ -46,7 +46,7 @@
         - Future considerations (things that we may not be adding right away but would be candidates for future versions)
 
         cat > $out/build-task.md << 'EOF'
-    We will BUILD a file called @TASK.md which lives in the project's root directory.  The objective is to give you important context about what tasks have been accomplished, and what work is left to do.  READ the @PLANNING.md file, then create a list of tasks that you think should be accomplished.  Categorize them appropriately (e.g. Setup, Core Functionality, etc).  The last category will be "Completed Work" where we will have a log of work that has been completed, although initially this will be empty.
+    We will BUILD a file called TASK.md which lives in the project's root directory.  The objective is to give you important context about what tasks have been accomplished, and what work is left to do.  READ the PLANNING.md file, then create a list of tasks that you think should be accomplished.  Categorize them appropriately (e.g. Setup, Core Functionality, etc).  The last category will be "Completed Work" where we will have a log of work that has been completed, although initially this will be empty.
     EOF
 
         cat > $out/fix.md << 'EOF'
@@ -63,8 +63,8 @@
     EOF
 
         cat > $out/update-primers.md << 'EOF'
-    UPDATE the @PLANNING.md file with context that is currently relevant to the project.  Walk through each line to confirm that the information is still valid.  REMOVE or UPDATE stale information.
-    THEN UPDATE the @TASK.md file, marking tasks completed if we have finished them, and adding new tasks if we are accomplishing something that is not on the task list.  Prioritize the tasks based on importance.
+    UPDATE the PLANNING.md file with context that is currently relevant to the project.  Walk through each line to confirm that the information is still valid.  REMOVE or UPDATE stale information.
+    THEN UPDATE the TASK.md file, marking tasks completed if we have finished them, and adding new tasks if we are accomplishing something that is not on the task list.  Prioritize the tasks based on importance.
     EOF
   '';
 in {
@@ -108,6 +108,8 @@ in {
         "Bash(go install:*)"
         "Bash(go test)"
         "Bash(go get)"
+        "Bash(go run)"
+        "Bash(go build)"
         "Bash(go test:*)"
         "Bash(go tool cover:*)"
 
