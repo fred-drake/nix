@@ -77,10 +77,14 @@ in {
   home.file.".claude/settings.json".text = builtins.toJSON {
     permissions = {
       allow = [
-        # file lookups
+        # file lookup and manipulation commands
         "Bash(grep:*)"
+        "Bash(eza:*)"
+        "Bash(mv:*)"
         "Bash(ls:*)"
         "Bash(rg:*)"
+        "Bash(cp:*)"
+        "Bash(find:*)"
         "Bash(mkdir:*)"
 
         # npm
@@ -100,6 +104,10 @@ in {
         "Bash(git commit:*)"
         "Bash(git push:*)"
         "Bash(git show:*)"
+        "Bash(git pull:*)"
+        "Bash(git merge:*)"
+        "Bash(git stash:*)"
+        "Bash(git worktree:*)"
 
         # go commands
         "Bash(go mod tidy)"
@@ -113,9 +121,15 @@ in {
         "Bash(go test:*)"
         "Bash(go tool cover:*)"
 
+        # python commands
+        "Bash(uv sync:*)"
+
         # mcp commands
         "mcp__brave-search__brave_web_search"
         "context7:*"
+
+        # javascript commands
+        "Bash(bun i:*)"
       ];
     };
     autoUpdaterStatus = "disabled";
