@@ -248,8 +248,8 @@
     {
       mode = "n";
       key = "M";
-      action = "<CMD>MarkdownPreviewToggle<CR>";
-      options.desc = "Markdown preview toggle";
+      action = "<CMD>MarkdownPreview<CR>";
+      options.desc = "Markdown preview";
     }
 
     # Add undo breakpoints

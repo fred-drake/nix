@@ -20,6 +20,10 @@
   home = config.home.homeDirectory;
   vscode-config = (import ../../apps/vscode/global-configuration.nix) {inherit pkgs lib;};
   claude-code = pkgs.callPackage ../../apps/claude-code {};
+  # Use wrapped mermaid-cli with platform-appropriate Chrome/Chromium
+  mermaid-cli-wrapped = pkgs.callPackage ../../apps/mermaid-cli-wrapped.nix {
+    inherit (pkgs) stdenv;
+  };
 in {
   # Import additional configuration files
   imports = [
@@ -206,6 +210,7 @@ in {
     ++ (
       if pkgs.stdenv.hostPlatform.isDarwin
       then [
+        mermaid-cli-wrapped # Mermaid CLI with Chrome support (Darwin only)
         (pkgs.writeShellScriptBin "windsurf-code" ''
           EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
           exec /opt/homebrew/bin/windsurf --extensions-dir $EXT_DIR "$@"

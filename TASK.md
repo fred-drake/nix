@@ -4,7 +4,12 @@ This file tracks active tasks, backlog, and milestones for the Nix configuration
 
 ## Active Tasks
 
-_No active tasks at the moment_
+### Package Updates
+
+- [x] Fix mermaid-cli module error - switched from custom npm package (v0.2.4) to nixpkgs version (v11.4.2) for proper dependency management
+- [x] Fix mermaid-cli Chromium dependency - created platform-aware wrapper that uses system Chrome on macOS and Chromium from nixpkgs on Linux
+- [x] Add Google Chrome to Darwin homebrew casks for mermaid-cli dependency
+- [x] Make mermaid-cli-wrapped conditional - only include on Darwin systems where Chrome is available
 
 ## High Priority Backlog
 

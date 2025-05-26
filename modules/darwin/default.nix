@@ -86,6 +86,7 @@ in {
       "daisydisk"
       "finicky"
       "ghostty"
+      "google-chrome"
       "google-drive"
       "krita"
       "macdown"
