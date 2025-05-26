@@ -244,6 +244,14 @@
       options.desc = "Hop Char 1";
     }
 
+    # Markdown preview in web browser
+    {
+      mode = "n";
+      key = "M";
+      action = "<CMD>MarkdownPreviewToggle<CR>";
+      options.desc = "Markdown preview toggle";
+    }
+
     # Add undo breakpoints
     {
       mode = "i";

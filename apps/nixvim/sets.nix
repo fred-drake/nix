@@ -37,6 +37,7 @@
     illuminate.enable = true;
     image.enable = true;
     lazygit.enable = true;
+    markdown-preview.enable = true;
     nvim-lightbulb.enable = true;
     lualine = {
       enable = true;
