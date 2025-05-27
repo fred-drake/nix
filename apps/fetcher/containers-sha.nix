@@ -49,14 +49,14 @@
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:821daa733a6f1942c453b54fa8f332a6ad7a5bfddd960083fa7f82d6dd80b788";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:ea165f4f5c291ffe8049254d9d2c935b852d11b4369da0f74985d8ae3fe62764";
       };
     };
   };
   "ghcr.io" = {
     "linuxserver/radarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:905e1485f9eaf547091b0513f2d6a41b8d22e0beae8eb41fde325687e4a72def";
+        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:656b5a234a520860498dd6405e91ba671385fbfc9ddab3f216a8565c6281a89a";
       };
     };
     "linuxserver/sabnzbd" = {
