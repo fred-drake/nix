@@ -11,6 +11,10 @@ This file tracks active tasks, backlog, and milestones for the Nix configuration
 - [x] Add Google Chrome to Darwin homebrew casks for mermaid-cli dependency
 - [x] Make mermaid-cli-wrapped conditional - only include on Darwin systems where Chrome is available
 
+### Security Fixes
+
+- [x] Fix SSH authorized_keys being created as symlink - SSH servers reject symlinked authorized_keys files for security. Added onChange handler to force file copy with proper permissions (600)
+
 ## High Priority Backlog
 
 ### Code Refactoring

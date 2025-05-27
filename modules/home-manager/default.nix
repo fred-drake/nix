@@ -43,6 +43,12 @@ in {
       mkdir -p ${home}/.ssh
       chmod 700 ${home}/.ssh
     '';
+    ssh-authorized-keys-copy = lib.hm.dag.entryAfter ["linkGeneration"] ''
+      # Remove symlink and create actual file for SSH authorized_keys
+      rm -f ${home}/.ssh/authorized_keys
+      echo "${config.soft-secrets.workstation.ssh.authorized-keys}" > ${home}/.ssh/authorized_keys
+      chmod 600 ${home}/.ssh/authorized_keys
+    '';
     zed-settings-copy = lib.hm.dag.entryAfter ["writeBoundary"] ''
       cp -f ${home}/.config/zed/settings-original.json ${home}/.config/zed/settings.json
       cp -f ${home}/.config/zed/keymap-original.json ${home}/.config/zed/keymap.json
@@ -67,10 +73,7 @@ in {
 
   home.file =
     {
-      "ssh-authorized-keys" = {
-        text = config.soft-secrets.workstation.ssh.authorized-keys;
-        target = ".ssh/authorized_keys";
-      };
+      # Note: authorized_keys is handled by home.activation to ensure it's a real file, not a symlink
       "ssh-config" = {
         text = config.soft-secrets.workstation.ssh.config;
         target = ".ssh/config";
