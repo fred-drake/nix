@@ -108,6 +108,7 @@ in {
         "Bash(git merge:*)"
         "Bash(git stash:*)"
         "Bash(git worktree:*)"
+        "Bash(git reset:*)"
 
         # go commands
         "Bash(go mod tidy)"
