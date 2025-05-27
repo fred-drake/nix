@@ -91,6 +91,7 @@ in {
         "Bash(npm run lint)"
         "Bash(npm run test:*)"
         "Bash(npm run build:*)"
+        "Bash(npm install:*)"
 
         # non-intrusive just targets
         "Bash(just build)"
