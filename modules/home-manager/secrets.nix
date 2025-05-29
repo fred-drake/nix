@@ -104,37 +104,24 @@ in {
       {
         "mcpServers": {
           "brave-search": {
-            "command": "/etc/profiles/per-user/fdrake/bin/podman",
+            "command": "npx",
             "args": [
-              "run",
-              "-i",
-              "--rm",
-              "-e",
-              "BRAVE_API_KEY",
-              "docker.io/mcp/brave-search:latest"
+              "-y",
+              "@modelcontextprotocol/server-brave-search"
             ],
             "env": {
               "BRAVE_API_KEY": "${config.sops.placeholder.llm-brave}"
             }
           },
           "playwright": {
-            "command": "/etc/profiles/per-user/fdrake/bin/podman",
+            "command": "npx",
             "args": [
-              "run",
-              "-i",
-              "--rm",
-              "--init",
-              "mcr.microsoft.com/playwright/mcp:latest"
+              "@playwright/mcp@latest"
             ]
           },
           "context7": {
-            "command": "/etc/profiles/per-user/fdrake/bin/podman",
-            "args": [
-              "run",
-              "-i",
-              "--rm",
-              "docker.io/mcp/context7:latest"
-            ]
+            "command": "npx",
+            "args": ["-y", "@upstash/context7-mcp"]
           }
         }
       }
