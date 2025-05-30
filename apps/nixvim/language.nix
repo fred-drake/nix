@@ -236,6 +236,7 @@ in
           nixd.enable = true;
           yamlls.enable = true;
           taplo.enable = true;
+          terraformls.enable = true;
         };
       };
 
