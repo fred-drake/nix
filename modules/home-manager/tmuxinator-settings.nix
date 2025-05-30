@@ -42,8 +42,8 @@ in {
         }
       ];
     };
-    "${dir}/ultrawide.yml".text = builtins.toJSON {
-      name = "ultrawide";
+    "${dir}/mac-studio.yml".text = builtins.toJSON {
+      name = "mac-studio";
       root = "~/";
       windows = [
         {
@@ -54,29 +54,36 @@ in {
           };
         }
         {
-          nix-secrets = {
+          nix-sec = {
             root = "~/Source/github.com/fred-drake/nix-secrets/";
             layout = "even-horizontal";
             panes = ["claude" "nvim" ""];
           };
         }
         {
-          brainrush-web = {
+          br-web = {
             root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/brainrush-web";
             layout = "even-horizontal";
             panes = ["claude" "nvim" ""];
           };
         }
         {
-          brainrush-chat = {
+          br-chat = {
             root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/brainrush-chat";
             layout = "even-horizontal";
             panes = ["claude" "nvim" ""];
           };
         }
         {
-          brainrush-user = {
+          br-user = {
             root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/brainrush-user";
+            layout = "even-horizontal";
+            panes = ["claude" "nvim" ""];
+          };
+        }
+        {
+          mcp-textbook = {
+            root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/mcp-textbook";
             layout = "even-horizontal";
             panes = ["claude" "nvim" ""];
           };
@@ -122,6 +129,15 @@ in {
     "${dir}/brainrush-user.yml".text = builtins.toJSON {
       name = "brainrush-user";
       root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/brainrush-user";
+      windows = [
+        {nvim = "nvim";}
+        {claude = "claude";}
+        {shell = "";}
+      ];
+    };
+    "${dir}/mcp-textbook.yml".text = builtins.toJSON {
+      name = "mcp-textbook";
+      root = "~/Source/gitea.${config.soft-secrets.networking.domain}/brainrush/mcp-textbook";
       windows = [
         {nvim = "nvim";}
         {claude = "claude";}
