@@ -89,9 +89,12 @@ in {
     pkgs = import nixpkgs {
       system = "aarch64-linux";
       config.allowUnfree = true;
+      overlays = [
+        nix4vscode.overlays.forVscode
+      ];
     };
     specialArgs = {
-      inherit inputs outputs nixpkgs nixpkgs-unstable nix4vscode;
+      inherit inputs outputs nixpkgs nixpkgs-unstable nix4vscode secrets;
       pkgsUnstable = import nixpkgs-unstable {
         system = "x86_64-linux";
         config.allowUnfree = true;
