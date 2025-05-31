@@ -132,6 +132,9 @@ in {
 
         # javascript commands
         "Bash(bun i:*)"
+
+        # terraform commands
+        "Bash(terraform:*)"
       ];
     };
     autoUpdaterStatus = "disabled";
