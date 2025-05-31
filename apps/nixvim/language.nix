@@ -7,7 +7,7 @@ let
 in
   {...}: {
     plugins = {
-      avante.enable = true;
+      avante.enable = false;
       cmp = {
         enable = true;
         settings = {
@@ -229,10 +229,11 @@ in
           end
         '';
         servers = {
+          gopls.enable = true;
           jsonls.enable = true;
           marksman.enable = true;
           nil_ls.enable = true;
-          nixd.enable = true;
+          # nixd.enable = true;
           yamlls.enable = true;
           taplo.enable = true;
           terraformls.enable = true;
