@@ -10,6 +10,7 @@ This file tracks active tasks, backlog, and milestones for the Nix configuration
 - [x] Fix mermaid-cli Chromium dependency - created platform-aware wrapper that uses system Chrome on macOS and Chromium from nixpkgs on Linux
 - [x] Add Google Chrome to Darwin homebrew casks for mermaid-cli dependency
 - [x] Make mermaid-cli-wrapped conditional - only include on Darwin systems where Chrome is available
+- [x] Fix nixvim Terraform filetype inconsistency - removed "tf" filetype handling and added autocmds to ensure .tf and .tfvars files are always detected as "terraform" filetype for consistent LSP behavior
 
 ### Security Fixes
 

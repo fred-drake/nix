@@ -6,6 +6,16 @@
         pattern = "*";
         command = "if mode() != 'c' | checktime | endif";
       }
+      {
+        event = [ "BufRead" "BufNewFile" ];
+        pattern = "*.tf";
+        command = "set filetype=terraform";
+      }
+      {
+        event = [ "BufRead" "BufNewFile" ];
+        pattern = "*.tfvars";
+        command = "set filetype=terraform";
+      }
     ];
 
     opts = {

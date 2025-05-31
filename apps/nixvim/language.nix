@@ -172,7 +172,6 @@ in
             nix = ["alejandra"];
             ruby = ["rubocop"];
             terraform = ["tofu_fmt"];
-            tf = ["tofu_fmt"];
             yaml = ["yamlfmt"];
           };
         };
