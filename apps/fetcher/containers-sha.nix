@@ -61,7 +61,7 @@
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:ac0e5c41caea58ea84067807448ac11120193adc7f7e68f6c13b3cae8b1f0176";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:e468d9605ef3cd5a2252a0633396b9f4a1c20affc85a91d5bdd165040950173d";
       };
     };
     "linuxserver/sonarr" = {
@@ -77,6 +77,13 @@
     "onedr0p/exportarr" = {
       "latest" = {
         "linux/amd64" = "ghcr.io/onedr0p/exportarr@sha256:cfa5172442268f09e6eb75e17ffb35d300ab4c02772ce0b1bc14c462ca85f808";
+      };
+    };
+  };
+  "quay.io" = {
+    "minio/minio" = {
+      "latest" = {
+        "linux/amd64" = "quay.io/minio/minio@sha256:bca5c8a966b9adede74c531db519fa0ac9e4684b824fde9707ac558314590818";
       };
     };
   };

@@ -70,3 +70,9 @@ repository = "docker.io"
 name = "fallenbagel/jellyseerr"
 tag = "latest"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "quay.io"
+name = "minio/minio"
+tag = "latest"
+architectures = ["linux/amd64"]
+

@@ -21,6 +21,7 @@
   external-metrics = import ./hosts/external-metrics.nix {inherit self nixpkgs-stable secrets sops-nix;};
   glance = import ./hosts/glance.nix {inherit self nixpkgs-stable secrets sops-nix;};
   arm64builder = import ./hosts/arm64builder.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
+  minio = import ./hosts/minio.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -42,6 +43,7 @@ in {
   _external-metrics = external-metrics._external-metrics;
   _glance = glance._glance;
   _arm64builder = arm64builder._arm64builder;
+  _minio = minio._minio;
 
   # Init configurations
   "dns1-init" = dns1."dns1-init";
@@ -58,6 +60,7 @@ in {
   "external-metrics-init" = external-metrics."external-metrics-init";
   "glance-init" = glance."glance-init";
   "arm64builder-init" = arm64builder."arm64builder-init";
+  "minio-init" = minio."minio-init";
 
   # Full configurations
   "dns1" = dns1."dns1";
@@ -74,4 +77,5 @@ in {
   "external-metrics" = external-metrics."external-metrics";
   "glance" = glance."glance";
   "arm64builder" = arm64builder."arm64builder";
+  "minio" = minio."minio";
 }
