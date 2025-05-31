@@ -88,7 +88,6 @@ in {
       cm = "chezmoi";
       df = "duf";
       k = "kubectl";
-      mc = "ranger";
       t = "tmuxinator";
       telnet = "nc -zv";
       la = "eza -a";

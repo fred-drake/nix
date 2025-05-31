@@ -17,12 +17,10 @@
       df = "duf";
       docker = "podman";
       k = "kubectl";
-      mc = "yy";
       t = "tmuxinator";
       telnet = "nc -zv";
       man = "batman";
       lg = "lazygit";
-      ranger = "yy";
     };
     extraConfig = ''
       # Plugins

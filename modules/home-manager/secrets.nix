@@ -42,6 +42,13 @@ in {
   };
   home.file.".continue/config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.continue-config.path;
 
+  sops.secrets.mc-config = {
+    sopsFile = config.secrets.workstation.mc-config;
+    mode = "0400";
+    key = "data";
+  };
+  home.file.".mc/config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.mc-config.path;
+
   sops.secrets.bws = {
     sopsFile = config.secrets.workstation.bws;
     mode = "0400";

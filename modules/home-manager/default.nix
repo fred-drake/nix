@@ -168,6 +168,7 @@ in {
       lazydocker # Docker CLI with auto-completion and syntax highlighting
       llama-cpp # Text generation
       meld # Visual diff and merge tool
+      minio-client
       nixd # Nix daemon for IDE
       oh-my-posh # Prompt theme engine
       ripgrep # Fast grep alternative
