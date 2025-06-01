@@ -1,5 +1,5 @@
 # Configuration specific to the MacBook Pro device.
-{...}: {
+{config, ...}: {
   # wayland.windowManager.hyprland = {
   #   enable = true;
   #   package = pkgs.hyprland;
@@ -20,4 +20,15 @@
       };
     };
   };
+
+  sops.secrets.wireguard-brainrush-stage = {
+    sopsFile = config.secrets.host.fredpc.wireguard-brainrush-stage;
+    mode = "0400";
+    key = "data";
+  };
+  home.file.".config/wireguard/brainrush-stage.conf".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.wireguard-brainrush-stage.path;
+
+  home.file.".config/wireguard/brainrush-stage-public-key.txt".text = ''
+    Dri6Y1cfpQ2moikPW7Lzo2HbqMNHefsCpMcYgL0uEFk=
+  '';
 }
