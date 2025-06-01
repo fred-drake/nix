@@ -123,6 +123,7 @@ in {
           inherit inputs secrets;
           imports = [
             ../modules/home-manager/darwin.nix
+            ../modules/home-manager/host/mac-studio.nix
           ];
           hostArgs.hostName = "mac-studio";
         };
