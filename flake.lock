@@ -800,11 +800,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1748896724,
-        "narHash": "sha256-mi0uoCTOF5hJbdH22AmwVaEWuFDOXnFV2UpfnZ3z1W8=",
+        "lastModified": 1748899852,
+        "narHash": "sha256-sNFQfzKosU+1FpRdIuUBUzMD7F8MZX3OK3AAZ2ojq3w=",
         "ref": "refs/heads/master",
-        "rev": "45013d4e869af1a1923262c5d40e706a11e9a73d",
-        "revCount": 121,
+        "rev": "4ef80dfed42a8136bdebe37f85e13a556a69d838",
+        "revCount": 122,
         "type": "git",
         "url": "ssh://git@github.com/fred-drake/nix-secrets.git"
       },
