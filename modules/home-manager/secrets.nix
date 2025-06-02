@@ -9,52 +9,52 @@ in {
   # Our secret declaration
   sops.secrets.ssh-id-rsa = {
     sopsFile = config.secrets.workstation.ssh.id_rsa;
+    path = "${home}/.ssh/id_rsa";
     mode = "0400";
     key = "data";
   };
-  home.file.".ssh/id_rsa".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.ssh-id-rsa.path;
 
   sops.secrets.ssh-id-ansible = {
     sopsFile = config.secrets.workstation.ssh.id_ansible;
+    path = "${home}/.ssh/id_ansible";
     mode = "0400";
     key = "data";
   };
-  home.file.".ssh/id_ansible".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.ssh-id-ansible.path;
 
   sops.secrets.ssh-id-infrastructure = {
     sopsFile = config.secrets.workstation.ssh.id_infrastructure;
+    path = "${home}/.ssh/id_infrastructure";
     mode = "0400";
     key = "data";
   };
-  home.file.".ssh/id_infrastructure".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.ssh-id-infrastructure.path;
 
   sops.secrets.git-credentials = {
     sopsFile = config.secrets.workstation.git-credentials;
+    path = "${home}/.git-credentials";
     mode = "0400";
     key = "data";
   };
-  home.file.".git-credentials".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.git-credentials.path;
 
   sops.secrets.continue-config = {
     sopsFile = config.secrets.workstation.continue-config;
+    path = "${home}/.continue/config.json";
     mode = "0400";
     key = "data";
   };
-  home.file.".continue/config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.continue-config.path;
 
   sops.secrets.mc-config = {
     sopsFile = config.secrets.workstation.mc-config;
+    path = "${home}/.mc/config.json";
     mode = "0400";
     key = "data";
   };
-  home.file.".mc/config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.mc-config.path;
 
   sops.secrets.bws = {
     sopsFile = config.secrets.workstation.bws;
+    path = "${home}/.bws.env";
     mode = "0400";
     key = "data";
   };
-  home.file.".bws.env".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.bws.path;
 
   sops.secrets.llm-deepseek = {
     sopsFile = config.secrets.workstation.llm-api-keys;
@@ -137,4 +137,18 @@ in {
   home.file.".cursor/mcp.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
   home.file.".codeium/windsurf/mcp_config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
   home.file."Library/Application Support/Claude/claude_desktop_config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
+
+  sops.secrets.oci-config = {
+    sopsFile = config.secrets.workstation.oci-config;
+    mode = "400";
+    key = "data";
+    path = "${home}/.oci/config";
+  };
+
+  sops.secrets.oracle-cloud-key = {
+    sopsFile = config.secrets.workstation.ssh.oracle_cloud_key;
+    mode = "400";
+    key = "data";
+    path = "${home}/.ssh/oracle_cloud_key.pem";
+  };
 }
