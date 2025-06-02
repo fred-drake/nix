@@ -141,5 +141,10 @@ in {
     includeCoAuthoredBy = false;
     env = {
     };
+
+    allowedTools = [];
+    dontCrawlDirectory = false;
+    hasTrustDialogAccepted = true;
+    hasCompletedProjectOnboarding = true;
   };
 }
