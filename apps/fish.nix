@@ -85,6 +85,8 @@ in {
               set devdir "$HOME/Source/gitea.$domain/BrainRush/brainrush-user"
             case "br-textbook"
               set devdir "$HOME/Source/gitea.$domain/BrainRush/mcp-textbook"
+            case "br-cockpit"
+              set devdir "$HOME/Source/gitea.$domain/BrainRush/cockpit"
             case "*"
               set devdir (pwd)
           end
