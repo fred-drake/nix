@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  config,
+  ...
+}: let
   repos-src = import ./fetcher/repos-src.nix {inherit pkgs;};
 in {
   programs.fish = {
@@ -54,6 +58,50 @@ in {
         builtin cd -- "$cwd"
        end
        rm -f -- "$tmp"
+      end
+
+      # Build dev windows
+      function windev
+        set domain "${config.soft-secrets.networking.domain}"
+        # If argv[2] is provided, use it as the directory
+        if test -n "$argv[2]"
+          set devdir "$argv[2]"
+        else
+          # Otherwise use predefined paths or current directory
+          switch "$argv[1]"
+            case "nix"
+              set devdir "$HOME/nix"
+            case "nix-secrets"
+              set devdir "$HOME/Source/github.com/fred-drake/nix-secrets"
+            case "br-infra"
+              set devdir "$HOME/Source/gitea.$domain/BrainRush/infrastructure"
+            case "br-secrets"
+              set devdir "$HOME/Source/gitea.$domain/BrainRush/nix-secrets"
+            case "br-web"
+              set devdir "$HOME/Source/gitea.$domain/BrainRush/brainrush-web"
+            case "br-chat"
+              set devdir "$HOME/Source/gitea.$domain/BrainRush/brainrush-chat"
+            case "br-user"
+              set devdir "$HOME/Source/gitea.$domain/BrainRush/brainrush-user"
+            case "br-textbook"
+              set devdir "$HOME/Source/gitea.$domain/BrainRush/mcp-textbook"
+            case "*"
+              set devdir (pwd)
+          end
+        end
+
+        # Debug output
+        # echo "windev: argv[1]='$argv[1]', devdir='$devdir'"
+
+        tmux new-window -n "$argv[1]" -c "$devdir"
+        tmux split-window -h -c "$devdir"
+        tmux select-pane -t 1
+        tmux split-window -v -c "$devdir"
+        tmux select-pane -t 3
+        tmux kill-pane -t 1
+        tmux select-pane -t 1
+        tmux split-pane -v -c "$devdir"
+        tmux select-pane -t 3
       end
 
       # Add LLM API keys to environment

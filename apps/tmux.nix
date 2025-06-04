@@ -61,6 +61,9 @@
       bind -r C-h resize-pane -L 5
       bind -r C-l resize-pane -R 5
 
+      # kill the window
+      bind -r K kill-window
+
       set-window-option -g mode-keys vi
       bind-key v copy-mode
       bind-key -T copy-mode-vi 'v' send -X begin-selection
