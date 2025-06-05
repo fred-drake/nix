@@ -15,13 +15,90 @@
     EOF
 
         cat > $out/prime.md << 'EOF'
-    READ and UNDERSTAND the README.md file in the project's root folder, if it is available.  This will help you understand the project from ther user's perspective.
-    THEN run git ls-files to understand the files in this project.
-    THEN READ and UNDERSTAND the PLANNING.md file in the project's root folder, if it is available.  This will give you important context about the project, and instructions on how to build and test.
-    THEN READ and UNDERSTAND the TASK.md file in the project's root folder, if it is available.  This will give you important context about what tasks have been accomplished, and what work is left to do, to the best of our knowledge.
-    UPDATE the TASK.md file with each change that you make to the project.  This is important, because it will give you context on future sessions.  ONLY UPDATE if there are changes to the project, not just reading files.
-    UPDATE the PLANNING.md file if our changes have altered the information in that file.
-    DO NOT READ any files that are in the project's external/ directory.  Those are files intended to be used elsewhere and either repeat information or would adversely affect your ability to understand the project.
+    # Project Understanding Prompt
+
+    When starting a new session, follow this systematic approach to understand the project:
+
+    ## 1. Project Overview & Structure
+    - **READ** the README.md file in the project's root folder, if available. This provides the user-facing perspective and basic setup instructions.
+    - **RUN** `git ls-files` to get a complete file inventory and understand the project structure.
+    - **EXAMINE** the project's directory structure to understand the architectural patterns (e.g., `/cmd`, `/internal`, `/pkg` for Go projects).
+
+    ## 2. Core Documentation
+    - **READ and UNDERSTAND** the PLANNING.md file for:
+      - Project architecture and design decisions
+      - Technology stack and dependencies
+      - Build, test, and deployment instructions
+      - Future considerations and roadmap
+    - **READ and UNDERSTAND** the TASK.md file for:
+      - Completed work and implementation status
+      - Current blockers or known issues
+      - Next steps and priorities
+
+    ## 3. Configuration & Dependencies
+    - **EXAMINE** dependency files (go.mod, package.json, requirements.txt, etc.) to understand:
+      - External libraries and their purposes
+      - Version constraints and compatibility requirements
+    - **REVIEW** configuration files (Dockerfile, docker-compose.yml, Justfile, Makefile, etc.) to understand:
+      - Build processes and environments
+      - Available commands and workflows
+      - Runtime configuration options
+
+    ## 4. Code Architecture Analysis
+    - **IDENTIFY** the main entry points (cmd/server/main.go, app.py, index.js, etc.)
+    - **UNDERSTAND** the layered architecture by examining:
+      - API/handler layers (routing, middleware)
+      - Service/business logic layers
+      - Data access layers (repositories, models)
+      - External integrations (clients, adapters)
+    - **REVIEW** key interfaces and contracts between layers
+
+    ## 5. Testing & Quality
+    - **EXAMINE** test files to understand:
+      - Testing patterns and frameworks used
+      - Test coverage expectations
+      - Integration vs unit test separation
+      - Mock implementations and test utilities
+
+    ## 6. Development Workflow
+    - **CHECK** for automation files:
+      - CI/CD pipelines (.github/workflows, .gitea/workflows)
+      - Development environment setup (devenv.nix, .devcontainer)
+      - Code quality tools (linting, formatting configurations)
+
+    ## 7. Data & External Systems
+    - **IDENTIFY** data models and schemas:
+      - Database migrations or schema files
+      - API specifications or OpenAPI docs
+      - Data transfer objects (DTOs) and validation rules
+    - **UNDERSTAND** external service integrations:
+      - Authentication providers (Keycloak, Auth0)
+      - Databases and connection patterns
+      - Third-party APIs and clients
+
+    ## 8. Exclusions
+    - **DO NOT READ** files in the `external/` directory, as these are output artifacts or documentation meant for other systems.
+    - **SKIP** generated files (vendor/, node_modules/, build artifacts) unless specifically relevant to understanding the build process.
+
+    ## 9. Documentation Maintenance
+    - **UPDATE TASK.md** with each substantial change made to the project, including:
+      - Features implemented or modified
+      - Issues resolved or discovered
+      - Dependencies added or updated
+      - Configuration changes
+    - **UPDATE PLANNING.md** if changes affect:
+      - Architecture decisions
+      - Technology stack
+      - Development workflows
+      - Future roadmap items
+
+    ## 10. Knowledge Validation
+    Before proceeding with any work, confirm understanding by being able to answer:
+    - What is the primary purpose of this project?
+    - How do I build, test, and run it locally?
+    - What are the main architectural components and their responsibilities?
+    - What external systems does it integrate with?
+    - What's the current implementation status and what's next?
     EOF
 
         cat > $out/build-planning.md << 'EOF'
@@ -44,6 +121,7 @@
         - Development guidelines (rules to follow when modifying the project)
         - Security considerations (things to keep in mind that are security-focused when modifying the project)
         - Future considerations (things that we may not be adding right away but would be candidates for future versions)
+    EOF
 
         cat > $out/build-task.md << 'EOF'
     We will BUILD a file called TASK.md which lives in the project's root directory.  The objective is to give you important context about what tasks have been accomplished, and what work is left to do.  READ the PLANNING.md file, then create a list of tasks that you think should be accomplished.  Categorize them appropriately (e.g. Setup, Core Functionality, etc).  The last category will be "Completed Work" where we will have a log of work that has been completed, although initially this will be empty.
@@ -66,8 +144,109 @@
     UPDATE the PLANNING.md file with context that is currently relevant to the project.  Walk through each line to confirm that the information is still valid.  REMOVE or UPDATE stale information.
     THEN UPDATE the TASK.md file, marking tasks completed if we have finished them, and adding new tasks if we are accomplishing something that is not on the task list.  Prioritize the tasks based on importance.
     EOF
+
+        cat > $out/code-review.md << 'EOF'
+    # Code Reviewer Assistant for Claude Code
+
+    You are an expert code reviewer tasked with analyzing a codebase and providing actionable feedback. Your primary responsibilities are:
+
+    ## Core Review Process
+
+    1. **Analyze the codebase structure** - Understand the project architecture, technologies used, and coding patterns
+    2. **Identify issues and improvements** across these categories:
+       - **Security vulnerabilities** and potential attack vectors
+       - **Performance bottlenecks** and optimization opportunities
+       - **Code quality issues** (readability, maintainability, complexity)
+       - **Best practices violations** for the specific language/framework
+       - **Bug risks** and potential runtime errors
+       - **Architecture concerns** and design pattern improvements
+       - **Testing gaps** and test quality issues
+       - **Documentation deficiencies**
+
+    3. **Prioritize findings** using this severity scale:
+       - 🔴 **Critical**: Security vulnerabilities, breaking bugs, major performance issues
+       - 🟠 **High**: Significant code quality issues, architectural problems
+       - 🟡 **Medium**: Minor bugs, style inconsistencies, missing tests
+       - 🟢 **Low**: Documentation improvements, minor optimizations
+
+    ## TASK.md Management
+
+    Always read the existing TASK.md file first. Then update it by:
+
+    ### Adding New Tasks
+    - Append new review findings to the appropriate priority sections
+    - Use clear, actionable task descriptions
+    - Include file paths and line numbers where relevant
+    - Reference specific code snippets when helpful
+
+    ### Task Format
+    ```markdown
+    ## 🔴 Critical Priority
+    - [ ] **[SECURITY]** Fix SQL injection vulnerability in `src/auth/login.js:45-52`
+    - [ ] **[BUG]** Handle null pointer exception in `utils/parser.js:120`
+
+    ## 🟠 High Priority
+    - [ ] **[REFACTOR]** Extract complex validation logic from `UserController.js` into separate service
+    - [ ] **[PERFORMANCE]** Optimize database queries in `reports/generator.js`
+
+    ## 🟡 Medium Priority
+    - [ ] **[TESTING]** Add unit tests for `PaymentProcessor` class
+    - [ ] **[STYLE]** Consistent error handling patterns across API endpoints
+
+    ## 🟢 Low Priority
+    - [ ] **[DOCS]** Add JSDoc comments to public API methods
+    - [ ] **[CLEANUP]** Remove unused imports in `components/` directory
+    ```
+
+    ### Maintaining Existing Tasks
+    - Don't duplicate existing tasks
+    - Mark completed items you can verify as `[x]`
+    - Update or clarify existing task descriptions if needed
+
+    ## Review Guidelines
+
+    ### Be Specific and Actionable
+    - ✅ "Extract the 50-line validation function in `UserService.js:120-170` into a separate `ValidationService` class"
+    - ❌ "Code is too complex"
+
+    ### Include Context
+    - Explain *why* something needs to be changed
+    - Suggest specific solutions or alternatives
+    - Reference relevant documentation or best practices
+
+    ### Focus on Impact
+    - Prioritize issues that affect security, performance, or maintainability
+    - Consider the effort-to-benefit ratio of suggestions
+
+    ### Language/Framework Specific Checks
+    - Apply appropriate linting rules and conventions
+    - Check for framework-specific anti-patterns
+    - Validate dependency usage and versions
+
+    ## Output Format
+
+    Provide a summary of your review findings, then show the updated TASK.md content. Structure your response as:
+
+    1. **Review Summary** - High-level overview of findings
+    2. **Key Issues Found** - Brief list of most important problems
+    3. **Updated TASK.md** - The complete updated file content
+
+    ## Commands to Execute
+
+    When invoked, you should:
+    1. Scan the entire codebase for issues
+    2. Read the current TASK.md file
+    3. Analyze and categorize all findings
+    4. Update TASK.md with new actionable tasks
+    5. Provide a comprehensive review summary
+
+    Focus on being thorough but practical - aim for improvements that will genuinely make the codebase more secure, performant, and maintainable.
+    EOF
+
   '';
 in {
+  # Claude command files can't be read via symlink, so we have to place them directly into the directory.
+  # https://github.com/anthropics/claude-code/issues/992
   home.activation.claude-commands = lib.hm.dag.entryAfter ["writeBoundary"] ''
     $DRY_RUN_CMD mkdir -p $HOME/${dir}
     $DRY_RUN_CMD cp -f ${claude-commands}/* $HOME/${dir}/
