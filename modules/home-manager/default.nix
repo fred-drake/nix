@@ -34,6 +34,7 @@ in {
     ../../apps/nixvim
     ./claude-code.nix
     ./tmuxinator-settings.nix
+    ./tmux-windev-settings.nix
     ./secrets.nix
   ];
 
@@ -171,6 +172,7 @@ in {
       minio-client
       nixd # Nix daemon for IDE
       oh-my-posh # Prompt theme engine
+      presenterm # Presentation in markdown
       ripgrep # Fast grep alternative
       rsync # File synchronization tool
       skim # Fuzzy finder

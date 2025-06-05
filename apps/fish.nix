@@ -62,34 +62,28 @@ in {
 
       # Build dev windows
       function windev
+        set config_file "$HOME/.config/windev/config.json"
         set domain "${config.soft-secrets.networking.domain}"
+
         # If argv[2] is provided, use it as the directory
         if test -n "$argv[2]"
           set devdir "$argv[2]"
-        else
-          # Otherwise use predefined paths or current directory
-          switch "$argv[1]"
-            case "nix"
-              set devdir "$HOME/nix"
-            case "nix-secrets"
-              set devdir "$HOME/Source/github.com/fred-drake/nix-secrets"
-            case "br-infra"
-              set devdir "$HOME/Source/gitea.$domain/BrainRush/infrastructure"
-            case "br-secrets"
-              set devdir "$HOME/Source/gitea.$domain/BrainRush/nix-secrets"
-            case "br-web"
-              set devdir "$HOME/Source/gitea.$domain/BrainRush/brainrush-web"
-            case "br-chat"
-              set devdir "$HOME/Source/gitea.$domain/BrainRush/brainrush-chat"
-            case "br-user"
-              set devdir "$HOME/Source/gitea.$domain/BrainRush/brainrush-user"
-            case "br-textbook"
-              set devdir "$HOME/Source/gitea.$domain/BrainRush/mcp-textbook"
-            case "br-cockpit"
-              set devdir "$HOME/Source/gitea.$domain/BrainRush/cockpit"
-            case "*"
-              set devdir (pwd)
+        else if test -f "$config_file"
+          # Read configuration from JSON file
+          set devdir (jq -r --arg name "$argv[1]" '.[] | select(.name == $name) | .dir' "$config_file" 2>/dev/null)
+
+          # If no match found in config, check for special placeholders
+          if test -z "$devdir"
+            set devdir (pwd)
+          else
+            # Replace $HOME placeholder if present
+            set devdir (echo "$devdir" | sed "s|\$HOME|$HOME|g")
+            # Replace $domain placeholder if present
+            set devdir (echo "$devdir" | sed "s|\$domain|$domain|g")
           end
+        else
+          # If config file doesn't exist, use current directory
+          set devdir (pwd)
         end
 
         # Debug output

@@ -12,6 +12,12 @@ This file tracks active tasks, backlog, and milestones for the Nix configuration
 - [x] Make mermaid-cli-wrapped conditional - only include on Darwin systems where Chrome is available
 - [x] Fix nixvim Terraform filetype inconsistency - removed "tf" filetype handling and added autocmds to ensure .tf and .tfvars files are always detected as "terraform" filetype for consistent LSP behavior
 
+### Development Environment
+
+- [x] Update windev function in fish.nix - Modified to parse JSON configuration from `$HOME/.config/windev/config.json` instead of hardcoded switch/case. Uses jq for parsing, supports `$HOME` and `$domain` placeholders
+- [x] Add fish completion for windev function - Created completion script that reads project names from the same JSON config file, shows directory paths as descriptions
+- [x] Remove legacy hardcoded paths from windev - Simplified function to use current directory (pwd) when config file doesn't exist, removing all hardcoded project paths
+
 ### Security Fixes
 
 - [x] Fix SSH authorized_keys being created as symlink - SSH servers reject symlinked authorized_keys files for security. Added onChange handler to force file copy with proper permissions (600)
