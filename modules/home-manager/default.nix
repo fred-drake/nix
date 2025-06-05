@@ -183,6 +183,7 @@ in {
       tmuxinator # Tmux session manager
       tmux-mem-cpu-load # CPU and memory usage monitor
       tokei # Code statistics tool
+      wiki-tui # Wikipedia TUI
       wireguard-tools # VPN tools
       wget # Network downloader
       yq-go # YAML processor
