@@ -278,6 +278,12 @@ in {
         "Bash(just integration-test)"
         "Bash(just lint)"
         "Bash(just deps)"
+        "Bash(just coverage)"
+        "Bash(just fmt:*)"
+        "Bash(just extract-pdf:*)"
+        "Bash(just integration-test:*)"
+        "Bash(just integration-short:*)"
+        "Bash(just:*)"
 
         # git commands
         "Bash(git add:*)"
@@ -289,24 +295,39 @@ in {
         "Bash(git stash:*)"
         "Bash(git worktree:*)"
         "Bash(git reset:*)"
+        "Bash(git check-ignore:*)"
 
         # go commands
         "Bash(go mod tidy)"
         "Bash(go mod list:*)"
+        "Bash(go mod init:*)"
         "Bash(go list:*)"
         "Bash(go install:*)"
         "Bash(go test)"
         "Bash(go get)"
+        "Bash(go run:*)"
+        "Bash(go fmt:*)"
+        "Bash(go clean:*)"
         "Bash(go run)"
         "Bash(go build)"
+        "Bash(go build:*)"
         "Bash(go test:*)"
         "Bash(go tool cover:*)"
+        "Bash(go get:*)"
+        "Bash(go doc:*)"
+        "Bash(TESTCONTAINERS_RYUK_DISABLED=true go test -v ./test -run TestIntegrationSuite)"
+        "Bash(TESTCONTAINERS_RYUK_DISABLED=true go test:*)"
+        "Bash(CI=true TESTCONTAINERS_RYUK_DISABLED=true go test:*)"
+        "Bash(TESTCONTAINERS_RYUK_DISABLED=true go test -count=1 -v ./test -run TestIntegrationSuite)"
 
         # python commands
         "Bash(uv sync:*)"
 
         # mcp commands
         "mcp__brave-search__brave_web_search"
+        "mcp__context7__resolve-library-id"
+        "mcp__context7__get-library-docs"
+        "WebFetch(domain:*)"
         "context7:*"
 
         # javascript commands
@@ -314,6 +335,13 @@ in {
 
         # terraform commands
         "Bash(terraform:*)"
+
+        # Other commands
+        "Bash(pdftotext:*)"
+        "Bash(sed:*)"
+        "Bash(timeout:*)"
+        "Bash(perl:*)"
+        "Bash(go doc:*)"
       ];
     };
     autoUpdaterStatus = "disabled";
