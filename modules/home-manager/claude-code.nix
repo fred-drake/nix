@@ -35,38 +35,20 @@
       - Current blockers or known issues
       - Next steps and priorities
 
-    ## 3. Configuration & Dependencies
-    - **EXAMINE** dependency files (go.mod, package.json, requirements.txt, etc.) to understand:
-      - External libraries and their purposes
-      - Version constraints and compatibility requirements
-    - **REVIEW** configuration files (Dockerfile, docker-compose.yml, Justfile, Makefile, etc.) to understand:
-      - Build processes and environments
-      - Available commands and workflows
-      - Runtime configuration options
-
-    ## 4. Code Architecture Analysis
-    - **IDENTIFY** the main entry points (cmd/server/main.go, app.py, index.js, etc.)
-    - **UNDERSTAND** the layered architecture by examining:
-      - API/handler layers (routing, middleware)
-      - Service/business logic layers
-      - Data access layers (repositories, models)
-      - External integrations (clients, adapters)
-    - **REVIEW** key interfaces and contracts between layers
-
-    ## 5. Testing & Quality
+    ## 3. Testing & Quality
     - **EXAMINE** test files to understand:
       - Testing patterns and frameworks used
       - Test coverage expectations
       - Integration vs unit test separation
       - Mock implementations and test utilities
 
-    ## 6. Development Workflow
+    ## 4. Development Workflow
     - **CHECK** for automation files:
       - CI/CD pipelines (.github/workflows, .gitea/workflows)
       - Development environment setup (devenv.nix, .devcontainer)
       - Code quality tools (linting, formatting configurations)
 
-    ## 7. Data & External Systems
+    ## 5. Data & External Systems
     - **IDENTIFY** data models and schemas:
       - Database migrations or schema files
       - API specifications or OpenAPI docs
@@ -76,11 +58,7 @@
       - Databases and connection patterns
       - Third-party APIs and clients
 
-    ## 8. Exclusions
-    - **DO NOT READ** files in the `external/` directory, as these are output artifacts or documentation meant for other systems.
-    - **SKIP** generated files (vendor/, node_modules/, build artifacts) unless specifically relevant to understanding the build process.
-
-    ## 9. Documentation Maintenance
+    ## 6. Documentation Maintenance
     - **UPDATE TASK.md** with each substantial change made to the project, including:
       - Features implemented or modified
       - Issues resolved or discovered
@@ -92,7 +70,7 @@
       - Development workflows
       - Future roadmap items
 
-    ## 10. Knowledge Validation
+    ## 7. Knowledge Validation
     Before proceeding with any work, confirm understanding by being able to answer:
     - What is the primary purpose of this project?
     - How do I build, test, and run it locally?
