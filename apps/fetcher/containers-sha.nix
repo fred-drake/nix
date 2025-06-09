@@ -49,7 +49,7 @@
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:ea165f4f5c291ffe8049254d9d2c935b852d11b4369da0f74985d8ae3fe62764";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:d23d331d0cacc7ce7de66e076d1755c5abe6a5da365ee9ec8173b211c8257950";
       };
     };
   };
