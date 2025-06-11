@@ -45,6 +45,11 @@ in {
         desc = "Brainrush textbook MCP app";
       }
       {
+        name = "br-holocron";
+        dir = "${home}/Source/gitea.${domain}/BrainRush/holocron";
+        desc = "Brainrush holocron app";
+      }
+      {
         name = "br-cockpit";
         dir = "${home}/Source/gitea.${domain}/BrainRush/cockpit";
         desc = "Tool for powering the product locally";
