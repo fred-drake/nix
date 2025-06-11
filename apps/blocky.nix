@@ -5,9 +5,15 @@ in {
     enable = true;
     settings = {
       upstreams = {
+        timeout = "1s";
         groups = {
           default = [
-            "https://dns10.quad9.net/dns-query"
+            # "https://dns10.quad9.net/dns-query"
+            "8.8.8.8" # Google DNS 1
+            "8.8.4.4" # Google DNS 2
+            "1.1.1.1" # Cloudflare DNS
+            "74.40.74.40" # Frontier DNS 1
+            "74.40.74.41" # Frontier DNS 2
           ];
         };
       };
