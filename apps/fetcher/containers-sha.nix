@@ -10,19 +10,19 @@
     };
     "gitea" = {
       "1-rootless" = {
-        "linux/amd64" = "docker.gitea.com/gitea@sha256:78d6946032b183d5f2c438c6b56fac373050dfd8c5415d356dd605e43086dfac";
+        "linux/amd64" = "docker.gitea.com/gitea@sha256:5c9501af2d5948e9938203bd4c302e396cca7ee6c322e5f966fd6a175060499b";
       };
     };
   };
   "docker.io" = {
     "fallenbagel/jellyseerr" = {
       "latest" = {
-        "linux/amd64" = "docker.io/fallenbagel/jellyseerr@sha256:cf84b74c32d3049554ae02ac1da2e9e5affc693fe4263f859e804da77fe7f98f";
+        "linux/amd64" = "docker.io/fallenbagel/jellyseerr@sha256:c33a32585e68417ef3d84a930d2cf2210fcfd46cb2ddf31963dba90acd0f945b";
       };
     };
     "glanceapp/glance" = {
       "latest" = {
-        "linux/amd64" = "docker.io/glanceapp/glance@sha256:c14027c56661a29a3c0419f7edef7ff9c1adb4a07fc464cafc203f573f8df7a8";
+        "linux/amd64" = "docker.io/glanceapp/glance@sha256:92989752b372b58d49a98b9f7c70004bda9b8fb661f84cdb05abaae5ba450763";
       };
     };
     "jellyfin/jellyfin" = {
@@ -49,7 +49,7 @@
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:d23d331d0cacc7ce7de66e076d1755c5abe6a5da365ee9ec8173b211c8257950";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:49f5e002a7ec5ec6b6b63ba916b31451e596248c8d1be99e7ebbbd1be2262012";
       };
     };
   };
@@ -61,7 +61,7 @@
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:e468d9605ef3cd5a2252a0633396b9f4a1c20affc85a91d5bdd165040950173d";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:195a021cd143260d3d8ace416c2dc98e6ba94b70308208a46508388207572c8e";
       };
     };
     "linuxserver/sonarr" = {
@@ -71,7 +71,7 @@
     };
     "monstermuffin/mergerfs-cache-mover" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:a3182b58e604787f0875c63d99bfb5deef261661c51b436f743e98c9cb24902e";
+        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:1292ab0827a78f2b48e4e20c5dbef71b8bc8351a30a33e0102cd0eef6ecacf33";
       };
     };
     "onedr0p/exportarr" = {
