@@ -18,6 +18,16 @@ in {
         };
       };
 
+      # Add conditional mapping for different networks
+      # conditional = {
+      #   mapping = {
+      #     "192.168.30.0/24" = "default";
+      #     "192.168.40.0/24" = "default";
+      #     "192.168.50.0/24" = "default";
+      #     "192.168.208.0/24" = "default";
+      #   };
+      # };
+
       blocking = {
         blackLists = {
           ads = [

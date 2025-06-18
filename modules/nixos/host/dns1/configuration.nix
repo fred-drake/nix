@@ -45,9 +45,19 @@
             }
           ];
           routes = [
+            # {
+            #   address = "0.0.0.0";
+            #   prefixLength = 0;
+            #   via = config.soft-secrets.networking.gateway.iot;
+            # }
             {
-              address = "0.0.0.0";
-              prefixLength = 0;
+              address = "192.168.30.0"; # WORKSTATION VLAN
+              prefixLength = 24;
+              via = config.soft-secrets.networking.gateway.iot;
+            }
+            {
+              address = "192.168.50.0"; # SERVICES VLAN
+              prefixLength = 24;
               via = config.soft-secrets.networking.gateway.iot;
             }
           ];
