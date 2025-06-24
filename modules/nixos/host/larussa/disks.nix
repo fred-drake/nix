@@ -37,10 +37,10 @@
     #   fsType = "ext4";
     # };
 
-    "/mnt/pool/ata-WDC_WD120EMFZ-11A6JA0_X1G1BDML-12TB" = {
-      device = "/dev/disk/by-id/ata-WDC_WD120EMFZ-11A6JA0_X1G1BDML-part1";
-      fsType = "xfs";
-    };
+    # "/mnt/pool/ata-WDC_WD120EMFZ-11A6JA0_X1G1BDML-12TB" = {
+    #   device = "/dev/disk/by-id/ata-WDC_WD120EMFZ-11A6JA0_X1G1BDML-part1";
+    #   fsType = "xfs";
+    # };
     "/mnt/pool/ata-WDC_WD142KFGX-68AFPN0_6AGD8A2S-14TB" = {
       device = "/dev/disk/by-id/ata-WDC_WD142KFGX-68AFPN0_6AGD8A2S-part1";
       fsType = "xfs";

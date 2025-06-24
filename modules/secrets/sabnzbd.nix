@@ -57,7 +57,7 @@
       https_port = ""
       username = ""
       password = ""
-      bandwidth_max = 50M
+      bandwidth_max = 100M
       cache_limit = 977.9 M
       web_dir = Glitter
       web_color = Auto
@@ -330,7 +330,7 @@
       timeout = 60
       username = ${config.sops.placeholder.sabnzbd-newsdemon-username}
       password = ${config.sops.placeholder.sabnzbd-newsdemon-password}
-      connections = 50
+      connections = 45
       ssl = 1
       ssl_verify = 2
       ssl_ciphers = ""
