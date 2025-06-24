@@ -10,14 +10,14 @@
     };
     "gitea" = {
       "1-rootless" = {
-        "linux/amd64" = "docker.gitea.com/gitea@sha256:5c9501af2d5948e9938203bd4c302e396cca7ee6c322e5f966fd6a175060499b";
+        "linux/amd64" = "docker.gitea.com/gitea@sha256:0a767f091abb5b69a19c9e8ccb0fb4c88599268e9229eaa9632d4cfdee4fd40e";
       };
     };
   };
   "docker.io" = {
     "fallenbagel/jellyseerr" = {
       "latest" = {
-        "linux/amd64" = "docker.io/fallenbagel/jellyseerr@sha256:c33a32585e68417ef3d84a930d2cf2210fcfd46cb2ddf31963dba90acd0f945b";
+        "linux/amd64" = "docker.io/fallenbagel/jellyseerr@sha256:e3b4cada3d4777ab7ddf7e376058a292fc5f50f2723c1aca8c3b807fb2eaf147";
       };
     };
     "glanceapp/glance" = {
@@ -49,14 +49,14 @@
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:49f5e002a7ec5ec6b6b63ba916b31451e596248c8d1be99e7ebbbd1be2262012";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:db12cc04636a7e9858eadba05633d4fa4c620a4d0fc75e4d1436436b6c843458";
       };
     };
   };
   "ghcr.io" = {
     "linuxserver/radarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:656b5a234a520860498dd6405e91ba671385fbfc9ddab3f216a8565c6281a89a";
+        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:838df23eaaeb694acb202b5774af13fb07d46e82f6d758f43a0f900e365d50ab";
       };
     };
     "linuxserver/sabnzbd" = {
@@ -66,12 +66,12 @@
     };
     "linuxserver/sonarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:66d1ec7daf2b6c5623ace552328d778420a739c432c3dc6d549067d69afc416c";
+        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:4454c8cc644aeceb1f7c15237196cd415e5f8166922b893ee33e06c283533814";
       };
     };
     "monstermuffin/mergerfs-cache-mover" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:1292ab0827a78f2b48e4e20c5dbef71b8bc8351a30a33e0102cd0eef6ecacf33";
+        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:601b67403ede370854910b64bf1592523e7a98193d718d6d507dae8d72db15d0";
       };
     };
     "onedr0p/exportarr" = {
@@ -83,7 +83,7 @@
   "quay.io" = {
     "minio/minio" = {
       "latest" = {
-        "linux/amd64" = "quay.io/minio/minio@sha256:bca5c8a966b9adede74c531db519fa0ac9e4684b824fde9707ac558314590818";
+        "linux/amd64" = "quay.io/minio/minio@sha256:1c681ce493064759564b10039bc3bbc73ec305a37d6c64919f70d9e1785164b1";
       };
     };
   };

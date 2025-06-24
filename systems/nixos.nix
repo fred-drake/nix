@@ -48,6 +48,12 @@ in {
       config.cudaSupport = true;
       overlays = [
         nix4vscode.overlays.forVscode
+        (final: prev: {
+          devenv = (import nixpkgs-unstable {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          }).devenv;
+        })
       ];
     };
     specialArgs = {
