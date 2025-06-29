@@ -35,16 +35,16 @@ in {
     systemPackages = [
       pkgs.coreutils
       # pluginList
-      (nix-jetbrains-plugins.lib."aarch64-darwin".buildIdeWithPlugins pkgs.jetbrains "pycharm-professional" [
-        "AceJump"
-        "org.jetbrains.IdeaVim-EasyMotion"
-        # "eu.theblob42.idea.whichkey"
-        # "IdeaVIM"
-        # "com.intellij.plugins.vscodekeymap"
-        # "com.github.catppuccin.jetbrains"
-        # "com.koxudaxi.ruff"
-        # "nix-idea"
-      ])
+      # (nix-jetbrains-plugins.lib."aarch64-darwin".buildIdeWithPlugins pkgs.jetbrains "pycharm-professional" [
+      #   "AceJump"
+      #   "org.jetbrains.IdeaVim-EasyMotion"
+      #   # "eu.theblob42.idea.whichkey"
+      #   # "IdeaVIM"
+      #   # "com.intellij.plugins.vscodekeymap"
+      #   # "com.github.catppuccin.jetbrains"
+      #   # "com.koxudaxi.ruff"
+      #   # "nix-idea"
+      # ])
     ]; # Core utilities package
     systemPath = [
       # "/opt/homebrew/bin"
