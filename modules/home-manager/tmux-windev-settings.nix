@@ -54,6 +54,11 @@ in {
         dir = "${home}/Source/gitea.${domain}/BrainRush/cockpit";
         desc = "Tool for powering the product locally";
       }
+      {
+        name = "br-peacemaker";
+        dir = "${home}/Source/gitea.${domain}/BrainRush/peacemaker";
+        desc = "Brainrush Peacemaker app";
+      }
     ];
   };
 }
