@@ -123,6 +123,10 @@
     THEN UPDATE the TASK.md file, marking tasks completed if we have finished them, and adding new tasks if we are accomplishing something that is not on the task list.  Prioritize the tasks based on importance.
     EOF
 
+        cat > $out/troublesome-fix.md << 'EOF'
+    Reflect on five to seven different possible sources of the problem, distill those down to one to two most likely sources, and then add logs to validate your assumptions before we move onto implementing the actual code fix.
+    EOF
+
         cat > $out/code-review.md << 'EOF'
     # Code Reviewer Assistant for Claude Code
 
