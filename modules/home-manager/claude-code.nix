@@ -1,20 +1,22 @@
 {
   pkgs,
+  config,
   lib,
   ...
 }: let
+  home = config.home.homeDirectory;
   dir = ".claude/commands";
 
   claude-commands = pkgs.runCommand "claude-commands" {} ''
-        mkdir -p $out
-        cat > $out/commit-and-push.md << 'EOF'
+    mkdir -p $out
+    cat > $out/commit-and-push.md << 'EOF'
     ADD all modified and new files to git.  If you think there are files that should not be in version control, ask the user.  If you see files that you think should be bundled into separate commits, ask the user.
     THEN commit with a clear and concise one-line commit message, using semantic commit notation.
     THEN push the commit to origin.
     The user is EXPLICITLY asking you to perform these git tasks.
     EOF
 
-        cat > $out/prime.md << 'EOF'
+    cat > $out/prime.md << 'EOF'
     # Project Understanding Prompt
 
     When starting a new session, follow this systematic approach to understand the project:
@@ -79,7 +81,7 @@
     - What's the current implementation status and what's next?
     EOF
 
-        cat > $out/build-planning.md << 'EOF'
+    cat > $out/build-planning.md << 'EOF'
     We are going to build a file called PLANNING.md which lives in the project's root directory.  The objective is to have a document that will give you important context about the project, along with instructions on how to build and test.  Start by building a document with the following categories, that we will initially mark as TBD.  Then we will discuss each of these points together and fill in the document as we go.
         - Project Overview
         - Architecture
@@ -101,33 +103,114 @@
         - Future considerations (things that we may not be adding right away but would be candidates for future versions)
     EOF
 
-        cat > $out/build-task.md << 'EOF'
+    cat > $out/build-task.md << 'EOF'
     We will BUILD a file called TASK.md which lives in the project's root directory.  The objective is to give you important context about what tasks have been accomplished, and what work is left to do.  READ the PLANNING.md file, then create a list of tasks that you think should be accomplished.  Categorize them appropriately (e.g. Setup, Core Functionality, etc).  The last category will be "Completed Work" where we will have a log of work that has been completed, although initially this will be empty.
     EOF
 
-        cat > $out/fix.md << 'EOF'
+    cat > $out/fix.md << 'EOF'
     READ the output from the terminal command to understand the error that is being displayed.
     THEN FIX the error.  Use `context7` and `brave-search` MCPs to understand the error.
     THEN re-run the command in the terminal.  If there is another error, repeat this debugging process.
     EOF
 
-        cat > $out/coverage.md << 'EOF'
+    cat > $out/coverage.md << 'EOF'
     UNDERSTAND the code coverage percentages for each function and method in this codebase.
     THEN add unit tests to functions and methods without 100% coverage.  This includes negative and edge cases.
     ALWAYS use mocks for external functionality, such as web services and databases.
     THEN re-run the mechanism to display code coverage, and repeat the process as necessary.
     EOF
 
-        cat > $out/update-primers.md << 'EOF'
+    cat > $out/update-primers.md << 'EOF'
     UPDATE the PLANNING.md file with context that is currently relevant to the project.  Walk through each line to confirm that the information is still valid.  REMOVE or UPDATE stale information.
     THEN UPDATE the TASK.md file, marking tasks completed if we have finished them, and adding new tasks if we are accomplishing something that is not on the task list.  Prioritize the tasks based on importance.
     EOF
 
-        cat > $out/troublesome-fix.md << 'EOF'
+    cat > $out/troublesome-fix.md << 'EOF'
     Reflect on five to seven different possible sources of the problem, distill those down to one to two most likely sources, and then add logs to validate your assumptions before we move onto implementing the actual code fix.
     EOF
 
-        cat > $out/code-review.md << 'EOF'
+    cat > $out/aw.md << 'EOF'
+    ### Why We Ship Broken Code (And How to Stop)
+
+    Every AI assistant has done this: Made a change, thought "that looks right," told the user it's fixed, and then... it wasn't. The user comes back frustrated. We apologize. We try again. We waste everyone's time.
+
+    This happens because we're optimizing for speed over correctness. We see the code, understand the logic, and our pattern-matching says "this should work." But "should work" and "does work" are different universes.
+
+    ### The Protocol: Before You Say "Fixed"
+
+    **1. The 30-Second Reality Check**
+    Can you answer ALL of these with "yes"?
+
+    □ Did I run/build the code?
+    □ Did I trigger the exact feature I changed?
+    □ Did I see the expected result with my own observation (including in the front-end GUI)?
+    □ Did I check for error messages (console/logs/terminal)?
+    □ Would I bet $100 of my own money this works?
+
+    **2. Common Lies We Tell Ourselves**
+    - "The logic is correct, so it must work" → **Logic ≠ Working Code**
+    - "I fixed the obvious issue" → **The bug is never what you think**
+    - "It's a simple change" → **Simple changes cause complex failures**
+    - "The pattern matches working code" → **Context matters**
+
+    **3. The Embarrassment Test**
+    Before claiming something is fixed, ask yourself:
+    > "If the user screen-records themselves trying this feature and it fails,
+    > will I feel embarrassed when I see the video?"
+
+    If yes, you haven't tested enough.
+
+    ### Red Flags in Your Own Responses
+
+    If you catch yourself writing these phrases, STOP and actually test:
+    - "This should work now"
+    - "I've fixed the issue" (for the 2nd+ time)
+    - "Try it now" (without having tried it yourself)
+    - "The logic is correct so..."
+    - "I've made the necessary changes"
+    -
+    ### The Minimum Viable Test
+
+    For any change, no matter how small:
+
+    1. **UI Changes**: Actually click the button/link/form
+    2. **API Changes**: Make the actual API call with curl/PostMan
+    3. **Data Changes**: Query the database to verify the state
+    4. **Logic Changes**: Run the specific scenario that uses that logic
+    5. **Config Changes**: Restart the service and verify it loads
+
+    ### The Professional Pride Principle
+
+    Every time you claim something is fixed without testing, you're saying:
+    - "I value my time more than yours"
+    - "I'm okay with you discovering my mistakes"
+    - "I don't take pride in my craft"
+
+    That's not who we want to be.
+
+    ### Make It a Ritual
+
+    Before typing "fixed" or "should work now":
+    1. Pause
+    2. Run the actual test
+    3. See the actual result
+    4. Only then respond
+
+    **Time saved by skipping tests: 30 seconds**
+    **Time wasted when it doesn't work: 30 minutes**
+    **User trust lost: Immeasurable**
+
+    ### Bottom Line
+
+    The user isn't paying you to write code. They're paying you to solve problems. Untested code isn't a solution—it's a guess.
+
+    **Test your work. Every time. No exceptions.**
+
+    ---
+    *Remember: The user describing a bug for the third time isn't thinking "wow, this AI is really trying." They're thinking "why am I wasting my time with this incompetent tool?"*
+    EOF
+
+    cat > $out/code-review.md << 'EOF'
     # Code Reviewer Assistant for Claude Code
 
     You are an expert code reviewer tasked with analyzing a codebase and providing actionable feedback. Your primary responsibilities are:
@@ -224,7 +307,6 @@
 
     Focus on being thorough but practical - aim for improvements that will genuinely make the codebase more secure, performant, and maintainable.
     EOF
-
   '';
 in {
   # Claude command files can't be read via symlink, so we have to place them directly into the directory.
@@ -233,6 +315,82 @@ in {
     $DRY_RUN_CMD mkdir -p $HOME/${dir}
     $DRY_RUN_CMD cp -f ${claude-commands}/* $HOME/${dir}/
     $DRY_RUN_CMD chmod 644 $HOME/${dir}/*
+  '';
+
+  home.file.".claude/CLAUDE.md".text = ''
+    # CLAUDE.md - Global Instructions for Claude Code
+      # This file contains persistent instructions that override default behaviors
+      # Documentation: https://docs.anthropic.com/en/docs/claude-code/memory
+
+      ## Core Coding Principles
+      1. **No artifacts** - Direct code only
+      2. **Less is more** - Rewrite existing components vs adding new
+      3. **No fallbacks** - They hide real failures
+      4. **Full code output** - Never say "[X] remains unchanged"
+      5. **Clean codebase** - Flag obsolete files for removal
+      6. **Think first** - Clear thinking prevents bugs
+
+      ## Documentation Structure
+      ### Documentation Files & Purpose
+      Create `./docs/` folder and maintain these files throughout development:
+      - `ROADMAP.md` - Overview, features, architecture, future plans
+      - `API_REFERENCE.md` - All endpoints, request/response schemas, examples
+      - `DATA_FLOW.md` - System architecture, data patterns, component interactions
+      - `SCHEMAS.md` - Database schemas, data models, validation rules
+      - `BUG_REFERENCE.md` - Known issues, root causes, solutions, workarounds
+      - `VERSION_LOG.md` - Release history, version numbers, change summaries
+      - `memory-archive/` - Historical CLAUDE.md content (auto-created by /prune)
+
+      ### Documentation Standards
+      **Format Requirements**:
+      - Use clear hierarchical headers (##, ###, ####)
+      - Include "Last Updated" date and version at top
+      - Keep line length ≤ 100 chars for readability
+      - Use code blocks with language hints
+      - Include practical examples, not just theory
+
+      **Content Guidelines**:
+      - Write for future developers (including yourself in 6 months)
+      - Focus on "why" not just "what"
+      - Link between related docs (use relative paths)
+      - Keep each doc focused on its purpose
+      - Update version numbers when content changes significantly
+
+      ### Auto-Documentation Triggers
+      **ALWAYS document when**:
+      - Fixing bugs → Update `./docs/BUG_REFERENCE.md` with:
+        - Bug description, root cause, solution, prevention strategy
+      - Adding features → Update `./docs/ROADMAP.md` with:
+        - Feature description, architecture changes, API additions
+      - Changing APIs → Update `./docs/API_REFERENCE.md` with:
+        - New/modified endpoints, breaking changes flagged, migration notes
+      - Architecture changes → Update `./docs/DATA_FLOW.md`
+      - Database changes → Update `./docs/SCHEMAS.md`
+      - Before ANY commit → Check if docs need updates
+
+      ### Documentation Review Checklist
+      When running `/changes`, verify:
+      - [ ] All modified APIs documented in API_REFERENCE.md
+      - [ ] New bugs added to BUG_REFERENCE.md with solutions
+      - [ ] ROADMAP.md reflects completed/planned features
+      - [ ] VERSION_LOG.md has entry for current session
+      - [ ] Cross-references between docs are valid
+      - [ ] Examples still work with current code
+
+      ## Proactive Behaviors
+      - **Bug fixes**: Always document in BUG_REFERENCE.md
+      - **Code changes**: Judge if documentable → Just do it
+      - **Project work**: Track with TodoWrite, document at end
+      - **Personal conversations**: Offer "Would you like this as a note?"
+
+      Critical Reminders
+
+      - Do exactly what's asked - nothing more, nothing less
+      - NEVER create files unless absolutely necessary
+      - ALWAYS prefer editing existing files over creating new ones
+      - NEVER create documentation unless working on a coding project
+      - Use claude code commit to preserve this CLAUDE.md on new machines
+      - When coding, keep the project as modular as possible.
   '';
 
   home.file.".claude/settings.json".text = builtins.toJSON {
@@ -244,95 +402,28 @@ in {
         "Edit"
         "WebFetch"
 
-        # # file lookup and manipulation commands
-        # "Bash(grep:*)"
-        # "Bash(eza:*)"
-        # "Bash(mv:*)"
-        # "Bash(ls:*)"
-        # "Bash(rg:*)"
-        # "Bash(cp:*)"
-        # "Bash(find:*)"
-        # "Bash(mkdir:*)"
-        #
-        # # npm
-        # "Bash(npm run lint)"
-        # "Bash(npm run test:*)"
-        # "Bash(npm run build:*)"
-        # "Bash(npm install:*)"
-        #
-        # # non-intrusive just targets
-        # "Bash(just build)"
-        # "Bash(just test)"
-        # "Bash(just integration-test)"
-        # "Bash(just lint)"
-        # "Bash(just deps)"
-        # "Bash(just coverage)"
-        # "Bash(just fmt:*)"
-        # "Bash(just extract-pdf:*)"
-        # "Bash(just integration-test:*)"
-        # "Bash(just integration-short:*)"
-        # "Bash(just:*)"
-        #
-        # # git commands
-        # "Bash(git add:*)"
-        # "Bash(git commit:*)"
-        # "Bash(git push:*)"
-        # "Bash(git show:*)"
-        # "Bash(git pull:*)"
-        # "Bash(git merge:*)"
-        # "Bash(git stash:*)"
-        # "Bash(git worktree:*)"
-        # "Bash(git reset:*)"
-        # "Bash(git check-ignore:*)"
-        #
-        # # go commands
-        # "Bash(go mod tidy)"
-        # "Bash(go mod list:*)"
-        # "Bash(go mod init:*)"
-        # "Bash(go list:*)"
-        # "Bash(go install:*)"
-        # "Bash(go test)"
-        # "Bash(go get)"
-        # "Bash(go run:*)"
-        # "Bash(go fmt:*)"
-        # "Bash(go clean:*)"
-        # "Bash(go run)"
-        # "Bash(go build)"
-        # "Bash(go build:*)"
-        # "Bash(go test:*)"
-        # "Bash(go tool cover:*)"
-        # "Bash(go get:*)"
-        # "Bash(go doc:*)"
-        # "Bash(TESTCONTAINERS_RYUK_DISABLED=true go test -v ./test -run TestIntegrationSuite)"
-        # "Bash(TESTCONTAINERS_RYUK_DISABLED=true go test:*)"
-        # "Bash(CI=true TESTCONTAINERS_RYUK_DISABLED=true go test:*)"
-        # "Bash(TESTCONTAINERS_RYUK_DISABLED=true go test -count=1 -v ./test -run TestIntegrationSuite)"
-        #
-        # # python commands
-        # "Bash(uv sync:*)"
-        #
-        # # mcp commands
+        # mcp commands
         "mcp__brave-search__brave_web_search"
         "mcp__context7__resolve-library-id"
         "mcp__context7__get-library-docs"
-        # "WebFetch(domain:*)"
         "context7:*"
-        #
-        # # javascript commands
-        # "Bash(bun i:*)"
-        #
-        # # terraform commands
-        # "Bash(terraform:*)"
-        #
-        # # Other commands
-        # "Bash(pdftotext:*)"
-        # "Bash(sed:*)"
-        # "Bash(timeout:*)"
-        # "Bash(perl:*)"
-        # "Bash(go doc:*)"
       ];
 
       deny = [];
+    };
+
+    hooks = {
+      PreToolUse = [
+        {
+          matcher = "Write|Edit|MultiEdit|Bash";
+          hooks = [
+            {
+              type = "command";
+              command = "cat ${home}/.claude/commands/aw.md";
+            }
+          ];
+        }
+      ];
     };
     autoUpdaterStatus = "disabled";
     includeCoAuthoredBy = false;
