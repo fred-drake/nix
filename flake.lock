@@ -352,6 +352,22 @@
         "type": "github"
       }
     },
+    "homebrew-sst": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1751424220,
+        "narHash": "sha256-TUWmq3shWkQ86Rdnn7UWitIbgg5UreTVsYK2kV+afjc=",
+        "owner": "sst",
+        "repo": "homebrew-tap",
+        "rev": "239fbb2bb646e25ca158df29a766ab8720bfcb8f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sst",
+        "repo": "homebrew-tap",
+        "type": "github"
+      }
+    },
     "ixx": {
       "inputs": {
         "flake-utils": [
@@ -744,6 +760,7 @@
         "homebrew-core": "homebrew-core",
         "homebrew-fdrake": "homebrew-fdrake",
         "homebrew-nikitabobko": "homebrew-nikitabobko",
+        "homebrew-sst": "homebrew-sst",
         "nix-homebrew": "nix-homebrew",
         "nix-jetbrains-plugins": "nix-jetbrains-plugins",
         "nix4vscode": "nix4vscode",

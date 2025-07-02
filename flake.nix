@@ -60,6 +60,10 @@
       url = "github:nikitabobko/homebrew-tap";
       flake = false;
     };
+    homebrew-sst = {
+      url = "github:sst/homebrew-tap";
+      flake = false;
+    };
 
     # Nix User Repository: User contributed nix packages
     nur.url = "github:nix-community/NUR";
@@ -108,6 +112,7 @@
     homebrew-bundle,
     homebrew-fdrake,
     homebrew-nikitabobko,
+    homebrew-sst,
     secrets,
     sops-nix,
     nix-jetbrains-plugins,
@@ -153,6 +158,7 @@
           homebrew-bundle
           homebrew-fdrake
           homebrew-nikitabobko
+          homebrew-sst
           ;
       };
 

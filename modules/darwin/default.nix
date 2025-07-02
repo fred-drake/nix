@@ -103,6 +103,7 @@ in {
       "zoom"
     ];
     brews = [
+      "sst/tap/opencode"
       "cmake"
       "openssh"
       "ruby-install"
