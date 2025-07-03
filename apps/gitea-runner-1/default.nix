@@ -19,6 +19,7 @@ in {
       gitea-runner-1 = {
         image = containers-sha."docker.gitea.com"."act_runner"."latest"."linux/amd64";
         autoStart = true;
+        privileged = true;
         volumes = [
           "${config.sops.secrets.gitea-registration-token.path}:/gitea-registration-token"
           "${configFile}:/config/config.yaml:ro"

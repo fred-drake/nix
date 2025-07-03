@@ -14,3 +14,5 @@ container:
   privileged: false
   force_pull: true
   valid_volumes: []
+  network: host
+  options: "--network=host"
