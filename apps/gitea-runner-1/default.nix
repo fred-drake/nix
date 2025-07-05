@@ -35,6 +35,9 @@ in {
           GITEA_RUNNER_NAME = "gitea-runner-1";
           CONFIG_FILE = "/config/config.yaml";
         };
+        extraOptions = [
+          "--dns=192.168.40.4"
+        ];
       };
     };
   };
