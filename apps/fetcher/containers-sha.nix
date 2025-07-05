@@ -5,7 +5,7 @@
   "docker.gitea.com" = {
     "act_runner" = {
       "latest" = {
-        "linux/amd64" = "docker.gitea.com/act_runner@sha256:eabea0883261fa3378849a1b9ce86dce6a2e906c8db48ad8553edc3f2bd9ff68";
+        "linux/amd64" = "docker.gitea.com/act_runner@sha256:55f9fcb59ac6159b4015549afa96712a8dde0b1017ffee5551b9c34173c87171";
       };
     };
     "gitea" = {
@@ -49,7 +49,7 @@
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:db12cc04636a7e9858eadba05633d4fa4c620a4d0fc75e4d1436436b6c843458";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:8070a64c03b0eb0cb4c00a9a072f1af26ce5e0741972975760a66430f06ba13b";
       };
     };
   };
@@ -61,12 +61,12 @@
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:195a021cd143260d3d8ace416c2dc98e6ba94b70308208a46508388207572c8e";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:ad7daee324171078b0e730add31b632d5e1a31b3bf57d24fca6a9bd36a343c9f";
       };
     };
     "linuxserver/sonarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:4454c8cc644aeceb1f7c15237196cd415e5f8166922b893ee33e06c283533814";
+        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:e204e2ed41e17f48b3ab8e1f933b5b2a28807fd4e8643e2a79e2ae602595f7c7";
       };
     };
     "monstermuffin/mergerfs-cache-mover" = {

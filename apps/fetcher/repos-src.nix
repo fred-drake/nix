@@ -5,8 +5,8 @@
   outline-nvim-src = pkgs.fetchFromGitHub {
     owner = "hedyhli";
     repo = "outline.nvim";
-    rev = "321f89ef79f168a78685f70d70c52d0e7b563abb";
-    hash = "sha256-fbNVSAOzdmmfTV4CkssTpw54IZbCCLUOguO/huEB6eU=";
+    rev = "0eb9289ab39c91caf8b3ed0e3a17764809d69558";
+    hash = "sha256-1ZZ2rtkOKAQdgMfgakNqi8NZzO2yPdvMFCs7mjS1ckI=";
   };
   container-digest-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
