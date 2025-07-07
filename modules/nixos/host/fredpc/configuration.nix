@@ -16,6 +16,7 @@ in {
 
   environment.systemPackages = with pkgs; [
     curl
+    bindfs
     file
     git
     inputs.zen-browser.packages."x86_64-linux".default
@@ -26,9 +27,9 @@ in {
     usbutils
 
     # Gaming
-    steam
-    steamcmd
-    steam-tui
+    # steam
+    # steamcmd
+    # steam-tui
     libratbag
     piper
 
@@ -144,16 +145,18 @@ in {
     enable = true;
   };
 
+  services.flatpak.enable = true;
+
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
 
   # Steam
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-    localNetworkGameTransfers.openFirewall = true;
-  };
+  # programs.steam = {
+  #   enable = true;
+  #   remotePlay.openFirewall = true;
+  #   dedicatedServer.openFirewall = true;
+  #   localNetworkGameTransfers.openFirewall = true;
+  # };
 
   # Podman
   virtualisation.containers.enable = true;
