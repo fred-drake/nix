@@ -36,6 +36,8 @@ in {
     # CUDA
     cudaPackages.cudatoolkit
     pkgsUnstable.cudaPackages.cudnn
+    nvidia-container-toolkit
+    crun
 
     zed-editor
     docker-compose
@@ -57,6 +59,11 @@ in {
       id = 1;
       interface = "enp5s0";
     };
+
+    extraHosts = ''
+      192.168.30.58 local.brainrush.ai
+      192.168.30.58 local-llm.brainrush.ai
+    '';
   };
 
   nix.extraOptions = ''
@@ -126,11 +133,12 @@ in {
     nvidiaSettings = true;
     open = true;
   };
+  hardware.nvidia-container-toolkit.enable = true;
 
   services.ratbagd.enable = true;
 
   services.ollama = {
-    enable = true;
+    enable = false; # Running it from podman for now
     acceleration = "cuda";
     openFirewall = true;
     host = "0.0.0.0";
@@ -145,7 +153,7 @@ in {
     enable = true;
   };
 
-  services.flatpak.enable = true;
+  services.flatpak.enable = true; # Installing Steam through here
 
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
@@ -160,6 +168,17 @@ in {
 
   # Podman
   virtualisation.containers.enable = true;
+  virtualisation.containers = {
+    containersConf.settings = {
+      engine = {
+        runtimes = {
+          nvidia = [
+            "${pkgs.nvidia-container-toolkit}/bin/nvidia-container-runtime"
+          ];
+        };
+      };
+    };
+  };
   virtualisation.podman = {
     enable = true;
     dockerCompat = true;
@@ -179,6 +198,24 @@ in {
       };
     };
   };
+
+  # Generate CDI specifications
+  systemd.services.nvidia-cdi-generate = {
+    description = "Generate NVIDIA CDI specifications";
+    wantedBy = ["multi-user.target"];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.nvidia-container-toolkit}/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml";
+      RemainAfterExit = true;
+    };
+  };
+
+  # Create symlink for nvidia-cdi-hook
+  # This is a hack, but podman/crun insists on looking at this location for the CDI hook,
+  # so at least this will persist with upgrades
+  systemd.tmpfiles.rules = [
+    "L+ /usr/bin/nvidia-cdi-hook - - - - ${pkgs.nvidia-container-toolkit.tools}/bin/nvidia-cdi-hook"
+  ];
 
   system.stateVersion = "24.11";
 }
