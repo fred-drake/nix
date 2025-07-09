@@ -1,6 +1,8 @@
 {pkgs, ...}: {
   # Screensaver management scripts
   environment.systemPackages = with pkgs; [
+    # GNOME extensions
+    gnomeExtensions.clipboard-indicator
     (writeShellScriptBin "disable-screensaver" ''
       #!/usr/bin/env bash
 
@@ -87,6 +89,7 @@
   services.desktopManager.gnome.enable = true;
   services.displayManager.gdm.enable = true;
 
+
   # GNOME dconf settings for declarative configuration
   programs.dconf.enable = true;
   programs.dconf.profiles.user.databases = [
@@ -128,6 +131,9 @@
             "com.valvesoftware.Steam.desktop"
           ];
           welcome-dialog-last-shown-version = "47.4";
+          enabled-extensions = [
+            "clipboard-indicator@tudmotu.com"
+          ];
         };
         "org/gnome/desktop/notifications" = {
           show-banners = false;
