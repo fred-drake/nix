@@ -89,7 +89,6 @@
   services.desktopManager.gnome.enable = true;
   services.displayManager.gdm.enable = true;
 
-
   # GNOME dconf settings for declarative configuration
   programs.dconf.enable = true;
   programs.dconf.profiles.user.databases = [
@@ -134,9 +133,6 @@
           enabled-extensions = [
             "clipboard-indicator@tudmotu.com"
           ];
-        };
-        "org/gnome/desktop/notifications" = {
-          show-banners = false;
         };
       };
     }
