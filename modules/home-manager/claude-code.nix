@@ -424,6 +424,17 @@ in {
           ];
         }
       ];
+      Stop = [
+        {
+          matcher = "";
+          hooks = [
+            {
+              command = "PROJECT_NAME=\${PROJECT_ROOT##*/}; PROJECT_NAME=\${PROJECT_NAME:-'project'}; curl -X POST -H 'Content-type: application/json' --data \"{\\\"text\\\":\\\"Task completed in $PROJECT_NAME\\\"}\" \"$CLAUDE_NOTIFICATION_SLACK_URL\"";
+              type = "command";
+            }
+          ];
+        }
+      ];
     };
     autoUpdaterStatus = "disabled";
     includeCoAuthoredBy = false;

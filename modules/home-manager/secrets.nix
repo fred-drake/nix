@@ -151,4 +151,11 @@ in {
     key = "data";
     path = "${home}/.ssh/oracle_cloud_key.pem";
   };
+
+  sops.secrets.claude-env = {
+    sopsFile = config.secrets.workstation.claude-notification-hook-env;
+    mode = "400";
+    key = "data";
+    path = "${home}/.config/fish/conf.d/claude-env.fish";
+  };
 }
