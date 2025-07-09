@@ -419,7 +419,7 @@ in {
           hooks = [
             {
               type = "command";
-              command = "cat ${home}/.claude/commands/aw.md";
+              command = "cat ${home}/.claude/commands/aw.md >&2 && exit 1";
             }
           ];
         }
