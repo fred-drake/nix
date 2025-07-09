@@ -134,6 +134,9 @@
             "clipboard-indicator@tudmotu.com"
           ];
         };
+        "org/gnome/desktop/notifications" = {
+          show-banners = true;
+        };
       };
     }
   ];
