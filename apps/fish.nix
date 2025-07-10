@@ -132,7 +132,6 @@ in {
       cm = "chezmoi";
       df = "duf";
       k = "kubectl";
-      t = "tmuxinator";
       telnet = "nc -zv";
       la = "eza -a";
       ll = "eza -l";

@@ -33,7 +33,6 @@ in {
     ../../apps/tmux.nix
     ../../apps/nixvim
     ./claude-code.nix
-    ./tmuxinator-settings.nix
     ./tmux-windev-settings.nix
     ./secrets.nix
   ];
@@ -182,7 +181,6 @@ in {
       syncthing # File synchronization tool
       tldr # Documentation tool
       tmux # Terminal multiplexer
-      tmuxinator # Tmux session manager
       tmux-mem-cpu-load # CPU and memory usage monitor
       tokei # Code statistics tool
       wiki-tui # Wikipedia TUI

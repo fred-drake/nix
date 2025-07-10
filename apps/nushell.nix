@@ -17,7 +17,6 @@
       df = "duf";
       docker = "podman";
       k = "kubectl";
-      t = "tmuxinator";
       telnet = "nc -zv";
       man = "batman";
       lg = "lazygit";
