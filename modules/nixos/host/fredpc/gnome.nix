@@ -3,6 +3,7 @@
   environment.systemPackages = with pkgs; [
     # GNOME extensions
     gnomeExtensions.clipboard-indicator
+    gnomeExtensions.caffeine
     (writeShellScriptBin "disable-screensaver" ''
       #!/usr/bin/env bash
 
@@ -132,6 +133,7 @@
           welcome-dialog-last-shown-version = "47.4";
           enabled-extensions = [
             "clipboard-indicator@tudmotu.com"
+            "caffeine@patapon.info"
           ];
         };
         "org/gnome/desktop/notifications" = {

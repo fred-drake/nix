@@ -413,17 +413,17 @@ in {
     };
 
     hooks = {
-      PreToolUse = [
-        {
-          matcher = "Write|Edit|MultiEdit|Bash";
-          hooks = [
-            {
-              type = "command";
-              command = "cat ${home}/.claude/commands/aw.md >&2 && exit 1";
-            }
-          ];
-        }
-      ];
+      # PreToolUse = [
+      #   {
+      #     matcher = "Write|Edit|MultiEdit|Bash";
+      #     hooks = [
+      #       {
+      #         type = "command";
+      #         command = "cat ${home}/.claude/commands/aw.md >&2 && exit 1";
+      #       }
+      #     ];
+      #   }
+      # ];
       Stop = [
         {
           matcher = "";
