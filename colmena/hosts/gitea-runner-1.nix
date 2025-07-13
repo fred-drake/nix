@@ -5,7 +5,7 @@
   sops-nix,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets";
+  soft-secrets = import "${secrets}/soft-secrets" { home = null; };
 in {
   # Base configuration for Gitea Runner
   _gitea-runner-1 = {
