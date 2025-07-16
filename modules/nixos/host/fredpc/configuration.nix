@@ -48,6 +48,7 @@ in {
     # Development
     alejandra
 
+    obsidian
   ];
 
   networking = {
@@ -98,7 +99,6 @@ in {
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
-
 
   # Sound
   security.rtkit.enable = true;
@@ -153,7 +153,6 @@ in {
   services.mongodb = {
     enable = true;
   };
-
 
   # Steam
   # programs.steam = {
