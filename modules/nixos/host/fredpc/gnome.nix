@@ -129,6 +129,8 @@
             "zen-beta.desktop"
             "org.gnome.Nautilus.desktop"
             "com.valvesoftware.Steam.desktop"
+            "slack.desktop"
+            "obsidian.desktop"
           ];
           welcome-dialog-last-shown-version = "47.4";
           enabled-extensions = [
