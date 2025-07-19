@@ -104,6 +104,16 @@ in {
     key = "brave";
   };
 
+  sops.secrets.docker-auth = {
+    sopsFile = config.secrets.workstation.docker-auth;
+    mode = "0400";
+    key = "data";
+    path = "${home}/.docker/config.json";
+  };
+
+  # Symlink for containers runtime location
+  home.file.".config/containers/auth.json".source = config.lib.file.mkOutOfStoreSymlink "${home}/.docker/config.json";
+
   sops.templates."mcp-config" = {
     mode = "0400";
     path = "${home}/mcp-config.json";
