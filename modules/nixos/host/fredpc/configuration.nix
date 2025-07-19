@@ -18,6 +18,7 @@ in {
   services.openssh.enable = true;
 
   environment.systemPackages = with pkgs; [
+    chromium
     curl
     bindfs
     file
