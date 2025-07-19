@@ -11,8 +11,8 @@
   container-digest-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
     repo = "container-digest";
-    rev = "2503196e2be47c54a1a0533a38564076ac3a2ec8";
-    hash = "sha256-8STjBS+ZQYQdREQCqPP4ZZ0/+DiQujI+Pc2bKhZQDGA=";
+    rev = "bcc31e383623403b0a33dd2e21751ddd1f262c28";
+    hash = "sha256-zBQDSr3bXuP9U3YIu9VQkYqfBP5p/5b+uLeai6a82Yk=";
   };
   npm-refresh-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
