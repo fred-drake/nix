@@ -167,6 +167,7 @@ in {
       kubectl # Kubernetes command-line tool
       lazydocker # Docker CLI with auto-completion and syntax highlighting
       llama-cpp # Text generation
+      lsof
       meld # Visual diff and merge tool
       minio-client
       nixd # Nix daemon for IDE
