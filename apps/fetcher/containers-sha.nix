@@ -10,14 +10,14 @@
     };
     "gitea" = {
       "1-rootless" = {
-        "linux/amd64" = "docker.gitea.com/gitea@sha256:0a767f091abb5b69a19c9e8ccb0fb4c88599268e9229eaa9632d4cfdee4fd40e";
+        "linux/amd64" = "docker.gitea.com/gitea@sha256:303d0d57cc29d9c7d33668e7ca5aff70f470ed106484fa79113ba6324492a834";
       };
     };
   };
   "docker.io" = {
     "fallenbagel/jellyseerr" = {
       "latest" = {
-        "linux/amd64" = "docker.io/fallenbagel/jellyseerr@sha256:e3b4cada3d4777ab7ddf7e376058a292fc5f50f2723c1aca8c3b807fb2eaf147";
+        "linux/amd64" = "docker.io/fallenbagel/jellyseerr@sha256:ead69d23ebb6c7e0c3d3250eb3c5993652d28779cbadcceae03b99833ca54932";
       };
     };
     "glanceapp/glance" = {
@@ -45,18 +45,28 @@
         "linux/amd64" = "docker.io/solarkennedy/ipmi-kvm-docker@sha256:63d758c437d333e4d3cf7abfc62dea85c68fa3f3ed72bf92917107540fb8c14d";
       };
     };
+    "sonarqube" = {
+      "latest" = {
+        "linux/amd64" = "docker.io/sonarqube@sha256:e709b05cb14576cb63b0517e5d5e8b4e70e612dbd726c5199e6d27119c29b330";
+      };
+    };
+    "postgres" = {
+      "17" = {
+        "linux/amd64" = "docker.io/library/postgres@sha256:3962158596daaef3682838cc8eb0e719ad1ce520f88e34596ce8d5de1b6330a1";
+      };
+    };
   };
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:63e03a00901e5a1e18b2b49baaa16435c82d9251282f656f472e73df957563df";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:3cb5d7ab3d698d3b0f0def2eecabca353d72d3721bcca847247eff148dbc6ee4";
       };
     };
   };
   "ghcr.io" = {
     "linuxserver/radarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:9f40049622dc9d3c683ec5c833747be2406920bd5f186766f5460e08a2f7f6b9";
+        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:d3c28fdee4aded26d53092c8be07dfdb383628dd8efb955732a2b2a8fbfe956f";
       };
     };
     "linuxserver/sabnzbd" = {
@@ -83,7 +93,7 @@
   "quay.io" = {
     "minio/minio" = {
       "latest" = {
-        "linux/amd64" = "quay.io/minio/minio@sha256:1c681ce493064759564b10039bc3bbc73ec305a37d6c64919f70d9e1785164b1";
+        "linux/amd64" = "quay.io/minio/minio@sha256:f47a7fb74cd5a06abf8151a690b4ed8e208fc65c7f9b4c5dc5581ae6a727bdd7";
       };
     };
   };

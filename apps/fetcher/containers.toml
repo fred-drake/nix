@@ -75,4 +75,14 @@ repository = "quay.io"
 name = "minio/minio"
 tag = "latest"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "sonarqube"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "postgres"
+tag = "17"
+architectures = ["linux/amd64"]
 
