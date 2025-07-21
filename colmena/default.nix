@@ -15,6 +15,7 @@
   gitea = import ./hosts/gitea.nix {inherit self nixpkgs-stable secrets sops-nix;};
   gitea-runner-1 = import ./hosts/gitea-runner-1.nix {inherit self nixpkgs-stable secrets sops-nix;};
   uptime-kuma = import ./hosts/uptime-kuma.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  sonarqube = import ./hosts/sonarqube.nix {inherit self nixpkgs-stable secrets sops-nix;};
   prometheus = import ./hosts/prometheus.nix {inherit self nixpkgs-stable secrets sops-nix;};
   grafana = import ./hosts/grafana.nix {inherit self nixpkgs-stable secrets sops-nix;};
   larussa = import ./hosts/larussa.nix {inherit self nixpkgs-stable secrets sops-nix;};
@@ -37,6 +38,7 @@ in {
   _gitea = gitea._gitea;
   _gitea-runner-1 = gitea-runner-1._gitea-runner-1;
   _uptime-kuma = uptime-kuma._uptime-kuma;
+  _sonarqube = sonarqube._sonarqube;
   _prometheus = prometheus._prometheus;
   _grafana = grafana._grafana;
   _larussa = larussa._larussa;
@@ -54,6 +56,7 @@ in {
   "gitea-init" = gitea."gitea-init";
   "gitea-runner-1-init" = gitea-runner-1."gitea-runner-1-init";
   "uptime-kuma-init" = uptime-kuma."uptime-kuma-init";
+  "sonarqube-init" = sonarqube."sonarqube-init";
   "prometheus-init" = prometheus."prometheus-init";
   "grafana-init" = grafana."grafana-init";
   "larussa-init" = larussa."larussa-init";
@@ -71,6 +74,7 @@ in {
   "gitea" = gitea."gitea";
   "gitea-runner-1" = gitea-runner-1."gitea-runner-1";
   "uptime-kuma" = uptime-kuma."uptime-kuma";
+  "sonarqube" = sonarqube."sonarqube";
   "prometheus" = prometheus."prometheus";
   "grafana" = grafana."grafana";
   "larussa" = larussa."larussa";
