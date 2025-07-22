@@ -111,6 +111,12 @@ in {
     path = "${home}/.docker/config.json";
   };
 
+  sops.secrets.sonarqube-token = {
+    sopsFile = config.secrets.workstation.sonarqube-token;
+    mode = "0400";
+    key = "token";
+  };
+
   # Symlink for containers runtime location
   home.file.".config/containers/auth.json".source = config.lib.file.mkOutOfStoreSymlink "${home}/.docker/config.json";
 
@@ -139,6 +145,16 @@ in {
           "context7": {
             "command": "npx",
             "args": ["-y", "@upstash/context7-mcp"]
+          },
+          "sonarqube": {
+            "command": "podman",
+            "args": [
+              "run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "mcp/sonarqube"
+            ],
+            "env": {
+              "SONARQUBE_URL": "https://sonarqube.${config.soft-secrets.networking.domain}",
+              "SONARQUBE_TOKEN": "${config.sops.placeholder.sonarqube-token}"
+            }
           }
         }
       }
