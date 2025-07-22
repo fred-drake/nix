@@ -130,6 +130,7 @@ in {
 
     shellAbbrs = {
       cm = "chezmoi";
+      cld = "claude --mcp-config ~/mcp-config.json --dangerously-skip-permissions --add-dir ~/Screenshots";
       df = "duf";
       k = "kubectl";
       telnet = "nc -zv";

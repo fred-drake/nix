@@ -149,11 +149,12 @@ in {
           "sonarqube": {
             "command": "podman",
             "args": [
-              "run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "mcp/sonarqube"
+              "run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "mcp/sonarqube", "-e", "TELEMETRY_DISABLED"
             ],
             "env": {
               "SONARQUBE_URL": "https://sonarqube.${config.soft-secrets.networking.domain}",
-              "SONARQUBE_TOKEN": "${config.sops.placeholder.sonarqube-token}"
+              "SONARQUBE_TOKEN": "${config.sops.placeholder.sonarqube-token}",
+              "TELEMETRY_DISABLED": "true"
             }
           }
         }
