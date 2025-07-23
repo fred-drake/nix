@@ -86,9 +86,12 @@
     '')
   ];
   # GNOME Desktop Environment
-  services.xserver.enable = true;
-  services.desktopManager.gnome.enable = true;
-  services.displayManager.gdm.enable = true;
+  services = {
+    xserver.enable = true;
+    desktopManager.gnome.enable = true;
+    displayManager.gdm.enable = true;
+    flatpak.enable = true;
+  };
 
   # GNOME dconf settings for declarative configuration
   programs.dconf.enable = true;
@@ -148,7 +151,4 @@
   # XDG Portal configuration
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
-
-  # Flatpak support
-  services.flatpak.enable = true;
 }

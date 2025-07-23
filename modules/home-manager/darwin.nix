@@ -1,29 +1,33 @@
 {pkgs, ...}: {
-  home.file = {
-    ".finicky.js" = {source = ../../homefiles/finicky.js;};
+  home = {
+    file = {
+      ".finicky.js" = {source = ../../homefiles/finicky.js;};
+    };
+    packages = with pkgs; [
+      mas # Mac App Store command-line interface
+    ];
+    sessionVariables = {
+      HOMEBREW_PREFIX = "/opt/homebrew";
+      HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
+      HOMEBREW_REPOSITORY = "/opt/homebrew";
+    };
   };
-  home.packages = with pkgs; [
-    mas # Mac App Store command-line interface
-  ];
 
-  # Set session variables
-  home.sessionVariables = {
-    HOMEBREW_PREFIX = "/opt/homebrew";
-    HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
-    HOMEBREW_REPOSITORY = "/opt/homebrew";
+  targets.darwin = {
+    currentHostDefaults."com.apple.controlcenter".BatteryShowPercentage = true;
+    defaults = {
+      "com.apple.Safari" = {
+        AutoFillCreditCardData = false;
+        AutoFillPasswords = false;
+        IncludeDevelopMenu = true;
+      };
+      "com.apple.desktopservices" = {
+        DSDontWriteNetworkStores = true;
+        DSDontWriteUSBStores = true;
+      };
+      "com.apple.finder".FXRemoveOldTrashItems = true;
+      "com.microsoft.VSCode".ApplePressAndHoldEnabled = false;
+    };
+    search = "Google";
   };
-
-  # macOS-specific settings
-  targets.darwin.currentHostDefaults."com.apple.controlcenter".BatteryShowPercentage =
-    true;
-  targets.darwin.defaults."com.apple.Safari".AutoFillCreditCardData = false;
-  targets.darwin.defaults."com.apple.Safari".AutoFillPasswords = false;
-  targets.darwin.defaults."com.apple.Safari".IncludeDevelopMenu = true;
-  targets.darwin.defaults."com.apple.desktopservices".DSDontWriteNetworkStores =
-    true;
-  targets.darwin.defaults."com.apple.desktopservices".DSDontWriteUSBStores =
-    true;
-  targets.darwin.defaults."com.apple.finder".FXRemoveOldTrashItems = true;
-  targets.darwin.defaults."com.microsoft.VSCode".ApplePressAndHoldEnabled = false;
-  targets.darwin.search = "Google";
 }

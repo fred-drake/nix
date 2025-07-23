@@ -40,15 +40,40 @@
 
   networking = {
     firewall.enable = false;
-    interfaces."end0" = {
-      useDHCP = false;
-      ipv4 = {
-        addresses = [
-          {
-            address = config.soft-secrets.host.dns2.admin_ip_address;
-            prefixLength = 24;
-          }
-        ];
+
+    interfaces = {
+      "end0" = {
+        useDHCP = false;
+        ipv4 = {
+          addresses = [
+            {
+              address = config.soft-secrets.host.dns2.admin_ip_address;
+              prefixLength = 24;
+            }
+          ];
+        };
+      };
+
+      "end0.40" = {
+        ipv4 = {
+          addresses = [
+            {
+              address = config.soft-secrets.host.dns2.iot_ip_address;
+              prefixLength = 24;
+            }
+          ];
+          routes = [
+            {
+              address = "0.0.0.0";
+              prefixLength = 0;
+              via = config.soft-secrets.networking.gateway.iot;
+            }
+          ];
+        };
+      };
+
+      "wlan0" = {
+        useDHCP = false;
       };
     };
 
@@ -59,28 +84,10 @@
       };
     };
 
-    interfaces."end0.40".ipv4 = {
-      addresses = [
-        {
-          address = config.soft-secrets.host.dns2.iot_ip_address;
-          prefixLength = 24;
-        }
-      ];
-      routes = [
-        {
-          address = "0.0.0.0";
-          prefixLength = 0;
-          via = config.soft-secrets.networking.gateway.iot;
-        }
-      ];
-    };
-
     defaultGateway = {
       address = config.soft-secrets.networking.gateway.admin;
       interface = "end0";
     };
-
-    interfaces."wlan0".useDHCP = false;
 
     nameservers = config.soft-secrets.networking.nameservers.public;
   };

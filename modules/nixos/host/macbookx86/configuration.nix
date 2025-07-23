@@ -8,9 +8,13 @@
   ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot";
+    };
+  };
 
   # Enable Wi-Fi and Bluetooth for Macbook T2
   hardware.firmware = [
@@ -24,14 +28,16 @@
     }))
   ];
 
-  networking.hostName = "macbookx86"; # Define your hostname.
-  # Pick only one of the below networking options.
-  networking.wireless = {
-    enable = true;
-    secretsFile = "/home/fdrake/.config/wifi/workstation.env";
-    networks."Frecklepie".pskRaw = "ext:WORKSTATION_PASSWORD";
+  networking = {
+    hostName = "macbookx86"; # Define your hostname.
+    # Pick only one of the below networking options.
+    wireless = {
+      enable = true;
+      secretsFile = "/home/fdrake/.config/wifi/workstation.env";
+      networks."Frecklepie".pskRaw = "ext:WORKSTATION_PASSWORD";
+    };
+    networkmanager.enable = false; # Easiest to use and most distros use this by default.
   };
-  networking.networkmanager.enable = false; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -62,63 +68,69 @@
   '';
 
   # Power management.
-  services.logind = {
-    lidSwitch = "ignore";
-    extraConfig = ''
-      HandlePowerKey=ignore
-    '';
+  services = {
+    logind = {
+      lidSwitch = "ignore";
+      extraConfig = ''
+        HandlePowerKey=ignore
+      '';
+    };
+
+    acpid = {
+      enable = true;
+      lidEventCommands = ''
+        export PATH=$PATH:/run/current-system/sw/bin
+
+        lid_state=$(cat /proc/acpi/button/lid/LID0/state | awk '{print $NF}')
+        if [ $lid_state = "closed" ]; then
+          # Set brightness to zero
+          echo 0  > /sys/class/backlight/acpi_video0/brightness
+        else
+          # Reset the brightness
+          echo 50  > /sys/class/backlight/acpi_video0/brightness
+        fi
+      '';
+
+      powerEventCommands = ''
+        systemctl suspend
+      '';
+    };
+
+    # Enable the X11 windowing system.
+    # Also disable suspend
+    xserver = {
+      enable = true;
+      displayManager.gdm.enable = true;
+      displayManager.gdm.autoSuspend = false;
+      desktopManager.gnome.enable = true;
+    };
+
+    # Configure keymap in X11
+    # xserver.xkb.layout = "us";
+    # xserver.xkb.options = "eurosign:e,caps:escape";
+
+    # Enable CUPS to print documents.
+    # printing.enable = true;
+
+    # OR enable pipewire for sound
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+
+    # Enable touchpad support (enabled default in most desktopManager).
+    libinput.enable = true;
+
+    # Enable the OpenSSH daemon.
+    openssh.enable = true;
   };
-
-  services.acpid = {
-    enable = true;
-    lidEventCommands = ''
-      export PATH=$PATH:/run/current-system/sw/bin
-
-      lid_state=$(cat /proc/acpi/button/lid/LID0/state | awk '{print $NF}')
-      if [ $lid_state = "closed" ]; then
-        # Set brightness to zero
-        echo 0  > /sys/class/backlight/acpi_video0/brightness
-      else
-        # Reset the brightness
-        echo 50  > /sys/class/backlight/acpi_video0/brightness
-      fi
-    '';
-
-    powerEventCommands = ''
-      systemctl suspend
-    '';
-  };
-
-  # Enable the X11 windowing system.
-  # Also disable suspend
-  services.xserver = {
-    enable = true;
-    displayManager.gdm.enable = true;
-    displayManager.gdm.autoSuspend = false;
-    desktopManager.gnome.enable = true;
-  };
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
 
   # Enable sound.
   hardware.pulseaudio.enable = false;
-  # OR
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.fdrake = {
     isNormalUser = true;
     extraGroups = ["wheel"]; # Enable ‘sudo’ for the user.
@@ -145,9 +157,6 @@
   # };
 
   # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

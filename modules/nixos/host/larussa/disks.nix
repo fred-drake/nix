@@ -103,57 +103,59 @@
   snapraidParityFiles = map (key: "${key}/snapraid.parity") (builtins.attrNames parityDisks);
   snapraidContentFiles = map (key: "${key}/snapraid.content") (builtins.attrNames slowDisks);
 in {
-  config.fileSystems =
-    slowDisks
-    // cacheDisks
-    // parityDisks
-    // {
-      "${storagePath}" = {
-        device = fullPoolDisks;
-        fsType = "mergerfs";
-        options = ["minfreespace=20G" "cache.files=off" "category.create=ff" "func.getattr=newest" "dropcacheonclose=false"];
+  config = {
+    fileSystems =
+      slowDisks
+      // cacheDisks
+      // parityDisks
+      // {
+        "${storagePath}" = {
+          device = fullPoolDisks;
+          fsType = "mergerfs";
+          options = ["minfreespace=20G" "cache.files=off" "category.create=ff" "func.getattr=newest" "dropcacheonclose=false"];
+        };
+        "${coldStoragePath}" = {
+          device = slowPoolDisks;
+          fsType = "mergerfs";
+          options = ["minfreespace=20G" "cache.files=off" "category.create=pfrd" "func.getattr=newest" "dropcacheonclose=false"];
+        };
       };
-      "${coldStoragePath}" = {
-        device = slowPoolDisks;
-        fsType = "mergerfs";
-        options = ["minfreespace=20G" "cache.files=off" "category.create=pfrd" "func.getattr=newest" "dropcacheonclose=false"];
-      };
+
+    services.snapraid = {
+      enable = true;
+      dataDisks = snapraidDataDisks;
+      parityFiles = snapraidParityFiles;
+      contentFiles = snapraidContentFiles;
+      exclude = [];
+      extraConfig = ''
+        autosave 100
+      '';
     };
 
-  config.services.snapraid = {
-    enable = true;
-    dataDisks = snapraidDataDisks;
-    parityFiles = snapraidParityFiles;
-    contentFiles = snapraidContentFiles;
-    exclude = [];
-    extraConfig = ''
-      autosave 100
-    '';
-  };
-
-  # MergerFS Cache Mover
-  config.virtualisation.oci-containers = {
-    containers = {
-      mergerfs-cache-mover = {
-        image = containers-sha."ghcr.io"."monstermuffin/mergerfs-cache-mover"."latest"."linux/amd64";
-        autoStart = true;
-        volumes = [
-          "${cachePath}:/mnt/cache"
-          "${coldStoragePath}:/mnt/cold"
-          "/mnt/pool:/mnt/data-disks"
-        ];
-        environment = {
-          CACHE_PATH = "/mnt/cache";
-          BACKING_PATH = "/mnt/cold";
-          EXCLUDED_DIRS = "sabnzbd_downloads,sabnzbd_downloads_incomplete";
-          SCHEDULE = "0 3 * * *"; # Run at 3 AM daily
-          THRESHOLD_PERCENTAGE = "5";
-          TARGET_PERCENTAGE = "2";
-          LOG_LEVEL = "INFO";
-          MAX_WORKERS = "8";
-          TZ = "America/New_York";
+    # MergerFS Cache Mover
+    virtualisation.oci-containers = {
+      containers = {
+        mergerfs-cache-mover = {
+          image = containers-sha."ghcr.io"."monstermuffin/mergerfs-cache-mover"."latest"."linux/amd64";
+          autoStart = true;
+          volumes = [
+            "${cachePath}:/mnt/cache"
+            "${coldStoragePath}:/mnt/cold"
+            "/mnt/pool:/mnt/data-disks"
+          ];
+          environment = {
+            CACHE_PATH = "/mnt/cache";
+            BACKING_PATH = "/mnt/cold";
+            EXCLUDED_DIRS = "sabnzbd_downloads,sabnzbd_downloads_incomplete";
+            SCHEDULE = "0 3 * * *"; # Run at 3 AM daily
+            THRESHOLD_PERCENTAGE = "5";
+            TARGET_PERCENTAGE = "2";
+            LOG_LEVEL = "INFO";
+            MAX_WORKERS = "8";
+            TZ = "America/New_York";
+          };
+          extraOptions = ["--cap-add=SYS_ADMIN" "--cap-add=DAC_READ_SEARCH"];
         };
-        extraOptions = ["--cap-add=SYS_ADMIN" "--cap-add=DAC_READ_SEARCH"];
       };
     };
   };

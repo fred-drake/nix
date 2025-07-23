@@ -89,28 +89,30 @@ in {
     "d /var/minio/data 0755 1000 1000 -"
   ];
 
-  virtualisation.containers.enable = true;
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      minio = {
-        image = containers-sha."quay.io"."minio/minio"."latest"."linux/amd64";
-        autoStart = true;
-        ports = ["127.0.0.1:9000:9000" "127.0.0.1:9001:9001"];
-        volumes = ["/var/minio/data:/data"];
-        cmd = ["server" "/data" "--console-address" ":9001"];
-        environment = {
-          PUID = "1000";
-          PGID = "1000";
-          MINIO_BROWSER_REDIRECT_URL = "https://s3-config.${config.soft-secrets.networking.domain}";
-          TZ = "America/New_York";
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+    oci-containers = {
+      backend = "podman";
+      containers = {
+        minio = {
+          image = containers-sha."quay.io"."minio/minio"."latest"."linux/amd64";
+          autoStart = true;
+          ports = ["127.0.0.1:9000:9000" "127.0.0.1:9001:9001"];
+          volumes = ["/var/minio/data:/data"];
+          cmd = ["server" "/data" "--console-address" ":9001"];
+          environment = {
+            PUID = "1000";
+            PGID = "1000";
+            MINIO_BROWSER_REDIRECT_URL = "https://s3-config.${config.soft-secrets.networking.domain}";
+            TZ = "America/New_York";
+          };
+          environmentFiles = [config.sops.secrets.minio-env-file.path];
         };
-        environmentFiles = [config.sops.secrets.minio-env-file.path];
       };
     };
   };
