@@ -3,9 +3,9 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "claude-code" = {
-    "version" = "1.0.57";
-    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.57.tgz";
-    "url-hash" = "sha256-ymyg21CgjALM3+oWk7haC+CvYuN54+mlQQefQF2hMCs=";
+    "version" = "1.0.58";
+    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.58.tgz";
+    "url-hash" = "sha256-6jEqf59AzEkvz6VbzhGNWah5LoAeL/6zStrRANO/JZE=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";

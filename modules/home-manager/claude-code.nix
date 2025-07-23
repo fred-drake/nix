@@ -10,10 +10,40 @@
   claude-commands = pkgs.runCommand "claude-commands" {} ''
     mkdir -p $out
     cat > $out/commit-and-push.md << 'EOF'
-    ADD all modified and new files to git.  If you think there are files that should not be in version control, ask the user.  If you see files that you think should be bundled into separate commits, please bundle into separate commits WITHOUT asking the user.
-    THEN commit with a clear and concise one-line commit message, using semantic commit notation.
-    THEN push the commit to origin.
-    The user is EXPLICITLY asking you to perform these git tasks.
+    OBJECTIVE: Validate, commit, and push code changes with quality checks.
+
+    PRE-COMMIT VALIDATION:
+    1. RUN language-specific quality checks:
+       - Go/Rust projects:
+         * `just format` - Fix any formatting issues
+         * `just lint` - Fix all linting errors
+         * `just test` - Ensure all tests pass
+       - JavaScript/TypeScript projects:
+         * `npm run format` - Fix any formatting issues
+         * `npm run lint` - Fix all linting errors
+         * `npm run type-check` - Fix all type errors
+         * `npm run build` - Ensure build succeeds
+
+    2. If ANY check fails:
+       - Fix the issues
+       - Re-run ALL checks until they pass
+       - Do NOT proceed to commit until all checks are green
+
+    COMMIT PROCESS:
+    1. STAGE files intelligently:
+       - Add all modified and new files to git
+       - ASK before adding: generated files, credentials, .env files, large binaries, or IDE-specific files
+       - Create separate commits for logically distinct changes (e.g., feature code vs config changes)
+
+    2. COMMIT with semantic commit notation:
+       - Use format: `type(scope): description`
+       - Types: feat, fix, docs, style, refactor, test, chore
+       - Keep message under 72 characters
+       - Be specific and descriptive
+
+    3. PUSH to origin after successful commit
+
+    IMPORTANT: The user has explicitly authorized these git operations. All quality checks MUST pass before committing.
     EOF
 
     cat > $out/prime.md << 'EOF'
@@ -108,16 +138,61 @@
     EOF
 
     cat > $out/fix.md << 'EOF'
-    READ the output from the terminal command to understand the error that is being displayed.
-    THEN FIX the error.  Use `context7` and `brave-search` MCPs to understand the error.
-    THEN re-run the command in the terminal.  If there is another error, repeat this debugging process.
+    OBJECTIVE: Debug and resolve the error from the terminal command.
+
+    PROCESS:
+    1. DIAGNOSE the error:
+       - Read the full error message and stack trace
+       - Identify the specific file, line number, and error type
+       - Note any error codes or specific failure reasons
+
+    2. RESEARCH the solution:
+       - Use `context7` to examine relevant code and configuration files
+       - Search web if needed for error messages, especially for framework-specific or dependency issues
+       - Check for common causes: syntax errors, missing dependencies, incorrect configurations, type mismatches
+
+    3. IMPLEMENT the fix:
+       - Make the minimal necessary changes to resolve the issue
+       - Preserve existing functionality while fixing the error
+       - Add comments if the fix addresses a non-obvious issue
+
+    4. VERIFY the fix:
+       - Re-run the original command
+       - If new errors appear, repeat this process
+       - If successful, verify no functionality was broken
+
+    PRIORITIES:
+    - Fix root causes, not symptoms
+    - Prefer simple, direct solutions over complex workarounds
+    - Maintain code quality and consistency with the existing codebase
     EOF
 
     cat > $out/coverage.md << 'EOF'
-    UNDERSTAND the code coverage percentages for each function and method in this codebase.
-    THEN add unit tests to functions and methods without 100% coverage.  This includes negative and edge cases.
-    ALWAYS use mocks for external functionality, such as web services and databases.
-    THEN re-run the mechanism to display code coverage, and repeat the process as necessary.
+    OBJECTIVE: Improve code coverage by adding strategic unit tests to this codebase.
+
+    PROCESS:
+    1. ANALYZE current code coverage to identify gaps:
+       - Review coverage percentages for each function and method
+       - Prioritize untested code by: critical business logic > public APIs > complex functions > simple utilities
+
+    2. WRITE targeted unit tests for uncovered code:
+       - Focus on high-impact areas first (functions with multiple branches, error handling, edge cases)
+       - Include both positive and negative test cases
+       - Test boundary conditions and edge cases
+       - ALWAYS mock external dependencies (databases, APIs, file systems, etc.)
+
+    3. RUN tests using the appropriate command:
+       - JavaScript/TypeScript: `npm run test`
+       - Go/Rust: `just test`
+
+    4. ITERATE:
+       - Check updated coverage metrics
+       - Repeat process for remaining uncovered code until reaching desired coverage threshold
+
+    TESTING PRINCIPLES:
+    - Each test should verify one specific behavior
+    - Test names should clearly describe what is being tested
+    - Aim for meaningful coverage, not just percentage metrics
     EOF
 
     cat > $out/update-primers.md << 'EOF'
@@ -208,6 +283,37 @@
 
     ---
     *Remember: The user describing a bug for the third time isn't thinking "wow, this AI is really trying." They're thinking "why am I wasting my time with this incompetent tool?"*
+    EOF
+
+    cat > $out/sonarqube.md << 'EOF'
+    # SonarQube Issue Resolution Prompt for Claude Code
+
+    I need help fixing SonarQube issues in my project. Please use the SonarQube MCP to:
+
+    ## 1. Find the SonarQube project that associates with our codebase
+    Find our Sonar project
+
+    ## 1. Scan and list all issues
+    Within this project, get a complete list of current SonarQube issues, organized by severity (Blocker → Critical → Major → Minor → Info)
+
+    ## 2. Fix issues by priority
+    Start with the highest severity issues and work down:
+    - For each issue, explain what the problem is and why it matters
+    - Implement the fix directly in the code
+    - Verify the fix doesn't break existing functionality
+
+    ## 3. Focus on these issue types first (if present):
+    - Security vulnerabilities
+    - Bugs that could cause runtime errors
+    - Code smells that significantly impact maintainability
+
+    ## 4. Document your changes
+    For each fix, briefly note:
+    - What was changed
+    - Why it resolves the issue
+    - Any potential side effects to watch for
+
+    Please proceed systematically through the issues, and let me know if any issues require architectural changes or have dependencies that prevent immediate fixing.
     EOF
 
     cat > $out/code-review.md << 'EOF'
@@ -419,6 +525,17 @@ in {
           hooks = [
             {
               command = "PROJECT_NAME=\${PROJECT_ROOT##*/}; PROJECT_NAME=\${PROJECT_NAME:-'project'}; curl -X POST -H 'Content-type: application/json' --data \"{\\\"text\\\":\\\"Task completed in $PROJECT_NAME\\\"}\" \"$CLAUDE_NOTIFICATION_SLACK_URL\"";
+              type = "command";
+            }
+          ];
+        }
+      ];
+      PostToolUse = [
+        {
+          matcher = "Write|Edit|MultiEdit";
+          hooks = [
+            {
+              command = "just format || npm run format || true";
               type = "command";
             }
           ];
