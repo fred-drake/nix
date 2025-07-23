@@ -6,7 +6,7 @@
   secrets,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets" { home = null; };
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
 in {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")

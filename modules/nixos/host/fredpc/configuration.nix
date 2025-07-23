@@ -15,7 +15,35 @@ in {
     efiInstallAsRemovable = true;
     device = "nodev";
   };
-  services.openssh.enable = true;
+  services = {
+    openssh.enable = true;
+    blueman.enable = true;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      jack.enable = true;
+      wireplumber.enable = true;
+    };
+    pulseaudio.enable = false;
+    ratbagd.enable = true;
+    ollama = {
+      enable = false; # Running it from podman for now
+      acceleration = "cuda";
+      openFirewall = true;
+      host = "0.0.0.0";
+      port = 11434;
+      environmentVariables = {
+        CUDA_VISIBLE_DEVICES = "0,1";
+        OLLAMA_MODELS = "/storage1/models";
+      };
+    };
+    mongodb = {
+      enable = true;
+    };
+    xserver.videoDrivers = ["nvidia"];
+  };
 
   environment.systemPackages = with pkgs; [
     chromium
@@ -72,52 +100,58 @@ in {
     '';
   };
 
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes
-  '';
-  nix.settings.trusted-users = ["root" "fdrake"];
+  nix = {
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+    settings.trusted-users = ["root" "fdrake"];
+  };
 
-  programs.zsh.enable = true;
-  programs.fish.enable = true;
+  programs = {
+    zsh.enable = true;
+    fish.enable = true;
+    hyprland = {
+      enable = false;
+      xwayland.enable = true;
+    };
+  };
 
-  security.sudo.wheelNeedsPassword = false;
+  security = {
+    sudo.wheelNeedsPassword = false;
+    rtkit.enable = true;
+  };
 
-  users.users.fdrake = {
-    isNormalUser = true;
-    home = "/home/fdrake";
-    description = "Fred Drake";
-    extraGroups = ["wheel"];
-    openssh.authorizedKeys.keys = [
+  users.users = {
+    fdrake = {
+      isNormalUser = true;
+      home = "/home/fdrake";
+      description = "Fred Drake";
+      extraGroups = ["wheel"];
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
+      ];
+      packages = with pkgs; [direnv git just];
+      shell = pkgs.fish;
+    };
+    root.openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
     ];
-    packages = with pkgs; [direnv git just];
-    shell = pkgs.fish;
   };
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
-  ];
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
-  services.blueman.enable = true;
+  hardware = {
+    bluetooth.enable = true;
+    bluetooth.powerOnBoot = true;
+    graphics.enable = true;
+    nvidia = {
+      modesetting.enable = true;
+      nvidiaSettings = true;
+      open = true;
+    };
+    nvidia-container-toolkit.enable = true;
+  };
 
   # Sound
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-    wireplumber.enable = true;
-  };
-  services.pulseaudio.enable = false;
-
   # Hyprland -- Disabled when using Gnome
-  programs.hyprland = {
-    enable = false;
-    xwayland.enable = true;
-  };
   environment.sessionVariables = {
     # If your cursor becomes invisible
     WLR_NO_HARDWARE_CURSORS = "1";
@@ -126,34 +160,6 @@ in {
   };
 
   # NVidia
-  hardware = {
-    graphics.enable = true;
-  };
-  services.xserver.videoDrivers = ["nvidia"];
-  hardware.nvidia = {
-    modesetting.enable = true;
-    nvidiaSettings = true;
-    open = true;
-  };
-  hardware.nvidia-container-toolkit.enable = true;
-
-  services.ratbagd.enable = true;
-
-  services.ollama = {
-    enable = false; # Running it from podman for now
-    acceleration = "cuda";
-    openFirewall = true;
-    host = "0.0.0.0";
-    port = 11434;
-    environmentVariables = {
-      CUDA_VISIBLE_DEVICES = "0,1";
-      OLLAMA_MODELS = "/storage1/models";
-    };
-  };
-
-  services.mongodb = {
-    enable = true;
-  };
 
   # Steam
   # programs.steam = {
@@ -164,33 +170,34 @@ in {
   # };
 
   # Podman
-  virtualisation.containers.enable = true;
-  virtualisation.containers = {
-    containersConf.settings = {
-      engine = {
-        runtimes = {
-          nvidia = [
-            "${pkgs.nvidia-container-toolkit}/bin/nvidia-container-runtime"
-          ];
+  virtualisation = {
+    containers = {
+      enable = true;
+      containersConf.settings = {
+        engine = {
+          runtimes = {
+            nvidia = [
+              "${pkgs.nvidia-container-toolkit}/bin/nvidia-container-runtime"
+            ];
+          };
         };
       };
     };
-  };
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    dockerSocket.enable = true;
-  };
-
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      ipmi = {
-        image = containers-sha."docker.io"."solarkennedy/ipmi-kvm-docker"."latest"."linux/amd64";
-        autoStart = true;
-        ports = ["0.0.0.0:8080:8080"];
-        environment = {
-          RES = "1280x1024x24";
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      dockerSocket.enable = true;
+    };
+    oci-containers = {
+      backend = "podman";
+      containers = {
+        ipmi = {
+          image = containers-sha."docker.io"."solarkennedy/ipmi-kvm-docker"."latest"."linux/amd64";
+          autoStart = true;
+          ports = ["0.0.0.0:8080:8080"];
+          environment = {
+            RES = "1280x1024x24";
+          };
         };
       };
     };

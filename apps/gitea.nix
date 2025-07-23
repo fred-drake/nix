@@ -12,7 +12,7 @@ in {
       acceptTerms = true;
       preliminarySelfsigned = false;
       defaults = {
-        email = config.soft-secrets.acme.email;
+        inherit (config.soft-secrets.acme) email;
         dnsProvider = "cloudflare";
         environmentFile = config.sops.secrets.cloudflare-api-key.path;
       };
@@ -69,30 +69,32 @@ in {
     "d /var/gitea/config 0755 1000 1000 -"
   ];
 
-  virtualisation.containers.enable = true;
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      gitea = {
-        image = containers-sha."docker.gitea.com"."gitea"."1-rootless"."linux/amd64";
-        autoStart = true;
-        ports = [
-          "127.0.0.1:${proxyPort}:${proxyPort}"
-          "0.0.0.0:22:2222"
-        ];
-        volumes = [
-          "/var/gitea/data:/var/lib/gitea"
-          "/var/gitea/config:/etc/gitea"
-        ];
-        environment = {
-          PUID = "1000";
-          PGID = "1000";
-          TZ = "America/New_York";
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+    oci-containers = {
+      backend = "podman";
+      containers = {
+        gitea = {
+          image = containers-sha."docker.gitea.com"."gitea"."1-rootless"."linux/amd64";
+          autoStart = true;
+          ports = [
+            "127.0.0.1:${proxyPort}:${proxyPort}"
+            "0.0.0.0:22:2222"
+          ];
+          volumes = [
+            "/var/gitea/data:/var/lib/gitea"
+            "/var/gitea/config:/etc/gitea"
+          ];
+          environment = {
+            PUID = "1000";
+            PGID = "1000";
+            TZ = "America/New_York";
+          };
         };
       };
     };

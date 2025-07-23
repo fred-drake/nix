@@ -12,7 +12,7 @@ in {
       acceptTerms = true;
       preliminarySelfsigned = false;
       defaults = {
-        email = config.soft-secrets.acme.email;
+        inherit (config.soft-secrets.acme) email;
         dnsProvider = "cloudflare";
         environmentFile = config.sops.secrets.cloudflare-api-key.path;
       };
@@ -70,49 +70,51 @@ in {
     "d /var/postgresql/data 0755 999 999 -"
   ];
 
-  virtualisation.containers.enable = true;
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      sonarqube-postgres = {
-        image = containers-sha."docker.io"."postgres"."17"."linux/amd64";
-        autoStart = true;
-        ports = [
-          "0.0.0.0:5432:5432"
-        ];
-        volumes = [
-          "/var/postgresql/data:/var/lib/postgresql/data"
-        ];
-        environment = {
-          POSTGRES_DB = "sonarqube";
-          POSTGRES_USER = "sonarqube";
-          TZ = "America/New_York";
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+    oci-containers = {
+      backend = "podman";
+      containers = {
+        sonarqube-postgres = {
+          image = containers-sha."docker.io"."postgres"."17"."linux/amd64";
+          autoStart = true;
+          ports = [
+            "0.0.0.0:5432:5432"
+          ];
+          volumes = [
+            "/var/postgresql/data:/var/lib/postgresql/data"
+          ];
+          environment = {
+            POSTGRES_DB = "sonarqube";
+            POSTGRES_USER = "sonarqube";
+            TZ = "America/New_York";
+          };
+          environmentFiles = [config.sops.secrets.sonarqube-env.path];
         };
-        environmentFiles = [config.sops.secrets.sonarqube-env.path];
-      };
-      sonarqube = {
-        image = containers-sha."docker.io"."sonarqube"."latest"."linux/amd64";
-        autoStart = true;
-        dependsOn = ["sonarqube-postgres"];
-        ports = [
-          "127.0.0.1:${proxyPort}:${proxyPort}"
-        ];
-        volumes = [
-          "/var/sonarqube/data:/opt/sonarqube/data"
-          "/var/sonarqube/logs:/opt/sonarqube/logs"
-          "/var/sonarqube/extensions:/opt/sonarqube/extensions"
-        ];
-        environment = {
-          SONAR_JDBC_URL = "jdbc:postgresql://host.containers.internal:5432/sonarqube";
-          SONAR_JDBC_USERNAME = "sonarqube";
-          TZ = "America/New_York";
+        sonarqube = {
+          image = containers-sha."docker.io"."sonarqube"."latest"."linux/amd64";
+          autoStart = true;
+          dependsOn = ["sonarqube-postgres"];
+          ports = [
+            "127.0.0.1:${proxyPort}:${proxyPort}"
+          ];
+          volumes = [
+            "/var/sonarqube/data:/opt/sonarqube/data"
+            "/var/sonarqube/logs:/opt/sonarqube/logs"
+            "/var/sonarqube/extensions:/opt/sonarqube/extensions"
+          ];
+          environment = {
+            SONAR_JDBC_URL = "jdbc:postgresql://host.containers.internal:5432/sonarqube";
+            SONAR_JDBC_USERNAME = "sonarqube";
+            TZ = "America/New_York";
+          };
+          environmentFiles = [config.sops.secrets.sonarqube-env.path];
         };
-        environmentFiles = [config.sops.secrets.sonarqube-env.path];
       };
     };
   };

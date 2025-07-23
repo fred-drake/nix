@@ -5,6 +5,14 @@ default:
 _rebuild-pre:
     git add *.nix
 
+# Format all .nix files with alejandra
+format:
+    alejandra .
+
+# Linting for the project
+lint:
+    statix check
+
 # Switch the system in its current form
 switch: _rebuild-pre
     system-flake-rebuild switch

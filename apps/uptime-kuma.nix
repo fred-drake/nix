@@ -12,7 +12,7 @@ in {
       acceptTerms = true;
       preliminarySelfsigned = false;
       defaults = {
-        email = config.soft-secrets.acme.email;
+        inherit (config.soft-secrets.acme) email;
         dnsProvider = "cloudflare";
         environmentFile = config.sops.secrets.cloudflare-api-key.path;
       };
@@ -59,30 +59,32 @@ in {
     "d /var/uptime-kuma/data 0755 1000 1000 -"
   ];
 
-  virtualisation.containers.enable = true;
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-  virtualisation.oci-containers = {
-    backend = "podman";
-    containers = {
-      uptime-kuma = {
-        image = containers-sha."docker.io"."louislam/uptime-kuma"."1"."linux/amd64";
-        autoStart = true;
-        ports = [
-          "127.0.0.1:${proxyPort}:${proxyPort}"
-        ];
-        volumes = [
-          "/var/uptime-kuma/data:/app/data"
-        ];
-        environment = {
-          PUID = "1000";
-          PGID = "1000";
-          TZ = "America/New_York";
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+    oci-containers = {
+      backend = "podman";
+      containers = {
+        uptime-kuma = {
+          image = containers-sha."docker.io"."louislam/uptime-kuma"."1"."linux/amd64";
+          autoStart = true;
+          ports = [
+            "127.0.0.1:${proxyPort}:${proxyPort}"
+          ];
+          volumes = [
+            "/var/uptime-kuma/data:/app/data"
+          ];
+          environment = {
+            PUID = "1000";
+            PGID = "1000";
+            TZ = "America/New_York";
+          };
+          extraOptions = ["--cap-add=NET_RAW"]; # Required for ping to work
         };
-        extraOptions = ["--cap-add=NET_RAW"]; # Required for ping to work
       };
     };
   };

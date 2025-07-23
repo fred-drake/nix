@@ -9,10 +9,10 @@
   # Main package
   claudeCode = stdenv.mkDerivation rec {
     pname = "claude-code";
-    version = npm-packages.claude-code.version;
+    inherit (npm-packages.claude-code) version;
 
     src = fetchurl {
-      url = npm-packages.claude-code.url;
+      inherit (npm-packages.claude-code) url;
       hash = npm-packages.claude-code.url-hash;
     };
 

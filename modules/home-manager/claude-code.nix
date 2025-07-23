@@ -23,6 +23,9 @@
          * `npm run lint` - Fix all linting errors
          * `npm run type-check` - Fix all type errors
          * `npm run build` - Ensure build succeeds
+       - Nix projects:
+         * `just format` - Fix any formatting issues
+         * `just lint` - Fix all linting errors
 
     2. If ANY check fails:
        - Fix the issues

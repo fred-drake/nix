@@ -5,13 +5,15 @@
   sops-nix,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets" { home = null; };
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
 in {
   # Base configuration for N8N
   _n8n = {
-    nixpkgs.system = "x86_64-linux";
-    nixpkgs.overlays = [];
-    nixpkgs.config = {};
+    nixpkgs = {
+      system = "x86_64-linux";
+      overlays = [];
+      config = {};
+    };
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets

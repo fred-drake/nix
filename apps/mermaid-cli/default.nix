@@ -9,10 +9,10 @@
   # Main package
   mermaidCli = stdenv.mkDerivation rec {
     pname = "mermaid-cli";
-    version = npm-packages.mermaid-cli.version;
+    inherit (npm-packages.mermaid-cli) version;
 
     src = fetchurl {
-      url = npm-packages.mermaid-cli.url;
+      inherit (npm-packages.mermaid-cli) url;
       hash = npm-packages.mermaid-cli.url-hash;
     };
 

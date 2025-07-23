@@ -37,7 +37,7 @@
     system ? "aarch64-darwin",
   }: let
     systemPkgs = import nixpkgs {
-      system = system;
+      inherit system;
       config.allowUnfree = true;
       overlays = [
         (import ../overlays/default.nix {inherit inputs;})
@@ -46,7 +46,7 @@
     };
   in
     darwin.lib.darwinSystem {
-      system = system;
+      inherit system;
       pkgs = systemPkgs;
       specialArgs = {
         inherit
@@ -57,7 +57,7 @@
           non-mac-mini-casks
           ;
         pkgsUnstable = import nixpkgs-unstable {
-          system = system;
+          inherit system;
           config.allowUnfree = true;
           overlays = [
             (import ../overlays/default.nix {inherit inputs;})
@@ -65,7 +65,7 @@
           ];
         };
         pkgsStable = import nixpkgs-stable {
-          system = system;
+          inherit system;
           config.allowUnfree = true;
           overlays = [
             (import ../overlays/default.nix {inherit inputs;})
@@ -73,7 +73,7 @@
           ];
         };
         pkgsFredTesting = import nixpkgs-fred-testing {
-          system = system;
+          inherit system;
           config.allowUnfree = true;
           overlays = [
             (import ../overlays/default.nix {inherit inputs;})
@@ -81,7 +81,7 @@
           ];
         };
         pkgsFredUnstable = import nixpkgs-fred-unstable {
-          system = system;
+          inherit system;
           config.allowUnfree = true;
           overlays = [
             (import ../overlays/default.nix {inherit inputs;})

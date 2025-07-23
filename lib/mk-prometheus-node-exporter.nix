@@ -1,9 +1,6 @@
-{ secrets, ... }:
-
-let
-  soft-secrets = import "${secrets}/soft-secrets" { home = null; };
-in
-{
+{secrets, ...}: let
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
+in {
   # Function to create a node exporter configuration with a specific host key
   mkNodeExporter = hostKey: {
     services.prometheus.exporters.node = {

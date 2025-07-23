@@ -97,7 +97,7 @@ in {
           job_name = "sonarr";
           scrape_timeout = "30s";
           scrape_interval = "1m";
-          static_configs = [ 
+          static_configs = [
             {
               targets = [
                 "sonarr-metrics.${config.soft-secrets.networking.domain}:9707"

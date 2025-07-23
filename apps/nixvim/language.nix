@@ -5,7 +5,7 @@ let
     }
   '';
 in
-  {...}: {
+  _: {
     plugins = {
       avante.enable = false;
       cmp = {

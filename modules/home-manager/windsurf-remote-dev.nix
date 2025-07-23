@@ -1,4 +1,8 @@
-{config, lib, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   home = config.home.homeDirectory;
 in {
   # Tie Windsurf extensions to the server used for SSH connections

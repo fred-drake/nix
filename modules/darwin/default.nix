@@ -12,11 +12,7 @@
   pkgs,
   nix-jetbrains-plugins,
   ...
-}: let
-  # pluginList = [
-  #   nix-jetbrains-plugins.plugins."aarch64-darwin".idea-ultimate."2024.3"."IdeaVIM"
-  # ];
-in {
+}: {
   # Environment configuration
   environment = {
     etc = {

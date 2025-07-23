@@ -5,7 +5,7 @@
   sops-nix,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets" { home = null; };
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
 in {
   # Base configuration for Glance
   _glance = {

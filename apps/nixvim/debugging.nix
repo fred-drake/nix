@@ -212,5 +212,5 @@
     require('dap').listeners.before.event_exited['dapui_config'] = require('dapui').close
   '';
 
-  extraPlugins = [(pkgs.vimPlugins.telescope-dap-nvim)];
+  extraPlugins = [pkgs.vimPlugins.telescope-dap-nvim];
 }

@@ -5,14 +5,17 @@
   sops-nix,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets" { home = null; };
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
 in {
   # Base configuration for Larussa
   _larussa = {
-    nixpkgs.system = "x86_64-linux";
-    nixpkgs.overlays = [];
-    nixpkgs.config.allowUnfree = true;
-    nixpkgs.config = {};
+    nixpkgs = {
+      system = "x86_64-linux";
+      overlays = [];
+      config = {
+        allowUnfree = true;
+      };
+    };
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets

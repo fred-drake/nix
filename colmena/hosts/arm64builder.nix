@@ -6,7 +6,7 @@
   sops-nix,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets" { home = null; };
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
 in {
   # Base configuration
   _arm64builder = {

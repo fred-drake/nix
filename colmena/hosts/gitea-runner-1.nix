@@ -5,13 +5,15 @@
   sops-nix,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets" { home = null; };
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
 in {
   # Base configuration for Gitea Runner
   _gitea-runner-1 = {
-    nixpkgs.system = "x86_64-linux";
-    nixpkgs.overlays = [];
-    nixpkgs.config = {};
+    nixpkgs = {
+      system = "x86_64-linux";
+      overlays = [];
+      config = {};
+    };
 
     networking.extraHosts = ''
       192.168.50.26 dev.brainrush.ai

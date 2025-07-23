@@ -1,4 +1,4 @@
-{...}: {
+_: {
   programs.nixvim = {
     enable = true;
     imports = [

@@ -5,7 +5,7 @@
   sops-nix,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets" { home = null; };
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
 in {
   # Base configuration for Grafana
   _grafana = {
@@ -38,7 +38,7 @@ in {
 
   # Full configuration
   "grafana" = let
-    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix { inherit secrets; };
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
   in {
     imports = [
       self.colmena._grafana

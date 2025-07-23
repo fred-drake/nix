@@ -1,5 +1,5 @@
 {config, ...}: let
-  blocky = config.soft-secrets.blocky;
+  inherit (config.soft-secrets) blocky;
 in {
   services.blocky = {
     enable = true;

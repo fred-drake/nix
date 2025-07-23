@@ -5,13 +5,15 @@
   sops-nix,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets" { home = null; };
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
 in {
   # Base configuration for Prometheus
   _prometheus = {
-    nixpkgs.system = "x86_64-linux";
-    nixpkgs.overlays = [];
-    nixpkgs.config = {};
+    nixpkgs = {
+      system = "x86_64-linux";
+      overlays = [];
+      config = {};
+    };
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets
@@ -36,14 +38,14 @@ in {
 
   # Full configuration
   "prometheus" = let
-    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix { inherit secrets; };
+    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
   in {
     imports = [
       self.colmena._prometheus
       ../../apps/prometheus.nix
       (nodeExporter.mkNodeExporter "prometheus")
     ];
-    
+
     # Include the Prometheus modules with proper parameters
     _module.args = {
       inherit secrets;

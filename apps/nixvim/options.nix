@@ -2,17 +2,17 @@
   config = {
     autoCmd = [
       {
-        event = [ "BufEnter" "CursorHold" "CursorHoldI" "FocusGained" ];
+        event = ["BufEnter" "CursorHold" "CursorHoldI" "FocusGained"];
         pattern = "*";
         command = "if mode() != 'c' | checktime | endif";
       }
       {
-        event = [ "BufRead" "BufNewFile" ];
+        event = ["BufRead" "BufNewFile"];
         pattern = "*.tf";
         command = "set filetype=terraform";
       }
       {
-        event = [ "BufRead" "BufNewFile" ];
+        event = ["BufRead" "BufNewFile"];
         pattern = "*.tfvars";
         command = "set filetype=terraform";
       }

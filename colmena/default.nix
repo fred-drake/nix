@@ -30,22 +30,22 @@ in {
 
   # Merge all host configurations
   # Base configurations
-  _dns1 = dns1._dns1;
-  _dns2 = dns2._dns2;
-  _jellyseerr = jellyseerr._jellyseerr;
-  _prowlarr = prowlarr._prowlarr;
-  _n8n = n8n._n8n;
-  _gitea = gitea._gitea;
-  _gitea-runner-1 = gitea-runner-1._gitea-runner-1;
-  _uptime-kuma = uptime-kuma._uptime-kuma;
-  _sonarqube = sonarqube._sonarqube;
-  _prometheus = prometheus._prometheus;
-  _grafana = grafana._grafana;
-  _larussa = larussa._larussa;
-  _external-metrics = external-metrics._external-metrics;
-  _glance = glance._glance;
-  _arm64builder = arm64builder._arm64builder;
-  _minio = minio._minio;
+  inherit (dns1) _dns1;
+  inherit (dns2) _dns2;
+  inherit (jellyseerr) _jellyseerr;
+  inherit (prowlarr) _prowlarr;
+  inherit (n8n) _n8n;
+  inherit (gitea) _gitea;
+  inherit (gitea-runner-1) _gitea-runner-1;
+  inherit (uptime-kuma) _uptime-kuma;
+  inherit (sonarqube) _sonarqube;
+  inherit (prometheus) _prometheus;
+  inherit (grafana) _grafana;
+  inherit (larussa) _larussa;
+  inherit (external-metrics) _external-metrics;
+  inherit (glance) _glance;
+  inherit (arm64builder) _arm64builder;
+  inherit (minio) _minio;
 
   # Init configurations
   "dns1-init" = dns1."dns1-init";
