@@ -14,7 +14,12 @@
 
     PRE-COMMIT VALIDATION:
     1. RUN language-specific quality checks:
-       - Go/Rust projects:
+       - Go projects:
+         * `just format` - Fix any formatting issues
+         * `just lint` - Fix all linting errors
+         * `just test` - Ensure all tests pass
+         * `just vulncheck` - Ensure there are no known vulnerabilities
+       - Rust projects:
          * `just format` - Fix any formatting issues
          * `just lint` - Fix all linting errors
          * `just test` - Ensure all tests pass
@@ -29,7 +34,7 @@
 
     2. If ANY check fails:
        - Fix the issues
-       - Re-run ALL checks until they pass
+       - Re-run ALL checks until they pass, including checks you have previously run that were successful.
        - Do NOT proceed to commit until all checks are green
 
     COMMIT PROCESS:

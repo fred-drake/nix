@@ -10,6 +10,7 @@
     # "${modulesPath}/virtualisation/lxc-container.nix"
     "${modulesPath}/virtualisation/proxmox-lxc.nix"
     ../../../secrets/cloudflare.nix
+    ../../../secrets/gitea.nix
   ];
 
   # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;

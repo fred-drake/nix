@@ -85,4 +85,9 @@ repository = "docker.io"
 name = "postgres"
 tag = "17"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "fred-drake/gitea-check-service"
+tag = "latest"
+architectures = ["linux/amd64"]
 
