@@ -1,4 +1,4 @@
-{
+runnerName: {
   config,
   pkgs,
   ...
@@ -17,14 +17,14 @@ in {
     oci-containers = {
       backend = "podman";
       containers = {
-        gitea-runner-1 = {
+        ${runnerName} = {
           image = containers-sha."docker.gitea.com"."act_runner"."latest"."linux/amd64";
           autoStart = true;
           privileged = true;
           volumes = [
             "${config.sops.secrets.gitea-registration-token.path}:/gitea-registration-token"
             "${configFile}:/config/config.yaml:ro"
-            "/var/gitea-runner-1/data:/data"
+            "/var/${runnerName}/data:/data"
             "/var/run/docker.sock:/var/run/docker.sock:ro"
           ];
           environment = {
@@ -33,7 +33,7 @@ in {
             TZ = "America/New_York";
             GITEA_INSTANCE_URL = "https://gitea.${config.soft-secrets.networking.domain}";
             GITEA_RUNNER_REGISTRATION_TOKEN_FILE = "/gitea-registration-token";
-            GITEA_RUNNER_NAME = "gitea-runner-1";
+            GITEA_RUNNER_NAME = runnerName;
             CONFIG_FILE = "/config/config.yaml";
           };
           extraOptions = [
@@ -45,6 +45,6 @@ in {
   };
 
   systemd.tmpfiles.rules = [
-    "d /var/gitea-runner-1/data 0755 1000 1000 -"
+    "d /var/${runnerName}/data 0755 1000 1000 -"
   ];
 }

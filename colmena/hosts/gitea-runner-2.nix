@@ -48,7 +48,7 @@ in {
   in {
     imports = [
       self.colmena._gitea-runner-2
-      ../../apps/gitea-runner-2
+      (import ../../apps/gitea-runner "gitea-runner-2")
       (nodeExporter.mkNodeExporter "gitea-runner-2")
     ];
 
