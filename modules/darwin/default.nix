@@ -8,11 +8,7 @@
 #   - Security settings
 #
 # Individual device-specific configurations should be placed in separate files.
-{
-  pkgs,
-  nix-jetbrains-plugins,
-  ...
-}: {
+{pkgs, ...}: {
   # Environment configuration
   environment = {
     etc = {

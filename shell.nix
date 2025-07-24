@@ -74,6 +74,7 @@ in
       statix
       nodejs_22
       uv
+      deadnix
 
       # Additional dependencies needed by scripts
       # jq

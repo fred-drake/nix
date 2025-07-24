@@ -121,7 +121,7 @@
   } @ inputs: let
     inherit (self) outputs;
   in
-    inputs.flake-utils.lib.eachDefaultSystem (system: {})
+    inputs.flake-utils.lib.eachDefaultSystem (_system: {})
     // {
       # NixOS configurations
       nixosConfigurations = import ./systems/nixos.nix {

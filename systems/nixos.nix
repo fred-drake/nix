@@ -48,7 +48,7 @@ in {
       config.cudaSupport = true;
       overlays = [
         nix4vscode.overlays.forVscode
-        (final: prev: {
+        (_: _prev: {
           inherit
             ((import nixpkgs-unstable {
               system = "x86_64-linux";

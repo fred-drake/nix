@@ -31,6 +31,7 @@
        - Nix projects:
          * `just format` - Fix any formatting issues
          * `just lint` - Fix all linting errors
+         * `deadnix` - Fix all dead code errors
 
     2. If ANY check fails:
        - Fix the issues
@@ -52,97 +53,6 @@
     3. PUSH to origin after successful commit
 
     IMPORTANT: The user has explicitly authorized these git operations. All quality checks MUST pass before committing.
-    EOF
-
-    cat > $out/prime.md << 'EOF'
-    # Project Understanding Prompt
-
-    When starting a new session, follow this systematic approach to understand the project:
-
-    ## 1. Project Overview & Structure
-    - **READ** the README.md file in the project's root folder, if available. This provides the user-facing perspective and basic setup instructions.
-    - **RUN** `git ls-files` to get a complete file inventory and understand the project structure.
-    - **EXAMINE** the project's directory structure to understand the architectural patterns (e.g., `/cmd`, `/internal`, `/pkg` for Go projects).
-
-    ## 2. Core Documentation
-    - **READ and UNDERSTAND** the PLANNING.md file for:
-      - Project architecture and design decisions
-      - Technology stack and dependencies
-      - Build, test, and deployment instructions
-      - Future considerations and roadmap
-    - **READ and UNDERSTAND** the TASK.md file for:
-      - Completed work and implementation status
-      - Current blockers or known issues
-      - Next steps and priorities
-
-    ## 3. Testing & Quality
-    - **EXAMINE** test files to understand:
-      - Testing patterns and frameworks used
-      - Test coverage expectations
-      - Integration vs unit test separation
-      - Mock implementations and test utilities
-
-    ## 4. Development Workflow
-    - **CHECK** for automation files:
-      - CI/CD pipelines (.github/workflows, .gitea/workflows)
-      - Development environment setup (devenv.nix, .devcontainer)
-      - Code quality tools (linting, formatting configurations)
-
-    ## 5. Data & External Systems
-    - **IDENTIFY** data models and schemas:
-      - Database migrations or schema files
-      - API specifications or OpenAPI docs
-      - Data transfer objects (DTOs) and validation rules
-    - **UNDERSTAND** external service integrations:
-      - Authentication providers (Keycloak, Auth0)
-      - Databases and connection patterns
-      - Third-party APIs and clients
-
-    ## 6. Documentation Maintenance
-    - **UPDATE TASK.md** with each substantial change made to the project, including:
-      - Features implemented or modified
-      - Issues resolved or discovered
-      - Dependencies added or updated
-      - Configuration changes
-    - **UPDATE PLANNING.md** if changes affect:
-      - Architecture decisions
-      - Technology stack
-      - Development workflows
-      - Future roadmap items
-
-    ## 7. Knowledge Validation
-    Before proceeding with any work, confirm understanding by being able to answer:
-    - What is the primary purpose of this project?
-    - How do I build, test, and run it locally?
-    - What are the main architectural components and their responsibilities?
-    - What external systems does it integrate with?
-    - What's the current implementation status and what's next?
-    EOF
-
-    cat > $out/build-planning.md << 'EOF'
-    We are going to build a file called PLANNING.md which lives in the project's root directory.  The objective is to have a document that will give you important context about the project, along with instructions on how to build and test.  Start by building a document with the following categories, that we will initially mark as TBD.  Then we will discuss each of these points together and fill in the document as we go.
-        - Project Overview
-        - Architecture
-          - Core components (API, Data, Service layers, configuration, etc)
-          - Data Model, if the project has a database component
-        - API endpoints, if the project exposes endpoints to be consumed
-        - Technology stack (Language, frameworks, etc)
-        - Project structure
-        - Testing strategy, if the project uses unit or integration testing
-        - Development commands (to build,Data Model, if the project has a database component
-        - API endpoints, if the project exposes endpoints to be consumed
-        - Technology stack (Language, frameworks, etc)
-        - Project structure
-        - Testing strategy, if the project uses unit or integration tests.
-        - Development commands (for building, running, etc).
-        - Environment setup (how the development environment is currently set up for the project)
-        - Development guidelines (rules to follow when modifying the project)
-        - Security considerations (things to keep in mind that are security-focused when modifying the project)
-        - Future considerations (things that we may not be adding right away but would be candidates for future versions)
-    EOF
-
-    cat > $out/build-task.md << 'EOF'
-    We will BUILD a file called TASK.md which lives in the project's root directory.  The objective is to give you important context about what tasks have been accomplished, and what work is left to do.  READ the PLANNING.md file, then create a list of tasks that you think should be accomplished.  Categorize them appropriately (e.g. Setup, Core Functionality, etc).  The last category will be "Completed Work" where we will have a log of work that has been completed, although initially this will be empty.
     EOF
 
     cat > $out/fix.md << 'EOF'
@@ -210,87 +120,6 @@
 
     cat > $out/troublesome-fix.md << 'EOF'
     Reflect on five to seven different possible sources of the problem, distill those down to one to two most likely sources, and then add logs to validate your assumptions before we move onto implementing the actual code fix.
-    EOF
-
-    cat > $out/aw.md << 'EOF'
-    ### Why We Ship Broken Code (And How to Stop)
-
-    Every AI assistant has done this: Made a change, thought "that looks right," told the user it's fixed, and then... it wasn't. The user comes back frustrated. We apologize. We try again. We waste everyone's time.
-
-    This happens because we're optimizing for speed over correctness. We see the code, understand the logic, and our pattern-matching says "this should work." But "should work" and "does work" are different universes.
-
-    ### The Protocol: Before You Say "Fixed"
-
-    **1. The 30-Second Reality Check**
-    Can you answer ALL of these with "yes"?
-
-    □ Did I run/build the code?
-    □ Did I trigger the exact feature I changed?
-    □ Did I see the expected result with my own observation (including in the front-end GUI)?
-    □ Did I check for error messages (console/logs/terminal)?
-    □ Would I bet $100 of my own money this works?
-
-    **2. Common Lies We Tell Ourselves**
-    - "The logic is correct, so it must work" → **Logic ≠ Working Code**
-    - "I fixed the obvious issue" → **The bug is never what you think**
-    - "It's a simple change" → **Simple changes cause complex failures**
-    - "The pattern matches working code" → **Context matters**
-
-    **3. The Embarrassment Test**
-    Before claiming something is fixed, ask yourself:
-    > "If the user screen-records themselves trying this feature and it fails,
-    > will I feel embarrassed when I see the video?"
-
-    If yes, you haven't tested enough.
-
-    ### Red Flags in Your Own Responses
-
-    If you catch yourself writing these phrases, STOP and actually test:
-    - "This should work now"
-    - "I've fixed the issue" (for the 2nd+ time)
-    - "Try it now" (without having tried it yourself)
-    - "The logic is correct so..."
-    - "I've made the necessary changes"
-    -
-    ### The Minimum Viable Test
-
-    For any change, no matter how small:
-
-    1. **UI Changes**: Actually click the button/link/form
-    2. **API Changes**: Make the actual API call with curl/PostMan
-    3. **Data Changes**: Query the database to verify the state
-    4. **Logic Changes**: Run the specific scenario that uses that logic
-    5. **Config Changes**: Restart the service and verify it loads
-
-    ### The Professional Pride Principle
-
-    Every time you claim something is fixed without testing, you're saying:
-    - "I value my time more than yours"
-    - "I'm okay with you discovering my mistakes"
-    - "I don't take pride in my craft"
-
-    That's not who we want to be.
-
-    ### Make It a Ritual
-
-    Before typing "fixed" or "should work now":
-    1. Pause
-    2. Run the actual test
-    3. See the actual result
-    4. Only then respond
-
-    **Time saved by skipping tests: 30 seconds**
-    **Time wasted when it doesn't work: 30 minutes**
-    **User trust lost: Immeasurable**
-
-    ### Bottom Line
-
-    The user isn't paying you to write code. They're paying you to solve problems. Untested code isn't a solution—it's a guess.
-
-    **Test your work. Every time. No exceptions.**
-
-    ---
-    *Remember: The user describing a bug for the third time isn't thinking "wow, this AI is really trying." They're thinking "why am I wasting my time with this incompetent tool?"*
     EOF
 
     cat > $out/sonarqube.md << 'EOF'
