@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-PROXMOX_SERVER=baine
-HOSTNAME=sonarqube
-CONTAINER_ID=116
+PROXMOX_SERVER=thrall
+HOSTNAME=gitea-runner-3
+CONTAINER_ID=118
 STORAGE=cephpool1
 MEMORY=4096
 DISK_SIZE_IN_GB=100

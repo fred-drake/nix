@@ -14,6 +14,8 @@
   n8n = import ./hosts/n8n.nix {inherit self nixpkgs-stable secrets sops-nix;};
   gitea = import ./hosts/gitea.nix {inherit self nixpkgs-stable secrets sops-nix;};
   gitea-runner-1 = import ./hosts/gitea-runner-1.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  gitea-runner-2 = import ./hosts/gitea-runner-2.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  gitea-runner-3 = import ./hosts/gitea-runner-3.nix {inherit self nixpkgs-stable secrets sops-nix;};
   uptime-kuma = import ./hosts/uptime-kuma.nix {inherit self nixpkgs-stable secrets sops-nix;};
   sonarqube = import ./hosts/sonarqube.nix {inherit self nixpkgs-stable secrets sops-nix;};
   prometheus = import ./hosts/prometheus.nix {inherit self nixpkgs-stable secrets sops-nix;};
@@ -37,6 +39,8 @@ in {
   inherit (n8n) _n8n;
   inherit (gitea) _gitea;
   inherit (gitea-runner-1) _gitea-runner-1;
+  inherit (gitea-runner-2) _gitea-runner-2;
+  inherit (gitea-runner-3) _gitea-runner-3;
   inherit (uptime-kuma) _uptime-kuma;
   inherit (sonarqube) _sonarqube;
   inherit (prometheus) _prometheus;
@@ -55,6 +59,8 @@ in {
   "n8n-init" = n8n."n8n-init";
   "gitea-init" = gitea."gitea-init";
   "gitea-runner-1-init" = gitea-runner-1."gitea-runner-1-init";
+  "gitea-runner-2-init" = gitea-runner-2."gitea-runner-2-init";
+  "gitea-runner-3-init" = gitea-runner-3."gitea-runner-3-init";
   "uptime-kuma-init" = uptime-kuma."uptime-kuma-init";
   "sonarqube-init" = sonarqube."sonarqube-init";
   "prometheus-init" = prometheus."prometheus-init";
@@ -73,6 +79,8 @@ in {
   "n8n" = n8n."n8n";
   "gitea" = gitea."gitea";
   "gitea-runner-1" = gitea-runner-1."gitea-runner-1";
+  "gitea-runner-2" = gitea-runner-2."gitea-runner-2";
+  "gitea-runner-3" = gitea-runner-3."gitea-runner-3";
   "uptime-kuma" = uptime-kuma."uptime-kuma";
   "sonarqube" = sonarqube."sonarqube";
   "prometheus" = prometheus."prometheus";
