@@ -44,4 +44,11 @@
     rev = "12d062eae0ad24f4ec20593be845ac30cd4b5923";
     hash = "sha256-2niYj0NLfmVIQguuGTA7RrPIcorJEPkxhH6Dhcy+6Bk=";
   };
+  gitea-mcp-src = pkgs.fetchFromGitea {
+    domain = "gitea.com";
+    owner = "gitea";
+    repo = "gitea-mcp";
+    rev = "1d9bdb5b445e5a4e6a13bbd2c5881a1157d97877";
+    hash = "sha256-vv+P/5usl8cXMmcVFTG5a3ufb3aWzxS59gJoyAX+7yg=";
+  };
 }

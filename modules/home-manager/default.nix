@@ -19,7 +19,6 @@
 }: let
   home = config.home.homeDirectory;
   vscode-config = (import ../../apps/vscode/global-configuration.nix) {inherit pkgs lib;};
-  claude-code = pkgs.callPackage ../../apps/claude-code {};
   # Use wrapped mermaid-cli with platform-appropriate Chrome/Chromium
   mermaid-cli-wrapped = pkgs.callPackage ../../apps/mermaid-cli-wrapped.nix {
     inherit (pkgs) stdenv;
@@ -34,6 +33,7 @@ in {
     ../../apps/nixvim
     ./tmux-windev-settings.nix
     ./secrets.nix
+    ./claude-code.nix
   ];
 
   # Ensure .ssh directory has correct permissions
@@ -93,63 +93,6 @@ in {
 
         ".hgignore_global" = {source = ../../homefiles/hgignore_global;};
         ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
-
-        # Claude Code configuration
-        # Claude command files
-        ".claude/commands" = {
-          source = ../../apps/claude-code/commands;
-          recursive = true;
-        };
-
-        ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
-
-        ".claude/settings.json".text = builtins.toJSON {
-          permissions = {
-            allow = [
-              "Bash"
-              "Write"
-              "MultiEdit"
-              "Edit"
-              "WebFetch"
-
-              # mcp commands
-              "mcp__brave-search__brave_web_search"
-              "mcp__context7__resolve-library-id"
-              "mcp__context7__get-library-docs"
-              "context7:*"
-            ];
-
-            deny = [];
-          };
-
-          hooks = {
-            Stop = [
-              {
-                matcher = "";
-                hooks = [
-                  {
-                    command = "PROJECT_NAME=\${PROJECT_ROOT##*/}; PROJECT_NAME=\${PROJECT_NAME:-'project'}; curl -X POST -H 'Content-type: application/json' --data \"{\\\"text\\\":\\\"Task completed in $PROJECT_NAME\\\"}\" \"$CLAUDE_NOTIFICATION_SLACK_URL\"";
-                    type = "command";
-                  }
-                ];
-              }
-            ];
-            PostToolUse = [
-              {
-                matcher = "Write|Edit|MultiEdit";
-                hooks = [
-                  {
-                    command = "just format || npm run format || true";
-                    type = "command";
-                  }
-                ];
-              }
-            ];
-          };
-          includeCoAuthoredBy = false;
-          env = {
-          };
-        };
       }
       // (
         if pkgs.stdenv.isDarwin
@@ -251,7 +194,6 @@ in {
         (pkgs.vscode-with-extensions.override {
           vscodeExtensions = vscode-config.globalExtensions;
         })
-        claude-code # Claude Code CLI tool
       ])
       ++ (
         # Packages that are on workstations that are more heavily used

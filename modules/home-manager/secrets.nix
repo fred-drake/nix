@@ -119,6 +119,18 @@ in {
         key = "token";
       };
 
+      personal-gitea-token = {
+        sopsFile = config.secrets.workstation.gitea-tokens;
+        mode = "0400";
+        key = "personal";
+      };
+
+      product-owner-gitea-token = {
+        sopsFile = config.secrets.workstation.gitea-tokens;
+        mode = "0400";
+        key = "product-owner";
+      };
+
       oci-config = {
         sopsFile = config.secrets.workstation.oci-config;
         mode = "400";
@@ -140,55 +152,10 @@ in {
         path = "${home}/.config/fish/conf.d/claude-env.fish";
       };
     };
-
-    templates."mcp-config" = {
-      mode = "0400";
-      path = "${home}/mcp-config.json";
-      content = ''
-        {
-          "mcpServers": {
-            "brave-search": {
-              "command": "npx",
-              "args": [
-                "-y",
-                "@modelcontextprotocol/server-brave-search"
-              ],
-              "env": {
-                "BRAVE_API_KEY": "${config.sops.placeholder.llm-brave}"
-              }
-            },
-            "playwright": {
-              "command": "npx",
-              "args": [
-                "@playwright/mcp@latest"
-              ]
-            },
-            "context7": {
-              "command": "npx",
-              "args": ["-y", "@upstash/context7-mcp"]
-            },
-            "sonarqube": {
-              "command": "podman",
-              "args": [
-                "run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "mcp/sonarqube", "-e", "TELEMETRY_DISABLED"
-              ],
-              "env": {
-                "SONARQUBE_URL": "https://sonarqube.${config.soft-secrets.networking.domain}",
-                "SONARQUBE_TOKEN": "${config.sops.placeholder.sonarqube-token}",
-                "TELEMETRY_DISABLED": "true"
-              }
-            }
-          }
-        }
-      '';
-    };
   };
 
-  # Symlink for containers runtime location and MCP config files
+  # Symlink for containers runtime location
   home.file = {
     ".config/containers/auth.json".source = config.lib.file.mkOutOfStoreSymlink "${home}/.docker/config.json";
-    ".cursor/mcp.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
-    ".codeium/windsurf/mcp_config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
-    "Library/Application Support/Claude/claude_desktop_config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
   };
 }
