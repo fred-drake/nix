@@ -61,6 +61,16 @@ in {
               "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.personal-gitea-token}"
             }
           },
+          "gitea-engineer": {
+            "command": "gitea-mcp",
+            "args": [
+              "-t", "stdio", "--host", "https://gitea.${config.soft-secrets.networking.domain}"
+            ],
+            "env": {
+              "GITEA_HOST": "https://gitea.${config.soft-secrets.networking.domain}",
+              "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.engineer-gitea-token}"
+            }
+          },
           "gitea-product-owner": {
             "command": "gitea-mcp",
             "args": [

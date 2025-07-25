@@ -131,6 +131,12 @@ in {
         key = "product-owner";
       };
 
+      engineer-gitea-token = {
+        sopsFile = config.secrets.workstation.gitea-tokens;
+        mode = "0400";
+        key = "engineer";
+      };
+
       oci-config = {
         sopsFile = config.secrets.workstation.oci-config;
         mode = "400";
