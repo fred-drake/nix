@@ -1,0 +1,1 @@
+Reflect on five to seven different possible sources of the problem, distill those down to one to two most likely sources, and then add logs to validate your assumptions before we move onto implementing the actual code fix.

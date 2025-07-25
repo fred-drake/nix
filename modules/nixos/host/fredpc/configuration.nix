@@ -40,7 +40,7 @@ in {
       };
     };
     mongodb = {
-      enable = true;
+      enable = false;
     };
     xserver.videoDrivers = ["nvidia"];
   };
