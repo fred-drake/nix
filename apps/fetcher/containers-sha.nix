@@ -76,7 +76,7 @@ _: {
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:994e075f6b958af29a7e4dad414b85294d0a5975cf881e03258ee3c400752ae0";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:609d65ba45e7b8d28cdd2fef5627fd15d72cfc87cb52f5a3fc4da9d816aa60bc";
       };
     };
     "linuxserver/sonarr" = {
@@ -98,7 +98,7 @@ _: {
   "quay.io" = {
     "minio/minio" = {
       "latest" = {
-        "linux/amd64" = "quay.io/minio/minio@sha256:f47a7fb74cd5a06abf8151a690b4ed8e208fc65c7f9b4c5dc5581ae6a727bdd7";
+        "linux/amd64" = "quay.io/minio/minio@sha256:f6efb212cad3b62f78ca02339f16d8bc28d5bb2fbe792dfc21225c6037d2af8b";
       };
     };
   };
