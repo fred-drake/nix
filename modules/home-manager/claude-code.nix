@@ -81,7 +81,7 @@ in {
               "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.product-owner-gitea-token}"
             }
           },
-          "gitea-product-owner": {
+          "gitea-code-architect": {
             "command": "gitea-mcp",
             "args": [
               "-t", "stdio", "--host", "https://gitea.${config.soft-secrets.networking.domain}"
