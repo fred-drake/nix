@@ -43,7 +43,7 @@ in {
           "sonarqube": {
             "command": "podman",
             "args": [
-              "run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "mcp/sonarqube", "-e", "TELEMETRY_DISABLED"
+              "run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "-e", "TELEMETRY_DISABLED", "mcp/sonarqube"
             ],
             "env": {
               "SONARQUBE_URL": "https://sonarqube.${config.soft-secrets.networking.domain}",
@@ -79,6 +79,25 @@ in {
             "env": {
               "GITEA_HOST": "https://gitea.${config.soft-secrets.networking.domain}",
               "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.product-owner-gitea-token}"
+            }
+          },
+          "gitea-product-owner": {
+            "command": "gitea-mcp",
+            "args": [
+              "-t", "stdio", "--host", "https://gitea.${config.soft-secrets.networking.domain}"
+            ],
+            "env": {
+              "GITEA_HOST": "https://gitea.${config.soft-secrets.networking.domain}",
+              "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.code-architect-gitea-token}"
+            }
+          },
+          "github": {
+            "command": "podman",
+            "args": [
+              "run", "-i", "--rm", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "ghcr.io/github/github-mcp-server"
+            ],
+            "env": {
+              "GITHUB_PERSONAL_ACCESS_TOKEN": "${config.sops.placeholder.github-token}"
             }
           }
         }
@@ -148,6 +167,34 @@ in {
       # MCP configuration symlinks
       ".cursor/mcp.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
       ".codeium/windsurf/mcp_config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
+
+      ".config/llminate/config.yml".text = builtins.toJSON {
+        mcp-config = "~/mcp-config.json";
+        labels-prompt = "issue-labels";
+        stop-label = "waiting-for-user";
+        prompts = [
+          {
+            label = "user-stories";
+            prompt = "llminate-user-stories";
+          }
+          {
+            label = "architecture-review";
+            prompt = "llminate-architecture-review";
+          }
+          {
+            label = "user-test-generation";
+            prompt = "llminate-user-test-generation";
+          }
+          {
+            label = "in-development";
+            prompt = "llminate-in-development";
+          }
+          {
+            label = "needs-code-review";
+            prompt = "llminate-needs-code-review";
+          }
+        ];
+      };
     }
     // (
       if pkgs.stdenv.isDarwin

@@ -137,6 +137,18 @@ in {
         key = "engineer";
       };
 
+      code-architect-gitea-token = {
+        sopsFile = config.secrets.workstation.gitea-tokens;
+        mode = "0400";
+        key = "code-architect";
+      };
+
+      github-token = {
+        sopsFile = config.secrets.workstation.github-token;
+        mode = "0400";
+        key = "token";
+      };
+
       oci-config = {
         sopsFile = config.secrets.workstation.oci-config;
         mode = "400";
