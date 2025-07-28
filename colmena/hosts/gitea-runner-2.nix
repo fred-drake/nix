@@ -18,6 +18,7 @@ in {
     networking.extraHosts = ''
       192.168.50.26 dev.brainrush.ai
       ${soft-secrets.host.gitea.service_ip_address} gitea.${soft-secrets.networking.domain}
+      ${soft-secrets.host.sonarqube.service_ip_address} sonarqube.${soft-secrets.networking.domain}
     '';
 
     imports = [
