@@ -91,6 +91,16 @@ in {
               "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.code-architect-gitea-token}"
             }
           },
+          "gitea-reviewer": {
+            "command": "gitea-mcp",
+            "args": [
+              "-t", "stdio", "--host", "https://gitea.${config.soft-secrets.networking.domain}"
+            ],
+            "env": {
+              "GITEA_HOST": "https://gitea.${config.soft-secrets.networking.domain}",
+              "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.reviewer-gitea-token}"
+            }
+          },
           "github": {
             "command": "podman",
             "args": [

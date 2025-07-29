@@ -143,6 +143,12 @@ in {
         key = "code-architect";
       };
 
+      reviewer-gitea-token = {
+        sopsFile = config.secrets.workstation.gitea-tokens;
+        mode = "0400";
+        key = "reviewer";
+      };
+
       github-token = {
         sopsFile = config.secrets.workstation.github-token;
         mode = "0400";

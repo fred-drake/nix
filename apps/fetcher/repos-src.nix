@@ -46,9 +46,9 @@
   };
   gitea-mcp-src = pkgs.fetchFromGitea {
     domain = "gitea.com";
-    owner = "gitea";
+    owner = "fdrake";
     repo = "gitea-mcp";
-    rev = "1d9bdb5b445e5a4e6a13bbd2c5881a1157d97877";
-    hash = "sha256-vv+P/5usl8cXMmcVFTG5a3ufb3aWzxS59gJoyAX+7yg=";
+    rev = "comment-index";
+    hash = "sha256-4vZQWAJ+0w64UZ20zFE24BITtU/5wz2eBSzONtyElcQ=";
   };
 }

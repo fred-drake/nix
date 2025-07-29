@@ -21,4 +21,5 @@ name = "puffer-fish-src"
 url = "https://github.com/nickeb96/puffer-fish"
 [[repos]]
 name = "gitea-mcp-src"
-url = "https://gitea.com/gitea/gitea-mcp"
+url = "https://gitea.com/fdrake/gitea-mcp"
+rev = "comment-index"

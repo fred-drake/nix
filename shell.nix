@@ -11,9 +11,17 @@
     echo "####################################" >> $SRCFILE
     echo "{pkgs, ...}: {" >> $SRCFILE
     ${pkgs.tomlq}/bin/tq --file $TOMLFILE --output json '.repos' | \
-    ${pkgs.jq}/bin/jq -r '.[] | "\(.name) = \(.url)"' | \
-    while IFS== read -r name url; do
-      processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "''${url# }" | tr -d '\n')
+    ${pkgs.jq}/bin/jq -c '.[]' | \
+    while IFS= read -r repo; do
+      name=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.name')
+      url=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.url')
+      rev=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.rev // empty')
+
+      if [ -n "$rev" ]; then
+        processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" "$rev" | tr -d '\n')
+      else
+        processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" | tr -d '\n')
+      fi
       echo "  ''${name} = ''${processed_url};"
     done >> $SRCFILE
     echo "}" >> $SRCFILE

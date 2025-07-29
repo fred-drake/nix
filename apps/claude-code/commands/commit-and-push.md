@@ -1,43 +1,223 @@
-OBJECTIVE: Validate, commit, and push code changes with quality checks.
+# Automated Commit and Push with Quality Loop
 
-PRE-COMMIT VALIDATION:
-1. RUN language-specific quality checks:
-   - Go projects:
-     * `just format` - Fix any formatting issues
-     * `just lint` - Fix all linting errors
-     * `just test` - Ensure all tests pass
-     * `just vulncheck` - Ensure there are no known vulnerabilities
-   - Rust projects:
-     * `just format` - Fix any formatting issues
-     * `just lint` - Fix all linting errors
-     * `just test` - Ensure all tests pass
-   - JavaScript/TypeScript projects:
-     * `npm run format` - Fix any formatting issues
-     * `npm run lint` - Fix all linting errors
-     * `npm run type-check` - Fix all type errors
-     * `npm run build` - Ensure build succeeds
-   - Nix projects:
-     * `just format` - Fix any formatting issues
-     * `just lint` - Fix all linting errors
-     * `deadnix` - Fix all dead code errors
+## OBJECTIVE
+Validate, commit, and push code changes ONLY after ALL quality checks pass through a continuous validation loop.
 
-2. If ANY check fails:
-   - Fix the issues
-   - Re-run ALL checks until they pass, including checks you have previously run that were successful.
-   - Do NOT proceed to commit until all checks are green
+## Phase 1: Pre-Commit Validation Loop
 
-COMMIT PROCESS:
-1. STAGE files intelligently:
-   - Add all modified and new files to git
-   - ASK before adding: generated files, credentials, .env files, large binaries, or IDE-specific files
-   - Create separate commits for logically distinct changes (e.g., feature code vs config changes)
+### VALIDATION LOOP START
+1. **Identify Project Type** by checking for:
+   - Go: `go.mod`
+   - Rust: `Cargo.toml`
+   - JavaScript/TypeScript: `package.json`
+   - Nix: `flake.nix` or `default.nix`
 
-2. COMMIT with semantic commit notation:
-   - Use format: `type(scope): description`
-   - Types: feat, fix, docs, style, refactor, test, chore
-   - Keep message under 72 characters
-   - Be specific and descriptive
+2. **Run ALL Quality Checks** for the identified project type:
 
-3. PUSH to origin after successful commit
+   **Go Projects - Run in this order:**
+   ```bash
+   just format
+   just lint
+   just test
+   just vulncheck
+   ```
 
-IMPORTANT: The user has explicitly authorized these git operations. All quality checks MUST pass before committing.
+   **Rust Projects - Run in this order:**
+   ```bash
+   just format
+   just lint
+   just test
+   ```
+
+   **JavaScript/TypeScript Projects - Run in this order:**
+   ```bash
+   npm run format
+   npm run lint
+   npm run type-check
+   npm run test
+   npm run build
+   ```
+
+   **Nix Projects - Run in this order:**
+   ```bash
+   just format
+   just lint
+   deadnix
+   ```
+
+3. **Capture Check Results:**
+   - Count total checks run
+   - Count passed checks
+   - Count failed checks
+   - Store specific error messages for each failure
+
+4. **VALIDATION DECISION POINT:**
+   ```
+   IF (any check failed):
+       - Print: "Validation Loop Iteration #X: Y checks failed"
+       - Fix the identified issues
+       - Print: "Fixes applied, re-running ALL checks..."
+       - GO TO STEP 2 (restart validation)
+   ELSE IF (all checks passed):
+       - Print: "All Z checks passed! Proceeding to commit phase..."
+       - GO TO PHASE 2
+   ```
+
+### IMPORTANT LOOP RULES:
+- **ALWAYS** re-run ALL checks after ANY fix, not just the failed ones
+- **NEVER** skip checks that previously passed
+- **TRACK** iteration count to prevent infinite loops
+- **ABORT** after 10 iterations and request human intervention
+
+## Phase 2: Intelligent Staging
+
+**ONLY REACHED AFTER ALL CHECKS PASS**
+
+1. **Analyze Changed Files:**
+   ```bash
+   git status --porcelain
+   ```
+
+2. **Categorize Files:**
+   - **Auto-stage**: Source code, tests, documentation, config files
+   - **Review Required**:
+     * Generated files (build artifacts, compiled output)
+     * Credential files (.env, secrets, keys)
+     * Large files (>1MB)
+     * IDE-specific files (.idea/, .vscode/)
+     * Package lock files (ask if intentional)
+
+3. **Staging Decision Loop:**
+   ```
+   FOR each file in changed_files:
+       IF (file in review_required_category):
+           ASK: "Should I stage {file}? (y/n)"
+           IF yes: git add {file}
+       ELSE:
+           git add {file}
+   ```
+
+4. **Logical Commit Grouping:**
+   - Group related changes together
+   - Separate feature changes from config/dependency updates
+   - Ask: "Should I create multiple commits for these changes?"
+
+## Phase 3: Commit Creation
+
+1. **Generate Semantic Commit Message:**
+   ```
+   Format: type(scope): description
+
+   Types:
+   - feat: New feature
+   - fix: Bug fix
+   - docs: Documentation only
+   - style: Code style (formatting, semicolons, etc)
+   - refactor: Code restructuring without behavior change
+   - test: Adding or modifying tests
+   - chore: Maintenance tasks
+   ```
+
+2. **Commit Rules:**
+   - Main message ≤ 72 characters
+   - Use present tense ("add" not "added")
+   - Be specific about WHAT changed and WHY
+   - If multiple commits needed, create them sequentially
+
+3. **Pre-Push Verification:**
+   ```bash
+   git log --oneline -n 5  # Show recent commits
+   ```
+   Ask: "Commits look correct. Proceed with push? (y/n)"
+
+## Phase 4: Push Process
+
+1. **Final Safety Check:**
+   ```bash
+   # One more verification run
+   git status
+   # Ensure we're on the right branch
+   git branch --show-current
+   ```
+
+2. **Push with Verification:**
+   ```bash
+   git push origin <current-branch>
+   ```
+
+3. **Post-Push Confirmation:**
+   - Verify push succeeded
+   - Report remote URL and branch
+   - Provide link to PR creation if applicable
+
+## Error Handling
+
+**If Validation Loop Fails 10 Times:**
+```
+ABORT: Quality checks failed to converge after 10 attempts.
+Issues that won't resolve:
+- [List specific persistent failures]
+Manual intervention required.
+```
+
+**If Push Fails:**
+```
+1. Check for remote changes: git fetch origin
+2. If behind, ask: "Remote has changes. Pull and merge? (y/n)"
+3. If conflicts exist, abort and request manual resolution
+```
+
+## Complete Example Flow
+
+```
+Starting pre-commit validation...
+
+Validation Loop Iteration #1:
+Running 4 checks for Go project...
+✓ just format - passed
+✗ just lint - failed (3 errors)
+✗ just test - failed (2 tests)
+✓ just vulncheck - passed
+Result: 2/4 checks failed
+
+Applying fixes...
+Re-running ALL checks...
+
+Validation Loop Iteration #2:
+Running 4 checks for Go project...
+✓ just format - passed
+✓ just lint - passed
+✗ just test - failed (1 test)
+✓ just vulncheck - passed
+Result: 1/4 checks failed
+
+Applying fixes...
+Re-running ALL checks...
+
+Validation Loop Iteration #3:
+Running 4 checks for Go project...
+✓ just format - passed
+✓ just lint - passed
+✓ just test - passed
+✓ just vulncheck - passed
+Result: All 4 checks passed! Proceeding to commit phase...
+
+Analyzing changes...
+Auto-staging: src/main.go, src/utils.go, tests/main_test.go
+Review required: .env.example - Should I stage this file? (y/n)
+
+Creating commit...
+Commit message: fix(auth): resolve token validation edge case
+
+Pushing to origin/feature-branch...
+Push successful!
+```
+
+## Key Principles
+
+1. **No Shortcuts**: ALL checks must pass before ANY commit
+2. **Full Revalidation**: Always re-run ALL checks after ANY change
+3. **Clear Feedback**: Report status at each loop iteration
+4. **Smart Staging**: Never blindly add all files
+5. **Semantic Commits**: Meaningful, well-formatted messages
+6. **Safety First**: Multiple confirmation points before push

@@ -11,7 +11,7 @@ in
 
     src = repos-src.gitea-mcp-src;
 
-    vendorHash = "sha256-5tFnPOe2b7l2GqPj4EJpSEZQMKVD4cZ7AlVuSkIFtbA=";
+    vendorHash = "sha256-i6QeRPg7vuLIMhqzcKYQM8hePOWphAo8kC+YQwJHTus=";
 
     # Build with version information like the Makefile does
     ldflags = [

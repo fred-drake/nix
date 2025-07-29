@@ -1,36 +1,130 @@
-We are going to run a loop where the coverage analyzer sub agent will execute commands to run checks on this project, assess the problems with the failing tests, and suggest solutions for remediation.  The coverage analyzer sub agent will then pass the summary and recommendations to the coverage test writer sub agent to remediate.
+# Test Fixing Loop with Sub-Agents
 
-When the coverage test writer sub agent is finished, the coverage analyzer sub agent will execute the commands to run all checks again.  If there are still failures, we are to repeat the cycle.
+You will coordinate a continuous loop between sub-agents until ALL tests, linting, and formatting checks pass successfully. Here's the process:
 
-The checks the coverage test writer sub agent should run depends on the type of project:
-   - Go projects:
-     * `just test` - Fix any unit testing
-     * `just format` - Fix any formatting issues
-     * `just lint` - Fix all linting errors
-     * `just test` - Ensure all tests pass
-     * `just vulncheck` - Ensure there are no known vulnerabilities
-   - Rust projects:
-     * `just test` - Fix any unit testing
-     * `just format` - Fix any formatting issues
-     * `just lint` - Fix all linting errors
-     * `just test` - Ensure all tests pass
-   - JavaScript/TypeScript projects:
-     * `npm run test` - Fix any unit testing
-     * `npm run format` - Fix any formatting issues
-     * `npm run lint` - Fix all linting errors
-     * `npm run type-check` - Fix all type errors
-     * `npm run build` - Ensure build succeeds
-   - Nix projects:
-     * `just format` - Fix any formatting issues
-     * `just lint` - Fix all linting errors
-     * `deadnix` - Fix all dead code errors
+## Initial Setup
+First, identify the project type by checking for these files:
+- Go: `go.mod`
+- Rust: `Cargo.toml`
+- JavaScript/TypeScript: `package.json`
+- Nix: `flake.nix` or `default.nix`
 
-If any of these fail, have the coverage analyzer explain the issues to the coverage-test-writer to remediate.  Please loop between the coverage-test-writer and the coverage analyzer until all checks are successful.
+## Main Loop Process
 
-IMPORTANT: Be especially mindful of any tests that break that were not a part of the code that was written.  We need to handle any regression errors with care.
+### LOOP START: Test Analysis Phase
+1. Have the `coverage-analyzer` sub-agent run ALL applicable checks for the project type:
 
-Afterwards, have the code-reviewer sub agent review the code that the coverage-test-writer wrote.  If they have concerns with the quality of the code, send it back to the coverage-test-writer where the entire loop begins again with the coverage-test-writer and the coverage analyzer.
+   **For Go projects:**
+   ```
+   just test
+   just format
+   just lint
+   just vulncheck
+   ```
 
-Once the code-reviewer is satisfied with the code, we are considered finished.
+   **For Rust projects:**
+   ```
+   just test
+   just format
+   just lint
+   ```
 
+   **For JavaScript/TypeScript projects:**
+   ```
+   npm run test
+   npm run format
+   npm run lint
+   npm run type-check
+   npm run build
+   ```
 
+   **For Nix projects:**
+   ```
+   just format
+   just lint
+   deadnix
+   ```
+
+2. The `coverage-analyzer` should create a comprehensive report that includes:
+   - Total number of failing tests/checks
+   - Specific error messages for each failure
+   - File paths and line numbers where errors occur
+   - Classification of errors (test failures, lint errors, format issues, etc.)
+   - Priority order for fixing (regression errors should be marked as HIGH priority)
+
+### Test Fixing Phase
+3. Pass the analyzer's report to the `coverage-test-writer` sub-agent with these instructions:
+   - Fix ALL issues identified in the report
+   - Start with HIGH priority regression errors
+   - Make minimal changes to avoid introducing new issues
+   - Document what changes were made and why
+
+### Verification Phase
+4. After `coverage-test-writer` completes, have `coverage-analyzer` run ALL checks again.
+
+5. **CRITICAL DECISION POINT:**
+   - If ANY test, lint, format, or build check fails: GO TO STEP 2 (continue loop)
+   - If ALL checks pass: GO TO STEP 6 (code review)
+
+### Code Review Phase
+6. Once all tests pass, have the `code-reviewer` sub-agent review the changes with focus on:
+   - Code quality and maintainability
+   - Proper error handling
+   - Test coverage adequacy
+   - No unnecessary changes or over-engineering
+   - Compliance with project conventions
+
+7. **REVIEW DECISION POINT:**
+   - If `code-reviewer` has concerns: Send feedback to `coverage-test-writer` and GO TO STEP 1
+   - If `code-reviewer` approves: GO TO STEP 8
+
+### Final Verification
+8. Have `coverage-analyzer` run the FULL test suite one final time.
+
+9. **FINAL DECISION POINT:**
+   - If ANY check fails: GO TO STEP 2 (restart main loop)
+   - If ALL checks pass: COMPLETE - Exit loop
+
+## Loop Control Instructions
+
+**IMPORTANT:** You must implement actual loop control:
+- Keep a counter of loop iterations
+- After each phase, explicitly check the exit conditions
+- Use clear statements like "Tests still failing, continuing loop iteration #X"
+- Do not proceed to completion until you see: "All X tests passed, 0 failures"
+
+**LOOP TERMINATION:** Only exit when:
+1. ALL automated checks pass (0 failures across all commands)
+2. AND code-reviewer has no concerns
+3. AND final verification passes
+
+**INFINITE LOOP PREVENTION:** If the loop has run 10 times without success:
+- Have `coverage-analyzer` create a detailed failure report
+- Escalate to human for manual intervention
+- Document which tests consistently fail to converge
+
+## Example Loop Execution
+
+```
+Iteration 1:
+- Analyzer: Found 5 test failures, 3 lint errors
+- Test Writer: Fixed issues
+- Analyzer: 2 tests still failing
+- Status: CONTINUE LOOP
+
+Iteration 2:
+- Analyzer: Found 2 test failures
+- Test Writer: Fixed remaining issues
+- Analyzer: All tests pass (0 failures)
+- Code Reviewer: Suggests refactoring
+- Status: CONTINUE LOOP
+
+Iteration 3:
+- Test Writer: Implements reviewer suggestions
+- Analyzer: All tests pass
+- Code Reviewer: Approved
+- Final Check: All tests pass
+- Status: COMPLETE
+```
+
+Remember: This is a LOOP, not a sequence. You must repeatedly cycle through these phases until all conditions are met.
