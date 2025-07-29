@@ -124,6 +124,11 @@ in {
         recursive = true;
       };
 
+      ".claude/agents" = {
+        source = ../../apps/claude-code/agents;
+        recursive = true;
+      };
+
       ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
 
       ".claude/settings.json".text = builtins.toJSON {
