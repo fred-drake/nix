@@ -4,4 +4,6 @@ repo = "@anthropic-ai/claude-code"
 [[npm-repository]]
 name = "mermaid-cli"
 repo = "mermaid-cli"
-
+[[npm-repository]]
+name = "ccusage"
+repo = "ccusage"

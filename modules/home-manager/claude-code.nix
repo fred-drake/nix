@@ -17,102 +17,62 @@ in {
   sops.templates."mcp-config" = {
     mode = "0400";
     path = "${home}/mcp-config.json";
-    content = ''
-      {
-        "mcpServers": {
-          "brave-search": {
-            "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-brave-search"
-            ],
-            "env": {
-              "BRAVE_API_KEY": "${config.sops.placeholder.llm-brave}"
-            }
-          },
-          "playwright": {
-            "command": "npx",
-            "args": [
-              "@playwright/mcp@latest"
-            ]
-          },
-          "context7": {
-            "command": "npx",
-            "args": ["-y", "@upstash/context7-mcp"]
-          },
-          "sonarqube": {
-            "command": "podman",
-            "args": [
-              "run", "-i", "--rm", "-e", "SONARQUBE_TOKEN", "-e", "SONARQUBE_URL", "-e", "TELEMETRY_DISABLED", "mcp/sonarqube"
-            ],
-            "env": {
-              "SONARQUBE_URL": "https://sonarqube.${config.soft-secrets.networking.domain}",
-              "SONARQUBE_TOKEN": "${config.sops.placeholder.sonarqube-token}",
-              "TELEMETRY_DISABLED": "true"
-            }
-          },
-          "gitea-personal": {
-            "command": "gitea-mcp",
-            "args": [
-              "-t", "stdio", "--host", "https://gitea.${config.soft-secrets.networking.domain}"
-            ],
-            "env": {
-              "GITEA_HOST": "https://gitea.${config.soft-secrets.networking.domain}",
-              "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.personal-gitea-token}"
-            }
-          },
-          "gitea-engineer": {
-            "command": "gitea-mcp",
-            "args": [
-              "-t", "stdio", "--host", "https://gitea.${config.soft-secrets.networking.domain}"
-            ],
-            "env": {
-              "GITEA_HOST": "https://gitea.${config.soft-secrets.networking.domain}",
-              "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.engineer-gitea-token}"
-            }
-          },
-          "gitea-product-owner": {
-            "command": "gitea-mcp",
-            "args": [
-              "-t", "stdio", "--host", "https://gitea.${config.soft-secrets.networking.domain}"
-            ],
-            "env": {
-              "GITEA_HOST": "https://gitea.${config.soft-secrets.networking.domain}",
-              "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.product-owner-gitea-token}"
-            }
-          },
-          "gitea-code-architect": {
-            "command": "gitea-mcp",
-            "args": [
-              "-t", "stdio", "--host", "https://gitea.${config.soft-secrets.networking.domain}"
-            ],
-            "env": {
-              "GITEA_HOST": "https://gitea.${config.soft-secrets.networking.domain}",
-              "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.code-architect-gitea-token}"
-            }
-          },
-          "gitea-reviewer": {
-            "command": "gitea-mcp",
-            "args": [
-              "-t", "stdio", "--host", "https://gitea.${config.soft-secrets.networking.domain}"
-            ],
-            "env": {
-              "GITEA_HOST": "https://gitea.${config.soft-secrets.networking.domain}",
-              "GITEA_ACCESS_TOKEN": "${config.sops.placeholder.reviewer-gitea-token}"
-            }
-          },
-          "github": {
-            "command": "podman",
-            "args": [
-              "run", "-i", "--rm", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "ghcr.io/github/github-mcp-server"
-            ],
-            "env": {
-              "GITHUB_PERSONAL_ACCESS_TOKEN": "${config.sops.placeholder.github-token}"
-            }
-          }
-        }
-      }
-    '';
+    content = builtins.toJSON {
+      mcpServers = {
+        brave-search = {
+          command = "npx";
+          args = ["-y" "@modelcontextprotocol/server-brave-search"];
+          env = {"BRAVE_API_KEY" = config.sops.placeholder.llm-brave;};
+        };
+        playwright = {
+          command = "npx";
+          args = ["@playwright/mcp@latest"];
+        };
+        context7 = {
+          command = "npx";
+          args = ["-y" "@upstash/context7-mcp"];
+        };
+        sonarqube = {
+          command = "podman";
+          args = ["run" "-i" "--rm" "-e" "SONARQUBE_TOKEN" "-e" "SONARQUBE_URL" "-e" "TELEMETRY_DISABLED" "mcp/sonarqube"];
+          env = {
+            SONARQUBE_URL = "https://sonarqube.${config.soft-secrets.networking.domain}";
+            SONARQUBE_TOKEN = config.sops.placeholder.sonarqube-token;
+            TELEMETRY_DISABLED = "true";
+          };
+        };
+        gitea-personal = {
+          command = "gitea-mcp";
+          args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
+          env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.personal-gitea-token;};
+        };
+        gitea-engineer = {
+          command = "gitea-mcp";
+          args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
+          env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.engineer-gitea-token;};
+        };
+        gitea-product-owner = {
+          command = "gitea-mcp";
+          args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
+          env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.product-owner-gitea-token;};
+        };
+      };
+      gitea-code-architect = {
+        command = "gitea-mcp";
+        args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
+        env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.code-architect-gitea-token;};
+      };
+      gitea-reviewer = {
+        command = "gitea-mcp";
+        args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
+        env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.reviewer-gitea-token;};
+      };
+      github = {
+        command = "podman";
+        args = ["run" "-i" "--rm" "-e" "GITHUB_PERSONAL_ACCESS_TOKEN" "ghcr.io/github/github-mcp-server"];
+        env = {GITHUB_PERSONAL_ACCESS_TOKEN = config.sops.placeholder.github-token;};
+      };
+    };
   };
 
   # Claude Code configuration files

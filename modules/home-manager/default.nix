@@ -23,6 +23,9 @@
   mermaid-cli-wrapped = pkgs.callPackage ../../apps/mermaid-cli-wrapped.nix {
     inherit (pkgs) stdenv;
   };
+  ccusage = pkgs.callPackage ../../apps/ccusage.nix {
+    npm-packages = import ../../apps/fetcher/npm-packages.nix;
+  };
 in {
   # Import additional configuration files
   imports = [
@@ -144,6 +147,7 @@ in {
         age # Modern encryption tool
         bat # Cat clone with syntax highlighting
         btop # System monitor
+        ccusage
         chafa # Image resizer
         curl # URL retrieval utility
         delta # Syntax-highlighting pager

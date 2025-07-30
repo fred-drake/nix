@@ -2,6 +2,11 @@
 # Do not modify manually - changes will be overwritten
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
+  "ccusage" = {
+    "version" = "15.5.2";
+    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-15.5.2.tgz";
+    "url-hash" = "sha256-f4n9Garu90gkI1qNOnLlvRAqXn+0DLrPbddZwbaHQ+g=";
+  };
   "claude-code" = {
     "version" = "1.0.63";
     "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.63.tgz";
