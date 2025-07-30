@@ -1,6 +1,3 @@
-# Import common Nix commands
-import "common-config/justfile-nix"
-
 # List all commands
 default:
     @just --list
@@ -34,3 +31,23 @@ update-npm-packages:
 # Run colmena on only the DNS hosts
 colmena-dns: update-secrets
     just colmena dns1,dns2
+
+# Format all .nix files with alejandra
+format:
+    alejandra .
+
+# Linting for the project
+lint:
+    statix check
+
+# Update input definitions from remote resources
+update:
+    nix flake update
+
+# Update the secrets flake
+update-secrets:
+    nix flake update secrets
+
+# Run colmena remote switch on given host
+colmena HOST:
+    colmena apply --on {{ HOST }} --impure

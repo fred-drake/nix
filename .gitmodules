@@ -1,6 +1,3 @@
 [submodule "development/nix4vscode"]
 	path = development/nix4vscode
 	url = https://github.com/nix-community/nix4vscode.git
-[submodule "common-config"]
-	path = common-config
-	url = https://github.com/fred-drake/common-configuration.git
