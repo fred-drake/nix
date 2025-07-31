@@ -9,19 +9,35 @@ This repository contains Nix configurations for managing both personal workstati
 ### Workstations
 
 - **macOS Workstations**: Managed via nix-darwin
-  - `fredpc` (Linux with GUI)
   - `mac-studio`
   - `macbook-pro`
   - `laisas-mac-mini`
-- **Linux Workstation**:
-  - `fredpc` (Linux with GUI)
+- **Linux Workstations**:
+  - `fredpc` (x86_64-linux with GUI, NVIDIA CUDA support)
+  - `macbookx86` (x86_64-linux on Apple T2 hardware)
+  - `nixosaarch64vm` (aarch64-linux)
 
 ### Servers
 
 - **Build Machines**:
   - `fredpc`: Builds x86_64-linux configurations
   - `nixosaarch64vm`: Builds aarch64-linux configurations
-- **Deployment**: Remote servers are configured using Colmena
+  - `arm64builder`: Dedicated aarch64-linux build server
+- **Infrastructure Services** (Managed via Colmena):
+  - `dns1`, `dns2`: DNS servers
+  - `gitea`: Git repository hosting
+  - `gitea-runner-1`, `gitea-runner-2`, `gitea-runner-3`: CI/CD runners
+  - `uptime-kuma`: Uptime monitoring
+  - `prometheus`: Metrics collection
+  - `grafana`: Metrics visualization
+  - `sonarqube`: Code quality analysis
+  - `larussa`: Media server (Jellyfin, Radarr, Sonarr)
+  - `jellyseerr`: Media request management
+  - `prowlarr`: Indexer management
+  - `n8n`: Workflow automation
+  - `external-metrics`: External metrics collection
+  - `glance`: Dashboard application
+  - `minio`: Object storage
 
 ## Network Overview
 
@@ -53,8 +69,8 @@ This repository uses [devenv](https://devenv.sh/) to provide a consistent develo
 
 ### Features Provided by devenv
 
-- **Development Tools**: Includes tools like `colmena`, `just`, `alejandra`, and other utilities
-- **Helper Scripts**: Automated scripts for updating VSCode extensions, container digests, and more
+- **Development Tools**: Includes tools like `colmena`, `just`, `alejandra`, `statix`, and other utilities
+- **Helper Scripts**: Automated scripts for updating NPM packages, container digests, fetcher repos, and more
 - **Consistent Environment**: Ensures all contributors have the same tooling and dependencies
 
 ### Using devenv
@@ -63,7 +79,7 @@ To enter the development environment:
 
 ```bash
 cd ~/nix
-devenv up
+devenv shell
 ```
 
 This will load all the tools and environment variables defined in `devenv.nix`. Once inside the environment, you can use the helper scripts and tools without additional installation.
@@ -76,14 +92,16 @@ This project uses `just` for task automation. Here are the available targets:
 
 - `switch` - Switches the system to the current configuration
 - `build` - Builds the system in its current form
-- `update-all` - Updates everything (runs update, update-vscode-extensions, update-repos, update-container-digests, and update-secrets)
+- `update-all` - Updates everything (runs update, update-npm-packages, update-repos, update-container-digests, and update-secrets)
 - `update` - Updates input definitions from remote resources
-- `update-vscode-extensions` - Refreshes VSCode Extensions
+- `update-npm-packages` - Updates NPM packages
 - `update-repos` - Pulls the latest hashes and shas from the repos in `apps/fetcher/repos.toml`
 - `update-container-digests` - Updates the SHA digests of container images
 - `update-secrets` - Updates the secrets flake
+- `format` - Format all .nix files with alejandra
+- `lint` - Linting for the project with statix
 - `colmena HOST` - Runs colmena remote switch on the specified host
-- `colmena-dns` - Runs colmena apply on dns1 and dns2 hosts (runs on nixosaarch64vm under aarch64-linux architecture)
+- `colmena-dns` - Runs colmena apply on dns1 and dns2 hosts
 
 ## Container Management
 
@@ -116,9 +134,10 @@ This project uses Podman for container runtime with the following practices:
    ```
 
 4. Build the flake for your system. This will take a while the first time.
-   - Macbook Pro: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.Freds-MacBook-Pro.system`
-   - Mac Studio: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfiguratiions.Freds-Mac-Studio.system`
-   - My better half's Mac Mini: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfiguratiions.Laisas-Mac-mini.system`
+   - Macbook Pro: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.macbook-pro.system`
+   - Mac Studio: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.mac-studio.system`
+   - My better half's Mac Mini: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.laisas-mac-mini.system`
+   - Linux PC: `nix --extra-experimental-features "nix-command flakes" build .#nixosConfigurations.fredpc.system`
 
 ## Key Management
 
@@ -157,8 +176,13 @@ For assistance with Nix configurations:
 
 ## Final Steps
 
+### For macOS systems:
 1. Run the initial switch into the flake. This will take a long while the first time: `./result/sw/bin/darwin-rebuild switch --flake ~/nix`
 2. Reboot the machine to ensure all Mac settings were applied.
+
+### For NixOS systems:
+1. Run the initial switch into the flake: `sudo nixos-rebuild switch --flake ~/nix`
+2. Reboot if needed for hardware changes.
 
 ## Post-setup That Can't Be Automated Yet
 
