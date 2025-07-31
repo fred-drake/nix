@@ -2,6 +2,7 @@
 name: project-analyst
 description: |
   Expert team member who deeply understands your project's architecture, technologies, and patterns. Works behind the scenes to ensure the right specialists are assigned to each task.
+model: opus
   
   Examples:
   - <example>

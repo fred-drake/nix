@@ -2,7 +2,8 @@
 name: code-reviewer
 description: |
   Expert code reviewer who ensures quality, security, and maintainability across any programming language. Provides actionable feedback to improve code.
-  
+model: opus
+
   Examples:
   - <example>
     Context: Developer completed a feature
@@ -28,7 +29,7 @@ description: |
     Educational reviews help developers grow while improving code quality
     </commentary>
   </example>
-  
+
   Delegations:
   - <delegation>
     Trigger: Security vulnerabilities found
@@ -235,7 +236,7 @@ Your variable `d` could be more descriptive. Consider:
 - `responseData` - if it's API response
 - `configData` - if it's configuration
 
-Good naming helps future developers (including yourself!) understand 
+Good naming helps future developers (including yourself!) understand
 the code without needing to trace through the logic.
 
 📚 Recommended reading: "Clean Code" by Robert Martin, Chapter 2

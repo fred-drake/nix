@@ -192,19 +192,27 @@ esac
      * Best practices for the language
      * Performance considerations
      * Security implications
+   - **OUTPUT**: Create a detailed review report
 
 7. **REVIEW DECISION POINT:**
    ```
    IF (code-reviewer has concerns):
        - Print: "Code Review Iteration #X: Changes requested"
+       - Print: "=== CODE REVIEW REPORT ==="
+       - Display the full code-reviewer report to the user
+       - Print: "=== END OF REPORT ==="
        - Document specific concerns:
          * Code quality issues
          * Missing requirements
          * Potential bugs or edge cases
+       - Wait for user acknowledgment (optional)
        - Send feedback to engineer
        - GO TO STEP 3 (restart implementation loop)
    ELSE:
        - Print: "Code review approved!"
+       - Print: "=== CODE REVIEW REPORT ==="
+       - Display the full code-reviewer report to the user
+       - Print: "=== END OF REPORT ==="
        - GO TO PHASE 4
    ```
 
@@ -305,11 +313,28 @@ Implementation Loop Iteration #3:
 
 Code Review Iteration #1:
 - Reviewer suggests refactoring for clarity
+=== CODE REVIEW REPORT ===
+Code Review for Phase 2 Implementation:
+- Implementation meets all requirements from comments #18 and #50
+- Suggest refactoring the processData function for better clarity
+- Consider extracting the validation logic into a separate method
+- Error handling is adequate but could use more specific error types
+- Test coverage is good but missing edge case for empty input
+=== END OF REPORT ===
 - Engineer implementing suggestions
 
 Implementation Loop Iteration #4:
 - All quality checks passed!
 - Code review approved!
+=== CODE REVIEW REPORT ===
+Code Review for Phase 2 Implementation:
+- All previous concerns have been addressed
+- Code is clean, well-structured, and maintainable
+- Error handling is now comprehensive with specific error types
+- Test coverage includes all edge cases
+- Implementation fully satisfies requirements
+- No further changes needed
+=== END OF REPORT ===
 - Running final validation...
 - All checks passed!
 
