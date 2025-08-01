@@ -1,15 +1,12 @@
 # Gitea Issue Implementation Loop
-
 ## OBJECTIVE
-Fetch implementation instructions from a Gitea issue comment and execute them with continuous quality validation until all checks pass.
+Fetch implementation instructions from a Gitea issue comment and execute them with continuous quality validation until all checks pass, then report results back to the issue.
 
 ## Initial Setup
-
 ### Parse Arguments
 ```
 COMMENT_INDICES = $1  # First argument: Comma-separated issue comment indices (e.g., "18,50")
 PHASE_NUMBER = $2     # Second argument: Phase to implement
-
 # Parse multiple indices
 IFS=',' read -ra COMMENT_ARRAY <<< "$COMMENT_INDICES"
 echo "Will fetch ${#COMMENT_ARRAY[@]} issue comments: ${COMMENT_ARRAY[@]}"
@@ -60,7 +57,6 @@ esac
 ```
 
 ## Phase 1: Fetch and Parse Instructions
-
 1. **Fetch Issue Instructions**
    - Have `code-architect` sub-agent use `gitea-code-architect` MCP server
    - Retrieve ALL issue single comments specified in `COMMENT_INDICES`:
@@ -106,9 +102,7 @@ esac
    - Recommend preferred approach with justification
 
 ## Phase 2: Implementation and Validation Loop
-
 ### MAIN IMPLEMENTATION LOOP START
-
 3. **Engineer Ultrathinking Phase**
    Before implementing, `engineer` performs deep analysis:
 
@@ -184,7 +178,6 @@ esac
 3. `engineer` MUST address regressions before any other fixes
 
 ## Phase 3: Code Review Loop
-
 6. **Code Review Phase**
    - `code-reviewer` evaluates the implementation against:
      * Original Gitea issue requirements
@@ -217,7 +210,6 @@ esac
    ```
 
 ## Phase 4: Final Validation
-
 8. **Final Quality Check**
    - `coverage-analyzer` runs complete validation suite one more time:
    ```bash
@@ -241,11 +233,94 @@ esac
    ELSE:
        - Print: "SUCCESS: Phase $PHASE_NUMBER implementation complete!"
        - Log implementation summary
-       - COMPLETE
+       - GO TO PHASE 5 (Gitea Reporting)
    ```
 
-## Loop Control and Monitoring
+## Phase 5: Gitea Issue Reporting
+10. **Engineer Reports to Gitea**
+    - `engineer` sub-agent uses ONLY the `gitea-engineer` MCP server
+    - **IMPORTANT**: Do NOT use bash, curl, or any other tools
+    - Compose implementation report including:
+      * Phase completed: $PHASE_NUMBER
+      * Requirements addressed from comments: $COMMENT_INDICES
+      * Key changes implemented
+      * Tests added or modified
+      * Performance improvements (if any)
+      * Known limitations or future considerations
+    - Post comment to the original Gitea issue
+    - Example report format:
+    ```
+    ## Phase $PHASE_NUMBER Implementation Complete
 
+    **Implemented requirements from comments:** #$COMMENT_INDICES
+
+    ### Summary of Changes
+    - [List key implementation points]
+    - [Describe major code changes]
+    - [Note any architectural decisions]
+
+    ### Testing
+    - All quality checks passed (format, lint, test, vulncheck)
+    - [Describe new tests added]
+    - [Note test coverage improvements]
+
+    ### Technical Details
+    - [Implementation approach chosen]
+    - [Performance considerations addressed]
+    - [Error handling improvements]
+
+    Implementation completed successfully and ready for production.
+    ```
+
+11. **Code Reviewer Reports to Gitea**
+    - `code-reviewer` sub-agent uses ONLY the `gitea-reviewer` MCP server
+    - **IMPORTANT**: Do NOT use bash, curl, or any other tools
+    - Compose code review report including:
+      * Overall code quality assessment
+      * Compliance with requirements
+      * Best practices adherence
+      * Security considerations
+      * Performance analysis
+      * Maintainability assessment
+    - Post comment to the original Gitea issue
+    - Example report format:
+    ```
+    ## Code Review Report - Phase $PHASE_NUMBER
+
+    **Review Status:** ✅ APPROVED
+
+    ### Code Quality Assessment
+    - **Clarity:** [Excellent/Good/Needs Improvement]
+    - **Maintainability:** [Score and reasoning]
+    - **Test Coverage:** [Percentage and adequacy]
+    - **Documentation:** [Quality assessment]
+
+    ### Compliance Verification
+    - All requirements from comments #$COMMENT_INDICES have been met
+    - [List specific requirement validations]
+
+    ### Technical Review
+    - **Design Patterns:** [Appropriate use of patterns]
+    - **Error Handling:** [Robustness assessment]
+    - **Performance:** [Any concerns or commendations]
+    - **Security:** [Vulnerability assessment]
+
+    ### Recommendations
+    - [Any future improvements]
+    - [Maintenance considerations]
+
+    Code meets all quality standards and is approved for deployment.
+    ```
+
+12. **COMPLETION:**
+    - Print: "Phase $PHASE_NUMBER fully complete with Gitea reporting done!"
+    - Print summary of:
+      * Total iterations required
+      * Time elapsed
+      * Both Gitea comment IDs posted
+    - EXIT SUCCESS
+
+## Loop Control and Monitoring
 ### Progress Tracking
 Maintain these metrics throughout execution:
 - Total loop iterations
@@ -253,6 +328,7 @@ Maintain these metrics throughout execution:
 - Quality check failures by type
 - Code review rounds
 - Time spent in each phase
+- Gitea reporting status
 
 ### Loop Safety Limits
 ```
@@ -263,6 +339,7 @@ if (current_iteration > MAX_ITERATIONS):
     - Persistent failures
     - Last error state
     - Recommendation for manual intervention
+    - Note: Gitea reporting skipped due to incomplete implementation
 ```
 
 ### Status Reporting Format
@@ -272,12 +349,11 @@ Issue Comments: #$COMMENT_INDICES (${#COMMENT_ARRAY[@]} comments)
 Phase: $PHASE_NUMBER
 Project Type: $PROJECT_TYPE
 Loop Iteration: #X
-Status: [Implementation|Validation|Review|Final Check]
+Status: [Implementation|Validation|Review|Final Check|Gitea Reporting]
 ----------------------------------------
 ```
 
 ## Example Execution Flow
-
 ```
 Parsing arguments: COMMENT_INDICES="18,50", PHASE_NUMBER=2
 Will fetch 2 issue comments: 18 50
@@ -339,12 +415,22 @@ Code Review for Phase 2 Implementation:
 - All checks passed!
 
 SUCCESS: Phase 2 implementation complete!
-Time elapsed: 8 minutes
+
+Gitea Reporting Phase:
+- Engineer posting implementation report to Gitea issue...
+  Using gitea-engineer MCP server only
+  Posted comment ID: #87
+- Code reviewer posting review report to Gitea issue...
+  Using gitea-reviewer MCP server only
+  Posted comment ID: #88
+
+Phase 2 fully complete with Gitea reporting done!
+Time elapsed: 10 minutes
 Total iterations: 4
+Gitea comments posted: #87 (engineer), #88 (reviewer)
 ```
 
 ## Integration Notes
-
 ### Multi-Comment Handling
 When multiple comment indices are provided:
 1. **Fetch Order**: Retrieve comments in the order specified
@@ -357,16 +443,21 @@ When multiple comment indices are provided:
 
 ### MCP Server Communication
 - `code-architect` must establish connection to `gitea-code-architect` MCP server
+- `engineer` must use ONLY `gitea-engineer` MCP server for reporting
+- `code-reviewer` must use ONLY `gitea-reviewer` MCP server for reporting
 - Handle authentication and connection errors gracefully
 - Cache all fetched comment data to avoid repeated fetches
 - Batch fetch multiple comments if MCP server supports it
+- **CRITICAL**: Never use bash commands or other tools for Gitea interactions
 
 ### Multi-Phase Coordination
 - Each phase builds on previous phases
 - Maintain phase dependency awareness
 - Consider cumulative testing impact
+- Ensure both reports reference the complete implementation
 
 ### Error Recovery
 - Network failures: Retry with exponential backoff
 - MCP server errors: Provide clear diagnostics
 - Build failures: Capture full logs for analysis
+- Gitea posting failures: Retry up to 3 times before failing

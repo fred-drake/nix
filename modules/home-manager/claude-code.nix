@@ -139,7 +139,7 @@ in {
         };
 
         # Claude adds this -- setting it to the year 2035 to see if it will prevent showing again
-        feedbackSurveyState.lastShownTime = 2069451551000;
+        # feedbackSurveyState.lastShownTime = 2069451551000;
       };
 
       # MCP configuration symlinks
