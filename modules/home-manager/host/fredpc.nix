@@ -6,7 +6,9 @@
   #   xwayland.enable = true;
   #   systemd.enable = true;
   # };
-  imports = [../../../apps/hyprland.nix];
+  imports = [../../../apps/hyprland.nix ../waybar];
+
+  # imports = [../hyprland.nix];
 
   dconf = {
     enable = true;

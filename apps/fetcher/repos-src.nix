@@ -49,6 +49,12 @@
     owner = "fdrake";
     repo = "gitea-mcp";
     rev = "comment-index";
-    hash = "sha256-4vZQWAJ+0w64UZ20zFE24BITtU/5wz2eBSzONtyElcQ=";
+    hash = "sha256-p/HlQNXmi1TDQtW47BgMbtMnLD0ZOnZ9RyvYKaqIoHM=";
+  };
+  kuma-waybar-src = pkgs.fetchFromGitHub {
+    owner = "WebTender";
+    repo = "kuma-waybar";
+    rev = "8af4832831f7c81f8f3f81bf0ba9f2e734c1f860";
+    hash = "sha256-NGofCO+7WsJtCvlTzj6JCjukcRT0IAJwinbk3shPKFE=";
   };
 }

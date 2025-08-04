@@ -8,6 +8,7 @@
 in {
   imports = [
     ./gnome.nix
+    ./hyprland.nix
   ];
   boot.loader.grub = {
     enable = true;
@@ -16,6 +17,7 @@ in {
     device = "nodev";
   };
   services = {
+    displayManager.defaultSession = "hyprland";
     openssh.enable = true;
     blueman.enable = true;
     pipewire = {
@@ -57,6 +59,9 @@ in {
     alsa-utils
     bitwarden-desktop
     usbutils
+    kitty
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.hack
 
     # Gaming
     # steam
@@ -110,10 +115,6 @@ in {
   programs = {
     zsh.enable = true;
     fish.enable = true;
-    hyprland = {
-      enable = false;
-      xwayland.enable = true;
-    };
   };
 
   security = {

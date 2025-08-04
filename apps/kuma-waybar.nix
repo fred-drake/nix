@@ -6,17 +6,14 @@
   repos-src = import ./fetcher/repos-src.nix {inherit pkgs;};
 in
   buildGoModule rec {
-    pname = "gitea-mcp";
+    pname = "kuma-waybar";
     version = "unstable";
 
-    src = repos-src.gitea-mcp-src;
+    src = repos-src.kuma-waybar-src;
 
-    # Fix vendor inconsistency
-    proxyVendor = true;
+    vendorHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
-    vendorHash = "sha256-2bJBB8o7yH5wYW4NfiYB9pQYWTmWnl+13VOSew8Nbyw=";
-
-    # Build with version information like the Makefile does
+    # Build with version information
     ldflags = [
       "-s"
       "-w"
@@ -27,11 +24,11 @@ in
     subPackages = ["."];
 
     meta = with lib; {
-      description = "Model Context Protocol (MCP) server for Gitea";
-      homepage = "https://gitea.com/gitea/gitea-mcp";
+      description = "Uptime Kuma integration for Waybar";
+      homepage = "https://github.com/WebTender/kuma-waybar";
       license = licenses.mit;
       maintainers = with maintainers; [];
       platforms = platforms.unix ++ platforms.darwin;
-      mainProgram = "gitea-mcp";
+      mainProgram = "kuma-waybar";
     };
   }

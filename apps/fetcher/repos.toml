@@ -23,3 +23,6 @@ url = "https://github.com/nickeb96/puffer-fish"
 name = "gitea-mcp-src"
 url = "https://gitea.com/fdrake/gitea-mcp"
 rev = "comment-index"
+[[repos]]
+name = "kuma-waybar-src"
+url = "https://github.com/WebTender/kuma-waybar.git"
