@@ -1,8 +1,8 @@
 /* -- Global rules -- */
 * {
   border: none;
-  font-family: "JetbrainsMono Nerd Font";
-  font-size: 15px;
+  font-family: "Hack Nerd Font";
+  font-size: 20px;
   min-height: 10px;
 }
 
@@ -15,15 +15,19 @@ window#waybar.hidden {
 }
 
 /* - General rules for visible modules -- */
-#custom-archicon,
+#custom-osicon,
+#custom-kuma-waybar,
+#custom-weather,
 #clock,
 #cpu,
+#load,
 #memory,
 #disk,
 #temperature,
 #idle_inhibitor,
 #pulseaudio,
 #pulseaudio_slider,
+#bluetooth,
 #network,
 #language {
   color: #161320;
@@ -35,9 +39,11 @@ window#waybar.hidden {
 }
 
 /* Left separation modules */
-#custom-archicon,
+#custom-osicon,
 #cpu,
-#idle_inhibitor {
+#idle_inhibitor,
+#custom-weather,
+#custom-kuma-waybar {
   margin-left: 5px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -45,8 +51,10 @@ window#waybar.hidden {
 
 /* Right separation modules */
 #clock,
-#temperature,
-#language {
+#disk,
+#custom-kuma-waybar,
+#custom-weather,
+#network {
   margin-right: 5px;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -55,31 +63,32 @@ window#waybar.hidden {
 /* -- Specific styles -- */
 
 /* Left modules */
-#custom-archicon {
+#custom-osicon {
   font-size: 20px;
-  color: #89B4FA;
-  background: #161320;
+  color: #89b4fa;
+  background: #000000;
   padding-right: 17px;
 }
 
 #clock {
-  background: #ABE9B3;
+  background: #abe9b3;
 }
 
-#cpu {
-  background: #96CDFB;
+#cpu,
+#load {
+  background: #96cdfb;
 }
 
 #memory {
-  background: #DDB6F2;
+  background: #ddb6f2;
 }
 
 #disk {
-  background: #F5C2E7;
+  background: #f5c2e7;
 }
 
-#temperature {
-  background: #F8BD96;
+#bluetooth {
+  background: #f8bd96;
 }
 
 /* Center modules */
@@ -91,26 +100,30 @@ window#waybar.hidden {
 }
 
 #workspaces button {
-  color: #B5E8E0;
+  color: #b5e8e0;
   background: transparent;
   padding: 4px 4px;
-  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 #workspaces button.occupied {
-  color: #A6E3A1;
+  color: #a6e3a1;
 }
 
 #workspaces button.active {
-  color: #89B4FA;
-  text-shadow: 0 0 4px #ABE9B3;
+  color: #89b4fa;
+  text-shadow: 0 0 4px #abe9b3;
 }
 
 #workspaces button:hover {
-  color: #89B4FA;
+  color: #89b4fa;
 }
 
-#workspaces button.active:hover {}
+#workspaces button.active:hover {
+}
 
 /* Right modules */
 #taskbar {
@@ -136,34 +149,39 @@ window#waybar.hidden {
 }
 
 #idle_inhibitor {
-  background: #B5E8E0;
+  background: #b5e8e0;
   padding-right: 15px;
 }
 
 #pulseaudio {
-  color: #1A1826;
-  background: #F5E0DC;
+  color: #1a1826;
+  background: #f5e0dc;
 }
 
 #pulseaudio_slider {
-  color: #1A1826;
-  background: #E8A2AF;
+  color: #1a1826;
+  background: #e8a2af;
 }
 
 #network {
-  background: #CBA6F7;
+  background: #cba6f7;
   padding-right: 13px;
 }
 
-#language {
-  background: #A6E3A1;
+#custom-kuma-waybar {
+  background: #000000;
+  padding-right: 15px;
+}
+
+#custom-weather {
+  background: #000000;
   padding-right: 15px;
 }
 
 /* === Optional animation (if you want to use it later) === */
 @keyframes blink {
   to {
-    background-color: #BF616A;
-    color: #B5E8E0;
+    background-color: #bf616a;
+    color: #b5e8e0;
   }
 }

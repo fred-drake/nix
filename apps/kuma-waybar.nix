@@ -11,7 +11,7 @@ in
 
     src = repos-src.kuma-waybar-src;
 
-    vendorHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    vendorHash = null;
 
     # Build with version information
     ldflags = [
