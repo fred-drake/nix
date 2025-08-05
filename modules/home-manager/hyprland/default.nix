@@ -108,7 +108,7 @@ in {
 
       # Set programs that you use
       "$terminal" = "ghostty";
-      "$fileManager" = "dolphin";
+      "$fileManager" = "nautilus";
       "$menu" = "wofi --show drun";
 
       #################
@@ -292,7 +292,7 @@ in {
       ###################
 
       # See https://wiki.hyprland.org/Configuring/Keywords/
-      "$mainMod" = "SUPER"; # Sets "Windows" key as main modifier
+      "$mainMod" = "ALT"; # Sets "Windows" key as main modifier
 
       # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
       bind = [
@@ -301,7 +301,7 @@ in {
         "$mainMod, M, exit,"
         "$mainMod, E, exec, $fileManager"
         "$mainMod, V, togglefloating,"
-        "$mainMod, SPACE, exec, $menu"
+        "SUPER, SPACE, exec, $menu"
         "$mainMod, P, pseudo, # dwindle"
         # "$mainMod, SHIFT, J, togglesplit, # dwindle"
 
