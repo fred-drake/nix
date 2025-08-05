@@ -10,7 +10,7 @@ _: {
     };
     "gitea" = {
       "1-rootless" = {
-        "linux/amd64" = "docker.gitea.com/gitea@sha256:303d0d57cc29d9c7d33668e7ca5aff70f470ed106484fa79113ba6324492a834";
+        "linux/amd64" = "docker.gitea.com/gitea@sha256:74d3eb6ef68699e661fbcf25496e052693c49adaff760c2a254bd1e7d5520885";
       };
     };
   };
@@ -52,14 +52,14 @@ _: {
     };
     "sonarqube" = {
       "latest" = {
-        "linux/amd64" = "docker.io/sonarqube@sha256:e709b05cb14576cb63b0517e5d5e8b4e70e612dbd726c5199e6d27119c29b330";
+        "linux/amd64" = "docker.io/sonarqube@sha256:3d99ae8fc0f5ec585be370a7564877dd952a7034b8ecfddd6da9f90ab7b7d62e";
       };
     };
   };
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:8544bb549d899868bb73c0699f08afbfb2c9715d280ffa363cf8d8b0a0bc7497";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:47e04d962e343b8950053fa8ecba5bb040090280d174eaa4d6f8d3b1b11e0e07";
       };
     };
   };
@@ -76,17 +76,17 @@ _: {
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:609d65ba45e7b8d28cdd2fef5627fd15d72cfc87cb52f5a3fc4da9d816aa60bc";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:7a13a8de123e2a66bc3de1552e088f9952a7b86e28cfc263653dc57574943a14";
       };
     };
     "linuxserver/sonarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:3e7c5a57ee079da1c3a1c5943985f9b44490e844fd968db32622ad0f9a47ebd6";
+        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:41dbae324b0306248198b90218a632e389f0ed47008e337b7b52c079a1f403b8";
       };
     };
     "monstermuffin/mergerfs-cache-mover" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:601b67403ede370854910b64bf1592523e7a98193d718d6d507dae8d72db15d0";
+        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:ccade745af82f89df54fd3106b5025cfe15000d9cbf6aba5355bd5497c2391c1";
       };
     };
     "onedr0p/exportarr" = {

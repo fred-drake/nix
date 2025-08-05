@@ -200,9 +200,9 @@ in {
         wget # Network downloader
         yq-go # YAML processor
         yt-dlp # Video downloader
-        (pkgs.vscode-with-extensions.override {
-          vscodeExtensions = vscode-config.globalExtensions;
-        })
+        # (pkgs.vscode-with-extensions.override {
+        #   vscodeExtensions = vscode-config.globalExtensions;
+        # })
       ])
       ++ (
         # Packages that are on workstations that are more heavily used

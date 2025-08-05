@@ -141,7 +141,6 @@ in {
 
       # MCP configuration symlinks
       ".cursor/mcp.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
-      ".codeium/windsurf/mcp_config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
 
       ".config/llminate/config.yml".text = builtins.toJSON {
         mcp-config = "~/mcp-config.json";
