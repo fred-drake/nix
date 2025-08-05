@@ -94,6 +94,11 @@ in {
           recursive = true;
         };
 
+        "Pictures" = {
+          source = ../../homefiles/Pictures;
+          recursive = true;
+        };
+
         ".hgignore_global" = {source = ../../homefiles/hgignore_global;};
         ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
       }

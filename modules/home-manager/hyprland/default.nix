@@ -1,7 +1,96 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  config,
+  ...
+}: let
+  home = config.home.homeDirectory;
+in {
+  imports = [./waybar];
+
+  # home.file.".config/wlogout/layout".source = ./wlogout-config;
+
+  home.file = {
+    ".config/wlogout/layout".text = ''
+      {
+          "label" : "lock",
+          "action" : "${pkgs.hyprlock}/bin/hyprlock",
+          "text" : "Lock",
+          "keybind" : "l"
+      }
+      {
+          "label" : "hibernate",
+          "action" : "systemctl hibernate",
+          "text" : "Hibernate",
+          "keybind" : "h"
+      }
+      {
+          "label" : "logout",
+          "action" : "loginctl terminate-user $USER",
+          "text" : "Logout",
+          "keybind" : "e"
+      }
+      {
+          "label" : "shutdown",
+          "action" : "systemctl poweroff",
+          "text" : "Shutdown",
+          "keybind" : "s"
+      }
+      {
+          "label" : "suspend",
+          "action" : "systemctl suspend",
+          "text" : "Suspend",
+          "keybind" : "u"
+      }
+      {
+          "label" : "reboot",
+          "action" : "systemctl reboot",
+          "text" : "Reboot",
+          "keybind" : "r"
+      }
+    '';
+
+    ".config/hypr/hyprlock.conf".source = ./hyprlock.conf;
+    ".config/hypr/weather.sh" = {
+      source = ./weather.sh;
+      executable = true;
+    };
+
+    ".config/hypr/hyprpaper.conf".text = ''
+      preload = ${home}/Pictures/wallpaper/wp6746982-tokyo-night-wallpapers.jpg
+      wallpaper = ,${home}/Pictures/wallpaper/wp6746982-tokyo-night-wallpapers.jpg
+    '';
+  };
+
+  services.hypridle = {
+    enable = true;
+
+    settings = {
+      general = {
+        lock_cmd = "${pkgs.hyprlock}/bin/hyprlock"; # command to run when locking the screen
+        before_sleep_cmd = "${pkgs.hyprlock}/bin/hyprlock"; # command to run before system sleeps
+        after_sleep_cmd = "hyprctl dispatch dpms on"; # command after waking up (turns screen on)
+        ignore_dbus_inhibit = false;
+      };
+
+      listener = [
+        {
+          timeout = 600; # 10 minutes idle time
+          on-timeout = "${pkgs.hyprlock}/bin/hyprlock"; # lock screen on this timeout
+        }
+        {
+          timeout = 900; # 15 minutes
+          on-timeout = "hyprctl dispatch dpms off"; # turn off screen after timeout
+          on-resume = "hyprctl dispatch dpms on"; # turn on screen on resume
+        }
+      ];
+    };
+  };
+
   wayland.windowManager.hyprland = {
     enable = true;
-    package = pkgs.hyprland;
+    package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+
     portalPackage = pkgs.xdg-desktop-portal-hyprland;
     settings = {
       ################
@@ -34,12 +123,13 @@
       # exec-once = waybar & hyprpaper & firefox
       # exec-once = "bash ~/.config/hypr/start.sh";
       exec-once = [
-        "swww init &"
-        "swww img ~/Pictures/night-desert.png &"
+        # "swww init &"
+        # "swww img ~/Pictures/night-desert.png &"
         # Add pkgs.networkmanagerapplet for this
         # nm-applet --indicator &
         # "waybar &"
-        "dunst &"
+        # "dunst &"
+        "${pkgs.hyprpaper}/bin/hyprpaper"
         "tmux setenv -g HYPRLAND_INSTANCE_SIGNATURE $HYPRLAND_INSTANCE_SIGNATURE"
       ];
 
@@ -49,7 +139,7 @@
 
       # See https://wiki.hyprland.org/Configuring/Environment-variables/
 
-      env = ["XCURSOR_SIZE,24" "HYPRCURSOR_SIZE,24"];
+      env = ["XCURSOR_SIZE,24" "HYPRCURSOR_SIZE,24" "HYPRCURSOR_THEME,rose-pine-hyprcursor"];
 
       #####################
       ### LOOK AND FEEL ###
@@ -60,9 +150,9 @@
       # https://wiki.hyprland.org/Configuring/Variables/#general
       general = {
         "gaps_in" = 5;
-        "gaps_out" = 20;
+        "gaps_out" = 5;
 
-        "border_size" = 2;
+        "border_size" = 1;
 
         # https://wiki.hyprland.org/Configuring/Variables/#variable-types for info about colors
         "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
@@ -215,6 +305,8 @@
         "$mainMod, P, pseudo, # dwindle"
         # "$mainMod, SHIFT, J, togglesplit, # dwindle"
 
+        ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot --mode region -o ${home}/Screenshots"
+
         # Move focus with mainMod + arrow keys
         "$mainMod, H, movefocus, l"
         "$mainMod, L, movefocus, r"
@@ -224,7 +316,7 @@
         # Switch workspaces with mainMod + [0-9]
         "$mainMod, A, workspace, 1"
         "$mainMod, Z, workspace, 2"
-        "$mainMod, 3, workspace, 3"
+        "$mainMod, S, workspace, 3"
         "$mainMod, 4, workspace, 4"
         "$mainMod, 5, workspace, 5"
         "$mainMod, 6, workspace, 6"
@@ -236,7 +328,7 @@
         # Move active window to a workspace with mainMod + SHIFT + [0-9]
         "$mainMod SHIFT, A, movetoworkspace, 1"
         "$mainMod SHIFT, Z, movetoworkspace, 2"
-        "$mainMod SHIFT, 3, movetoworkspace, 3"
+        "$mainMod SHIFT, S, movetoworkspace, 3"
         "$mainMod SHIFT, 4, movetoworkspace, 4"
         "$mainMod SHIFT, 5, movetoworkspace, 5"
         "$mainMod SHIFT, 6, movetoworkspace, 6"
@@ -252,9 +344,6 @@
         # Scroll through existing workspaces with mainMod + scroll
         "$mainMod, mouse_down, workspace, e+1"
         "$mainMod, mouse_up, workspace, e-1"
-
-        # Execute rofi
-        "$mainMod, S, exec, rofi -show drun -show-icons -theme material.rasi"
       ];
 
       # Move/resize windows with mainMod + LMB/RMB and dragging

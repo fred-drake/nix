@@ -97,6 +97,11 @@
     # vscode.url = "github:fred-drake/vscode"; # My custom vscode configuration
 
     hyprland.url = "github:hyprwm/Hyprland";
+    rose-pine-hyprcursor = {
+      url = "github:ndom91/rose-pine-hyprcursor";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.hyprlang.follows = "hyprland/hyprlang";
+    };
   };
 
   # Output configuration

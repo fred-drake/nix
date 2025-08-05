@@ -28,9 +28,10 @@ window#waybar.hidden {
 #pulseaudio,
 #pulseaudio_slider,
 #bluetooth,
-#network,
-#language {
-  color: #161320;
+#custom-power,
+#network {
+  color: #7aa2f7;
+  background-color: #292e42;
   margin-top: 6px;
   margin-bottom: 6px;
   padding-left: 10px;
@@ -40,9 +41,11 @@ window#waybar.hidden {
 
 /* Left separation modules */
 #custom-osicon,
+#clock,
 #cpu,
 #idle_inhibitor,
 #custom-weather,
+#custom-power,
 #custom-kuma-waybar {
   margin-left: 5px;
   border-top-left-radius: 10px;
@@ -50,10 +53,12 @@ window#waybar.hidden {
 }
 
 /* Right separation modules */
+#custom-osicon,
 #clock,
 #disk,
 #custom-kuma-waybar,
 #custom-weather,
+#custom-power,
 #network {
   margin-right: 5px;
   border-top-right-radius: 10px;
@@ -66,29 +71,28 @@ window#waybar.hidden {
 #custom-osicon {
   font-size: 20px;
   color: #89b4fa;
-  background: #000000;
   padding-right: 17px;
 }
 
 #clock {
-  background: #abe9b3;
+  color: #7dcfff;
 }
 
 #cpu,
 #load {
-  background: #96cdfb;
+  color: #bb9af7;
 }
 
 #memory {
-  background: #ddb6f2;
+  color: #f7768e;
 }
 
 #disk {
-  background: #f5c2e7;
+  color: #e0af68;
 }
 
 #bluetooth {
-  background: #f8bd96;
+  color: #bb9af7;
 }
 
 /* Center modules */
@@ -97,32 +101,6 @@ window#waybar.hidden {
   border-radius: 10px;
   margin: 6px 5px;
   padding: 0px 6px;
-}
-
-#workspaces button {
-  color: #b5e8e0;
-  background: transparent;
-  padding: 4px 4px;
-  transition:
-    color 0.3s ease,
-    text-shadow 0.3s ease,
-    transform 0.3s ease;
-}
-
-#workspaces button.occupied {
-  color: #a6e3a1;
-}
-
-#workspaces button.active {
-  color: #89b4fa;
-  text-shadow: 0 0 4px #abe9b3;
-}
-
-#workspaces button:hover {
-  color: #89b4fa;
-}
-
-#workspaces button.active:hover {
 }
 
 /* Right modules */
@@ -149,33 +127,34 @@ window#waybar.hidden {
 }
 
 #idle_inhibitor {
-  background: #b5e8e0;
   padding-right: 15px;
+  color: #2ac3de;
 }
 
 #pulseaudio {
-  color: #1a1826;
-  background: #f5e0dc;
+  color: #9ece6a;
 }
 
 #pulseaudio_slider {
-  color: #1a1826;
-  background: #e8a2af;
+  color: #9ece6a;
 }
 
 #network {
-  background: #cba6f7;
   padding-right: 13px;
+  color: #e0af68;
 }
 
 #custom-kuma-waybar {
-  background: #000000;
   padding-right: 15px;
 }
 
 #custom-weather {
-  background: #000000;
   padding-right: 15px;
+}
+
+#custom-power {
+  color: #f7768e;
+  font-size: 30px;
 }
 
 /* === Optional animation (if you want to use it later) === */

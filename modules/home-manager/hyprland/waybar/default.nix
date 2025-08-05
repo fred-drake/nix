@@ -3,9 +3,14 @@
   pkgs,
   ...
 }: let
-  home = config.home.homeDirectory;
-  kuma-waybar = pkgs.callPackage ../../../apps/kuma-waybar.nix {};
+  kuma-waybar = pkgs.callPackage ./kuma-waybar.nix {};
 in {
+  sops.secrets.uptime-kuma-env = {
+    sopsFile = config.secrets.workstation.uptime-kuma-env;
+    mode = "0400";
+    key = "data";
+  };
+
   home = {
     packages = [
       kuma-waybar
@@ -16,7 +21,7 @@ in {
       ".config/waybar/config".text = builtins.toJSON {
         position = "top";
         modules-left = ["custom/osicon" "clock" "cpu" "load" "memory" "disk" "custom/weather"];
-        modules-right = ["custom/kuma-waybar" "idle_inhibitor" "pulseaudio" "bluetooth" "network"];
+        modules-right = ["custom/kuma-waybar" "idle_inhibitor" "pulseaudio" "bluetooth" "network" "custom/power"];
 
         clock = {
           format = "{:%d - %H:%M:%S}";
@@ -31,31 +36,32 @@ in {
         };
 
         cpu = {
-          format = "{usage}% ";
+          format = "{usage:2}%";
+          interval = 2;
           tooltip = true;
           tooltip-format = "Usage: {cpu}\nCores: {cores}";
         };
 
         load = {
           interval = 2;
-          format = "{load1} {load5} {load15}";
+          format = "{load1:2.2f} {load5:2.2f} {load15:2.2f}  ";
         };
 
         memory = {
-          format = "{}% 󰍛";
+          format = "{used:.0f}GB/{total:.0f}GB 󰍛";
           tooltip = true;
           tooltip-format = "RAM used: {used} / {total} ({percentage}%)";
         };
 
         disk = {
-          format = "{percentage_free}%  ";
+          format = "{percentage_free}%  ";
           tooltip = true;
           tooltip-format = "Free space: {free} / {total} ({percentage_free}%)";
         };
 
         "custom/weather" = {
-          exec = "${pkgs.wttrbar}/bin/wttrbar --fahrenheit --ampm -m -l en";
-          format = "{}°";
+          exec = "${pkgs.wttrbar}/bin/wttrbar --fahrenheit --nerd --ampm -m -l en";
+          format = "{} °";
           tooltip = true;
           interval = 3600;
           return-type = "json";
@@ -66,7 +72,7 @@ in {
           interval = 60;
           on-click = "${kuma-waybar}/bin/kuma-waybar open --env=${config.sops.secrets.uptime-kuma-env.path}";
           max-length = 40;
-          format = "🐻 {}";
+          format = "  {}";
         };
 
         "wlr/taskbar" = {
@@ -111,6 +117,11 @@ in {
           tooltip-format-ethernet = "{ifname} {ipaddr}/{cidr}";
           tooltip-format-disconnected = "Disconnected";
           max-length = 50;
+        };
+
+        "custom/power" = {
+          format = "⏻";
+          on-click = "${pkgs.wlogout}/bin/wlogout --protocol layer-shell";
         };
       };
 
