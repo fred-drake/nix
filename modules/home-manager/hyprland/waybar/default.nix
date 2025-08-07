@@ -20,11 +20,12 @@ in {
     file = {
       ".config/waybar/config".text = builtins.toJSON {
         position = "top";
-        modules-left = ["custom/osicon" "clock" "cpu" "load" "memory" "disk" "custom/weather"];
+        modules-left = ["custom/osicon" "cpu" "load" "memory" "disk"];
+        modules-center = ["clock"];
         modules-right = ["custom/kuma-waybar" "idle_inhibitor" "pulseaudio" "bluetooth" "network" "custom/power"];
 
         clock = {
-          format = "{:%d - %H:%M:%S}";
+          format = "{:%a %d - %I:%M:%S %p}";
           interval = 1;
         };
 
@@ -57,14 +58,6 @@ in {
           format = "{percentage_free}%  ";
           tooltip = true;
           tooltip-format = "Free space: {free} / {total} ({percentage_free}%)";
-        };
-
-        "custom/weather" = {
-          exec = "${pkgs.wttrbar}/bin/wttrbar --fahrenheit --nerd --ampm -m -l en";
-          format = "{} °";
-          tooltip = true;
-          interval = 3600;
-          return-type = "json";
         };
 
         "custom/kuma-waybar" = {
