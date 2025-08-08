@@ -22,7 +22,7 @@ in {
         position = "top";
         modules-left = ["custom/osicon" "cpu" "load" "memory" "disk"];
         modules-center = ["clock"];
-        modules-right = ["custom/kuma-waybar" "idle_inhibitor" "pulseaudio" "bluetooth" "network" "custom/power"];
+        modules-right = ["idle_inhibitor" "custom/kuma-waybar" "pulseaudio" "bluetooth" "network" "custom/power"];
 
         clock = {
           format = "{:%a %d - %I:%M:%S %p}";
@@ -79,11 +79,7 @@ in {
         };
 
         idle_inhibitor = {
-          format = "{icon}";
-          format-icons = {
-            activated = "";
-            deactivated = "";
-          };
+          format = "";
         };
 
         pulseaudio = {
