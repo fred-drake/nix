@@ -56,68 +56,7 @@ in {
       # extraFlags = ["--web.enable-admin-api"];
       listenAddress = "127.0.0.1";
       globalConfig.scrape_interval = "15s";
-      scrapeConfigs = [
-        {
-          job_name = "node";
-          static_configs = [
-            {
-              targets = [
-                "prometheus.${config.soft-secrets.networking.domain}:9000"
-                "gitea.admin.${config.soft-secrets.networking.domain}:9000"
-                "gitea-runner-1.admin.${config.soft-secrets.networking.domain}:9000"
-                "grafana.admin.${config.soft-secrets.networking.domain}:9000"
-                "dns1.${config.soft-secrets.networking.domain}:9000"
-                "dns2.${config.soft-secrets.networking.domain}:9000"
-                "gateway.${config.soft-secrets.networking.domain}:9100"
-                "n8n.admin.${config.soft-secrets.networking.domain}:9000"
-                "jellyseerr.admin.${config.soft-secrets.networking.domain}:9000"
-                "prowlarr.admin.${config.soft-secrets.networking.domain}:9000"
-                "radarr.admin.${config.soft-secrets.networking.domain}:9000"
-                "sabnzbd.admin.${config.soft-secrets.networking.domain}:9000"
-                "sonarr.admin.${config.soft-secrets.networking.domain}:9000"
-                "uptime-kuma.admin.${config.soft-secrets.networking.domain}:9000"
-                "larussa.${config.soft-secrets.networking.domain}:9000"
-              ];
-            }
-          ];
-        }
-        {
-          job_name = "sabnzbd";
-          scrape_timeout = "30s";
-          scrape_interval = "1m";
-          static_configs = [
-            {
-              targets = [
-                "sabnzbd-metrics.${config.soft-secrets.networking.domain}:9387"
-              ];
-            }
-          ];
-        }
-        {
-          job_name = "sonarr";
-          scrape_timeout = "30s";
-          scrape_interval = "1m";
-          static_configs = [
-            {
-              targets = [
-                "sonarr-metrics.${config.soft-secrets.networking.domain}:9707"
-              ];
-            }
-          ];
-        }
-        {
-          job_name = "radarr";
-          scrape_timeout = "30s";
-          scrape_interval = "1m";
-          static_configs = [
-            {
-              targets = [
-                "radarr-metrics.${config.soft-secrets.networking.domain}:9708"
-              ];
-            }
-          ];
-        }
-      ];
+      scrapeConfigs = config.soft-secrets.host.prometheus.prometheus_scrape_configs;
     };
   };
 }

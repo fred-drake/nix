@@ -13,6 +13,11 @@ in {
       dockerSocket.enable = true;
       dockerCompat = true;
       defaultNetwork.settings.dns_enabled = true;
+      autoPrune = {
+        enable = true;
+        flags = ["--all" "--volumes"];
+        dates = "*-*-* 06:00:00";
+      };
     };
     oci-containers = {
       backend = "podman";
