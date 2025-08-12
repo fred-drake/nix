@@ -2,6 +2,11 @@
   host = "grafana";
   proxyPort = "3000";
 in {
+  networking.extraHosts = ''
+    192.168.50.26 dev.brainrush.ai
+    ${config.soft-secrets.host.prometheus.admin_ip_address} prometheus.${config.soft-secrets.networking.domain}
+  '';
+
   security = {
     acme = {
       acceptTerms = true;
