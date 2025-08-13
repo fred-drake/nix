@@ -25,8 +25,8 @@ in {
           env = {"BRAVE_API_KEY" = config.sops.placeholder.llm-brave;};
         };
         playwright = {
-          command = "npx";
-          args = ["@playwright/mcp@latest"];
+          command = "podman";
+          args = ["run" "-i" "--rm" "--init" "--pull=always" "mcr.microsoft.com/playwright/mcp"];
         };
         context7 = {
           command = "npx";
