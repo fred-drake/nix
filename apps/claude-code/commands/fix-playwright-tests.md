@@ -31,25 +31,44 @@ First, verify this is a Playwright project by checking for:
    - Screenshots or traces if available
    - Flaky test indicators (tests that sometimes pass/fail)
 
-### Test Fixing Phase
+### Test Fixing Phase with MCP
 
 3. Pass the analyzer's report to the `playwright-test-writer` sub-agent with these instructions:
-   - Fix ALL issues identified in the report
+   
+   **IMPORTANT: The playwright-test-writer should use the Playwright MCP for enhanced test fixing:**
+   
+   **MCP Integration Instructions:**
+   - Connect to the Playwright MCP server before making any changes
+   - Use MCP to analyze failing test patterns and get fix suggestions
+   - Query MCP for:
+     - Best selector strategies for failed elements
+     - Recommended wait strategies based on error types
+     - Cross-browser compatibility fixes
+     - Historical fixes for similar issues
+   
+   **Fix ALL issues identified in the report:**
    - Priority order:
-     1. Selector/locator issues (update selectors to be more robust)
-     2. Assertion failures (fix expected vs actual mismatches)
-     3. Timeout issues (add appropriate waits or increase timeouts)
-     4. Network/navigation issues (handle loading states properly)
-   - Best practices to follow:
-     - Use data-testid attributes when possible
-     - Implement proper wait strategies (waitForLoadState, waitForSelector)
-     - Add retry logic for flaky operations
-     - Use page.locator() instead of page.$()
+     1. Selector/locator issues (use MCP to find more robust selectors)
+     2. Assertion failures (use MCP to verify expected values)
+     3. Timeout issues (use MCP to determine optimal wait strategies)
+     4. Network/navigation issues (use MCP for loading state recommendations)
+   
+   **Best practices to follow:**
+   - Use data-testid attributes when possible (MCP can suggest these)
+   - Implement proper wait strategies (MCP recommends: waitForLoadState, waitForSelector)
+   - Add retry logic for flaky operations (MCP identifies flaky patterns)
+   - Use page.locator() instead of page.$()
    - Document what changes were made and why
+   
+   **MCP-Enhanced Fixes:**
+   - Let MCP analyze the DOM structure for better selectors
+   - Use MCP's timing analysis to set appropriate timeouts
+   - Apply MCP's browser-specific recommendations
+   - Leverage MCP's test stability patterns
 
 ### Single Browser Verification Phase
 
-4. After `playwright-test-writer` completes, have `playwright-analyzer` run Chromium tests again:
+4. After `playwright-test-writer` completes (using MCP), have `playwright-analyzer` run Chromium tests again:
    ```bash
    TEST_BROWSER=chromium npm run podman:test:headless
    ```
@@ -70,7 +89,7 @@ First, verify this is a Playwright project by checking for:
    - If ANY browser has failures:
      - Create browser-specific fix report
      - Focus on cross-browser compatibility issues
-     - GO TO STEP 3 with browser-specific fixes
+     - GO TO STEP 3 with browser-specific fixes (using MCP)
    - If ALL browsers pass: GO TO STEP 8 (code review)
 
 ### Code Review Phase
@@ -113,6 +132,31 @@ First, verify this is a Playwright project by checking for:
     - If ANY test fails in ANY browser: GO TO STEP 2 (restart main loop)
     - If ALL tests pass in ALL browsers: COMPLETE - Exit loop
 
+## MCP Usage Guidelines for playwright-test-writer
+
+When the `playwright-test-writer` uses the Playwright MCP, it should:
+
+1. **Connect to MCP:**
+   - Establish connection to Playwright MCP server
+   - Verify MCP is available and responsive
+
+2. **Analyze Failures with MCP:**
+   - Submit failing test details to MCP
+   - Request fix recommendations based on error types
+   - Get selector suggestions for failed locators
+   - Query optimal wait strategies
+
+3. **Apply MCP Recommendations:**
+   - Use MCP-suggested selectors that are more robust
+   - Implement MCP-recommended wait patterns
+   - Apply browser-specific fixes from MCP
+   - Follow MCP's retry logic suggestions
+
+4. **Validate Fixes with MCP:**
+   - Before finalizing, verify fixes with MCP
+   - Check if similar fixes have worked before
+   - Ensure cross-browser compatibility
+
 ## Loop Control Instructions
 
 **IMPORTANT:** You must implement actual loop control:
@@ -144,20 +188,26 @@ First, verify this is a Playwright project by checking for:
 Iteration 1:
 - Analyzer: Testing with Chromium
 - Found: 5 test failures (3 selector issues, 2 timeout errors)
-- Test Writer: Updated selectors, added explicit waits
+- Test Writer: Connecting to Playwright MCP...
+- MCP: Analyzing failures and suggesting fixes
+- Test Writer: Applied MCP-recommended selectors and wait strategies
 - Analyzer: Chromium - 2 tests still failing
 - Status: CONTINUE LOOP (Chromium not passing)
 
 Iteration 2:
 - Analyzer: Found 2 Chromium failures (assertion mismatches)
-- Test Writer: Fixed assertions, updated expected values
+- Test Writer: Using MCP to verify expected values
+- MCP: Provided correct assertion values based on DOM analysis
+- Test Writer: Fixed assertions with MCP-verified values
 - Analyzer: Chromium - All tests pass (0 failures)
 - Status: PROCEED TO MULTI-BROWSER
 
 Iteration 3:
 - Analyzer: Testing all browsers
 - Results: Chromium ✓, Firefox ✗ (2 failures), WebKit ✗ (1 failure)
-- Test Writer: Added browser-specific handling for Firefox, fixed WebKit viewport issue
+- Test Writer: Connecting to MCP for browser-specific fixes
+- MCP: Identified Firefox event timing issue, WebKit viewport problem
+- Test Writer: Applied MCP browser-specific recommendations
 - Analyzer: All browsers pass
 - Playwright Reviewer: Suggests improving selector strategy
 === PLAYWRIGHT REVIEW REPORT ===
@@ -170,7 +220,9 @@ Review Summary:
 - Status: CONTINUE LOOP
 
 Iteration 4:
-- Test Writer: Implements reviewer suggestions
+- Test Writer: Using MCP to implement reviewer suggestions
+- MCP: Provided data-testid selector patterns and retry templates
+- Test Writer: Applied MCP-enhanced improvements
 - Analyzer: All browsers pass
 - Playwright Reviewer: Approved
 === PLAYWRIGHT REVIEW REPORT ===
@@ -187,9 +239,9 @@ Review Summary:
 
 ## Browser-Specific Considerations
 
-When fixing cross-browser issues, consider:
+When fixing cross-browser issues (playwright-test-writer should use MCP for these):
 - **WebKit/Safari**: Stricter security policies, different viewport handling
 - **Firefox**: Different event timing, unique developer tools behavior
 - **Chromium**: Generally most permissive, good baseline
 
-Remember: This is a LOOP, not a sequence. Start with Chromium for speed, then expand to all browsers only after Chromium passes completely.
+Remember: This is a LOOP, not a sequence. Start with Chromium for speed, then expand to all browsers only after Chromium passes completely. The Playwright MCP is used specifically during the test fixing phase to provide enhanced fix recommendations and validation.
