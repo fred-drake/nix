@@ -26,7 +26,7 @@ in {
         };
         playwright = {
           command = "podman";
-          args = ["run" "-i" "--rm" "--init" "--pull=always" "mcr.microsoft.com/playwright/mcp"];
+          args = ["run" "-i" "--rm" "--init" "--pull=always" "--add-host=local.brainrush.ai:host-gateway" "mcr.microsoft.com/playwright/mcp"];
         };
         context7 = {
           command = "npx";
@@ -92,6 +92,12 @@ in {
       ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
 
       ".claude/settings.json".text = builtins.toJSON {
+        statusLine = {
+          type = "command";
+          command = "npx -y ccstatusline@latest";
+          padding = 0;
+        };
+
         permissions = {
           allow = [
             "Bash"
