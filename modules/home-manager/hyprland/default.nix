@@ -8,6 +8,47 @@
 in {
   imports = [./waybar];
 
+  # GTK configuration for dark mode
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+  };
+
+  # Qt configuration for dark mode
+  qt = {
+    enable = true;
+    platformTheme.name = "gtk3";
+    style.name = "adwaita-dark";
+  };
+
+  # Set dark mode for xdg-desktop-portal
+  xdg.portal = {
+    enable = true;
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    config.common = {
+      default = ["gtk"];
+      "org.freedesktop.impl.portal.Settings" = ["gtk"];
+    };
+    xdgOpenUsePortal = true;
+  };
+
+  # dconf settings for GNOME/GTK apps
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      gtk-theme = "Adwaita-dark";
+    };
+  };
+
   # home.file.".config/wlogout/layout".source = ./wlogout-config;
 
   home.file = {
@@ -139,7 +180,16 @@ in {
 
       # See https://wiki.hyprland.org/Configuring/Environment-variables/
 
-      env = ["XCURSOR_SIZE,24" "HYPRCURSOR_SIZE,24" "HYPRCURSOR_THEME,rose-pine-hyprcursor"];
+      env = [
+        "XCURSOR_SIZE,24"
+        "HYPRCURSOR_SIZE,24"
+        "HYPRCURSOR_THEME,rose-pine-hyprcursor"
+        # Dark mode settings
+        "GTK_THEME,Adwaita-dark"
+        "GNOME_THEME,Adwaita:dark"
+        "QT_STYLE_OVERRIDE,Adwaita-Dark"
+        "QT_QPA_PLATFORMTHEME,gtk3"
+      ];
 
       #####################
       ### LOOK AND FEEL ###
@@ -304,6 +354,7 @@ in {
         "SUPER, SPACE, exec, $menu"
         "$mainMod, P, pseudo, # dwindle"
         # "$mainMod, SHIFT, J, togglesplit, # dwindle"
+        "$mainMod CTRL, O, exec, obsidian --disable-gpu"
 
         ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot --mode region -o ${home}/Screenshots"
 
@@ -317,7 +368,7 @@ in {
         "$mainMod, A, workspace, 1"
         "$mainMod, Z, workspace, 2"
         "$mainMod, S, workspace, 3"
-        "$mainMod, 4, workspace, 4"
+        "$mainMod, O, workspace, 4"
         "$mainMod, 5, workspace, 5"
         "$mainMod, 6, workspace, 6"
         "$mainMod, 7, workspace, 7"
@@ -329,7 +380,7 @@ in {
         "$mainMod SHIFT, A, movetoworkspace, 1"
         "$mainMod SHIFT, Z, movetoworkspace, 2"
         "$mainMod SHIFT, S, movetoworkspace, 3"
-        "$mainMod SHIFT, 4, movetoworkspace, 4"
+        "$mainMod SHIFT, O, movetoworkspace, 4"
         "$mainMod SHIFT, 5, movetoworkspace, 5"
         "$mainMod SHIFT, 6, movetoworkspace, 6"
         "$mainMod SHIFT, 7, movetoworkspace, 7"
@@ -338,8 +389,8 @@ in {
         "$mainMod SHIFT, 0, movetoworkspace, 10"
 
         # Example special workspace (scratchpad)
-        "$mainMod, S, togglespecialworkspace, magic"
-        "$mainMod SHIFT, S, movetoworkspace, special:magic"
+        # "$mainMod, S, togglespecialworkspace, magic"
+        # "$mainMod SHIFT, S, movetoworkspace, special:magic"
 
         # Scroll through existing workspaces with mainMod + scroll
         "$mainMod, mouse_down, workspace, e+1"
