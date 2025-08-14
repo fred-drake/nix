@@ -4,9 +4,15 @@
   ...
 }: let
   kuma-waybar = pkgs.callPackage ./kuma-waybar.nix {};
+  spotifatius = pkgs.callPackage ./spotifatius.nix {};
 in {
   sops.secrets.uptime-kuma-env = {
     sopsFile = config.secrets.workstation.uptime-kuma-env;
+    mode = "0400";
+    key = "data";
+  };
+  sops.secrets.spotifatius-env = {
+    sopsFile = config.secrets.workstation.spotifatius-env;
     mode = "0400";
     key = "data";
   };
@@ -14,13 +20,18 @@ in {
   home = {
     packages = [
       kuma-waybar
+      spotifatius
       pkgs.wttrbar
     ];
 
     file = {
+      ".config/spotifatius/config.toml".text = ''
+        format = "{title} {separator} {artist}"
+      '';
+
       ".config/waybar/config".text = builtins.toJSON {
         position = "top";
-        modules-left = ["custom/osicon" "cpu" "load" "memory" "disk"];
+        modules-left = ["custom/osicon" "cpu" "load" "memory" "disk" "custom/spotify"];
         modules-center = ["clock"];
         modules-right = ["idle_inhibitor" "custom/kuma-waybar" "pulseaudio" "bluetooth" "network" "custom/power"];
 
@@ -111,6 +122,13 @@ in {
         "custom/power" = {
           format = "⏻";
           on-click = "${pkgs.wlogout}/bin/wlogout --protocol layer-shell";
+        };
+
+        "custom/spotify" = {
+          format = "  {}";
+          return-type = "json";
+          on-click-right = "source ~/.config/spotifatius/env; ${spotifatius}/bin/spotifatius toggle-liked";
+          exec = "source ${config.sops.secrets.spotifatius-env.path} ; ${spotifatius}/bin/spotifatius monitor";
         };
       };
 
