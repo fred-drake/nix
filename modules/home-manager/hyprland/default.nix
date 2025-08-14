@@ -51,6 +51,12 @@ in {
 
   # home.file.".config/wlogout/layout".source = ./wlogout-config;
 
+  home = {
+    packages = [
+      pkgs.playerctl
+    ];
+  };
+
   home.file = {
     ".config/wlogout/layout".text = ''
       {
@@ -422,10 +428,10 @@ in {
       ];
       # Requires playerctl
       bindl = [
-        ", XF86AudioNext, exec, playerctl next"
-        ", XF86AudioPause, exec, playerctl play-pause"
-        ", XF86AudioPlay, exec, playerctl play-pause"
-        ", XF86AudioPrev, exec, playerctl previous"
+        ", XF86AudioNext, exec, playerctl -p spotify next"
+        ", XF86AudioPause, exec, playerctl -p spotify play-pause"
+        ", XF86AudioPlay, exec, playerctl -p spotify play-pause"
+        ", XF86AudioPrev, exec, playerctl -p spotify previous"
       ];
 
       ##############################
