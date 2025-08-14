@@ -7,6 +7,7 @@ Validate, commit, and push code changes ONLY after ALL quality checks pass throu
    - Go: `go.mod`
    - Rust: `Cargo.toml`
    - JavaScript/TypeScript: `package.json`
+   - Playwright: `package.json` with `@playwright/test` dependency
    - Nix: `flake.nix` or `default.nix`
 2. **Run ALL Quality Checks** for the identified project type:
    **Go Projects - Run in this order:**
@@ -29,6 +30,15 @@ Validate, commit, and push code changes ONLY after ALL quality checks pass throu
    npm run type-check
    npm run test
    npm run build
+   ```
+   **Playwright Projects - Run in this order:**
+   ```bash
+   npm run format
+   npm run lint
+   npm run type-check
+   npm run test
+   npm run build
+   npm run podman:test
    ```
    **Nix Projects - Run in this order:**
    ```bash
@@ -138,7 +148,8 @@ Manual intervention required.
 2. If behind, ask: "Remote has changes. Pull and merge? (y/n)"
 3. If conflicts exist, abort and request manual resolution
 ```
-## Complete Example Flow
+## Complete Example Flows
+### Example 1: Go Project
 ```
 Starting pre-commit validation...
 Validation Loop Iteration #1:
@@ -166,11 +177,35 @@ Running 4 checks for Go project...
 ✓ just test - passed
 ✓ just vulncheck - passed
 Result: All 4 checks passed! Proceeding to commit phase...
+```
+### Example 2: Playwright Project
+```
+Starting pre-commit validation...
+Validation Loop Iteration #1:
+Running 6 checks for Playwright project...
+✓ npm run format - passed
+✓ npm run lint - passed
+✓ npm run type-check - passed
+✓ npm run test - passed
+✓ npm run build - passed
+✗ npm run podman:test - failed (2 tests)
+Result: 1/6 checks failed
+Applying fixes...
+Re-running ALL checks...
+Validation Loop Iteration #2:
+Running 6 checks for Playwright project...
+✓ npm run format - passed
+✓ npm run lint - passed
+✓ npm run type-check - passed
+✓ npm run test - passed
+✓ npm run build - passed
+✓ npm run podman:test - passed
+Result: All 6 checks passed! Proceeding to commit phase...
 Analyzing changes...
-Auto-staging: src/main.go, src/utils.go, tests/main_test.go
+Auto-staging: src/main.ts, tests/e2e/login.spec.ts, playwright.config.ts
 Review required: .env.example - Should I stage this file? (y/n)
 Creating commit...
-Commit message: fix(auth): resolve token validation edge case
+Commit message: test(e2e): add login flow validation tests
 Commits verified. Proceeding with push...
 Pushing to origin/feature-branch...
 Push successful!
@@ -182,3 +217,4 @@ Push successful!
 4. **Smart Staging**: Never blindly add all files
 5. **Semantic Commits**: Meaningful, well-formatted messages
 6. **Safety First**: Multiple confirmation points before push
+7. **E2E Testing**: Playwright tests run in headless mode for automation
