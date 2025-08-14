@@ -364,6 +364,12 @@ in {
         "$mainMod, K, movefocus, u"
         "$mainMod, J, movefocus, d"
 
+        # Swap windows with mainMod + arrow keys
+        "$mainMod SHIFT, H, swapwindow, l"
+        "$mainMod SHIFT, L, swapwindow, r"
+        "$mainMod SHIFT, J, swapwindow, d"
+        "$mainMod SHIFT, K, swapwindow, u"
+
         # Switch workspaces with mainMod + [0-9]
         "$mainMod, A, workspace, 1"
         "$mainMod, Z, workspace, 2"
