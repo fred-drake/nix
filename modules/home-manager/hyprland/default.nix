@@ -5,6 +5,7 @@
   ...
 }: let
   home = config.home.homeDirectory;
+  vicinae = pkgs.callPackage ../../../apps/vicinae.nix {};
 in {
   imports = [./waybar];
 
@@ -52,9 +53,7 @@ in {
   # home.file.".config/wlogout/layout".source = ./wlogout-config;
 
   home = {
-    packages = [
-      pkgs.playerctl
-    ];
+    packages = with pkgs; [playerctl vicinae];
   };
 
   home.file = {
@@ -132,6 +131,28 @@ in {
           on-resume = "hyprctl dispatch dpms on"; # turn on screen on resume
         }
       ];
+    };
+  };
+
+  # Vicinae server systemd service
+  systemd.user.services.vicinae-server = {
+    Unit = {
+      Description = "Vicinae Server - Application Launcher Backend";
+      After = ["graphical-session.target"];
+      PartOf = ["graphical-session.target"];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${vicinae}/bin/vicinae server";
+      Restart = "on-failure";
+      RestartSec = "5s";
+      Environment = [
+        "QT_QPA_PLATFORM=wayland"
+        "WAYLAND_DISPLAY=wayland-1"
+      ];
+    };
+    Install = {
+      WantedBy = ["graphical-session.target"];
     };
   };
 
@@ -357,13 +378,16 @@ in {
         "$mainMod, M, exit,"
         "$mainMod, E, exec, $fileManager"
         "$mainMod, V, togglefloating,"
-        "SUPER, SPACE, exec, $menu"
+        # "SUPER, SPACE, exec, $menu"
+        "SUPER, SPACE, exec, vicinae vicinae://toggle"
         "$mainMod, P, pseudo, # dwindle"
+        "SUPER, V, exec, ${vicinae}/bin/vicinae # Launch Vicinae"
         # "$mainMod, SHIFT, J, togglesplit, # dwindle"
 
         "$mainMod CTRL, A, exec, $terminal"
         "$mainMod CTRL, Z, exec, zen"
         "$mainMod CTRL, O, exec, obsidian --disable-gpu"
+        "$mainMod CTRL, L, exec, spotifatius toggle-liked"
 
         ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot --mode region -o ${home}/Screenshots"
 
