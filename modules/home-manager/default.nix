@@ -188,7 +188,6 @@ in {
         rsync # File synchronization tool
         skim # Fuzzy finder
         sops # Secret management tool
-        spotify-player # Spotify client
         stc-cli # Syncthing CLI
         syncthing # File synchronization tool
         tldr # Documentation tool

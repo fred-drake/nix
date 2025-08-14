@@ -2,8 +2,9 @@
 * {
   border: none;
   font-family: "Hack Nerd Font";
-  font-size: 20px;
-  min-height: 10px;
+  font-size: 16px;
+  min-height: 8px;
+  font-weight: bold;
 }
 
 window#waybar {
@@ -37,6 +38,8 @@ window#waybar.hidden {
   padding-left: 10px;
   padding-right: 10px;
   transition: none;
+  border-top: 3px solid #7aa2f7;
+  border-bottom: 3px solid #7aa2f7;
 }
 
 /* Left separation modules */
@@ -49,6 +52,7 @@ window#waybar.hidden {
 #custom-power,
 #custom-kuma-waybar {
   margin-left: 5px;
+  border-left: 3px solid #7aa2f7;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
@@ -65,6 +69,7 @@ window#waybar.hidden {
   margin-right: 5px;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  border-right: 3px solid #7aa2f7;
 }
 
 /* -- Specific styles -- */
@@ -129,9 +134,10 @@ window#waybar.hidden {
 }
 
 #idle_inhibitor {
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-left: 15px;
+  padding-right: 18px;
   color: #2ac3de;
+  font-size: 22px;
 }
 
 #idle_inhibitor.deactivated {
@@ -141,7 +147,6 @@ window#waybar.hidden {
 #idle_inhibitor.activated {
   color: #f7768e;
   font-weight: bold;
-  font-size: 22px;
 }
 
 #pulseaudio {

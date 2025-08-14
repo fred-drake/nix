@@ -1,0 +1,152 @@
+/* Tokyo Night Theme for Wofi */
+
+* {
+  font-family: "Hack Nerd Font";
+  font-size: 14px;
+}
+
+/* Main window */
+window {
+  margin: 0px;
+  border: 2px solid #7aa2f7;
+  border-radius: 12px;
+  background-color: #1a1b26;
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* Outer box container */
+#outer-box {
+  margin: 5px;
+  border: none;
+  background-color: #1a1b26;
+}
+
+/* Input field */
+#input {
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  color: #c0caf5;
+  background-color: #24283b;
+  font-size: 16px;
+  outline: none;
+}
+
+#input:focus {
+  border: 2px solid #bb9af7;
+  margin: 3px;
+}
+
+/* Inner box with entries */
+#inner-box {
+  margin: 5px;
+  border: none;
+  background-color: #1a1b26;
+  border-radius: 8px;
+}
+
+/* Scrollbar */
+#scroll {
+  margin: 0px;
+  border: none;
+}
+
+#scroll scrollbar {
+  background-color: #1a1b26;
+  border-radius: 8px;
+}
+
+#scroll scrollbar:handle {
+  background-color: #414868;
+  border-radius: 8px;
+}
+
+/* Entry items */
+#entry {
+  margin: 3px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #a9b1d6;
+}
+
+#entry:selected {
+  background-color: #292e42;
+  color: #c0caf5;
+  border: 1px solid #7aa2f7;
+  outline: none;
+}
+
+/* Text within entries */
+#text {
+  margin: 0px;
+  padding: 0px;
+  color: inherit;
+}
+
+#text:selected {
+  color: #c0caf5;
+}
+
+/* Entry image/icon */
+#img {
+  margin-right: 8px;
+  background-color: transparent;
+}
+
+/* Mode indicator (drun, run, etc.) */
+#mode {
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background-color: #24283b;
+  color: #7aa2f7;
+  font-weight: bold;
+  border: 1px solid #3b4261;
+}
+
+/* Hover effects */
+#entry:hover {
+  background-color: #24283b;
+  color: #c0caf5;
+}
+
+/* Selected and hovered */
+#entry:selected:hover {
+  background-color: #292e42;
+  border: 1px solid #bb9af7;
+}
+
+/* Animation for window appearance */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Optional: Style for when no results found */
+#entry.no-results {
+  color: #f7768e;
+  font-style: italic;
+}
+
+/* Optional: Alternating row colors for better readability */
+#entry:nth-child(even) {
+  background-color: rgba(36, 40, 59, 0.3);
+}
+
+/* Optional: Icons color filter to match theme */
+#img image {
+  -gtk-icon-style: symbolic;
+}
+
+/* Optional: Expander arrow */
+#expander-box {
+  color: #7aa2f7;
+}

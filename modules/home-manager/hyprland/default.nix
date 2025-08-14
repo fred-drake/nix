@@ -91,6 +91,7 @@ in {
       }
     '';
 
+    ".config/wofi/style.css".source = ./wofi.css;
     ".config/hypr/hyprlock.conf".source = ./hyprlock.conf;
     ".config/hypr/weather.sh" = {
       source = ./weather.sh;
@@ -346,7 +347,6 @@ in {
 
       # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
       bind = [
-        "$mainMod, Q, exec, $terminal"
         "$mainMod, C, killactive,"
         "$mainMod, M, exit,"
         "$mainMod, E, exec, $fileManager"
@@ -354,6 +354,9 @@ in {
         "SUPER, SPACE, exec, $menu"
         "$mainMod, P, pseudo, # dwindle"
         # "$mainMod, SHIFT, J, togglesplit, # dwindle"
+
+        "$mainMod CTRL, A, exec, $terminal"
+        "$mainMod CTRL, Z, exec, zen"
         "$mainMod CTRL, O, exec, obsidian --disable-gpu"
 
         ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot --mode region -o ${home}/Screenshots"
