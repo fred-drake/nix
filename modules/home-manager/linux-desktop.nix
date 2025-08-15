@@ -46,7 +46,15 @@
     brave
     gnome-tweaks
     zed-editor
+    mako
   ];
+
+  services.mako = {
+    enable = true;
+    settings = {
+      defaultTimeout = 4000;
+    };
+  };
 
   programs.firefox = {
     enable = true;

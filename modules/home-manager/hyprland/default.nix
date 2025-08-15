@@ -6,8 +6,68 @@
 }: let
   home = config.home.homeDirectory;
   vicinae = pkgs.callPackage ../../../apps/vicinae.nix {};
+  spotifatius = pkgs.callPackage ./spotifatius.nix {};
 in {
   imports = [./waybar];
+
+  services.mako = {
+    enable = true;
+
+    settings = {
+      # Position at top center
+      anchor = "top-center";
+      default-timeout = 4000;
+
+      # Dimensions
+      width = 550;
+      height = 100;
+      margin = "20";
+      padding = "15";
+      border-size = 2;
+      border-radius = 10;
+
+      # Tokyo Night theme colors
+      background-color = "#1a1b26";
+      text-color = "#c0caf5";
+      border-color = "#7aa2f7";
+      progress-color = "#7aa2f7";
+
+      # Typography
+      font = "JetBrainsMono Nerd Font 12";
+
+      # Icons
+      icons = true;
+      max-icon-size = 64;
+
+      # Behavior
+      layer = "overlay";
+      sort = "-time";
+
+      # Grouping
+      group-by = "summary";
+    };
+
+    # Extra config for urgency styling using raw config
+    extraConfig = ''
+      [urgency=low]
+      background-color=#1a1b26
+      text-color=#9ece6a
+      border-color=#9ece6a
+      default-timeout=3000
+
+      [urgency=normal]
+      background-color=#1a1b26
+      text-color=#c0caf5
+      border-color=#7aa2f7
+      default-timeout=4000
+
+      [urgency=high]
+      background-color=#1a1b26
+      text-color=#f7768e
+      border-color=#f7768e
+      default-timeout=0
+    '';
+  };
 
   # GTK configuration for dark mode
   gtk = {
@@ -53,7 +113,12 @@ in {
   # home.file.".config/wlogout/layout".source = ./wlogout-config;
 
   home = {
-    packages = with pkgs; [playerctl vicinae];
+    packages = [
+      pkgs.playerctl
+      vicinae
+      spotifatius
+      pkgs.nerd-fonts.jetbrains-mono
+    ];
   };
 
   home.file = {
@@ -387,7 +452,7 @@ in {
         "$mainMod CTRL, A, exec, $terminal"
         "$mainMod CTRL, Z, exec, zen"
         "$mainMod CTRL, O, exec, obsidian --disable-gpu"
-        "$mainMod CTRL, L, exec, spotifatius toggle-liked"
+        "$mainMod CTRL, L, exec, ${spotifatius}/bin/spotifatius toggle-liked"
 
         ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot --mode region -o ${home}/Screenshots"
 

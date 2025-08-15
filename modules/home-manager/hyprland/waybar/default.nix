@@ -4,7 +4,7 @@
   ...
 }: let
   kuma-waybar = pkgs.callPackage ./kuma-waybar.nix {};
-  spotifatius = pkgs.callPackage ./spotifatius.nix {};
+  spotifatius = pkgs.callPackage ../spotifatius.nix {};
 in {
   sops.secrets.uptime-kuma-env = {
     sopsFile = config.secrets.workstation.uptime-kuma-env;
@@ -20,7 +20,6 @@ in {
   home = {
     packages = [
       kuma-waybar
-      spotifatius
       pkgs.wttrbar
     ];
 
@@ -48,10 +47,12 @@ in {
         };
 
         cpu = {
-          format = "{usage:2}%";
+          format = "{usage}%";
           interval = 2;
           tooltip = true;
           tooltip-format = "Usage: {cpu}\nCores: {cores}";
+          min-length = 4;
+          align = 1;
         };
 
         load = {
@@ -127,7 +128,7 @@ in {
         "custom/spotify" = {
           format = "  {}";
           return-type = "json";
-          on-click-right = "source ~/.config/spotifatius/env; ${spotifatius}/bin/spotifatius toggle-liked";
+          on-click-right = "source ${config.sops.secrets.spotifatius-env.path}; ${spotifatius}/bin/spotifatius toggle-liked";
           exec = "source ${config.sops.secrets.spotifatius-env.path} ; ${spotifatius}/bin/spotifatius monitor";
         };
       };

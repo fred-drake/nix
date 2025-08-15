@@ -2,13 +2,16 @@
 * {
   border: none;
   font-family: "Hack Nerd Font";
-  font-size: 16px;
-  min-height: 8px;
+  font-size: 15px;
+  min-height: 0px;
   font-weight: bold;
+  padding: 0;
+  margin: 0;
 }
 
 window#waybar {
   background: rgba(34, 36, 54, 0.6);
+  padding: 0;
 }
 
 window#waybar.hidden {
@@ -34,13 +37,32 @@ window#waybar.hidden {
 #network {
   color: #7aa2f7;
   background-color: #292e42;
-  margin-top: 6px;
-  margin-bottom: 6px;
-  padding-left: 10px;
-  padding-right: 10px;
+  margin: 1px 0;
+  padding: 0 10px;
   transition: none;
-  border-top: 3px solid #7aa2f7;
-  border-bottom: 3px solid #7aa2f7;
+  border-top: 1px solid #7aa2f7;
+  border-bottom: 1px solid #7aa2f7;
+}
+
+/* Force label padding */
+#custom-osicon label,
+#custom-kuma-waybar label,
+#custom-weather label,
+#clock label,
+#cpu label,
+#load label,
+#memory label,
+#disk label,
+#temperature label,
+#idle_inhibitor label,
+#pulseaudio label,
+#pulseaudio_slider label,
+#bluetooth label,
+#custom-power label,
+#custom-spotify label,
+#network label {
+  padding: 0;
+  margin: 0;
 }
 
 /* Left separation modules */
@@ -54,7 +76,7 @@ window#waybar.hidden {
 #custom-spotify,
 #custom-kuma-waybar {
   margin-left: 5px;
-  border-left: 3px solid #7aa2f7;
+  border-left: 1px solid #7aa2f7;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
@@ -72,7 +94,7 @@ window#waybar.hidden {
   margin-right: 5px;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-  border-right: 3px solid #7aa2f7;
+  border-right: 1px solid #7aa2f7;
 }
 
 /* -- Specific styles -- */
@@ -88,7 +110,11 @@ window#waybar.hidden {
   color: #7dcfff;
 }
 
-#cpu,
+#cpu {
+  color: #bb9af7;
+  padding-top: 1px;
+}
+
 #load {
   color: #bb9af7;
 }
@@ -115,17 +141,17 @@ window#waybar.hidden {
 }
 
 #custom-spotify.liked {
-  border-top: 3px solid #f7768e;
-  border-bottom: 3px solid #f7768e;
-  border-left: 3px solid #f7768e;
-  border-right: 3px solid #f7768e;
+  border-top: 1px solid #f7768e;
+  border-bottom: 1px solid #f7768e;
+  border-left: 1px solid #f7768e;
+  border-right: 1px solid #f7768e;
 }
 
 /* Center modules */
 #workspaces {
   background: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
-  margin: 6px 5px;
+  margin: 1px 5px;
   padding: 0px 6px;
 }
 
@@ -134,7 +160,7 @@ window#waybar.hidden {
   background: transparent;
   border-radius: 10px;
   padding: 0px 5px;
-  margin: 6px 5px;
+  margin: 1px 5px;
 }
 
 #taskbar button {
