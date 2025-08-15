@@ -130,6 +130,7 @@ in {
           return-type = "json";
           on-click-right = "source ${config.sops.secrets.spotifatius-env.path}; ${spotifatius}/bin/spotifatius toggle-liked";
           exec = "source ${config.sops.secrets.spotifatius-env.path} ; ${spotifatius}/bin/spotifatius monitor";
+          max-length = 108;
         };
       };
 
