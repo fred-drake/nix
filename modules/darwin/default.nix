@@ -88,7 +88,7 @@
       "obsidian"
       "raycast"
       "sourcetree"
-      # "visual-studio-code"
+      "tailscale"
       "vlc"
       "windsurf"
       "zen"
