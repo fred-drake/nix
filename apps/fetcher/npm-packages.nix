@@ -3,9 +3,9 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "ccusage" = {
-    "version" = "15.9.7";
-    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-15.9.7.tgz";
-    "url-hash" = "sha256-TfxLCj5UyHRNdqxOEG2d6MDkuA/RKnSGwf9M7hcvYvY=";
+    "version" = "15.9.9";
+    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-15.9.9.tgz";
+    "url-hash" = "sha256-mJ3E50Q30g/cQ9sbgJdZgEBNIJjQISY6L4p807KbNN4=";
   };
   "claude-code" = {
     "version" = "1.0.83";
