@@ -473,7 +473,7 @@ in {
         "$mainMod, Z, workspace, 2"
         "$mainMod, S, workspace, 3"
         "$mainMod, O, workspace, 4"
-        "$mainMod, 5, workspace, 5"
+        "$mainMod, W, workspace, 5"
         "$mainMod, 6, workspace, 6"
         "$mainMod, 7, workspace, 7"
         "$mainMod, 8, workspace, 8"
@@ -485,7 +485,7 @@ in {
         "$mainMod SHIFT, Z, movetoworkspace, 2"
         "$mainMod SHIFT, S, movetoworkspace, 3"
         "$mainMod SHIFT, O, movetoworkspace, 4"
-        "$mainMod SHIFT, 5, movetoworkspace, 5"
+        "$mainMod SHIFT, W, movetoworkspace, 5"
         "$mainMod SHIFT, 6, movetoworkspace, 6"
         "$mainMod SHIFT, 7, movetoworkspace, 7"
         "$mainMod SHIFT, 8, movetoworkspace, 8"
@@ -540,6 +540,10 @@ in {
         # Fix some dragging issues with XWayland
         "nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
       ];
+
+      # windowrulev2 = [
+      #   "float,class:com.usebottles.bottles"
+      # ];
     };
   };
 }
