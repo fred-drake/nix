@@ -3,14 +3,14 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "ccusage" = {
-    "version" = "15.10.0";
-    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-15.10.0.tgz";
-    "url-hash" = "sha256-01gGaZKYorqjKaVQ81wusgfcBXOTO+TGffMrp2RqhEA=";
+    "version" = "16.1.1";
+    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-16.1.1.tgz";
+    "url-hash" = "sha256-IyDjiXEtuqzlJ4k76gl47vTb7JB8lDAJux/45WsTa1M=";
   };
   "claude-code" = {
-    "version" = "1.0.84";
-    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.84.tgz";
-    "url-hash" = "sha256-m4yrbnak2Et48CkJmOKZ7zfvi4j+WL+ZMeTTx5rERR0=";
+    "version" = "1.0.85";
+    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.85.tgz";
+    "url-hash" = "sha256-faOh/l88ZFAsw4n22yz4GMov5nusUg7JeVL7n1eD1aM=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";
