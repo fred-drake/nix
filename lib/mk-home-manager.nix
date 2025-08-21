@@ -13,7 +13,7 @@
       inputs.sops-nix.homeManagerModules.sops
       inputs.secrets.nixosModules.soft-secrets
       inputs.secrets.nixosModules.secrets
-      inputs.nixvim.homeManagerModules.nixvim
+      inputs.nixvim.homeModules.nixvim
       # ({pkgs, ...}: {
       #   home.packages =
       #     (builtins.attrValues (import ./mk-neovim-packages.nix {

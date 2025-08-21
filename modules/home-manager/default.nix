@@ -183,6 +183,7 @@ in {
         minio-client
         nixd # Nix daemon for IDE
         oh-my-posh # Prompt theme engine
+        openssl
         presenterm # Presentation in markdown
         ripgrep # Fast grep alternative
         rsync # File synchronization tool
@@ -194,6 +195,7 @@ in {
         tmux # Terminal multiplexer
         tmux-mem-cpu-load # CPU and memory usage monitor
         tokei # Code statistics tool
+        unzip
         wiki-tui # Wikipedia TUI
         wireguard-tools # VPN tools
         wget # Network downloader
