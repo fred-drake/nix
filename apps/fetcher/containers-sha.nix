@@ -59,7 +59,7 @@ _: {
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:c8a48c2110e149306ae07cd73f13bec2e413a11c00230bb9d6f856a1e8e4dcd3";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:12c5ba8e3effdea8c95a36b4f5d8e25132172ef9e4f0dd9f04a311fed84ff68c";
       };
     };
   };
@@ -76,7 +76,7 @@ _: {
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:97271f3150f732ebf3ccbb421720cf5b63f0d5735e5d573cd14d179e8e47353e";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:3bee4116c038af53e1c4a18861d7c0282f646ccc2afc52de7ac01d98400422f1";
       };
     };
     "linuxserver/sonarr" = {
@@ -86,7 +86,7 @@ _: {
     };
     "monstermuffin/mergerfs-cache-mover" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:075a1425fe5f4a54fd91e0a6ab1e9737ce5a6d26b0e109ff349b7a0d01dedaf7";
+        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:92c1b272ffe13ef1383c9fd64a781e9c3daf633c0aa6d4b99a5aafb70bb55e81";
       };
     };
     "onedr0p/exportarr" = {
