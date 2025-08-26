@@ -57,4 +57,10 @@
     rev = "8af4832831f7c81f8f3f81bf0ba9f2e734c1f860";
     hash = "sha256-NGofCO+7WsJtCvlTzj6JCjukcRT0IAJwinbk3shPKFE=";
   };
+  vicinae-src = pkgs.fetchFromGitHub {
+    owner = "vicinaehq";
+    repo = "vicinae";
+    rev = "82761f53e80b6dc73440d91fa7e5d4d0dc272600";
+    hash = "sha256-PUV7MYwoXpPvtsF6v95pVu3XVQ4nK54qIY5RswsQAts=";
+  };
 }

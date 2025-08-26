@@ -26,3 +26,6 @@ rev = "comment-index"
 [[repos]]
 name = "kuma-waybar-src"
 url = "https://github.com/WebTender/kuma-waybar.git"
+[[repos]]
+name = "vicinae-src"
+url = "https://github.com/vicinaehq/vicinae.git"
