@@ -130,8 +130,7 @@ in {
 
     shellAbbrs = {
       cm = "chezmoi";
-      cld = "claude --mcp-config ~/mcp-config.json --dangerously-skip-permissions --add-dir ~/Screenshots";
-      cldmcp = "claude --mcp-config ~/mcp-config.json --mcp-config ./mcp-config.json --dangerously-skip-permissions --add-dir ~/Screenshots";
+      cld = "claude --dangerously-skip-permissions --add-dir ~/Screenshots";
       df = "duf";
       k = "kubectl";
       telnet = "nc -zv";
@@ -143,6 +142,7 @@ in {
       lart = "eza -ar --sort newest";
       llart = "eza -lar --sort newest";
       known-hosts-clear = "ssh-keygen -R";
+      fish-reload = "exec fish";
     };
   };
 }

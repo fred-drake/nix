@@ -71,3 +71,4 @@
   - NEVER create documentation unless working on a coding project
   - Use claude code commit to preserve this CLAUDE.md on new machines
   - When coding, keep the project as modular as possible.
+  - When asked to look at screenshots without a specific path, check ~/Screenshots/ directory

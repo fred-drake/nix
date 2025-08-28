@@ -13,174 +13,209 @@ in {
     gitea-mcp # Gitea MCP server
   ];
 
-  # SOPS template for MCP configuration
-  sops.templates."mcp-config" = {
-    mode = "0400";
-    path = "${home}/mcp-config.json";
-    content = builtins.toJSON {
-      mcpServers = {
-        brave-search = {
-          command = "npx";
-          args = ["-y" "@modelcontextprotocol/server-brave-search"];
-          env = {"BRAVE_API_KEY" = config.sops.placeholder.llm-brave;};
-        };
-        playwright = {
-          command = "podman";
-          args = ["run" "-i" "--rm" "--init" "--pull=always" "--add-host=local.brainrush.ai:host-gateway" "mcr.microsoft.com/playwright/mcp"];
-        };
-        context7 = {
-          command = "npx";
-          args = ["-y" "@upstash/context7-mcp"];
-        };
-        sonarqube = {
-          command = "podman";
-          args = ["run" "-i" "--rm" "-e" "SONARQUBE_TOKEN" "-e" "SONARQUBE_URL" "-e" "TELEMETRY_DISABLED" "mcp/sonarqube"];
-          env = {
-            SONARQUBE_URL = "https://sonarqube.${config.soft-secrets.networking.domain}";
-            SONARQUBE_TOKEN = config.sops.placeholder.sonarqube-token;
-            TELEMETRY_DISABLED = "true";
+  # SOPS templates for MCP configuration
+  sops.templates = {
+    mcp-brave = {
+      mode = "0400";
+      path = "${home}/mcp/brave.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          brave-search = {
+            command = "npx";
+            args = ["-y" "@modelcontextprotocol/server-brave-search"];
+            env = {"BRAVE_API_KEY" = config.sops.placeholder.llm-brave;};
           };
         };
-        gitea-personal = {
-          command = "gitea-mcp";
-          args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
-          env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.personal-gitea-token;};
-        };
-        gitea-engineer = {
-          command = "gitea-mcp";
-          args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
-          env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.engineer-gitea-token;};
-        };
-        gitea-product-owner = {
-          command = "gitea-mcp";
-          args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
-          env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.product-owner-gitea-token;};
+      };
+    };
+    mcp-playwright = {
+      mode = "0400";
+      path = "${home}/mcp/playwright.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          playwright = {
+            command = "podman";
+            args = ["run" "-i" "--rm" "--init" "--pull=always" "--add-host=local.brainrush.ai:host-gateway" "mcr.microsoft.com/playwright/mcp"];
+          };
         };
       };
-      gitea-code-architect = {
-        command = "gitea-mcp";
-        args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
-        env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.code-architect-gitea-token;};
+    };
+    mcp-context7 = {
+      mode = "0400";
+      path = "${home}/mcp/context7.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          context7 = {
+            command = "npx";
+            args = ["-y" "@upstash/context7-mcp"];
+          };
+        };
       };
-      gitea-reviewer = {
-        command = "gitea-mcp";
-        args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
-        env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.reviewer-gitea-token;};
+    };
+    mcp-sonarqube = {
+      mode = "0400";
+      path = "${home}/mcp/sonarqube.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          sonarqube = {
+            command = "podman";
+            args = ["run" "-i" "--rm" "-e" "SONARQUBE_TOKEN" "-e" "SONARQUBE_URL" "-e" "TELEMETRY_DISABLED" "mcp/sonarqube"];
+            env = {
+              SONARQUBE_URL = "https://sonarqube.${config.soft-secrets.networking.domain}";
+              SONARQUBE_TOKEN = config.sops.placeholder.sonarqube-token;
+              TELEMETRY_DISABLED = "true";
+            };
+          };
+        };
       };
-      github = {
-        command = "podman";
-        args = ["run" "-i" "--rm" "-e" "GITHUB_PERSONAL_ACCESS_TOKEN" "ghcr.io/github/github-mcp-server"];
-        env = {GITHUB_PERSONAL_ACCESS_TOKEN = config.sops.placeholder.github-token;};
+    };
+    mcp-gitea-personal = {
+      mode = "0400";
+      path = "${home}/mcp/gitea-personal.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          gitea-personal = {
+            command = "gitea-mcp";
+            args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
+            env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.personal-gitea-token;};
+          };
+        };
+      };
+    };
+    mcp-gitea-engineer = {
+      mode = "0400";
+      path = "${home}/mcp/gitea-engineer.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          gitea-personal = {
+            command = "gitea-mcp";
+            args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
+            env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.personal-gitea-token;};
+          };
+        };
+      };
+    };
+    mcp-gitea-product-owner = {
+      mode = "0400";
+      path = "${home}/mcp/gitea-product-owner.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          gitea-product-owner = {
+            command = "gitea-mcp";
+            args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
+            env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.product-owner-gitea-token;};
+          };
+        };
+      };
+    };
+    mcp-gitea-code-architect = {
+      mode = "0400";
+      path = "${home}/mcp/gitea-code-architect.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          gitea-code-architect = {
+            command = "gitea-mcp";
+            args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
+            env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.code-architect-gitea-token;};
+          };
+        };
+      };
+    };
+    mcp-gitea-reviewer = {
+      mode = "0400";
+      path = "${home}/mcp/gitea-reviewer.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          gitea-reviewer = {
+            command = "gitea-mcp";
+            args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
+            env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.reviewer-gitea-token;};
+          };
+        };
+      };
+    };
+    mcp-github = {
+      mode = "0400";
+      path = "${home}/mcp/github.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          github = {
+            command = "podman";
+            args = ["run" "-i" "--rm" "-e" "GITHUB_PERSONAL_ACCESS_TOKEN" "ghcr.io/github/github-mcp-server"];
+            env = {GITHUB_PERSONAL_ACCESS_TOKEN = config.sops.placeholder.github-token;};
+          };
+        };
       };
     };
   };
 
   # Claude Code configuration files
-  home.file =
-    {
-      # Claude command files
-      ".claude/commands" = {
-        source = ../../apps/claude-code/commands;
-        recursive = true;
+  home.file = {
+    # Claude command files
+    ".claude/commands" = {
+      source = ../../apps/claude-code/commands;
+      recursive = true;
+    };
+
+    ".claude/agents" = {
+      source = ../../apps/claude-code/agents;
+      recursive = true;
+    };
+
+    ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
+
+    ".claude/settings.json".text = builtins.toJSON {
+      statusLine = {
+        type = "command";
+        command = "npx -y ccstatusline@latest";
+        padding = 0;
       };
 
-      ".claude/agents" = {
-        source = ../../apps/claude-code/agents;
-        recursive = true;
+      permissions = {
+        allow = [
+          "Bash"
+          "Write"
+          "MultiEdit"
+          "Edit"
+          "WebFetch"
+
+          # mcp commands
+          "mcp__brave-search__brave_web_search"
+          "mcp__context7__resolve-library-id"
+          "mcp__context7__get-library-docs"
+          "context7:*"
+        ];
+
+        deny = [];
       };
 
-      ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
-
-      ".claude/settings.json".text = builtins.toJSON {
-        statusLine = {
-          type = "command";
-          command = "npx -y ccstatusline@latest";
-          padding = 0;
-        };
-
-        permissions = {
-          allow = [
-            "Bash"
-            "Write"
-            "MultiEdit"
-            "Edit"
-            "WebFetch"
-
-            # mcp commands
-            "mcp__brave-search__brave_web_search"
-            "mcp__context7__resolve-library-id"
-            "mcp__context7__get-library-docs"
-            "context7:*"
-          ];
-
-          deny = [];
-        };
-
-        hooks = {
-          Stop = [
-            {
-              matcher = "";
-              hooks = [
-                {
-                  command = "PROJECT_NAME=\${PROJECT_ROOT##*/}; PROJECT_NAME=\${PROJECT_NAME:-'project'}; curl -X POST -H 'Content-type: application/json' --data \"{\\\"text\\\":\\\"Task completed in $PROJECT_NAME\\\"}\" \"$CLAUDE_NOTIFICATION_SLACK_URL\"";
-                  type = "command";
-                }
-              ];
-            }
-          ];
-          PostToolUse = [
-            {
-              matcher = "Write|Edit|MultiEdit";
-              hooks = [
-                {
-                  command = "just format || npm run format || true";
-                  type = "command";
-                }
-              ];
-            }
-          ];
-        };
-        includeCoAuthoredBy = false;
-        env = {
-        };
-      };
-
-      # MCP configuration symlinks
-      ".cursor/mcp.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
-
-      ".config/llminate/config.yml".text = builtins.toJSON {
-        mcp-config = "~/mcp-config.json";
-        labels-prompt = "issue-labels";
-        stop-label = "waiting-for-user";
-        prompts = [
+      hooks = {
+        Stop = [
           {
-            label = "user-stories";
-            prompt = "llminate-user-stories";
+            matcher = "";
+            hooks = [
+              {
+                command = "PROJECT_NAME=\${PROJECT_ROOT##*/}; PROJECT_NAME=\${PROJECT_NAME:-'project'}; curl -X POST -H 'Content-type: application/json' --data \"{\\\"text\\\":\\\"Task completed in $PROJECT_NAME\\\"}\" \"$CLAUDE_NOTIFICATION_SLACK_URL\"";
+                type = "command";
+              }
+            ];
           }
+        ];
+        PostToolUse = [
           {
-            label = "architecture-review";
-            prompt = "llminate-architecture-review";
-          }
-          {
-            label = "user-test-generation";
-            prompt = "llminate-user-test-generation";
-          }
-          {
-            label = "in-development";
-            prompt = "llminate-in-development";
-          }
-          {
-            label = "needs-code-review";
-            prompt = "llminate-needs-code-review";
+            matcher = "Write|Edit|MultiEdit";
+            hooks = [
+              {
+                command = "just format || npm run format || true";
+                type = "command";
+              }
+            ];
           }
         ];
       };
-    }
-    // (
-      if pkgs.stdenv.isDarwin
-      then {
-        "Library/Application Support/Claude/claude_desktop_config.json".source = config.lib.file.mkOutOfStoreSymlink config.sops.templates.mcp-config.path;
-      }
-      else {}
-    );
+      includeCoAuthoredBy = false;
+      env = {
+      };
+    };
+  };
 }
