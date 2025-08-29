@@ -80,6 +80,7 @@
       "ghostty"
       "google-chrome"
       "google-drive"
+      "inkscape"
       "krita"
       "macdown"
       "maestral"
