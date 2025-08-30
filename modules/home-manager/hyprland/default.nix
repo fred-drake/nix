@@ -419,9 +419,10 @@ in {
       };
 
       # https://wiki.hyprland.org/Configuring/Variables/#gestures
-      gestures = {
-        workspace_swipe = false;
-      };
+      # Now throws error that no longer exists 2025-08-30
+      # gestures = {
+      #   workspace_swipe = false;
+      # };
 
       # Example per-device config
       # See https://wiki.hyprland.org/Configuring/Keywords/#per-device-input-configs for more

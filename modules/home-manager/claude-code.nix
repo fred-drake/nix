@@ -15,6 +15,18 @@ in {
 
   # SOPS templates for MCP configuration
   sops.templates = {
+    mcp-browsermcp = {
+      mode = "0400";
+      path = "${home}/mcp/browsermcp.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          browsermcp = {
+            command = "npx";
+            args = ["@browsermcp/mcp@latest"];
+          };
+        };
+      };
+    };
     mcp-brave = {
       mode = "0400";
       path = "${home}/mcp/brave.json";
