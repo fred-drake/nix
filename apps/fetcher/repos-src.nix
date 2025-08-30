@@ -60,7 +60,7 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "82761f53e80b6dc73440d91fa7e5d4d0dc272600";
-    hash = "sha256-PUV7MYwoXpPvtsF6v95pVu3XVQ4nK54qIY5RswsQAts=";
+    rev = "c592b1daffdbd9eb7c13da5ce1301da3c1455626";
+    hash = "sha256-8hIrMjRJtwiU6sA20YjfS2t3eFjzPn+fOf7WY0wiesM=";
   };
 }
