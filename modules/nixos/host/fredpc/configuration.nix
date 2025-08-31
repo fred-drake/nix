@@ -101,6 +101,7 @@ in {
 
     extraHosts = ''
       192.168.30.58 local.brainrush.ai
+      192.168.30.58 local-fredpc.brainrush.ai
       192.168.30.58 local-llm.brainrush.ai
     '';
   };
