@@ -7,3 +7,6 @@ repo = "mermaid-cli"
 [[npm-repository]]
 name = "ccusage"
 repo = "ccusage"
+[[npm-repository]]
+name = "ccstatusline"
+repo = "ccstatusline"

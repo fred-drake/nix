@@ -26,6 +26,9 @@
   ccusage = pkgs.callPackage ../../apps/ccusage.nix {
     npm-packages = import ../../apps/fetcher/npm-packages.nix;
   };
+  ccstatusline = pkgs.callPackage ../../apps/ccstatusline.nix {
+    npm-packages = import ../../apps/fetcher/npm-packages.nix;
+  };
 in {
   # Import additional configuration files
   imports = [
@@ -153,6 +156,7 @@ in {
         bat # Cat clone with syntax highlighting
         btop # System monitor
         ccusage
+        ccstatusline
         chafa # Image resizer
         curl # URL retrieval utility
         delta # Syntax-highlighting pager

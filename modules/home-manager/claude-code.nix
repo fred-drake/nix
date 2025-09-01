@@ -6,6 +6,9 @@
   home = config.home.homeDirectory;
   claude-code = pkgs.callPackage ../../apps/claude-code {};
   gitea-mcp = pkgs.callPackage ../../apps/gitea-mcp.nix {};
+  ccstatusline = pkgs.callPackage ../../apps/ccstatusline.nix {
+    npm-packages = import ../../apps/fetcher/npm-packages.nix;
+  };
 in {
   # Add Claude Code and Gitea MCP packages
   home.packages = [
@@ -179,24 +182,12 @@ in {
     ".claude/settings.json".text = builtins.toJSON {
       statusLine = {
         type = "command";
-        command = "npx -y ccstatusline@latest";
+        command = "${ccstatusline}/bin/ccstatusline";
         padding = 0;
       };
 
       permissions = {
-        allow = [
-          "Bash"
-          "Write"
-          "MultiEdit"
-          "Edit"
-          "WebFetch"
-
-          # mcp commands
-          "mcp__brave-search__brave_web_search"
-          "mcp__context7__resolve-library-id"
-          "mcp__context7__get-library-docs"
-          "context7:*"
-        ];
+        allow = [];
 
         deny = [];
       };
