@@ -178,6 +178,7 @@ in {
         kubectl # Kubernetes command-line tool
         lazydocker # Docker CLI with auto-completion and syntax highlighting
         llama-cpp # Text generation
+        localsend
         lsof
         meld # Visual diff and merge tool
         minio-client

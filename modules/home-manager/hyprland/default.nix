@@ -453,7 +453,8 @@ in {
         "$mainMod CTRL, A, exec, $terminal"
         "$mainMod CTRL, Z, exec, zen"
         "$mainMod CTRL, O, exec, obsidian --disable-gpu"
-        "$mainMod CTRL, L, exec, ${spotifatius}/bin/spotifatius toggle-liked"
+        "$mainMod CTRL ALT, L, exec, ${spotifatius}/bin/spotifatius toggle-liked"
+        "$mainMod CTRL, L, exec, localsend_app"
 
         ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot --mode region -o ${home}/Screenshots"
 
