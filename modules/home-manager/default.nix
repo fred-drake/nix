@@ -365,7 +365,7 @@ in {
       enableNushellIntegration = true;
       enableZshIntegration = true;
       enableFishIntegration = true;
-      useTheme = "craver";
+      settings = builtins.fromJSON (builtins.readFile ../../apps/oh-my-posh/config.json);
     };
 
     # Yazi file manager
