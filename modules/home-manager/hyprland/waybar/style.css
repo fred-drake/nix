@@ -34,6 +34,7 @@ window#waybar.hidden {
 #bluetooth,
 #custom-power,
 #custom-spotify,
+#custom-ccusage,
 #network {
   color: #7aa2f7;
   background-color: #292e42;
@@ -60,6 +61,7 @@ window#waybar.hidden {
 #bluetooth label,
 #custom-power label,
 #custom-spotify label,
+#custom-ccusage label,
 #network label {
   padding: 0;
   margin: 0;
@@ -74,6 +76,7 @@ window#waybar.hidden {
 #custom-weather,
 #custom-power,
 #custom-spotify,
+#custom-ccusage,
 #custom-kuma-waybar {
   margin-left: 5px;
   border-left: 1px solid #7aa2f7;
@@ -90,6 +93,7 @@ window#waybar.hidden {
 #custom-weather,
 #custom-power,
 #custom-spotify,
+#custom-ccusage,
 #network {
   margin-right: 5px;
   border-top-right-radius: 10px;
@@ -133,6 +137,16 @@ window#waybar.hidden {
 
 #custom-spotify {
   color: #9ece6a;
+}
+
+#custom-ccusage.warning {
+  color: #e0af68;
+  border-color: #e0af68;
+}
+
+#custom-ccusage.critical {
+  color: #f7768e;
+  border-color: #f7768e;
 }
 
 #custom-spotify.paused,

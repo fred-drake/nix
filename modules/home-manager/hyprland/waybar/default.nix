@@ -5,6 +5,7 @@
 }: let
   kuma-waybar = pkgs.callPackage ./kuma-waybar.nix {};
   spotifatius = pkgs.callPackage ../spotifatius.nix {};
+  ccusage-waybar = pkgs.callPackage ./ccusage-waybar.nix {};
 in {
   sops.secrets.uptime-kuma-env = {
     sopsFile = config.secrets.workstation.uptime-kuma-env;
@@ -32,7 +33,7 @@ in {
         position = "top";
         modules-left = ["custom/osicon" "cpu" "load" "memory" "disk" "custom/spotify"];
         modules-center = ["clock"];
-        modules-right = ["idle_inhibitor" "custom/kuma-waybar" "pulseaudio" "bluetooth" "network" "custom/power"];
+        modules-right = ["custom/ccusage" "idle_inhibitor" "custom/kuma-waybar" "pulseaudio" "bluetooth" "network" "custom/power"];
 
         clock = {
           format = "{:%a %d - %I:%M:%S %p}";
@@ -92,6 +93,13 @@ in {
 
         idle_inhibitor = {
           format = "";
+        };
+
+        "custom/ccusage" = {
+          exec = ccusage-waybar;
+          return-type = "json";
+          format = "CC {}";
+          interval = 30;
         };
 
         pulseaudio = {
