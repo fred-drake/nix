@@ -37,7 +37,8 @@ Confirm project type by checking for:
 
 ### Define Check Commands
 ```
-TEST_COMMAND="go test ./... -coverprofile=coverage.out"
+# IMPORTANT: Tests must run without external dependencies
+TEST_COMMAND="go test ./... -coverprofile=coverage.out -short -timeout 30s"
 COVERAGE_REPORT="go tool cover -func=coverage.out"
 CHECK_COMMANDS=(
     "go fmt ./..."
@@ -67,23 +68,52 @@ For each file in the prioritized list:
    - Plan unit vs integration test balance
    - Consider table-driven tests for Go
    - Design test data and fixtures
+   - **CRITICAL: Identify ALL external dependencies for mocking:**
+     * Database connections (PostgreSQL, MySQL, MongoDB, etc.)
+     * Message queues (Kafka, RabbitMQ, SQS, etc.)
+     * HTTP/gRPC external API calls
+     * File system operations
+     * Cloud services (AWS, GCP, Azure)
+     * Cache systems (Redis, Memcached)
+     * Email/SMS services
    
    **Risk-Based Testing:**
-   - Focus on error handling paths
+   - Focus on error handling paths (with mocked errors)
    - Test boundary conditions
    - Cover concurrent code carefully
    - Ensure interface implementations are tested
+   - **Validate all mocks are properly configured:**
+     * Mock returns match real service contracts
+     * Error scenarios use realistic error types
+     * Timeouts and retries are simulated, not real
 
 2. **Test Writing Phase**
    Based on coverage gaps and ultrathinking insights:
    - `coverage-test-writer` creates/improves tests for current file
+   
+   **MANDATORY MOCKING REQUIREMENTS:**
+   ```
+   CRITICAL: ALL external services MUST be mocked. NEVER connect to:
+   - Real databases (use sqlmock, go-sqlmock, or testcontainers)
+   - Real Kafka/message brokers (use mock interfaces or embedded kafka)
+   - Real external APIs (use httptest or mock clients)
+   - Real file systems (use afero or temporary test directories)
+   - Real cloud services (use localstack or mocked SDK clients)
+   - Real cache systems (use miniredis or mock interfaces)
+   
+   Tests that attempt real connections MUST be rejected and rewritten.
+   ```
+   
    - Focus on:
+     * **ALWAYS mock external dependencies first**
      * Covering all uncovered functions
      * Testing error paths and edge cases
      * Using table-driven tests where appropriate
      * Following Go testing conventions
      * Creating subtests with t.Run()
      * Proper cleanup with t.Cleanup() or defer
+     * Using dependency injection for mockable components
+     * Creating interface abstractions for external services
 
 3. **Incremental Coverage Validation**
    - Run: `go test ./path/to/package -coverprofile=temp_coverage.out`
@@ -207,6 +237,86 @@ After processing all priority files:
     ```
 
 ## Go-Specific Testing Patterns
+
+### CRITICAL: Mocking External Services
+
+**Database Mocking Example:**
+```go
+// NEVER DO THIS:
+func TestUserService_Bad(t *testing.T) {
+    db, _ := sql.Open("postgres", "postgres://localhost/testdb") // NO!
+    // This connects to a real database
+}
+
+// ALWAYS DO THIS:
+func TestUserService_Good(t *testing.T) {
+    db, mock, err := sqlmock.New()
+    require.NoError(t, err)
+    defer db.Close()
+    
+    mock.ExpectQuery("SELECT \\* FROM users").
+        WillReturnRows(sqlmock.NewRows([]string{"id", "name"}).
+            AddRow(1, "test user"))
+    
+    // Test with mocked database
+}
+```
+
+**Kafka Mocking Example:**
+```go
+// NEVER DO THIS:
+func TestKafkaProducer_Bad(t *testing.T) {
+    producer, _ := sarama.NewSyncProducer([]string{"localhost:9092"}, nil) // NO!
+    // This connects to a real Kafka broker
+}
+
+// ALWAYS DO THIS:
+type MockProducer struct {
+    mock.Mock
+}
+
+func (m *MockProducer) SendMessage(msg *sarama.ProducerMessage) (partition int32, offset int64, err error) {
+    args := m.Called(msg)
+    return args.Get(0).(int32), args.Get(1).(int64), args.Error(2)
+}
+
+func TestKafkaProducer_Good(t *testing.T) {
+    mockProducer := new(MockProducer)
+    mockProducer.On("SendMessage", mock.Anything).Return(int32(0), int64(1), nil)
+    // Test with mocked producer
+}
+```
+
+**HTTP Client Mocking Example:**
+```go
+// NEVER DO THIS:
+func TestAPIClient_Bad(t *testing.T) {
+    resp, _ := http.Get("https://api.example.com/users") // NO!
+    // This makes a real HTTP request
+}
+
+// ALWAYS DO THIS:
+func TestAPIClient_Good(t *testing.T) {
+    server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        w.WriteHeader(http.StatusOK)
+        w.Write([]byte(`{"id": 1, "name": "test"}`))
+    }))
+    defer server.Close()
+    
+    client := &APIClient{BaseURL: server.URL}
+    // Test with mocked server
+}
+```
+
+### Common Mocking Libraries for Go
+- **Database**: sqlmock, go-sqlmock, pgxmock
+- **Redis**: miniredis, redismock
+- **HTTP**: httptest, httpmock
+- **AWS**: aws-sdk-go-v2/mocks, localstack
+- **gRPC**: grpc-testing, mockgen
+- **Kafka**: saramamock, embedded-kafka
+- **General**: testify/mock, gomock
+
 ### Table-Driven Tests
 ```go
 tests := []struct {
@@ -228,9 +338,23 @@ for _, tt := range tests {
 ```
 
 ### Coverage Improvement Strategies
+
+**PRE-FLIGHT CHECKLIST for Test Writing:**
+```
+☐ All database connections mocked
+☐ All message queue producers/consumers mocked
+☐ All HTTP/gRPC external calls mocked
+☐ All file system operations use temp directories or mocks
+☐ All cloud service SDKs mocked
+☐ No hardcoded external URLs or connection strings
+☐ No real network calls possible
+☐ Tests can run offline
+☐ Tests can run in parallel without conflicts
+```
+
 1. **Focus on Untested Error Paths**
    - Error returns often have low coverage
-   - Mock failures in dependencies
+   - Mock failures in dependencies (NOT real failures)
    - Test timeout and context cancellation
 
 2. **Interface Testing**
@@ -257,6 +381,11 @@ Maintain metrics for:
 1. Existing tests that start failing
 2. Coverage decreasing in already-tested files
 3. Performance degradation from new tests
+4. **Tests attempting real external connections:**
+   - Watch for timeouts indicating real connection attempts
+   - Check for hardcoded URLs/hosts in test code
+   - Verify all tests run successfully offline
+   - Ensure no test data persists in real systems
 
 ### Loop Termination
 - After 20 files OR 50 iterations:
