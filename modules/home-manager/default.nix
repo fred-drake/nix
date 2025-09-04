@@ -186,6 +186,7 @@ in {
         lsof
         meld # Visual diff and merge tool
         minio-client
+        ncdu
         nixd # Nix daemon for IDE
         oh-my-posh # Prompt theme engine
         openssl
