@@ -8,7 +8,7 @@ in
     # Fetches Claude Code usage data and formats it for Waybar display
 
     # Token limit for Claude Code
-    TOKEN_LIMIT=98687500
+    TOKEN_LIMIT=119179300
 
     # Get the usage data
     data=$(${ccusage}/bin/ccusage blocks --json --active 2>/dev/null)
