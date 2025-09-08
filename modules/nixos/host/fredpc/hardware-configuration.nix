@@ -14,10 +14,10 @@
   boot = {
     initrd = {
       availableKernelModules = ["xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod"];
-      kernelModules = [];
+      kernelModules = ["v4l2loopback" "snd-aloop"];
     };
     kernelModules = ["kvm-intel"];
-    extraModulePackages = [];
+    extraModulePackages = [config.boot.kernelPackages.v4l2loopback];
   };
 
   fileSystems = {

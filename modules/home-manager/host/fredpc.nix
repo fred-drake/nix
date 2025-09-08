@@ -31,11 +31,17 @@
     mode = "0400";
     key = "data";
   };
-  home.file.".config/wireguard/brainrush-stage.conf".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.wireguard-brainrush-stage.path;
+  home = {
+    file.".config/wireguard/brainrush-stage.conf".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.wireguard-brainrush-stage.path;
 
-  home.file.".config/wireguard/brainrush-stage-public-key.txt".text = ''
-    Dri6Y1cfpQ2moikPW7Lzo2HbqMNHefsCpMcYgL0uEFk=
-  '';
+    file.".config/wireguard/brainrush-stage-public-key.txt".text = ''
+      Dri6Y1cfpQ2moikPW7Lzo2HbqMNHefsCpMcYgL0uEFk=
+    '';
+
+    packages = with pkgs; [
+      droidcam
+    ];
+  };
 
   programs.obs-studio = {
     enable = true;
