@@ -1,5 +1,9 @@
 # Configuration specific to the MacBook Pro device.
-{config, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   # wayland.windowManager.hyprland = {
   #   enable = true;
   #   package = pkgs.hyprland;
@@ -32,4 +36,14 @@
   home.file.".config/wireguard/brainrush-stage-public-key.txt".text = ''
     Dri6Y1cfpQ2moikPW7Lzo2HbqMNHefsCpMcYgL0uEFk=
   '';
+
+  programs.obs-studio = {
+    enable = true;
+    plugins = with pkgs.obs-studio-plugins; [
+      wlrobs
+      obs-backgroundremoval
+      obs-pipewire-audio-capture
+      droidcam-obs
+    ];
+  };
 }

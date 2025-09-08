@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   pkgsUnstable,
+  config,
   ...
 }: let
   containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};
@@ -10,11 +11,19 @@ in {
     ./gnome.nix
     ./hyprland.nix
   ];
-  boot.loader.grub = {
-    enable = true;
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-    device = "nodev";
+  boot = {
+    loader.grub = {
+      enable = true;
+      efiSupport = true;
+      efiInstallAsRemovable = true;
+      device = "nodev";
+    };
+    extraModulePackages = with config.boot.kernelPackages; [
+      v4l2loopback
+    ];
+    extraModprobeConfig = ''
+      options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
+    '';
   };
   services = {
     displayManager.defaultSession = "hyprland";
@@ -204,6 +213,9 @@ in {
       };
     };
   };
+
+  # OBS Studio with virtual camera
+  security.polkit.enable = true;
 
   # Generate CDI specifications
   systemd.services.nvidia-cdi-generate = {
