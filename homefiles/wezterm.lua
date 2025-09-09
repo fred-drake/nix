@@ -14,7 +14,7 @@ config.color_scheme = "tokyonight_night"
 config.hide_tab_bar_if_only_one_tab = false
 config.tab_bar_at_bottom = true
 config.use_fancy_tab_bar = false
-config.tab_and_split_indicies_are_zero_based = false
+config.tab_and_split_indices_are_zero_based = false
 
 config.colors = {
     cursor_bg = "#7aa2f7",
@@ -28,7 +28,7 @@ config.inactive_pane_hsb = {
 }
 
 config.window_decorations = "RESIZE"
-config.enable_tab_bar = false
+config.enable_tab_bar = true
 
 -- SSH Domains with multiplexer support
 config.ssh_domains = {
@@ -89,6 +89,26 @@ config.keys = {
         action = act.ActivatePaneDirection("Right"),
     },
     {
+        key = "LeftArrow",
+        mods = "CTRL|SHIFT",
+        action = act.AdjustPaneSize({ "Left", 2 }),
+    },
+    {
+        key = "RightArrow",
+        mods = "CTRL|SHIFT",
+        action = act.AdjustPaneSize({ "Right", 2 }),
+    },
+    {
+        key = "DownArrow",
+        mods = "CTRL|SHIFT",
+        action = act.AdjustPaneSize({ "Down", 2 }),
+    },
+    {
+        key = "UpArrow",
+        mods = "CTRL|SHIFT",
+        action = act.AdjustPaneSize({ "Up", 2 }),
+    },
+    {
         key = "s",
         mods = "LEADER",
         action = act.ShowLauncherArgs({ flags = "FUZZY|WORKSPACES" }),
@@ -96,8 +116,7 @@ config.keys = {
     {
         key = "c",
         mods = "LEADER",
-        -- action = wezterm.action.ShowTabNavigator,
-        action = act.ShowLauncherArgs({ flags = "FUZZY|TABS" }),
+        action = act.SpawnTab("CurrentPaneDomain"),
     },
     {
         key = ",",
@@ -139,30 +158,33 @@ config.keys = {
         action = act.DisableDefaultAssignment,
     },
     {
-        key = "r",
-        mods = "LEADER",
-        action = act.Multiple({
-            act.AdjustPaneSize({ "Left", 100 }),
-            act.AdjustPaneSize({ "Right", 100 }),
-            act.AdjustPaneSize({ "Up", 100 }),
-            act.AdjustPaneSize({ "Down", 100 }),
-            act.PaneSelect({ mode = "Activate" }),
-        }),
-    },
-    {
         key = "=",
         mods = "LEADER",
         action = act.ResetFontAndWindowSize,
     },
+    {
+        key = "x",
+        mods = "LEADER",
+        action = act.CloseCurrentPane({ confirm = true }),
+    },
 }
+
+for i = 1, 9 do
+    table.insert(config.keys, {
+        key = tostring(i),
+        mods = "LEADER",
+        action = act.ActivateTab(i - 1),
+    })
+end
 
 -- Smart Splits Neovim configuration
 smart_splits.apply_to_config(config, {
     direction_keys = { "h", "j", "k", "l" },
+    resize = { "LeftArrow", "DownArrow", "UpArrow", "RightArrow" },
     -- modifier keys to combine with direction_keys
     modifiers = {
-        move = "CTRL", -- modifier to use for pane movement, e.g. CTRL+h to move left
-        resize = "META", -- modifier to use for pane resize, e.g. META+h to resize to the left
+        move = "CTRL", -- modifier to use for pane movement
+        resize = "CTRL|SHIFT", -- modifier to use for pane resize
     },
     -- log level to use: info, warn, error
     log_level = "info",
