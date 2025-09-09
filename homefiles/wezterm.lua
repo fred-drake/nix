@@ -29,6 +29,7 @@ config.inactive_pane_hsb = {
 
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = true
+config.window_background_opacity = 0.8
 
 -- SSH Domains with multiplexer support
 config.ssh_domains = {
