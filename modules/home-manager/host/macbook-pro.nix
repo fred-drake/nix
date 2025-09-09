@@ -1,5 +1,9 @@
 # Configuration specific to the MacBook Pro device.
-{config, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   sops.secrets = {
     wireguard-office-admin = {
       sopsFile = config.secrets.host.macbookpro.wireguard-office-admin;
@@ -26,4 +30,7 @@
       GK82AkQED91xMMqZ7RXpAu8LwFC2BiTsAsnwzR47B2w=
     '';
   };
+  home.packages = with pkgs; [
+    tailscale
+  ];
 }

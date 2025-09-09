@@ -89,15 +89,26 @@ in {
         # Debug output
         # echo "windev: argv[1]='$argv[1]', devdir='$devdir'"
 
-        tmux new-window -n "$argv[1]" -c "$devdir"
-        tmux split-window -h -c "$devdir"
-        tmux select-pane -t 1
-        tmux split-window -v -c "$devdir"
-        tmux select-pane -t 3
-        tmux kill-pane -t 1
-        tmux select-pane -t 1
-        tmux split-pane -v -c "$devdir"
-        tmux select-pane -t 3
+        # Use wezterm if available, otherwise fall back to tmux
+        if command -v wezterm &> /dev/null
+          # Wezterm commands
+          set pane_id (wezterm cli spawn --cwd "$devdir")
+          wezterm cli set-tab-title --pane-id $pane_id "$argv[1]" > /dev/null
+          wezterm cli split-pane --right --pane-id $pane_id > /dev/null
+          wezterm cli split-pane --top --pane-id $pane_id > /dev/null
+          wezterm cli activate-pane --pane-id $pane_id > /dev/null
+        else
+          # tmux commands
+          tmux new-window -n "$argv[1]" -c "$devdir"
+          tmux split-window -h -c "$devdir"
+          tmux select-pane -t 1
+          tmux split-window -v -c "$devdir"
+          tmux select-pane -t 3
+          tmux kill-pane -t 1
+          tmux select-pane -t 1
+          tmux split-pane -v -c "$devdir"
+          tmux select-pane -t 3
+        end
       end
 
       # Add LLM API keys to environment

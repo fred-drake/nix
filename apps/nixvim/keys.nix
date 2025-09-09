@@ -365,7 +365,8 @@
     # Windows
     {
       key = "<C-h>";
-      action = "<CMD>wincmd h<CR>";
+      # action = "<CMD>wincmd h<CR>";
+      action = "<CMD>lua require('smart-splits').move_cursor_left()<CR>";
       options.desc = "Navigate Window Left";
     }
     {
@@ -380,7 +381,8 @@
     }
     {
       key = "<C-l>";
-      action = "<CMD>wincmd l<CR>";
+      # action = "<CMD>wincmd l<CR>";
+      action = "<CMD>lua require('smart-splits').move_cursor_right()<CR>";
       options.desc = "Navigate Window Right";
     }
     {

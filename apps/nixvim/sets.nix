@@ -76,6 +76,7 @@
       };
     };
     render-markdown.enable = true;
+    smart-splits.enable = true;
     todo-comments.enable = true;
 
     treesitter = {

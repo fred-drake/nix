@@ -104,6 +104,7 @@ in {
 
         ".hgignore_global" = {source = ../../homefiles/hgignore_global;};
         ".ideavimrc" = {source = ../../homefiles/ideavimrc;};
+        ".wezterm.lua" = {source = ../../homefiles/wezterm.lua;};
       }
       // (
         if pkgs.stdenv.isDarwin
@@ -202,6 +203,7 @@ in {
         tmux-mem-cpu-load # CPU and memory usage monitor
         tokei # Code statistics tool
         unzip
+        wezterm
         wiki-tui # Wikipedia TUI
         wireguard-tools # VPN tools
         wget # Network downloader

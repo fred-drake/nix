@@ -89,7 +89,7 @@
       "obsidian"
       "raycast"
       "sourcetree"
-      "tailscale"
+      # "tailscale"
       "vlc"
       "windsurf"
       "zen"
