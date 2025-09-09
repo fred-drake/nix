@@ -15,8 +15,34 @@ config.colors = {
     cursor_border = "#7aa2f7",
 }
 
+-- Dim inactive panes for better focus contrast
+config.inactive_pane_hsb = {
+    saturation = 0.6,
+    brightness = 0.4,
+}
+
 config.window_decorations = "RESIZE"
 config.enable_tab_bar = false
+
+-- SSH Domains with multiplexer support
+config.ssh_domains = {
+    {
+        name = "fredpc",
+        remote_address = "192.168.30.58",
+        username = "fdrake",
+        multiplexing = "WezTerm",
+    },
+}
+
+-- Unix domain for local multiplexing
+config.unix_domains = {
+    {
+        name = "local-mux",
+    },
+}
+
+-- Set default domain to local multiplexer
+config.default_domain = "local-mux"
 
 -- Key Bindings
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
@@ -95,6 +121,32 @@ config.keys = {
                 end
             end),
         }),
+    },
+    {
+        key = "d",
+        mods = "LEADER",
+        action = act.DetachDomain("CurrentPaneDomain"),
+    },
+    {
+        key = "Enter",
+        mods = "ALT",
+        action = act.DisableDefaultAssignment,
+    },
+    {
+        key = "r",
+        mods = "LEADER",
+        action = act.Multiple({
+            act.AdjustPaneSize({ "Left", 100 }),
+            act.AdjustPaneSize({ "Right", 100 }),
+            act.AdjustPaneSize({ "Up", 100 }),
+            act.AdjustPaneSize({ "Down", 100 }),
+            act.PaneSelect({ mode = "Activate" }),
+        }),
+    },
+    {
+        key = "=",
+        mods = "LEADER",
+        action = act.ResetFontAndWindowSize,
     },
 }
 
