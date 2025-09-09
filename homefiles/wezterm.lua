@@ -10,6 +10,12 @@ config.line_height = 1.2
 config.font = wezterm.font("JetBrainsMono Nerd Font")
 config.color_scheme = "tokyonight_night"
 
+-- Tab bar
+config.hide_tab_bar_if_only_one_tab = false
+config.tab_bar_at_bottom = true
+config.use_fancy_tab_bar = false
+config.tab_and_split_indicies_are_zero_based = false
+
 config.colors = {
     cursor_bg = "#7aa2f7",
     cursor_border = "#7aa2f7",
