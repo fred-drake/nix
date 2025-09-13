@@ -157,23 +157,35 @@ in {
 
       oci-config = {
         sopsFile = config.secrets.workstation.oci-config;
-        mode = "400";
+        mode = "0400";
         key = "data";
         path = "${home}/.oci/config";
       };
 
       oracle-cloud-key = {
         sopsFile = config.secrets.workstation.ssh.oracle_cloud_key;
-        mode = "400";
+        mode = "0400";
         key = "data";
         path = "${home}/.ssh/oracle_cloud_key.pem";
       };
 
       claude-env = {
         sopsFile = config.secrets.workstation.claude-notification-hook-env;
-        mode = "400";
+        mode = "0400";
         key = "data";
         path = "${home}/.config/fish/conf.d/claude-env.fish";
+      };
+
+      ref-mcp-api-key = {
+        sopsFile = config.secrets.workstation.ref-mcp;
+        mode = "0400";
+        key = "api-key";
+      };
+
+      firecrawl-api-key = {
+        sopsFile = config.secrets.workstation.firecrawl;
+        mode = "0400";
+        key = "api-key";
       };
     };
   };

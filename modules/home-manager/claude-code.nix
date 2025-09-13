@@ -18,12 +18,12 @@ in {
 
   # SOPS templates for MCP configuration
   sops.templates = {
-    mcp-browsermcp = {
+    mcp-browser = {
       mode = "0400";
-      path = "${home}/mcp/browsermcp.json";
+      path = "${home}/mcp/browser.json";
       content = builtins.toJSON {
         mcpServers = {
-          browsermcp = {
+          browser = {
             command = "npx";
             args = ["@browsermcp/mcp@latest"];
           };
@@ -162,9 +162,46 @@ in {
         };
       };
     };
-    # mcp-ref = {
-    #
-    # }
+    mcp-ref = {
+      mode = "0400";
+      path = "${home}/mcp/ref.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          ref = {
+            command = "npx";
+            args = ["ref-tools-mcp@latest"];
+            env = {"REF_API_KEY" = config.sops.placeholder.ref-mcp-api-key;};
+          };
+        };
+      };
+    };
+
+    mcp-shadcn = {
+      mode = "0400";
+      path = "${home}/mcp/shadcn.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          shadcn = {
+            command = "npx";
+            args = ["-y" "shadcn@latest" "mcp"];
+          };
+        };
+      };
+    };
+
+    mcp-firecrawl = {
+      mode = "0400";
+      path = "${home}/mcp/firecrawl.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          firecrawl = {
+            command = "npx";
+            args = ["-y" "firecrawl-mcp"];
+            env = {"FIRECRAWL_API_KEY" = config.sops.placeholder.firecrawl-api-key;};
+          };
+        };
+      };
+    };
   };
 
   # Claude Code configuration files
