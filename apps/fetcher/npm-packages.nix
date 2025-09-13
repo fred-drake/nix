@@ -13,13 +13,18 @@
     "url-hash" = "sha256-PrrLbP61xRy5CmkEx3mYnXhH7Lc4gy8m30/mYG5rAzA=";
   };
   "claude-code" = {
-    "version" = "1.0.112";
-    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.112.tgz";
-    "url-hash" = "sha256-duEo4SIOzNTRXPkYaUzDVOeSTicyq0ZxgzLFYjoaunc=";
+    "version" = "1.0.113";
+    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.113.tgz";
+    "url-hash" = "sha256-ffoE7ejBnggnP1VdRmMJT0OH3P9gbN/y6U0d9aHM6Js=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";
     "url" = "https://registry.npmjs.org/mermaid-cli/-/mermaid-cli-0.2.4.tgz";
     "url-hash" = "sha256-LNFoy/TmuAY7BJegdIcXVO3gM2HyiF1rjEX92F6u7+o=";
+  };
+  "tdd-guard" = {
+    "version" = "1.0.0";
+    "url" = "https://registry.npmjs.org/tdd-guard/-/tdd-guard-1.0.0.tgz";
+    "url-hash" = "sha256-7dOnVHccckzOtqsPClBeRJYUvTk679XU9riNBoKyb9Q=";
   };
 }

@@ -10,3 +10,7 @@ repo = "ccusage"
 [[npm-repository]]
 name = "ccstatusline"
 repo = "ccstatusline"
+[[npm-repository]]
+name = "tdd-guard"
+repo = "tdd-guard"
+

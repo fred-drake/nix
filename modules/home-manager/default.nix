@@ -29,6 +29,7 @@
   ccstatusline = pkgs.callPackage ../../apps/ccstatusline.nix {
     npm-packages = import ../../apps/fetcher/npm-packages.nix;
   };
+  tdd-guard = pkgs.callPackage ../../apps/tdd-guard.nix {};
 in {
   # Import additional configuration files
   imports = [
@@ -198,6 +199,7 @@ in {
         sops # Secret management tool
         stc-cli # Syncthing CLI
         syncthing # File synchronization tool
+        tdd-guard
         tldr # Documentation tool
         tmux # Terminal multiplexer
         tmux-mem-cpu-load # CPU and memory usage monitor

@@ -162,6 +162,9 @@ in {
         };
       };
     };
+    # mcp-ref = {
+    #
+    # }
   };
 
   # Claude Code configuration files
@@ -193,6 +196,27 @@ in {
       };
 
       hooks = {
+        UserPromptSubmit = [
+          {
+            hooks = [
+              {
+                type = "command";
+                command = "tdd-guard";
+              }
+            ];
+          }
+        ];
+        SessionStart = [
+          {
+            matcher = "startup|resume|clear";
+            hooks = [
+              {
+                type = "command";
+                command = "tdd-guard";
+              }
+            ];
+          }
+        ];
         Stop = [
           {
             matcher = "";

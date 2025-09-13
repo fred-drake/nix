@@ -29,3 +29,7 @@ url = "https://github.com/WebTender/kuma-waybar.git"
 [[repos]]
 name = "vicinae-src"
 url = "https://github.com/vicinaehq/vicinae.git"
+[[repos]]
+name = "tdd-guard-src"
+url = "https://github.com/nizos/tdd-guard.git"
+

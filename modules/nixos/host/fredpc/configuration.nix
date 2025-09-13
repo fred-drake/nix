@@ -20,10 +20,12 @@ in {
     };
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
+      xpadneo
     ];
     extraModprobeConfig = ''
       options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
     '';
+    kernelModules = ["xpadneo"];
   };
   services = {
     displayManager.defaultSession = "hyprland";
@@ -150,8 +152,18 @@ in {
   };
 
   hardware = {
-    bluetooth.enable = true;
-    bluetooth.powerOnBoot = true;
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+      settings = {
+        General = {
+          Privacy = "device";
+          JustWorksRepairing = "always";
+          Class = "0x000100";
+          FastConnectable = true;
+        };
+      };
+    };
     graphics.enable = true;
     nvidia = {
       modesetting.enable = true;
