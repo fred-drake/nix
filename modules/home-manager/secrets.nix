@@ -187,6 +187,12 @@ in {
         mode = "0400";
         key = "api-key";
       };
+
+      stripe-sandbox-api-key = {
+        sopsFile = config.secrets.workstation.stripe;
+        mode = "0400";
+        key = "sandbox";
+      };
     };
   };
 

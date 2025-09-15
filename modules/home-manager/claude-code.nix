@@ -202,6 +202,20 @@ in {
         };
       };
     };
+
+    mcp-stripe-sandbox = {
+      mode = "0400";
+      path = "${home}/mcp/stripe-sandbox.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          stripe = {
+            command = "npx";
+            args = ["-y" "@stripe/mcp" "--tools=all"];
+            env = {"STRIPE_SECRET_KEY" = config.sops.placeholder.stripe-sandbox-api-key;};
+          };
+        };
+      };
+    };
   };
 
   # Claude Code configuration files
