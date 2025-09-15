@@ -31,6 +31,11 @@
   systemd.tmpfiles.rules = [
     "d /export 0755 root root -"
     "C /var/sabnzbd/config/sabnzbd.ini 0660 svcuser users - /var/sabnzbd/config/sabnzbd-orig.ini"
+    # Set group writable and setgid on storage directories
+    "d /mnt/array/storage1 2775 svcuser users -"
+    "d /mnt/array/storage1/videos 2775 svcuser users -"
+    "d /mnt/array/storage1/sabnzbd_downloads 2775 svcuser users -"
+    "d /mnt/array/storage1/sabnzbd_downloads_incomplete 2775 svcuser users -"
   ];
 
   services = {
@@ -65,6 +70,10 @@
     enable = true;
     wheelNeedsPassword = false;
   };
+
+  # Set default umask to make files group writable
+  security.loginDefs.settings.UMASK = "002";
+  environment.extraInit = "umask 002";
 
   networking = {
     firewall.enable = false;
