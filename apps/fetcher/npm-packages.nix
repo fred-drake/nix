@@ -8,14 +8,14 @@
     "url-hash" = "sha256-3EC/SmOpXexXQ6LWyUlRxXp4xbTo08+8+vySnQcaxr0=";
   };
   "ccusage" = {
-    "version" = "16.2.4";
-    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-16.2.4.tgz";
-    "url-hash" = "sha256-PrrLbP61xRy5CmkEx3mYnXhH7Lc4gy8m30/mYG5rAzA=";
+    "version" = "16.2.5";
+    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-16.2.5.tgz";
+    "url-hash" = "sha256-GXleBpZ3XF4DWrXG31Kh15SoOLRm6kXuuvIEEEmQ8eA=";
   };
   "claude-code" = {
-    "version" = "1.0.113";
-    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.113.tgz";
-    "url-hash" = "sha256-ffoE7ejBnggnP1VdRmMJT0OH3P9gbN/y6U0d9aHM6Js=";
+    "version" = "1.0.115";
+    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.115.tgz";
+    "url-hash" = "sha256-Obe8zW9Z8nXvgeeG6npHTSimo2zY2AXL+fEdzBzjqqY=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";
@@ -23,8 +23,8 @@
     "url-hash" = "sha256-LNFoy/TmuAY7BJegdIcXVO3gM2HyiF1rjEX92F6u7+o=";
   };
   "tdd-guard" = {
-    "version" = "1.0.0";
-    "url" = "https://registry.npmjs.org/tdd-guard/-/tdd-guard-1.0.0.tgz";
-    "url-hash" = "sha256-7dOnVHccckzOtqsPClBeRJYUvTk679XU9riNBoKyb9Q=";
+    "version" = "1.0.1";
+    "url" = "https://registry.npmjs.org/tdd-guard/-/tdd-guard-1.0.1.tgz";
+    "url-hash" = "sha256-eJBPY3Ee1dKmVCWOPl8wEkdz2BdGrX/THdJV9J/hLbU=";
   };
 }
