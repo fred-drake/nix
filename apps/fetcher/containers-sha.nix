@@ -1,7 +1,7 @@
 ####################################
 # Auto-generated -- do not modify! #
 ####################################
-_: {
+{_}: {
   "docker.gitea.com" = {
     "act_runner" = {
       "latest" = {
@@ -10,7 +10,7 @@ _: {
     };
     "gitea" = {
       "1-rootless" = {
-        "linux/amd64" = "docker.gitea.com/gitea@sha256:52eb05a8f14299591490d87aa0650fc4c18154b169c670a6d6155c3bdfaf5ea0";
+        "linux/amd64" = "docker.gitea.com/gitea@sha256:3a54ec4b271f0479eb1f40624cbf90f2245306aab8533dd14bb5f49f4c580ccf";
       };
     };
   };
@@ -42,7 +42,7 @@ _: {
     };
     "postgres" = {
       "17" = {
-        "linux/amd64" = "docker.io/postgres@sha256:16508ad37e81dd63a94cdc620b0cfa1b771c4176b4e0f1cbc3a670431643e3ed";
+        "linux/amd64" = "docker.io/postgres@sha256:41ef119663a6bea8c21c90f22305b30d3967180a447feb4a69a5e33e835fd24c";
       };
     };
     "solarkennedy/ipmi-kvm-docker" = {
@@ -52,14 +52,14 @@ _: {
     };
     "sonarqube" = {
       "latest" = {
-        "linux/amd64" = "docker.io/sonarqube@sha256:3fd415c8e8460f197d6c5c4be2a158638bbec3d9c68455fcf8e21465fca2fed6";
+        "linux/amd64" = "docker.io/sonarqube@sha256:c9ef6dc40db8be8b2fd31b9c81d88ff99a993b80098acc5e55b9148960b9baeb";
       };
     };
   };
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:0947e5946fed59f88d6e1454a65c8964bf6e74a4ea92fe34c831bf3af61097d9";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:30c360e27773376cb9947db1c79333b278b0f18abdbfb0546ec75ce559a5fd60";
       };
     };
   };
@@ -71,7 +71,7 @@ _: {
     };
     "linuxserver/radarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:3384d61c3eb5f4c761d7aeda1c673405b9b501677ea34c83bc1a8c9d5777c819";
+        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:35bcea229acafbda759a6aea0fd8793b8df09317402b1df6c6e28e00ccf84196";
       };
     };
     "linuxserver/sabnzbd" = {

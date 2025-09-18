@@ -60,13 +60,13 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "0da9c871e1b697d7551687afd4a2bec01d32d288";
-    hash = "sha256-HwDVE6X6/Vq0FWJQzByUOa/4ub2IfcXbxGEQ1/Zk+bw=";
+    rev = "2e633e046ff889323af74c5823a0fd01a911bf1c";
+    hash = "sha256-OhI7im7PxUt2zalnD//UwXtX7K+wrPCuWBcOUTwCP7M=";
   };
   tdd-guard-src = pkgs.fetchFromGitHub {
     owner = "nizos";
     repo = "tdd-guard";
-    rev = "a6d44b0ee580761f5d41feba7d493d6e7057d402";
-    hash = "sha256-u+8WOyq+E/Ymuc4gKVX7b/pBe4RQnnxktv/AcumiKXI=";
+    rev = "5e0c9a5e37c71f7bc7fdfc3b85b3365792f5d185";
+    hash = "sha256-tqyuTWuZhBEUiAMh6O/YOWGfdnqzL4Do7oFJRviM7Ow=";
   };
 }

@@ -41,7 +41,7 @@ in
     version = "0.0.1";
 
     src = repos-src.tdd-guard-src;
-    npmDepsHash = "sha256-bW/bQdzsr4kL4HJMNPVKI1d39qypO3ZhFqFbcdn3Fb0=";
+    npmDepsHash = "sha256-6wb9oaUVOcXlwnWwaFac3CK8BuW2jTUKxJkjc4Xrwis=";
 
     # We need to build the project to generate dist/
     # dontNpmBuild = true;
