@@ -476,11 +476,11 @@ in {
         "$mainMod, S, workspace, 3"
         "$mainMod, O, workspace, 4"
         "$mainMod, W, workspace, 5"
-        "$mainMod, 6, workspace, 6"
-        "$mainMod, 7, workspace, 7"
-        "$mainMod, 8, workspace, 8"
-        "$mainMod, 9, workspace, 9"
-        "$mainMod, 0, workspace, 10"
+        "$mainMod, D, workspace, 6"
+        "$mainMod, F, workspace, 7"
+        "$mainMod, G, workspace, 8"
+        "$mainMod, Q, workspace, 9"
+        "$mainMod, R, workspace, 10"
 
         # Move active window to a workspace with mainMod + SHIFT + [0-9]
         "$mainMod SHIFT, A, movetoworkspace, 1"
@@ -488,11 +488,11 @@ in {
         "$mainMod SHIFT, S, movetoworkspace, 3"
         "$mainMod SHIFT, O, movetoworkspace, 4"
         "$mainMod SHIFT, W, movetoworkspace, 5"
-        "$mainMod SHIFT, 6, movetoworkspace, 6"
-        "$mainMod SHIFT, 7, movetoworkspace, 7"
-        "$mainMod SHIFT, 8, movetoworkspace, 8"
-        "$mainMod SHIFT, 9, movetoworkspace, 9"
-        "$mainMod SHIFT, 0, movetoworkspace, 10"
+        "$mainMod SHIFT, D, movetoworkspace, 6"
+        "$mainMod SHIFT, F, movetoworkspace, 7"
+        "$mainMod SHIFT, G, movetoworkspace, 8"
+        "$mainMod SHIFT, Q, movetoworkspace, 9"
+        "$mainMod SHIFT, R, movetoworkspace, 10"
 
         # Example special workspace (scratchpad)
         # "$mainMod, S, togglespecialworkspace, magic"

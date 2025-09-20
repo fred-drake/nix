@@ -1,7 +1,7 @@
 ####################################
 # Auto-generated -- do not modify! #
 ####################################
-{_}: {
+_: {
   "docker.gitea.com" = {
     "act_runner" = {
       "latest" = {

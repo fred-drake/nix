@@ -19,6 +19,7 @@
     hyprshot
     satty
     inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
+    xdg-desktop-portal-gtk
   ];
 
   programs.waybar = {
