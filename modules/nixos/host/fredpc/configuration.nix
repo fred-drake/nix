@@ -71,6 +71,7 @@ in {
     bitwarden-desktop
     usbutils
     kitty
+    krita
     nerd-fonts.jetbrains-mono
     nerd-fonts.hack
 
