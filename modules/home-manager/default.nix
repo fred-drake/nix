@@ -189,6 +189,7 @@ in {
         meld # Visual diff and merge tool
         minio-client
         ncdu
+        neofetch
         nixd # Nix daemon for IDE
         oh-my-posh # Prompt theme engine
         openssl
