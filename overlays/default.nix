@@ -4,7 +4,7 @@
   spotify = prev.spotify.overrideAttrs (oldAttrs: {
     src = prev.fetchurl {
       url = oldAttrs.src.url or "https://download.scdn.co/SpotifyARM64.dmg";
-      sha256 = "sha256-fTyACxbyIgg7EwIgnNvNerJGUwAVLP2bg0TMnOegWeQ=";
+      sha256 = "sha256-K+dwlT4hd/SWbQT23ESZY8gGQ8bf5x5CpepMz5Wd6Ng=";
     };
   });
 }
