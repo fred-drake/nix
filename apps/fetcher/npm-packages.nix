@@ -3,19 +3,19 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "ccstatusline" = {
-    "version" = "2.0.18";
-    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.0.18.tgz";
-    "url-hash" = "sha256-yfxChZhRhoFfeXbsf7riIfVr5IJ5SHh+MRsrYa5STDU=";
+    "version" = "2.0.20";
+    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.0.20.tgz";
+    "url-hash" = "sha256-/Fm03pcmcQqsnZJ3PIOD0j91MRSslTrlb8rg1VRhrJc=";
   };
   "ccusage" = {
-    "version" = "17.0.3";
-    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-17.0.3.tgz";
-    "url-hash" = "sha256-tfIT44gYt0QT1cC/W6fYndlSYD0RWhTKRp94QkwEi/0=";
+    "version" = "17.1.3";
+    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-17.1.3.tgz";
+    "url-hash" = "sha256-yK5Js1QEJ/QY0AufJFUz6CyEX5cO2hmsscIXyTCCJFw=";
   };
   "claude-code" = {
-    "version" = "1.0.128";
-    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.128.tgz";
-    "url-hash" = "sha256-kzQhEiCPT78BmcYiu92SMcYNUcgy5o4qTERcJSMXJ0A=";
+    "version" = "2.0.9";
+    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.9.tgz";
+    "url-hash" = "sha256-DKad+i1krmEm6xq+aA8pSQ0pQK7ykExCkCuSQZw++Qw=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";
@@ -23,8 +23,8 @@
     "url-hash" = "sha256-LNFoy/TmuAY7BJegdIcXVO3gM2HyiF1rjEX92F6u7+o=";
   };
   "tdd-guard" = {
-    "version" = "1.0.2";
-    "url" = "https://registry.npmjs.org/tdd-guard/-/tdd-guard-1.0.2.tgz";
-    "url-hash" = "sha256-SPUc2XqmjVXox/Y+bR2bA5+rYFPMCJl35OrzvbqtD8s=";
+    "version" = "1.1.0";
+    "url" = "https://registry.npmjs.org/tdd-guard/-/tdd-guard-1.1.0.tgz";
+    "url-hash" = "sha256-+dpl0liXlwQJf2ZGGQRzoxCA4FkJq1TIFLjZAqiTgIc=";
   };
 }
