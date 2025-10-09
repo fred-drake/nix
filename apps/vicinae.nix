@@ -43,11 +43,29 @@ in
     ];
 
     preConfigure = ''
-      export HOME=$TMPDIR
+            export HOME=$TMPDIR
+
+            # Make npm unavailable to prevent CMake from finding it
+            export PATH=$(echo $PATH | tr ':' '\n' | grep -v node | tr '\n' ':')
+
+            # Create a fake npm that does nothing
+            mkdir -p $TMPDIR/bin
+            cat > $TMPDIR/bin/npm << 'EOF'
+      #!/bin/sh
+      echo "npm is disabled in Nix build"
+      exit 0
+      EOF
+            chmod +x $TMPDIR/bin/npm
+            export PATH=$TMPDIR/bin:$PATH
     '';
 
     patchPhase = ''
       runHook prePatch
+
+      # Find and patch the main CMakeLists.txt to completely skip TypeScript builds
+      sed -i '/add_subdirectory.*typescript/d' CMakeLists.txt
+      sed -i '/include.*ExtensionApi/d' CMakeLists.txt
+      sed -i '/include.*ExtensionManager/d' CMakeLists.txt
 
       # Replace the entire ExtensionApi.cmake to skip npm builds
       cat > cmake/ExtensionApi.cmake << 'EOF'
@@ -56,8 +74,9 @@ in
       set(EXT_API_OUT_DIR "$\{CMAKE_SOURCE_DIR}/api/dist")
       set(API_DIST_DIR "$\{CMAKE_SOURCE_DIR}/api/dist")
 
-      # Create empty target
-      add_custom_target(build-api ALL
+      # Create empty target (do nothing)
+      add_custom_target(build-api
+        COMMAND ${pkgs.coreutils}/bin/true
         COMMENT "Skipping API build (Nix)"
       )
       EOF
@@ -68,11 +87,17 @@ in
       # Dummy ExtensionManager.cmake to skip npm builds
       set(EXT_MANAGER_DIST "$\{CMAKE_SOURCE_DIR}/vicinae/assets/extension-runtime.js")
 
-      # Create empty target
-      add_custom_target(build-extension-manager ALL
+      # Create empty target (do nothing)
+      add_custom_target(build-extension-manager
+        COMMAND ${pkgs.coreutils}/bin/true
         COMMENT "Skipping Extension Manager build (Nix)"
       )
       EOF
+      fi
+
+      # Completely remove typescript directory from build if it exists
+      if [ -d typescript ]; then
+        rm -rf typescript/*/CMakeLists.txt || true
       fi
 
       # Create all required dummy files that the build expects
@@ -129,7 +154,12 @@ in
     cmakeFlags = [
       "-G Ninja"
       "-DBUILD_TESTING=OFF"
+      "-DSKIP_NPM_BUILD=ON"
     ];
+
+    # Disable network access during build
+    __impureHostDeps = [];
+    __noChroot = false;
 
     meta = with lib; {
       description = "A high-performance, native launcher for Linux — built with C++ and Qt (without npm components)";

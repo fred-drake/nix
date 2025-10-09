@@ -4,7 +4,7 @@
   ...
 }: let
   kuma-waybar = pkgs.callPackage ./kuma-waybar.nix {};
-  spotifatius = pkgs.callPackage ../spotifatius.nix {};
+  # spotifatius = pkgs.callPackage ../spotifatius.nix {};  # Temporarily disabled due to CMake build issues
   ccusage-waybar = pkgs.callPackage ./ccusage-waybar.nix {};
 in {
   sops.secrets.uptime-kuma-env = {
@@ -12,11 +12,11 @@ in {
     mode = "0400";
     key = "data";
   };
-  sops.secrets.spotifatius-env = {
-    sopsFile = config.secrets.workstation.spotifatius-env;
-    mode = "0400";
-    key = "data";
-  };
+  # sops.secrets.spotifatius-env = {
+  #   sopsFile = config.secrets.workstation.spotifatius-env;
+  #   mode = "0400";
+  #   key = "data";
+  # };
 
   home = {
     packages = [
@@ -25,13 +25,13 @@ in {
     ];
 
     file = {
-      ".config/spotifatius/config.toml".text = ''
-        format = "{title} {separator} {artist}"
-      '';
+      # ".config/spotifatius/config.toml".text = ''
+      #   format = "{title} {separator} {artist}"
+      # '';
 
       ".config/waybar/config".text = builtins.toJSON {
         position = "top";
-        modules-left = ["custom/osicon" "cpu" "load" "memory" "disk" "custom/spotify"];
+        modules-left = ["custom/osicon" "cpu" "load" "memory" "disk"]; # Removed "custom/spotify" temporarily
         modules-center = ["clock"];
         modules-right = ["custom/ccusage" "idle_inhibitor" "custom/kuma-waybar" "pulseaudio" "bluetooth" "network" "custom/power"];
 
@@ -133,13 +133,13 @@ in {
           on-click = "${pkgs.wlogout}/bin/wlogout --protocol layer-shell";
         };
 
-        "custom/spotify" = {
-          format = "  {}";
-          return-type = "json";
-          on-click-right = "source ${config.sops.secrets.spotifatius-env.path}; ${spotifatius}/bin/spotifatius toggle-liked";
-          exec = "source ${config.sops.secrets.spotifatius-env.path} ; ${spotifatius}/bin/spotifatius monitor";
-          max-length = 108;
-        };
+        #         "custom/spotify" = {
+        #           format = "  {}";
+        #           return-type = "json";
+        #           on-click-right = "source ${config.sops.secrets.spotifatius-env.path}; ${spotifatius}/bin/spotifatius toggle-liked";
+        #           exec = "source ${config.sops.secrets.spotifatius-env.path} ; ${spotifatius}/bin/spotifatius monitor";
+        #           max-length = 108;
+        #         };  # Temporarily disabled due to spotifatius CMake build issues
       };
 
       ".config/waybar/style.css".source = ./style.css;

@@ -6,7 +6,7 @@
 }: let
   home = config.home.homeDirectory;
   vicinae = pkgs.callPackage ../../../apps/vicinae.nix {};
-  spotifatius = pkgs.callPackage ./spotifatius.nix {};
+  # spotifatius = pkgs.callPackage ./spotifatius.nix {};  # Temporarily disabled due to CMake build issues
 in {
   imports = [./waybar];
 
@@ -116,7 +116,7 @@ in {
     packages = [
       pkgs.playerctl
       vicinae
-      spotifatius
+      # spotifatius  # Temporarily disabled due to CMake build issues
       pkgs.nerd-fonts.jetbrains-mono
     ];
   };
@@ -444,8 +444,8 @@ in {
         "$mainMod, M, exit,"
         "$mainMod, E, exec, $fileManager"
         "$mainMod, V, togglefloating,"
-        # "SUPER, SPACE, exec, $menu"
-        "SUPER, SPACE, exec, vicinae vicinae://toggle"
+        "SUPER, SPACE, exec, $menu"
+        # "SUPER, SPACE, exec, vicinae vicinae://toggle"
         "$mainMod, P, pseudo, # dwindle"
         "SUPER, V, exec, ${vicinae}/bin/vicinae # Launch Vicinae"
         # "$mainMod, SHIFT, J, togglesplit, # dwindle"
@@ -453,7 +453,7 @@ in {
         "$mainMod CTRL, A, exec, $terminal"
         "$mainMod CTRL, Z, exec, zen"
         "$mainMod CTRL, O, exec, obsidian --disable-gpu"
-        "$mainMod CTRL ALT, L, exec, ${spotifatius}/bin/spotifatius toggle-liked"
+        # "$mainMod CTRL ALT, L, exec, ${spotifatius}/bin/spotifatius toggle-liked"  # Temporarily disabled
         "$mainMod CTRL, L, exec, localsend_app"
 
         ", Print, exec, ${pkgs.hyprshot}/bin/hyprshot --mode region -o ${home}/Screenshots"

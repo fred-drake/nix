@@ -3,9 +3,9 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "ccstatusline" = {
-    "version" = "2.0.20";
-    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.0.20.tgz";
-    "url-hash" = "sha256-/Fm03pcmcQqsnZJ3PIOD0j91MRSslTrlb8rg1VRhrJc=";
+    "version" = "2.0.21";
+    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.0.21.tgz";
+    "url-hash" = "sha256-+puIi9gALJw7EXLt0AT4fmQq8UmtLfZPxs8n0aFGyiE=";
   };
   "ccusage" = {
     "version" = "17.1.3";
@@ -13,9 +13,9 @@
     "url-hash" = "sha256-yK5Js1QEJ/QY0AufJFUz6CyEX5cO2hmsscIXyTCCJFw=";
   };
   "claude-code" = {
-    "version" = "2.0.9";
-    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.9.tgz";
-    "url-hash" = "sha256-DKad+i1krmEm6xq+aA8pSQ0pQK7ykExCkCuSQZw++Qw=";
+    "version" = "2.0.11";
+    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.11.tgz";
+    "url-hash" = "sha256-kxNCkkeE02uWWSmrqOkJQRdCBM2i+gbXTRsiAw6x4gU=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";
