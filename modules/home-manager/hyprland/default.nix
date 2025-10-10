@@ -282,6 +282,10 @@ in {
         "GNOME_THEME,Adwaita:dark"
         "QT_STYLE_OVERRIDE,Adwaita-Dark"
         "QT_QPA_PLATFORMTHEME,gtk3"
+        # Gaming performance optimizations
+        "SDL_VIDEODRIVER,wayland"
+        "__GL_VRR_ALLOWED,0"
+        "WLR_DRM_NO_ATOMIC,1"
       ];
 
       #####################
@@ -328,7 +332,7 @@ in {
 
         # https://wiki.hyprland.org/Configuring/Variables/#blur
         blur = {
-          enabled = true;
+          enabled = false; # Disabled for gaming performance
           size = 3;
           passes = 1;
 
@@ -338,7 +342,7 @@ in {
 
       # https://wiki.hyprland.org/Configuring/Variables/#animations
       animations = {
-        enabled = "yes, please :)";
+        enabled = false; # Disabled for gaming performance
 
         # Default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
 
@@ -395,6 +399,8 @@ in {
       misc = {
         force_default_wallpaper = -1; # Set to 0 or 1 to disable the anime mascot wallpapers
         disable_hyprland_logo = false; # If true disables the random hyprland logo / anime girl background. :(
+        vfr = true; # Enable variable frame rate for better gaming performance
+        vrr = 2; # Enable variable refresh rate (2 = fullscreen only, better for gaming)
       };
 
       #############

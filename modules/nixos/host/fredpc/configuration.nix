@@ -76,6 +76,7 @@ in {
     nerd-fonts.hack
 
     # Gaming
+    gamescope # Wayland micro-compositor for gaming performance
     # steam
     # steamcmd
     # steam-tui
@@ -187,12 +188,13 @@ in {
   # NVidia
 
   # Steam
-  # programs.steam = {
-  #   enable = true;
-  #   remotePlay.openFirewall = true;
-  #   dedicatedServer.openFirewall = true;
-  #   localNetworkGameTransfers.openFirewall = true;
-  # };
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true;
+    gamescopeSession.enable = true; # Enable gamescope integration
+  };
 
   # Podman
   virtualisation = {
