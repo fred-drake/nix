@@ -129,6 +129,19 @@
                 }
               ];
             }
+            {
+              type = "rss";
+              limit = 20;
+              collapse-after = 3;
+              cache = "1h";
+              feeds = [
+                {
+                  url = "https://www.google.com/alerts/feeds/07701143563028353434/797330850344076965";
+                  title = "Google Alerts - AI Software Dev";
+                  limit = 20;
+                }
+              ];
+            }
           ];
         }
         {
