@@ -30,6 +30,18 @@ in {
         };
       };
     };
+    mcp-chrome = {
+      mode = "0400";
+      path = "${home}/mcp/chrome.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          chrome = {
+            command = "npx";
+            args = ["-y" "chrome-devtools-mcp@latest"];
+          };
+        };
+      };
+    };
     mcp-brave = {
       mode = "0400";
       path = "${home}/mcp/brave.json";
@@ -212,6 +224,23 @@ in {
             command = "npx";
             args = ["-y" "@stripe/mcp" "--tools=all"];
             env = {"STRIPE_SECRET_KEY" = config.sops.placeholder.stripe-sandbox-api-key;};
+          };
+        };
+      };
+    };
+
+    mcp-google-sheets = {
+      mode = "0400";
+      path = "${home}/mcp/google-sheets.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          google-sheets = {
+            command = "uvx";
+            args = ["mcp-google-sheets@latest"];
+            env = {
+              SERVICE_ACCOUNT_PATH = config.sops.secrets.google-service-account.path;
+              DRIVE_FOLDER_ID = config.soft-secrets.workstation.google-service-drive-id;
+            };
           };
         };
       };

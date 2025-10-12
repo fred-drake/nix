@@ -193,6 +193,12 @@ in {
         mode = "0400";
         key = "sandbox";
       };
+
+      google-service-account = {
+        sopsFile = config.secrets.workstation.google-service-account;
+        mode = "0400";
+        key = "data";
+      };
     };
   };
 
