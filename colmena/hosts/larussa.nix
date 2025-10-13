@@ -50,6 +50,9 @@ in {
       ../../modules/nixos/host/larussa/jellyfin.nix
       ../../modules/nixos/host/larussa/radarr.nix
       ../../modules/nixos/host/larussa/sonarr.nix
+      ../../modules/nixos/host/larussa/calibre.nix
+      ../../modules/nixos/host/larussa/calibre-web.nix
+      ../../modules/nixos/host/larussa/lazylibrarian.nix
       (nodeExporter.mkNodeExporter "larussa")
     ];
 

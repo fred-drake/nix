@@ -34,6 +34,7 @@
     # Set group writable and setgid on storage directories
     "d /mnt/array/storage1 2775 svcuser users -"
     "d /mnt/array/storage1/videos 2775 svcuser users -"
+    "d /mnt/array/storage1/calibre 2775 svcuser users -"
     "d /mnt/array/storage1/sabnzbd_downloads 2775 svcuser users -"
     "d /mnt/array/storage1/sabnzbd_downloads_incomplete 2775 svcuser users -"
   ];

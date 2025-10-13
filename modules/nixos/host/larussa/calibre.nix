@@ -9,14 +9,25 @@ in {
     "d /var/calibre/config 0755 99 100 -"
   ];
 
-  security.acme.certs."calibre.${config.soft-secrets.networking.domain}" = {
-    domain = "calibre.${config.soft-secrets.networking.domain}";
-    dnsProvider = "cloudflare";
-    dnsResolver = "1.1.1.1:53";
-    webroot = null;
-    listenHTTP = null;
-    s3Bucket = null;
-    environmentFile = config.sops.secrets.cloudflare-api-key.path;
+  security.acme.certs = {
+    "calibre-desktop.${config.soft-secrets.networking.domain}" = {
+      domain = "calibre-desktop.${config.soft-secrets.networking.domain}";
+      dnsProvider = "cloudflare";
+      dnsResolver = "1.1.1.1:53";
+      webroot = null;
+      listenHTTP = null;
+      s3Bucket = null;
+      environmentFile = config.sops.secrets.cloudflare-api-key.path;
+    };
+    "calibre-desktop-web.${config.soft-secrets.networking.domain}" = {
+      domain = "calibre-desktop-web.${config.soft-secrets.networking.domain}";
+      dnsProvider = "cloudflare";
+      dnsResolver = "1.1.1.1:53";
+      webroot = null;
+      listenHTTP = null;
+      s3Bucket = null;
+      environmentFile = config.sops.secrets.cloudflare-api-key.path;
+    };
   };
 
   services.nginx.virtualHosts = {
@@ -40,7 +51,7 @@ in {
         '';
       };
     };
-    "calibre-web.${config.soft-secrets.networking.domain}" = {
+    "calibre-desktop-web.${config.soft-secrets.networking.domain}" = {
       enableACME = true;
       forceSSL = true;
       locations."/" = {
@@ -65,7 +76,7 @@ in {
   virtualisation.oci-containers.containers.calibre = {
     image = containers-sha."ghcr.io"."linuxserver/calibre"."latest"."linux/amd64";
     autoStart = true;
-    ports = ["127.0.0.1:8080:8082" "127.0.0.1:8081:8081"];
+    ports = ["127.0.0.1:8082:8080" "127.0.0.1:8081:8081"];
     volumes = [
       "/mnt/array/storage1/calibre:/config"
     ];
