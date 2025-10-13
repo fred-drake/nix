@@ -69,28 +69,118 @@ passwd
 
 You can now SSH into the machine.  Follow the steps above for changing `colmena.deployment.targetHost` and in this case `colmena.deployment.targetUser` to `nixos`.
 
-# Epson Scanner
+# Epson Scanner (ES-400)
 
-## Device setup on Proxmox host
+## Device Setup on Proxmox Host
 
-For the proxmox node connected to the Epson scanner, you will need to create a file `/etc/udev/rules.d/99-epson-scanner.rules` on the proxmox host with this content
+### 1. Create Udev Rule
+
+Create a udev rule at `/etc/udev/rules.d/99-epson-scanner-lxc.rules` on the Proxmox host:
+
 ```bash
-SUBSYSTEM=="usb", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0156", SYMLINK+="epson-scanner", MODE="0660", GROUP="scanner"
+# Epson ES-400 Scanner for LXC container 120
+# Container GID 59 (scanner) maps to host GID 100059
+# Create stable symlink and set permissions for LXC passthrough
+SUBSYSTEM=="usb", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0156", SYMLINK+="epson-scanner", GROUP="100059", MODE="0660"
 ```
 
-Then enable the changes on the proxmox host:
+**Note:** The GROUP is set to `100059` because unprivileged LXC containers use UID/GID mapping. The container's GID 59 (scanner group) maps to host GID 100059.
+
+### 2. Apply Udev Changes
+
 ```bash
 udevadm control --reload-rules
-udevadm trigger
+udevadm trigger --subsystem-match=usb --attr-match=idVendor=04b8
 ```
 
-You will now have a symlink `/dev/epson-scanner` that you can use to passthrough.
-
-## Passing through to LXC container
-
-After your container has been created, add the following (in this example, we assume you are using container ID 120):
+Verify the symlink and permissions:
 ```bash
-pct set 120 -dev0 /dev/epson-scanner,mode=0660
+ls -la /dev/epson-scanner
+# Should show: lrwxrwxrwx 1 root root 15 ... /dev/epson-scanner -> bus/usb/003/XXX
+
+ls -la /dev/bus/usb/003/XXX  # Use actual device number
+# Should show: crw-rw---- 1 root 100059 ...
 ```
 
-Then restart your container.
+## Passing Through to LXC Container
+
+### 1. Configure LXC Container
+
+Edit `/etc/pve/lxc/120.conf` (replace 120 with your container ID):
+
+```bash
+# Pass through the epson-scanner device with proper UID/GID mapping
+dev0: /dev/epson-scanner,uid=0,gid=59,mode=0660
+
+# Allow access to USB character devices
+lxc.cgroup2.devices.allow: c 189:* rwm
+
+# Mount the entire USB bus 003 directory (adjust bus number if needed)
+lxc.mount.entry: /dev/bus/usb/003 dev/bus/usb/003 none bind,optional,create=dir 0 0
+```
+
+**Important Notes:**
+- The `gid=59` maps to the scanner group inside the container
+- The `lxc.mount.entry` mounts the entire USB bus directory, which is needed for SANE to auto-detect the scanner
+- If the scanner is on a different USB bus (e.g., 004), update the mount entry accordingly
+
+### 2. Restart Container
+
+```bash
+pct stop 120
+pct start 120
+```
+
+### 3. Verify Inside Container
+
+SSH into the container and verify:
+
+```bash
+# Check device permissions
+ls -la /dev/epson-scanner
+# Should show: crw-rw---- 1 root scanner ...
+
+# Check USB devices
+ls -la /dev/bus/usb/003/
+# Should show scanner device with proper permissions
+
+# List available scanners
+scanimage -L
+# Should show: device `epsonscan2:ES-400:...` and `epsonds:libusb:003:XXX`
+```
+
+## Using the Scanner
+
+The scanner configuration includes two commands:
+
+**Simple Scan (600 DPI, PDF):**
+```bash
+scan
+```
+- Single page from ADF or flatbed
+- Output: `/home/default/scans/scan-TIMESTAMP.pdf`
+
+**Duplex Scan (600 DPI, PDF, both sides):**
+```bash
+scan-duplex
+```
+- Multiple pages from ADF, both sides
+- Merges into single PDF
+- Output: `/home/default/scans/scan-duplex-TIMESTAMP.pdf`
+
+## Troubleshooting
+
+**Scanner not detected:**
+- Check USB device number hasn't changed: `readlink /dev/epson-scanner` on host
+- Verify permissions on host: `ls -la /dev/bus/usb/003/XXX`
+- Restart container: `pct stop 120 && pct start 120`
+
+**Device I/O errors:**
+- Scanner may have moved to different USB bus
+- Check if USB bus mount in LXC config matches actual bus
+- Power cycle the scanner
+
+**Permissions issues:**
+- Verify udev rule is applying: `udevadm test /sys/devices/.../usb3/3-X`
+- Check user is in scanner group: `groups` (should include scanner)
+- Trigger udev: `udevadm trigger --subsystem-match=usb --attr-match=idVendor=04b8`
