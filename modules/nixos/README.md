@@ -34,3 +34,63 @@ mkdir -p ~/.ssh && curl "https://github.com/fred-drake.keys" > ~/.ssh/authorized
 - Copy over your `id_infrastructure` key to `/home/default`. This key is used to decrypt secrets in the secrets repository.
 - Change the `targetHost` and `targetUser` back to their permanent settings, and re-run the init colmena target. This will push the necessary secrets to the server.
 - Finally, run the regular colmena target, which will install the necessary applications. You will use this target for all subsequent updates. Note that if your server uses podman containers, you might get an error with the service. This should be a one time timing error, just re-run the target.
+
+# Setting up Raspberry Pi with NixOS
+
+## Get the SD Image From Hydra
+
+1. Go to https://hydra.nixos.org/jobset/nixos/release-25.05
+2. Look for a build containing sd_image or sd-image
+3. Grab the latest release that passed checks
+
+## Decompress the image
+
+```bash
+unzstd -d image-name-aarch64-linux.img.zst
+```
+
+## Write the uncompressed image to SD card at /dev/sdX
+
+```bash
+sudo dd if=image-name-aarch64-linux.img of=/dev/sdX bs=4096 conv=fsync status=progress
+```
+
+## If you need to enable WiFi
+
+```bash
+wpa_passphrase 'SSID' 'passphrase' > /tmp/wpa.conf
+sudo wpa_supplicant -B -i wlan0 -c /tmp/wpa.conf
+```
+
+## Set up a temporary password for nixos user
+```bash
+passwd
+```
+
+You can now SSH into the machine.  Follow the steps above for changing `colmena.deployment.targetHost` and in this case `colmena.deployment.targetUser` to `nixos`.
+
+# Epson Scanner
+
+## Device setup on Proxmox host
+
+For the proxmox node connected to the Epson scanner, you will need to create a file `/etc/udev/rules.d/99-epson-scanner.rules` on the proxmox host with this content
+```bash
+SUBSYSTEM=="usb", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0156", SYMLINK+="epson-scanner", MODE="0660", GROUP="scanner"
+```
+
+Then enable the changes on the proxmox host:
+```bash
+udevadm control --reload-rules
+udevadm trigger
+```
+
+You will now have a symlink `/dev/epson-scanner` that you can use to passthrough.
+
+## Passing through to LXC container
+
+After your container has been created, add the following (in this example, we assume you are using container ID 120):
+```bash
+pct set 120 -dev0 /dev/epson-scanner,mode=0660
+```
+
+Then restart your container.
