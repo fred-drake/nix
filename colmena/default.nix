@@ -25,6 +25,7 @@
   glance = import ./hosts/glance.nix {inherit self nixpkgs-stable secrets sops-nix;};
   arm64builder = import ./hosts/arm64builder.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   minio = import ./hosts/minio.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
+  kavita = import ./hosts/kavita.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -50,6 +51,7 @@ in {
   inherit (glance) _glance;
   inherit (arm64builder) _arm64builder;
   inherit (minio) _minio;
+  inherit (kavita) _kavita;
 
   # Init configurations
   "dns1-init" = dns1."dns1-init";
@@ -70,6 +72,7 @@ in {
   "glance-init" = glance."glance-init";
   "arm64builder-init" = arm64builder."arm64builder-init";
   "minio-init" = minio."minio-init";
+  "kavita-init" = kavita."kavita-init";
 
   # Full configurations
   "dns1" = dns1."dns1";
@@ -90,4 +93,5 @@ in {
   "glance" = glance."glance";
   "arm64builder" = arm64builder."arm64builder";
   "minio" = minio."minio";
+  "kavita" = kavita."kavita";
 }

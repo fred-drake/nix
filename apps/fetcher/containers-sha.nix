@@ -95,6 +95,13 @@ _: {
       };
     };
   };
+  "lscr.io" = {
+    "linuxserver/kavita" = {
+      "latest" = {
+        "linux/amd64" = "lscr.io/linuxserver/kavita@sha256:3196f66d2a4669e740049177fe50466697434e8fa6aaf2a19b700467e1502f16";
+      };
+    };
+  };
   "quay.io" = {
     "minio/minio" = {
       "latest" = {
