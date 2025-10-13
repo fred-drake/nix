@@ -68,7 +68,7 @@ in {
 
       scriptdir = /etc/scanbd/scripts
 
-      pidfile = "/var/run/scanbd.pid"
+      pidfile = "/run/scanbd/scanbd.pid"
 
       timeout = 500
 
@@ -108,7 +108,8 @@ in {
       Type = "forking";
       User = "default";
       Group = "scanner";
-      PIDFile = "/var/run/scanbd.pid";
+      RuntimeDirectory = "scanbd";
+      PIDFile = "/run/scanbd/scanbd.pid";
       ExecStart = "${pkgs.scanbd}/bin/scanbd -c /etc/scanbd/scanbd.conf";
       ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       Restart = "on-failure";
