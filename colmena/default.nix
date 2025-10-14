@@ -27,6 +27,7 @@
   minio = import ./hosts/minio.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   kavita = import ./hosts/kavita.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   scanner = import ./hosts/scanner.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
+  paperless = import ./hosts/paperless.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -54,6 +55,7 @@ in {
   inherit (minio) _minio;
   inherit (kavita) _kavita;
   inherit (scanner) _scanner;
+  inherit (paperless) _paperless;
 
   # Init configurations
   "dns1-init" = dns1."dns1-init";
@@ -76,6 +78,7 @@ in {
   "minio-init" = minio."minio-init";
   "kavita-init" = kavita."kavita-init";
   "scanner-init" = scanner."scanner-init";
+  "paperless-init" = paperless."paperless-init";
 
   # Full configurations
   "dns1" = dns1."dns1";
@@ -98,4 +101,5 @@ in {
   "minio" = minio."minio";
   "kavita" = kavita."kavita";
   "scanner" = scanner."scanner";
+  "paperless" = paperless."paperless";
 }

@@ -15,6 +15,11 @@ _: {
     };
   };
   "docker.io" = {
+    "clusterzx/paperless-ai" = {
+      "latest" = {
+        "linux/amd64" = "docker.io/clusterzx/paperless-ai@sha256:ea2309b446ce478dd0bb0263de201229a218af7e217588f619ffaf34e3ebfbe3";
+      };
+    };
     "fallenbagel/jellyseerr" = {
       "latest" = {
         "linux/amd64" = "docker.io/fallenbagel/jellyseerr@sha256:499fbe958fa4a0c93172a231c14898986556bb28bd5cd569a0f41dbf887b04d7";
@@ -25,9 +30,19 @@ _: {
         "linux/amd64" = "docker.io/glanceapp/glance@sha256:92989752b372b58d49a98b9f7c70004bda9b8fb661f84cdb05abaae5ba450763";
       };
     };
+    "gotenberg/gotenberg" = {
+      "latest" = {
+        "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:6d2eeeedf12eab585cfc44f3292a172b7cb3de193ef5dcf16d2cad7b6476a828";
+      };
+    };
     "jellyfin/jellyfin" = {
       "latest" = {
         "linux/amd64" = "docker.io/jellyfin/jellyfin@sha256:3b38dae4c3ddd6ebc7378538fba4d3f314070ebefbdb3d688166b7c8658fb123";
+      };
+    };
+    "library/redis" = {
+      "latest" = {
+        "linux/amd64" = "docker.io/library/redis@sha256:b83648c7ab6752e1f52b88ddf5dabc11987132336210d26758f533fb01325865";
       };
     };
     "louislam/uptime-kuma" = {
@@ -52,14 +67,14 @@ _: {
     };
     "sonarqube" = {
       "latest" = {
-        "linux/amd64" = "docker.io/sonarqube@sha256:2ef56ec9063dbcf6cfa07a94825d68a0c0d155798bb8d8c461213bb2c9b18577";
+        "linux/amd64" = "docker.io/sonarqube@sha256:051a9e932fe55a68cf5d87cacf508d84f61ca8f95ca0deef473489b997259b74";
       };
     };
   };
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:fb984a8dbb8bf6e6bd46e283b6ed0ea61d76c459205b3241cdc8488ff1b7db5c";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:8e52be313448e6914b289e418fce4a3d9b64b1077007a46a3a89435489bfa7cb";
       };
     };
   };
@@ -102,6 +117,16 @@ _: {
     "onedr0p/exportarr" = {
       "latest" = {
         "linux/amd64" = "ghcr.io/onedr0p/exportarr@sha256:89c48c73e5285bfd707afcf02d5d8d6dcfc1d955aa7160d08145654b4bc8dfbc";
+      };
+    };
+    "paperless-ngx/paperless-ngx" = {
+      "latest" = {
+        "linux/amd64" = "ghcr.io/paperless-ngx/paperless-ngx@sha256:7729fccc4a763ca85bac26b9c4a495b6816e59be8fbd27d29c0e773201bfc6e7";
+      };
+    };
+    "paperless-ngx/tika" = {
+      "latest" = {
+        "linux/amd64" = "ghcr.io/paperless-ngx/tika@sha256:e9e02af066dde04e84fdbc99e5d49ef2eaccf75378cc0aa4d4ef2559639b9753";
       };
     };
   };

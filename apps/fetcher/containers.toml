@@ -110,4 +110,29 @@ repository = "lscr.io"
 name = "linuxserver/lazylibrarian"
 tag = "latest"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "library/redis"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "paperless-ngx/paperless-ngx"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "paperless-ngx/tika"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "gotenberg/gotenberg"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "clusterzx/paperless-ai"
+tag = "latest"
+architectures = ["linux/amd64"]
 

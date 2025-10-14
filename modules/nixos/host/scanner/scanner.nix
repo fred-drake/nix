@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: let
+{pkgs, ...}: let
   epsonscan2-custom = pkgs.epsonscan2.override {
     withNonFreePlugins = true;
     withGui = false;
