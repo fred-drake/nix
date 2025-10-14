@@ -75,4 +75,10 @@
     rev = "6eceb8e992ba2d1d89d370961a18a1fdeae729fa";
     hash = "sha256-esQiz9nduOm7nAUIq/Y5dMMxpKo2m19lEbZl6iRcxpo=";
   };
+  scanimage-web-src = pkgs.fetchFromGitHub {
+    owner = "fred-drake";
+    repo = "scanimage-web";
+    rev = "030c6a985cb22eca47a5fed7f0c67f9786afb284";
+    hash = "sha256-JuGiHHvjz5EC+BUnthjIA9Sgef39fo7QtWjf4kB5U9g=";
+  };
 }

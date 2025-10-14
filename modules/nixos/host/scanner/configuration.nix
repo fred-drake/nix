@@ -9,7 +9,8 @@
     # Include the default lxc/lxd configuration.
     # "${modulesPath}/virtualisation/lxc-container.nix"
     "${modulesPath}/virtualisation/proxmox-lxc.nix"
-    # ../../../secrets/cloudflare.nix
+    ../../../secrets/cloudflare.nix
+    ../../../secrets/scanner.nix
   ];
 
   # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;

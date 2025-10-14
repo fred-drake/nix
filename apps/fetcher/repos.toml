@@ -35,3 +35,6 @@ url = "https://github.com/nizos/tdd-guard.git"
 [[repos]]
 name = "spotifatius-src"
 url = "https://github.com/AndreasBackx/spotifatius"
+[[repos]]
+name = "scanimage-web-src"
+url = "https://github.com/fred-drake/scanimage-web"
