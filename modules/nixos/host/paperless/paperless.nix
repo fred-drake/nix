@@ -40,6 +40,13 @@ in {
   };
 
   services = {
+    openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = false;
+        PermitRootLogin = "no";
+      };
+    };
     nginx = {
       enable = true;
       virtualHosts = {
@@ -95,6 +102,15 @@ in {
     "d /var/redis/data 0755 1000 1000 -"
     "d /var/postgresql/data 0755 1000 1000 -"
     "d /var/paperless-ai/data 0755 1000 1000 -"
+  ];
+
+  environment.systemPackages = [
+    pkgs.rsync
+  ];
+
+  # Add public key for scanner to connect
+  users.users.default.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIaQl0o8WD6inmcntGzrCmHdsB/Gj5PEUXSFM/eYrukI"
   ];
 
   virtualisation = {

@@ -42,6 +42,7 @@ in {
   in {
     imports = [
       self.colmena._scanner
+      ../../modules/secrets/scanner.nix
       ../../modules/nixos/host/scanner/scanner.nix
       (nodeExporter.mkNodeExporter "scanner")
     ];
