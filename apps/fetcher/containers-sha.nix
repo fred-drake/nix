@@ -74,7 +74,7 @@ _: {
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:8e52be313448e6914b289e418fce4a3d9b64b1077007a46a3a89435489bfa7cb";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:673934005439fc447d93554e0b18dfb106c50c4835c4f3577263f267cc0c5d68";
       };
     };
   };
@@ -86,7 +86,7 @@ _: {
     };
     "linuxserver/calibre" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/calibre@sha256:71b68c2f56c9f229e84e2dab0c4679e06ffd0a792409387b56660d2a13df67a2";
+        "linux/amd64" = "ghcr.io/linuxserver/calibre@sha256:d704e5d7bc426a8638db925781bc4f589260cee94b984264c726358ab96f6de3";
       };
     };
     "linuxserver/calibre-web" = {
@@ -96,22 +96,22 @@ _: {
     };
     "linuxserver/radarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:7300d13a6b6c6490d561097d03f4873db769efa2373473f7583e27717168c915";
+        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:fccfe41915d9670602e224ce929c3487ed37a4fcc0e29c8d1d370586835ae5ab";
       };
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:17984b25002df06cce40f5a118c48711b24adaef87422acef1bb6b23241df00f";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:34ea33bbabb8d4a45460431613a3e856b7550fe90d6b70c6537e6e166b981ee8";
       };
     };
     "linuxserver/sonarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:cc4716de294bc8499ec5ceb5d36191f24f6ea3a17a2c06530b8715033d3e0cf7";
+        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:1f749927a158cdc9e2fe5fa5532509af13a80bbcb8c814ce3079b31dd1c2e076";
       };
     };
     "monstermuffin/mergerfs-cache-mover" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:b55ca82267dfdab97e974ddddd49765d6b314103fa928d3012267d408c08b869";
+        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:f512c26e5e42d1b6457ccd2abf21a904bacf728c43b273d64b86912562e1e625";
       };
     };
     "onedr0p/exportarr" = {
@@ -138,7 +138,7 @@ _: {
     };
     "linuxserver/lazylibrarian" = {
       "latest" = {
-        "linux/amd64" = "lscr.io/linuxserver/lazylibrarian@sha256:d14cb7e9066b95275bb71056165b1a6da17cb28e5a27c33d4075f3e71b902695";
+        "linux/amd64" = "lscr.io/linuxserver/lazylibrarian@sha256:62ad7e3bd88ada6d27deddc4df07a8019b13ddcd488c9841f7ec7bd80dffefc3";
       };
     };
   };

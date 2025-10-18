@@ -35,7 +35,6 @@ in {
   imports = [
     ../../apps/zsh.nix
     ../../apps/fish.nix
-    ../../apps/nushell.nix
     ../../apps/tmux.nix
     ../../apps/nixvim
     ./tmux-windev-settings.nix
