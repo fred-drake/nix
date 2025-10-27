@@ -14,10 +14,14 @@
       prettybat = stableBatExtras.prettybat.overrideAttrs (_: {doCheck = false;});
     };
 
-  spotify = prev.spotify.overrideAttrs (oldAttrs: {
-    src = prev.fetchurl {
-      url = oldAttrs.src.url or "https://download.scdn.co/SpotifyARM64.dmg";
-      sha256 = "sha256-0gwoptqLBJBM0qJQ+dGAZdCD6WXzDJEs0BfOxz7f2nQ=";
-    };
-  });
+  spotify =
+    if prev.stdenv.isDarwin
+    then
+      prev.spotify.overrideAttrs (oldAttrs: {
+        src = prev.fetchurl {
+          url = oldAttrs.src.url or "https://download.scdn.co/SpotifyARM64.dmg";
+          sha256 = "sha256-0gwoptqLBJBM0qJQ+dGAZdCD6WXzDJEs0BfOxz7f2nQ=";
+        };
+      })
+    else prev.spotify;
 }
