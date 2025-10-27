@@ -47,6 +47,7 @@ in {
       config.allowUnfree = true;
       config.cudaSupport = true;
       overlays = [
+        (import ../overlays/default.nix {inherit inputs;})
         nix4vscode.overlays.forVscode
         (_: _prev: {
           inherit
