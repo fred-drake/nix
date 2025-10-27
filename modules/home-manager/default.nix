@@ -322,7 +322,7 @@ in {
     # Git configuration
     git = {
       enable = true;
-      extraConfig = {
+      settings = {
         core.pager = "delta";
         credential.helper = "store";
         delta = {
@@ -344,11 +344,13 @@ in {
         init.defaultBranch = "master";
         interactive.diffFilter = "delta --color-only --features=interactive";
         pull.rebase = true;
+        user = {
+          email = "fred.drake@gmail.com";
+          name = "Fred Drake";
+        };
       };
       ignores = ["*~" ".DS_Store" "*.swp"];
       lfs.enable = true;
-      userEmail = "fred.drake@gmail.com";
-      userName = "Fred Drake";
     };
 
     # Enable other utilities
