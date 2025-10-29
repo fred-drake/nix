@@ -71,9 +71,7 @@
       # Using zed in homebrew because nix pkg is currently broken for Darwin
       "nikitabobko/tap/aerospace"
       "balenaetcher"
-      "brave-browser"
       "bruno"
-      "calibre"
       "claude"
       "daisydisk"
       "finicky"
@@ -91,7 +89,6 @@
       "sourcetree"
       # "tailscale"
       "vlc"
-      "windsurf"
       "zen"
       "zoom"
     ];

@@ -24,8 +24,6 @@
   non-mac-mini-casks = [
     "godot-mono"
     "steam"
-    "transmission"
-    "ultimaker-cura"
     "wine-stable"
     "winbox"
     # "zed"  # Temporary disable to run the pre-release
