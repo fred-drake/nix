@@ -41,6 +41,7 @@
       #   # "com.koxudaxi.ruff"
       #   # "nix-idea"
       # ])
+      pkgs.dotnet-sdk
     ]; # Core utilities package
     systemPath = [
       # "/opt/homebrew/bin"
