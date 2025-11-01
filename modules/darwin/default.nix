@@ -64,11 +64,12 @@
     masApps = {
       # Mac App Store applications
       "Bitwarden" = 1352778147;
+      "DaVinci Resolve" = 571213070;
       "Pages" = 409201541;
       "RunCat" = 1429033973;
       "The Unarchiver" = 425424353;
-      "Xcode" = 497799835;
       "WireGuard" = 1451685025;
+      "Xcode" = 497799835;
     };
     casks = [
       # Homebrew casks (GUI applications)
