@@ -97,6 +97,11 @@ in {
           recursive = true;
         };
 
+        # Ghostty configuration (base config for all hosts)
+        ".config/ghostty/config".text = ''
+          app-notifications = no-clipboard-copy
+        '';
+
         "Pictures" = {
           source = ../../homefiles/Pictures;
           recursive = true;
