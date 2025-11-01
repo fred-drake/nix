@@ -1,5 +1,12 @@
 # Configuration specific to the Mac Studio machine
-{non-mac-mini-casks, ...}: {
+{
+  non-mac-mini-casks,
+  lib,
+  ...
+}: {
+  # User configuration - override home directory for external drive
+  users.users.fdrake.home = lib.mkForce "/Volumes/External/Users/fdrake";
+
   homebrew = {
     casks = ["mutedeck" "proxy-audio-device" "elgato-stream-deck" "vmware-fusion"] ++ non-mac-mini-casks;
     masApps = {
@@ -8,6 +15,7 @@
   };
 
   system.defaults.NSGlobalDomain."com.apple.trackpad.scaling" = 2.0; # Set trackpad speed to a faster setting
+
   system.keyboard = {
     enableKeyMapping = true;
     userKeyMapping = [

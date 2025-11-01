@@ -8,7 +8,11 @@
 #   - Security settings
 #
 # Individual device-specific configurations should be placed in separate files.
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   # Environment configuration
   environment = {
     etc = {
@@ -162,6 +166,7 @@
       };
       trackpad.Clicking = true; # Enable tap to click
       menuExtraClock.ShowSeconds = true; # Show seconds in menu bar clock
+      screencapture.location = "${config.users.users.fdrake.home}/Screenshots"; # Save screenshots to ~/Screenshots
       NSGlobalDomain = {
         AppleShowAllExtensions = true;
         InitialKeyRepeat = 14;

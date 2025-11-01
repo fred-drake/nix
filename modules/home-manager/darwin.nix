@@ -2,6 +2,9 @@
   home = {
     file = {
       ".finicky.js" = {source = ../../homefiles/finicky.js;};
+      "Screenshots/.keep" = {
+        text = "";
+      }; # Ensure Screenshots directory exists for macOS screenshots
     };
     packages = with pkgs; [
       mas # Mac App Store command-line interface
