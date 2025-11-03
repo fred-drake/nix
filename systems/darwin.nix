@@ -22,7 +22,8 @@
   # Some casks take space on a limited Mac Mini, so only install them
   # on Mac Studio and MacBook Pro.
   non-mac-mini-casks = [
-    "godot-mono"
+    # "godot-mono"
+    "godot"
     "steam"
     "wine-stable"
     "winbox"
