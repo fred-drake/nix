@@ -10,14 +10,19 @@ _: {
     };
     "gitea" = {
       "1-rootless" = {
-        "linux/amd64" = "docker.gitea.com/gitea@sha256:5c7658276141f1086f0ed2bed2c745c6a17189db5a4d6c18f93298db081e1680";
+        "linux/amd64" = "docker.gitea.com/gitea@sha256:8e8d30ed22eab2e45caa8d8f2fbb65c067022b176b2d0edcd6be7d1229bc8561";
       };
     };
   };
   "docker.io" = {
+    "apache/tika" = {
+      "latest" = {
+        "linux/amd64" = "docker.io/apache/tika@sha256:3fafa194474c5f3a8cff25a0eefd07e7c0513b7f552074ad455e1af58a06bbea";
+      };
+    };
     "clusterzx/paperless-ai" = {
       "latest" = {
-        "linux/amd64" = "docker.io/clusterzx/paperless-ai@sha256:ea2309b446ce478dd0bb0263de201229a218af7e217588f619ffaf34e3ebfbe3";
+        "linux/amd64" = "docker.io/clusterzx/paperless-ai@sha256:22c14c7d96316ea223586be8f5a450ff3f8f36522154e6f79625dcf3f217b06f";
       };
     };
     "fallenbagel/jellyseerr" = {
@@ -37,12 +42,12 @@ _: {
     };
     "jellyfin/jellyfin" = {
       "latest" = {
-        "linux/amd64" = "docker.io/jellyfin/jellyfin@sha256:3ac09e916cca1425b3c42d97791373d3903863e8281082e3e73a72a8309bb51f";
+        "linux/amd64" = "docker.io/jellyfin/jellyfin@sha256:298fceb9fa1c526d1392fef62e99b903148527ed7cdb9845509bdb8c5959b366";
       };
     };
     "library/redis" = {
       "latest" = {
-        "linux/amd64" = "docker.io/library/redis@sha256:3e3982fbc94dd878eaafd21c068aa8ed9f6246440676849cca46bf46f9c4012f";
+        "linux/amd64" = "docker.io/library/redis@sha256:adee9173ad959f0f1a3515ae4c471fdd803e432f2f81dffde99a247f162480f0";
       };
     };
     "louislam/uptime-kuma" = {
@@ -74,7 +79,7 @@ _: {
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:5c4829b23b82e978f3f209ec29cd733dc1b43ed27aa38fa6ac07055a0de00c14";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:45f1eb4005b8d876824914558c806c1aebba8ab14c14b1d66645b48a8f4ba08c";
       };
     };
   };
@@ -86,7 +91,7 @@ _: {
     };
     "linuxserver/calibre" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/calibre@sha256:65ac4da59172e93b29fd9f3db20bd104df86ab050855fa57d818dae4b8bbfc50";
+        "linux/amd64" = "ghcr.io/linuxserver/calibre@sha256:35a9bcd6a23a94df2be7921b508640f169562defcae1b047e72560d8828a2075";
       };
     };
     "linuxserver/calibre-web" = {
@@ -101,7 +106,7 @@ _: {
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:62174989448639b36575bef8156a3ac1aa562fcc07b9e89da3d8c5909fa74284";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:e2839f6146df218ba890134deba5d0f64f371e2f31f042067b0d6bf0afa62ab4";
       };
     };
     "linuxserver/sonarr" = {
@@ -111,7 +116,7 @@ _: {
     };
     "monstermuffin/mergerfs-cache-mover" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:520e70da8fe8d5018a2fa4d37e63aec185992a7f8a58e250fee925264cbb9df6";
+        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:204f531b5237320ce8cdb275f229e9247dade5395cf85f2fbf36da6ffa237dfd";
       };
     };
     "onedr0p/exportarr" = {
@@ -121,12 +126,7 @@ _: {
     };
     "paperless-ngx/paperless-ngx" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/paperless-ngx/paperless-ngx@sha256:04bdb4cd2598099c51efe6c312a382c1538561765af27f0c29f08d13a3aa2165";
-      };
-    };
-    "paperless-ngx/tika" = {
-      "latest" = {
-        "linux/amd64" = "ghcr.io/paperless-ngx/tika@sha256:e9e02af066dde04e84fdbc99e5d49ef2eaccf75378cc0aa4d4ef2559639b9753";
+        "linux/amd64" = "ghcr.io/paperless-ngx/paperless-ngx@sha256:fd290633e2f3d3e61b08ecbb6d567a2e1a7e0e1a95ad431eab2bf99f5b3d317b";
       };
     };
   };
@@ -138,7 +138,7 @@ _: {
     };
     "linuxserver/lazylibrarian" = {
       "latest" = {
-        "linux/amd64" = "lscr.io/linuxserver/lazylibrarian@sha256:0b70bc2a6f6c5da531352d0c17ae455db82bb3d341b3003a79c1d589d0c147ff";
+        "linux/amd64" = "lscr.io/linuxserver/lazylibrarian@sha256:2036cf1237ee7e96d8a00503b1ef795f2f239479f1ef9ff5cf979e8c33fe2ad7";
       };
     };
   };

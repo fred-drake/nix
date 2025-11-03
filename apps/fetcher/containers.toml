@@ -121,8 +121,8 @@ name = "paperless-ngx/paperless-ngx"
 tag = "latest"
 architectures = ["linux/amd64"]
 [[containers]]
-repository = "ghcr.io"
-name = "paperless-ngx/tika"
+repository = "docker.io"
+name = "apache/tika"
 tag = "latest"
 architectures = ["linux/amd64"]
 [[containers]]
