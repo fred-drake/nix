@@ -364,7 +364,7 @@ in {
     lazygit = {
       enable = true;
       settings = {
-        git.paging = {pager = "delta --dark --paging=never";};
+        git.pagers = [{pager = "delta --dark --paging=never";}];
         gui.theme = {lightTheme = true;};
       };
     };
