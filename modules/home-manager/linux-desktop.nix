@@ -63,6 +63,6 @@
       DefaultDownloadDirectory = "\${home}/Downloads";
     };
 
-    profiles.default.extensions = with inputs.firefox-addons.packages.${pkgs.system}; [bitwarden];
+    profiles.default.extensions = with inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system}; [bitwarden];
   };
 }

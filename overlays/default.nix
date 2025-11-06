@@ -1,9 +1,9 @@
 {inputs, ...}: _final: prev: {
-  inherit (inputs.nixpkgs-stable.legacyPackages.${prev.system}) wireguard-tools;
+  inherit (inputs.nixpkgs-stable.legacyPackages.${prev.stdenv.hostPlatform.system}) wireguard-tools;
 
   # Pull bat-extras from stable and disable tests for all components
   bat-extras = let
-    stableBatExtras = inputs.nixpkgs-stable.legacyPackages.${prev.system}.bat-extras;
+    stableBatExtras = inputs.nixpkgs-stable.legacyPackages.${prev.stdenv.hostPlatform.system}.bat-extras;
   in
     prev.lib.recurseIntoAttrs {
       batgrep = stableBatExtras.batgrep.overrideAttrs (_: {doCheck = false;});
