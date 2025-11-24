@@ -41,7 +41,7 @@ in
     version = "0.0.1";
 
     src = repos-src.tdd-guard-src;
-    npmDepsHash = "sha256-R/xEMs2lXuRKRZWEO22p+1CN3rLKfnPV0ORgjJPuwf0=";
+    npmDepsHash = "sha256-BZ9PpvpXtIS/VhAGx247HIipIJNYRYmrYOyUpq4WWdg=";
 
     # We need to build the project to generate dist/
     # dontNpmBuild = true;
@@ -69,10 +69,12 @@ in
       # Create missing directories that symlinks expect
       mkdir -p $out/lib/node_modules/tdd-guard/reporters/jest
       mkdir -p $out/lib/node_modules/tdd-guard/reporters/vitest
+      mkdir -p $out/lib/node_modules/tdd-guard/reporters/storybook
 
       # Alternative: Remove broken symlinks if directories aren't needed
       # rm -f $out/lib/node_modules/tdd-guard/node_modules/tdd-guard-jest
       # rm -f $out/lib/node_modules/tdd-guard/node_modules/tdd-guard-vitest
+      # rm -f $out/lib/node_modules/tdd-guard/node_modules/tdd-guard-storybook
 
       # Install the Go reporter binary alongside the npm package
       mkdir -p $out/bin
