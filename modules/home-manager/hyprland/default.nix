@@ -226,7 +226,13 @@ in {
     package = inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".hyprland;
 
     portalPackage = pkgs.xdg-desktop-portal-hyprland;
+
     settings = {
+      # Window rules
+      windowrule = [
+        "match:class .*, suppress_event maximize"
+        "match:class ^$, match:title ^$, match:xwayland 1, suppress_event activatefocus"
+      ];
       ################
       ### MONITORS ###
       ################
@@ -536,18 +542,6 @@ in {
 
       # Example windowrule
       # windowrule = float,class:^(kitty)$,title:^(kitty)$
-
-      # Ignore maximize requests from apps. You'll probably like this.
-      windowrule = [
-        "suppressevent maximize, class:.*"
-
-        # Fix some dragging issues with XWayland
-        "nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
-      ];
-
-      # windowrulev2 = [
-      #   "float,class:com.usebottles.bottles"
-      # ];
     };
   };
 }
