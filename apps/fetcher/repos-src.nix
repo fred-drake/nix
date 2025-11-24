@@ -41,8 +41,8 @@
   puffer-fish-src = pkgs.fetchFromGitHub {
     owner = "nickeb96";
     repo = "puffer-fish";
-    rev = "3cb17caa88270e1bd215d97fbd591155c976f083";
-    hash = "sha256-kzAFM4rYWGQiFiw4LTnWv8LYBL7VQ9VlPqOw6d9NYe4=";
+    rev = "83174b07de60078be79985ef6123d903329622b8";
+    hash = "sha256-Dhx5+XRxJvlhdnFyimNxFyFiASrGU4ZwyefsDwtKnSg=";
   };
   gitea-mcp-src = pkgs.fetchFromGitea {
     domain = "gitea.com";
@@ -60,14 +60,14 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "dec93efa90d2765e2efc65e1d27455bd30b33ac0";
-    hash = "sha256-BXBzVznheP5ftLoeYPdo1V0f24oiHXfJj20PbvBi5DA=";
+    rev = "63304cee4a967f30eeca7d875f6c9a8ff4454050";
+    hash = "sha256-orsv0YJ6e6Sm6/ft56spin/npDf2xXKls1B7HauJ4dk=";
   };
   tdd-guard-src = pkgs.fetchFromGitHub {
     owner = "nizos";
     repo = "tdd-guard";
-    rev = "211734a974ae9094237c59c36f05391e492ca55a";
-    hash = "sha256-c2TGm8nRt+ljjNZX8zcOPIT0VHbcp/rUHBkdzS4f148=";
+    rev = "1dc16414c268753c029fa09422d8e55ccc9a40b3";
+    hash = "sha256-TfoGHllPbCyB9X6kI99YoJuAvAkcm4QE+mIftbS5rA0=";
   };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
