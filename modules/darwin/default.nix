@@ -63,7 +63,6 @@
     global.brewfile = true; # Use a global Brewfile
     masApps = {
       # Mac App Store applications
-      "Bitwarden" = 1352778147;
       "DaVinci Resolve" = 571213070;
       "Pages" = 409201541;
       "RunCat" = 1429033973;
@@ -76,6 +75,7 @@
       # Using zed in homebrew because nix pkg is currently broken for Darwin
       "nikitabobko/tap/aerospace"
       "balenaetcher"
+      "bitwarden"
       "bruno"
       "claude"
       "daisydisk"
