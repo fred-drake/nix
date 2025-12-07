@@ -59,11 +59,12 @@
   # Homebrew configuration
   homebrew = {
     enable = true;
+    user = "fdrake"; # Run homebrew as user, not root (required for masApps)
     caskArgs.no_quarantine = true; # Disable quarantine for casks
     global.brewfile = true; # Use a global Brewfile
     masApps = {
       # Mac App Store applications
-      "DaVinci Resolve" = 571213070;
+      # "DaVinci Resolve" = 571213070; # Disabled due to mas-cli bug: https://github.com/mas-cli/mas/issues/1029
       "Pages" = 409201541;
       "RunCat" = 1429033973;
       "The Unarchiver" = 425424353;
