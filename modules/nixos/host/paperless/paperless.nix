@@ -153,7 +153,7 @@ in {
           cmd = ["gotenberg" "--chromium-disable-javascript=true" "--chromium-allow-list=file:///tmp/.*"];
         };
         tika = {
-          image = containers-sha."ghcr.io"."paperless-ngx/tika"."latest"."linux/amd64";
+          image = containers-sha."docker.io"."apache/tika"."latest"."linux/amd64";
           autoStart = true;
           ports = ["9998:9998"];
         };

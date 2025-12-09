@@ -43,7 +43,7 @@ in {
     ratbagd.enable = true;
     ollama = {
       enable = false; # Running it from podman for now
-      acceleration = "cuda";
+      package = pkgs.ollama-cuda;
       openFirewall = true;
       host = "0.0.0.0";
       port = 11434;
@@ -233,17 +233,6 @@ in {
 
   # OBS Studio with virtual camera
   security.polkit.enable = true;
-
-  # Generate CDI specifications
-  systemd.services.nvidia-cdi-generate = {
-    description = "Generate NVIDIA CDI specifications";
-    wantedBy = ["multi-user.target"];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.nvidia-container-toolkit}/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml";
-      RemainAfterExit = true;
-    };
-  };
 
   # Create symlink for nvidia-cdi-hook
   # This is a hack, but podman/crun insists on looking at this location for the CDI hook,
