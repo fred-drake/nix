@@ -5,7 +5,6 @@
   ...
 }: let
   home = config.home.homeDirectory;
-  vicinae = pkgs.callPackage ../../../apps/vicinae.nix {};
   # spotifatius = pkgs.callPackage ./spotifatius.nix {};  # Temporarily disabled due to CMake build issues
 in {
   imports = [./waybar];
@@ -115,7 +114,6 @@ in {
   home = {
     packages = [
       pkgs.playerctl
-      vicinae
       # spotifatius  # Temporarily disabled due to CMake build issues
       pkgs.nerd-fonts.jetbrains-mono
     ];
@@ -196,28 +194,6 @@ in {
           on-resume = "hyprctl dispatch dpms on"; # turn on screen on resume
         }
       ];
-    };
-  };
-
-  # Vicinae server systemd service
-  systemd.user.services.vicinae-server = {
-    Unit = {
-      Description = "Vicinae Server - Application Launcher Backend";
-      After = ["graphical-session.target"];
-      PartOf = ["graphical-session.target"];
-    };
-    Service = {
-      Type = "simple";
-      ExecStart = "${vicinae}/bin/vicinae server";
-      Restart = "on-failure";
-      RestartSec = "5s";
-      Environment = [
-        "QT_QPA_PLATFORM=wayland"
-        "WAYLAND_DISPLAY=wayland-1"
-      ];
-    };
-    Install = {
-      WantedBy = ["graphical-session.target"];
     };
   };
 
@@ -457,9 +433,7 @@ in {
         "$mainMod, E, exec, $fileManager"
         "$mainMod, V, togglefloating,"
         "SUPER, SPACE, exec, $menu"
-        # "SUPER, SPACE, exec, vicinae vicinae://toggle"
         "$mainMod, P, pseudo, # dwindle"
-        "SUPER, V, exec, ${vicinae}/bin/vicinae # Launch Vicinae"
         # "$mainMod, SHIFT, J, togglesplit, # dwindle"
 
         "$mainMod CTRL, A, exec, $terminal"
