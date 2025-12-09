@@ -60,8 +60,8 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "63304cee4a967f30eeca7d875f6c9a8ff4454050";
-    hash = "sha256-orsv0YJ6e6Sm6/ft56spin/npDf2xXKls1B7HauJ4dk=";
+    rev = "b7391a02592d512ada397841440457b3dc292502";
+    hash = "sha256-OIpOC69I+2rhIvIU2CmDXsKU4BRCouBGPlKx+IYFqOE=";
   };
   tdd-guard-src = pkgs.fetchFromGitHub {
     owner = "nizos";
