@@ -8,7 +8,7 @@
   users.users.fdrake.home = lib.mkForce "/Volumes/External/Users/fdrake";
 
   homebrew = {
-    casks = ["mutedeck" "proxy-audio-device" "elgato-stream-deck" "vmware-fusion"] ++ non-mac-mini-casks;
+    casks = ["mutedeck" "proxy-audio-device" "elgato-stream-deck" "elgato-camera-hub" "vmware-fusion"] ++ non-mac-mini-casks;
     masApps = {
       "iWallpaper - Live Wallpaper" = 1552826194;
     };
