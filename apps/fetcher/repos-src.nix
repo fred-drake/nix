@@ -60,14 +60,14 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "b7391a02592d512ada397841440457b3dc292502";
-    hash = "sha256-OIpOC69I+2rhIvIU2CmDXsKU4BRCouBGPlKx+IYFqOE=";
+    rev = "32cf6b1f82e007cddba9c9ae037eff670219cd55";
+    hash = "sha256-etv2HJA9OWvTkjnrjaNSqvebu9gWLIGPYb9PWr4qkfM=";
   };
   tdd-guard-src = pkgs.fetchFromGitHub {
     owner = "nizos";
     repo = "tdd-guard";
-    rev = "1dc16414c268753c029fa09422d8e55ccc9a40b3";
-    hash = "sha256-TfoGHllPbCyB9X6kI99YoJuAvAkcm4QE+mIftbS5rA0=";
+    rev = "aaa258dfe699d9e011e2961aa6337ed04efe486b";
+    hash = "sha256-7/i//WQBLVodGhsyiTvyn4RnmNhmKyd7vVRY8DGcDK4=";
   };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
