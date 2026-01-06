@@ -77,6 +77,7 @@ in {
 
     # Gaming
     gamescope # Wayland micro-compositor for gaming performance
+    protonup-qt # Manage GE-Proton and other custom Proton versions
     # steam
     # steamcmd
     # steam-tui
@@ -173,6 +174,7 @@ in {
       modesetting.enable = true;
       nvidiaSettings = true;
       open = true;
+      powerManagement.enable = true;
     };
     nvidia-container-toolkit.enable = true;
   };
@@ -196,6 +198,9 @@ in {
     localNetworkGameTransfers.openFirewall = true;
     gamescopeSession.enable = true; # Enable gamescope integration
   };
+
+  # GameMode - CPU/GPU optimizations for gaming
+  programs.gamemode.enable = true;
 
   # Podman
   virtualisation = {
