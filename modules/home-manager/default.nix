@@ -14,6 +14,7 @@
   pkgs,
   config,
   hostArgs,
+  inputs,
   lib,
   ...
 }: let
@@ -29,7 +30,12 @@
   ccstatusline = pkgs.callPackage ../../apps/ccstatusline.nix {
     npm-packages = import ../../apps/fetcher/npm-packages.nix;
   };
-  tdd-guard = pkgs.callPackage ../../apps/tdd-guard.nix {};
+  # Build tdd-guard with nixpkgs-stable to avoid npm 10+ ENOTCACHED issues
+  pkgsStable = import inputs.nixpkgs-stable {
+    inherit (pkgs.stdenv.hostPlatform) system;
+    config.allowUnfree = true;
+  };
+  tdd-guard = pkgsStable.callPackage ../../apps/tdd-guard.nix {};
 in {
   # Import additional configuration files
   imports = [

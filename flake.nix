@@ -16,10 +16,20 @@
     # nixpkgs-fred-testing.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/nixpkgs"; # For locally testing my contributions
 
     # Secrets inputs
-    secrets.url = "git+ssh://git@github.com/fred-drake/nix-secrets.git";
-    sops-nix.url = "github:Mic92/sops-nix";
+    secrets = {
+      url = "git+ssh://git@github.com/fred-drake/nix-secrets.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.sops-nix.follows = "sops-nix";
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    colmena.url = "github:zhaofengli/colmena";
+    colmena = {
+      url = "github:zhaofengli/colmena";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # A collection of NixOS modules covering hardware quirks.
     nixos-hardware.url = "github:nixos/nixos-hardware";

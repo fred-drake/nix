@@ -41,6 +41,9 @@ in
     version = "0.0.1";
 
     src = repos-src.tdd-guard-src;
+    # NOTE: This package must be built with nixpkgs-stable (not bleeding edge) because
+    # npm 10+ requires registry metadata caching which buildNpmPackage doesn't support.
+    # See: https://github.com/NixOS/nixpkgs/issues/261137
     npmDepsHash = "sha256-KCpI4F9zjsh2CWoDdqomvPrRLVS7sUY8OPwWgVG2epc=";
 
     # We need to build the project to generate dist/
