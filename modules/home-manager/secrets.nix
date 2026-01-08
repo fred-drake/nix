@@ -199,6 +199,18 @@ in {
         mode = "0400";
         key = "data";
       };
+
+      google-oauth = {
+        sopsFile = config.secrets.workstation.google-oauth;
+        mode = "0400";
+        key = "data";
+      };
+
+      zohomail-mcp-url = {
+        sopsFile = config.secrets.workstation.zohomail;
+        mode = "0400";
+        key = "mcp-url";
+      };
     };
   };
 

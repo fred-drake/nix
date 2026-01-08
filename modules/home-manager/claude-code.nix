@@ -245,6 +245,36 @@ in {
         };
       };
     };
+
+    mcp-gmail = {
+      mode = "0400";
+      path = "${home}/mcp/gmail.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          gmail = {
+            command = "uvx";
+            # args = ["run" "--directory" "${home}/Source/github.com/fred-drake/gmail-mcp" "gmail-mcp"];
+            args = ["--from" "git+https://github.com/fred-drake/gmail-mcp" "gmail-mcp"];
+            env = {
+              GMAIL_MCP_CREDENTIALS_PATH = config.sops.secrets.google-oauth.path;
+            };
+          };
+        };
+      };
+    };
+
+    mcp-zohomail = {
+      mode = "0400";
+      path = "${home}/mcp/zohomail.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          zohomail = {
+            command = "npx";
+            args = ["mcp-remote" config.sops.secrets.zohomail-mcp-url "--transport" "http-only"];
+          };
+        };
+      };
+    };
   };
 
   # Claude Code configuration files
@@ -257,6 +287,17 @@ in {
 
     ".claude/agents" = {
       source = ../../apps/claude-code/agents;
+      recursive = true;
+    };
+
+    ".claude/skills" = {
+      source = ../../apps/claude-code/skills;
+      recursive = true;
+    };
+
+    # Ralph Wiggum assets (scripts and hooks for the ralph-loop command)
+    ".claude/assets/ralph-wiggum" = {
+      source = ../../apps/claude-code/assets/ralph-wiggum;
       recursive = true;
     };
 
@@ -298,6 +339,15 @@ in {
           }
         ];
         Stop = [
+          {
+            # Ralph Wiggum stop hook - intercepts exit when loop is active
+            hooks = [
+              {
+                type = "command";
+                command = "$HOME/.claude/assets/ralph-wiggum/hooks/stop-hook.sh";
+              }
+            ];
+          }
           {
             matcher = "";
             hooks = [
