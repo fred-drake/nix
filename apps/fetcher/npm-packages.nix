@@ -8,14 +8,14 @@
     "url-hash" = "sha256-HRFmV9B7REhYsDmVK4mSda2bJ21/4smJj9uc/zASHPE=";
   };
   "ccusage" = {
-    "version" = "17.2.1";
-    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-17.2.1.tgz";
-    "url-hash" = "sha256-TczcEi4aioD8OYbdQgV2WYU0+EPySARReTzLzKIDEeU=";
+    "version" = "18.0.5";
+    "url" = "https://registry.npmjs.org/ccusage/-/ccusage-18.0.5.tgz";
+    "url-hash" = "sha256-Co9+jFDk4WmefrDnJvladjjYk+XHhYYEKNKb9MbrkU8=";
   };
   "claude-code" = {
-    "version" = "2.1.1";
-    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.1.tgz";
-    "url-hash" = "sha256-oMmivRpTwwRAP/m+A5zniU7PgWeLsPr/Z427VRtAFus=";
+    "version" = "2.1.2";
+    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.2.tgz";
+    "url-hash" = "sha256-yCRQtK286EOGVs+0SMokATpvwCeZC4irV1bmhU0kgiI=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";
