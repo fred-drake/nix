@@ -13,9 +13,9 @@
     "url-hash" = "sha256-Co9+jFDk4WmefrDnJvladjjYk+XHhYYEKNKb9MbrkU8=";
   };
   "claude-code" = {
-    "version" = "2.1.2";
-    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.2.tgz";
-    "url-hash" = "sha256-yCRQtK286EOGVs+0SMokATpvwCeZC4irV1bmhU0kgiI=";
+    "version" = "2.1.3";
+    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.3.tgz";
+    "url-hash" = "sha256-Y2FnXj6vBIDMVEuPvbbMX4iwsW8nQjHw+5Mitw6JDMg=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";
