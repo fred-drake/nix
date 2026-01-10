@@ -433,7 +433,7 @@ in {
         "$mainMod, E, exec, $fileManager"
         "$mainMod, V, togglefloating,"
         "SUPER, SPACE, exec, $menu"
-        "$mainMod, P, pseudo, # dwindle"
+        # "$mainMod, P, pseudo, # dwindle"  # Disabled to allow alt-p in helix
         # "$mainMod, SHIFT, J, togglesplit, # dwindle"
 
         "$mainMod CTRL, A, exec, $terminal"

@@ -46,6 +46,8 @@ newline = "none"
 enable = true
 
 [keys.normal]
+# Hover documentation (shift-K)
+K = "hover"
 # Quick save
 C-s = ":w"
 # Quick quit
@@ -53,3 +55,6 @@ C-q = ":q"
 # Buffer navigation
 C-h = ":bp"
 C-l = ":bn"
+
+[keys.insert]
+j = { k = "normal_mode" }
