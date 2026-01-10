@@ -379,8 +379,8 @@ in {
 
       # https://wiki.hyprland.org/Configuring/Variables/#misc
       misc = {
-        force_default_wallpaper = -1; # Set to 0 or 1 to disable the anime mascot wallpapers
-        disable_hyprland_logo = false; # If true disables the random hyprland logo / anime girl background. :(
+        force_default_wallpaper = 0; # 0 disables the anime mascot wallpapers, 1 enables, -1 follows disable_hyprland_logo
+        disable_hyprland_logo = true; # Disables the random hyprland logo / anime girl background
         vfr = true; # Enable variable frame rate for better gaming performance
         vrr = 2; # Enable variable refresh rate (2 = fullscreen only, better for gaming)
       };

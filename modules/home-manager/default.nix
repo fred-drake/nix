@@ -186,6 +186,7 @@ in {
         gnupg # GNU Privacy Guard
         hclfmt # HCL formatter imagemagick # Image manipulation tools
         highlight # Syntax highlighting
+        helix # Helix CLI IDE
         imgcat # Image viewer
         inetutils # Network utilities
         jq # Command-line JSON processor
@@ -284,7 +285,7 @@ in {
       TERM = "xterm-256color";
       PAGER = "less";
       CLICOLOR = 1;
-      EDITOR = "nvim";
+      EDITOR = "hx";
       SOPS_AGE_KEY_FILE = "$HOME/.age/personal-key.txt";
       GHQ_ROOT = "$HOME/Source";
       PODMAN_COMPOSE_WARNING_LOGS = "false";
