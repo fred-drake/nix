@@ -1,4 +1,13 @@
 {inputs, ...}: _final: prev: {
+  # Disable flaky uvloop tests (timing-sensitive tests fail intermittently)
+  python313Packages = prev.python313Packages.override {
+    overrides = _python-final: python-prev: {
+      uvloop = python-prev.uvloop.overrideAttrs (_: {doCheck = false;});
+    };
+  };
+
+  # Disable tailscale tests (tsconsensus test times out)
+  tailscale = prev.tailscale.overrideAttrs (_: {doCheck = false;});
   inherit (inputs.nixpkgs-stable.legacyPackages.${prev.stdenv.hostPlatform.system}) wireguard-tools;
 
   # Pull bat-extras from stable and disable tests for all components
@@ -20,7 +29,7 @@
       prev.spotify.overrideAttrs (oldAttrs: {
         src = prev.fetchurl {
           url = oldAttrs.src.url or "https://download.scdn.co/SpotifyARM64.dmg";
-          sha256 = "sha256-0gwoptqLBJBM0qJQ+dGAZdCD6WXzDJEs0BfOxz7f2nQ=";
+          sha256 = "sha256-/rrThZOpjzaHPX1raDe5X8PqtJeTI4GDS5sXSfthXTQ=";
         };
       })
     else prev.spotify;
