@@ -7,11 +7,15 @@ theme = "tokyonight"
 line-number = "relative"
 mouse = true
 cursorline = true
-auto-save = true
 rulers = [100]
 color-modes = true
 bufferline = "multiple"
 true-color = true
+
+[editor.auto-save]
+focus-lost = true
+after-delay.enable = true
+after-delay.timeout = 500 # milliseconds
 
 [editor.cursor-shape]
 insert = "bar"
