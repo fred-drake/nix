@@ -186,7 +186,6 @@ in {
         gnupg # GNU Privacy Guard
         hclfmt # HCL formatter imagemagick # Image manipulation tools
         highlight # Syntax highlighting
-        helix # Helix CLI IDE
         imgcat # Image viewer
         inetutils # Network utilities
         jq # Command-line JSON processor
@@ -255,7 +254,9 @@ in {
             exec /opt/homebrew/bin/windsurf --extensions-dir $EXT_DIR "$@"
           '')
         ]
-        else []
+        else [
+          pkgs.wl-clipboard # Wayland clipboard for helix and other apps
+        ]
         # REMOVING THIS FOR NOW -- Using Claude Code and NVIM over Windsurf
         # )
         # ++ (
@@ -285,7 +286,6 @@ in {
       TERM = "xterm-256color";
       PAGER = "less";
       CLICOLOR = 1;
-      EDITOR = "hx";
       SOPS_AGE_KEY_FILE = "$HOME/.age/personal-key.txt";
       GHQ_ROOT = "$HOME/Source";
       PODMAN_COMPOSE_WARNING_LOGS = "false";
@@ -363,6 +363,96 @@ in {
       };
       ignores = ["*~" ".DS_Store" "*.swp"];
       lfs.enable = true;
+    };
+
+    # Helix editor configuration
+    helix = {
+      enable = true;
+      defaultEditor = true;
+
+      settings = {
+        theme = "tokyonight";
+
+        editor = {
+          line-number = "relative";
+          mouse = true;
+          cursorline = true;
+          rulers = [100];
+          color-modes = true;
+          bufferline = "multiple";
+          true-color = true;
+
+          auto-save = {
+            focus-lost = true;
+            after-delay = {
+              enable = true;
+              timeout = 500;
+            };
+          };
+
+          cursor-shape = {
+            insert = "bar";
+            normal = "block";
+            select = "underline";
+          };
+
+          file-picker.hidden = false;
+
+          indent-guides = {
+            render = true;
+            character = "│";
+          };
+
+          lsp = {
+            display-messages = true;
+            display-inlay-hints = true;
+          };
+
+          statusline = {
+            left = ["mode" "spinner" "file-name" "file-modification-indicator"];
+            center = [];
+            right = ["diagnostics" "selections" "register" "position" "file-encoding"];
+            separator = "│";
+            mode = {
+              normal = "NORMAL";
+              insert = "INSERT";
+              select = "SELECT";
+            };
+          };
+
+          whitespace.render.tab = "all";
+          whitespace.render.newline = "none";
+
+          soft-wrap.enable = true;
+        };
+
+        keys.normal = {
+          K = "hover";
+          C-s = ":w";
+          C-q = ":q";
+          C-h = ":bp";
+          C-l = ":bn";
+          # Clipboard operations - yank, delete, change all use system clipboard
+          y = "yank_to_clipboard";
+          d = ["yank_to_clipboard" "delete_selection_noyank"];
+          c = ["yank_to_clipboard" "change_selection_noyank"];
+        };
+
+        keys.insert = {
+          j = {k = "normal_mode";};
+        };
+      };
+
+      languages = {
+        language = [
+          {
+            name = "nix";
+            auto-format = true;
+            formatter.command = "alejandra";
+            formatter.args = ["-q"];
+          }
+        ];
+      };
     };
 
     # Enable other utilities
