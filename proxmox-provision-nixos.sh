@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-PROXMOX_SERVER=baine
-HOSTNAME=paperless
-CONTAINER_ID=121
+PROXMOX_SERVER=thrall
+HOSTNAME=woodpecker
+CONTAINER_ID=122
 STORAGE=local-lvm
 MEMORY=4096
 DISK_SIZE_IN_GB=100
