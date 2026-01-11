@@ -28,6 +28,7 @@
   kavita = import ./hosts/kavita.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   scanner = import ./hosts/scanner.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   paperless = import ./hosts/paperless.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
+  woodpecker = import ./hosts/woodpecker.nix {inherit self nixpkgs-stable secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -56,6 +57,7 @@ in {
   inherit (kavita) _kavita;
   inherit (scanner) _scanner;
   inherit (paperless) _paperless;
+  inherit (woodpecker) _woodpecker;
 
   # Init configurations
   "dns1-init" = dns1."dns1-init";
@@ -79,6 +81,7 @@ in {
   "kavita-init" = kavita."kavita-init";
   "scanner-init" = scanner."scanner-init";
   "paperless-init" = paperless."paperless-init";
+  "woodpecker-init" = woodpecker."woodpecker-init";
 
   # Full configurations
   "dns1" = dns1."dns1";
@@ -102,4 +105,5 @@ in {
   "kavita" = kavita."kavita";
   "scanner" = scanner."scanner";
   "paperless" = paperless."paperless";
+  "woodpecker" = woodpecker."woodpecker";
 }
