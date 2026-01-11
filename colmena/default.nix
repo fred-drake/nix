@@ -29,6 +29,7 @@
   scanner = import ./hosts/scanner.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   paperless = import ./hosts/paperless.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   woodpecker = import ./hosts/woodpecker.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  resume = import ./hosts/resume.nix {inherit self nixpkgs-stable secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -58,6 +59,7 @@ in {
   inherit (scanner) _scanner;
   inherit (paperless) _paperless;
   inherit (woodpecker) _woodpecker;
+  inherit (resume) _resume;
 
   # Init configurations
   "dns1-init" = dns1."dns1-init";
@@ -82,6 +84,7 @@ in {
   "scanner-init" = scanner."scanner-init";
   "paperless-init" = paperless."paperless-init";
   "woodpecker-init" = woodpecker."woodpecker-init";
+  "resume-init" = resume."resume-init";
 
   # Full configurations
   "dns1" = dns1."dns1";
@@ -106,4 +109,5 @@ in {
   "scanner" = scanner."scanner";
   "paperless" = paperless."paperless";
   "woodpecker" = woodpecker."woodpecker";
+  "resume" = resume."resume";
 }

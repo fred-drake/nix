@@ -145,4 +145,19 @@ repository = "docker.io"
 name = "postgres"
 tag = "18"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "postgres"
+tag = "16-alpine"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "browserless/chromium"
+tag = "v2.18.0"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "amruthpillai/reactive-resume"
+tag = "latest"
+architectures = ["linux/amd64"]
 
