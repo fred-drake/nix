@@ -211,6 +211,12 @@ in {
         mode = "0400";
         key = "mcp-url";
       };
+
+      resume-credentials = {
+        sopsFile = config.secrets.workstation.resume-credentials;
+        mode = "0400";
+        key = "data";
+      };
     };
   };
 
