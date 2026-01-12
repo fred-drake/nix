@@ -84,7 +84,15 @@ in {
   };
 
   virtualisation = {
-    containers.enable = true;
+    containers = {
+      enable = true;
+      containersConf.settings = {
+        containers = {
+          default_sysctls = ["net.ipv4.ip_unprivileged_port_start=0"];
+          dns_servers = config.soft-secrets.networking.nameservers.internal;
+        };
+      };
+    };
     podman = {
       enable = true;
       dockerCompat = true;
@@ -134,16 +142,22 @@ in {
           image = containers-sha."docker.io"."woodpeckerci/woodpecker-agent"."v3"."linux/amd64";
           autoStart = true;
           dependsOn = ["woodpecker-server"];
-          extraOptions = [
-            "--network=woodpecker-net"
-            "--privileged"
-          ];
+          extraOptions =
+            [
+              "--network=woodpecker-net"
+              "--privileged"
+              "--security-opt=seccomp=unconfined"
+              "--security-opt=apparmor=unconfined"
+              "--security-opt=label=disable"
+            ]
+            ++ map (dns: "--dns=${dns}") config.soft-secrets.networking.nameservers.internal;
           volumes = [
             "/run/podman/podman.sock:/var/run/docker.sock"
           ];
           environment = {
             WOODPECKER_SERVER = "woodpecker-server:9000";
             WOODPECKER_BACKEND = "docker";
+            WOODPECKER_BACKEND_DOCKER_NETWORK = "woodpecker-net";
             TZ = "America/New_York";
           };
           environmentFiles = [config.sops.secrets.woodpecker-agent-env.path];
