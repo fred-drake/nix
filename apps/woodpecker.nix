@@ -56,19 +56,30 @@ in {
     };
   };
 
-  systemd.tmpfiles.rules = [
-    "d /var/woodpecker/data 0755 1000 1000 -"
-    "d /var/postgresql 0755 999 999 -"
-  ];
-
-  systemd.services.podman-network-woodpecker = {
-    description = "Create woodpecker podman network with DNS enabled";
-    wantedBy = ["multi-user.target"];
-    before = ["podman-woodpecker-postgres.service" "podman-woodpecker-server.service"];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.podman}/bin/podman network create --ignore woodpecker-net";
+  systemd = {
+    tmpfiles.rules = [
+      "d /var/woodpecker/data 0755 1000 1000 -"
+      "d /var/postgresql 0755 999 999 -"
+    ];
+    services = {
+      podman-network-woodpecker = {
+        description = "Create woodpecker podman network with DNS enabled";
+        wantedBy = ["multi-user.target"];
+        before = ["podman-woodpecker-postgres.service" "podman-woodpecker-server.service" "podman-woodpecker-agent.service"];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${pkgs.podman}/bin/podman network create --ignore woodpecker-net";
+        };
+      };
+      podman-woodpecker-agent = {
+        after = ["podman.socket"];
+        bindsTo = ["podman.socket"];
+      };
+    };
+    # Ensure the socket is properly created at boot
+    sockets.podman = {
+      wantedBy = ["sockets.target"];
     };
   };
 
@@ -117,6 +128,24 @@ in {
             TZ = "America/New_York";
           };
           environmentFiles = [config.sops.secrets.woodpecker-env.path];
+        };
+        woodpecker-agent = {
+          image = containers-sha."docker.io"."woodpeckerci/woodpecker-agent"."v3"."linux/amd64";
+          autoStart = true;
+          dependsOn = ["woodpecker-server"];
+          extraOptions = [
+            "--network=woodpecker-net"
+            "--privileged"
+          ];
+          volumes = [
+            "/run/podman/podman.sock:/var/run/docker.sock"
+          ];
+          environment = {
+            WOODPECKER_SERVER = "woodpecker-server:9000";
+            WOODPECKER_BACKEND = "docker";
+            TZ = "America/New_York";
+          };
+          environmentFiles = [config.sops.secrets.woodpecker-agent-env.path];
         };
       };
     };

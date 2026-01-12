@@ -13,6 +13,11 @@
         mode = "0400";
         key = "data";
       };
+      woodpecker-agent-env = {
+        sopsFile = config.secrets.host.woodpecker.woodpecker-agent-env;
+        mode = "0400";
+        key = "data";
+      };
     };
   };
 }

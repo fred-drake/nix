@@ -142,6 +142,11 @@ tag = "v3"
 architectures = ["linux/amd64"]
 [[containers]]
 repository = "docker.io"
+name = "woodpeckerci/woodpecker-agent"
+tag = "v3"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
 name = "postgres"
 tag = "18"
 architectures = ["linux/amd64"]

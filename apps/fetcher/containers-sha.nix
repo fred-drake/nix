@@ -86,6 +86,11 @@ _: {
         "linux/amd64" = "docker.io/sonarqube@sha256:90c9de0f2d5609c696aae213ed6ea3c347eeb6d851a552d6f08922aeda28bed6";
       };
     };
+    "woodpeckerci/woodpecker-agent" = {
+      "v3" = {
+        "linux/amd64" = "docker.io/woodpeckerci/woodpecker-agent@sha256:098ac6cdd4644d9ffce50d9a19c864c1c91eb3c4a07f0924af113d702e3adbe9";
+      };
+    };
     "woodpeckerci/woodpecker-server" = {
       "v3" = {
         "linux/amd64" = "docker.io/woodpeckerci/woodpecker-server@sha256:54a6bb827066f2cdebe5665c5b921b585369b6d8006f350d63ac2b9ed1ce86c6";
