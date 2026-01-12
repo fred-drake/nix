@@ -220,6 +220,7 @@ in {
         wiki-tui # Wikipedia TUI
         wireguard-tools # VPN tools
         wget # Network downloader
+        woodpecker-cli # Woodpecker CI CLI tool
         yq-go # YAML processor
         yt-dlp # Video downloader
         # (pkgs.vscode-with-extensions.override {

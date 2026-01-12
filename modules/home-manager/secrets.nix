@@ -217,6 +217,13 @@ in {
         mode = "0400";
         key = "data";
       };
+
+      woodpecker-credentials = {
+        sopsFile = config.secrets.workstation.woodpecker-env;
+        mode = "0400";
+        key = "data";
+        path = "${home}/.config/fish/conf.d/woodpecker-env.fish";
+      };
     };
   };
 

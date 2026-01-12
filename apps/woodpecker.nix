@@ -125,6 +125,7 @@ in {
             WOODPECKER_HOST = "https://${host}.${config.soft-secrets.networking.domain}";
             WOODPECKER_DATABASE_DRIVER = "postgres";
             WOODPECKER_OPEN = "true";
+            WOODPECKER_PLUGINS_PRIVILEGED = "woodpeckerci/plugin-docker-buildx";
             TZ = "America/New_York";
           };
           environmentFiles = [config.sops.secrets.woodpecker-env.path];

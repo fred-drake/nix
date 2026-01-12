@@ -129,6 +129,8 @@ in {
             PUID = "1000";
             PGID = "1000";
             TZ = "America/New_York";
+            # Allow webhooks to call Woodpecker CI server
+            GITEA__webhook__ALLOWED_HOST_LIST = "woodpecker.${config.soft-secrets.networking.domain}";
           };
         };
         gitea-check-service = {
