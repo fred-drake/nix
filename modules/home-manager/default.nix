@@ -371,8 +371,21 @@ in {
       enable = true;
       defaultEditor = true;
 
+      # Custom theme with transparent background so tmux window-style shows through
+      themes = {
+        tokyonight_transparent = {
+          inherits = "tokyonight";
+          "ui.background" = {};
+          "ui.cursorline.primary" = {};
+          "ui.statusline" = {fg = "#a9b1d6";};
+          "ui.statusline.inactive" = {fg = "#565f89";};
+          "ui.bufferline" = {fg = "#565f89";};
+          "ui.bufferline.active" = {fg = "#a9b1d6";};
+        };
+      };
+
       settings = {
-        theme = "tokyonight";
+        theme = "tokyonight_transparent";
 
         editor = {
           line-number = "relative";
