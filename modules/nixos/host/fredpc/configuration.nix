@@ -169,12 +169,16 @@ in {
         };
       };
     };
-    graphics.enable = true;
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
     nvidia = {
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
       modesetting.enable = true;
       nvidiaSettings = true;
       open = true;
-      powerManagement.enable = true;
+      powerManagement.enable = false;
     };
     nvidia-container-toolkit.enable = true;
   };
