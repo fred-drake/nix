@@ -13,4 +13,7 @@ repo = "ccstatusline"
 [[npm-repository]]
 name = "tdd-guard"
 repo = "tdd-guard"
+[[npm-repository]]
+name = "agent-browser"
+repo = "agent-browser"
 

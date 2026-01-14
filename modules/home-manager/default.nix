@@ -30,6 +30,10 @@
   ccstatusline = pkgs.callPackage ../../apps/ccstatusline.nix {
     npm-packages = import ../../apps/fetcher/npm-packages.nix;
   };
+  agent-browser = pkgs.callPackage ../../apps/agent-browser.nix {
+    npm-packages = import ../../apps/fetcher/npm-packages.nix;
+    inherit (pkgs) playwright-driver;
+  };
   # Build tdd-guard with nixpkgs-stable to avoid npm 10+ ENOTCACHED issues
   pkgsStable = import inputs.nixpkgs-stable {
     inherit (pkgs.stdenv.hostPlatform) system;
@@ -163,7 +167,8 @@ in {
 
     # Install packages using Home Manager
     packages =
-      (with pkgs; [
+      [agent-browser]
+      ++ (with pkgs; [
         age # Modern encryption tool
         bat # Cat clone with syntax highlighting
         btop # System monitor
