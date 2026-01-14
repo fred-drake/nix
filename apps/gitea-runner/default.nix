@@ -30,7 +30,7 @@ in {
             "${config.sops.secrets.gitea-registration-token.path}:/gitea-registration-token"
             "${configFile}:/config/config.yaml:ro"
             "/var/${runnerName}/data:/data"
-            "/var/run/docker.sock:/var/run/docker.sock:ro"
+            "/run/podman/podman.sock:/var/run/docker.sock"
           ];
           environment = {
             PUID = "1000";
@@ -49,7 +49,18 @@ in {
     };
   };
 
-  systemd.tmpfiles.rules = [
-    "d /var/${runnerName}/data 0755 1000 1000 -"
-  ];
+  systemd = {
+    tmpfiles.rules = [
+      "d /var/${runnerName}/data 0755 1000 1000 -"
+    ];
+    # Ensure the podman socket is properly created at boot
+    sockets.podman = {
+      wantedBy = ["sockets.target"];
+    };
+    # Ensure the container waits for the podman socket
+    services."podman-${runnerName}" = {
+      after = ["podman.socket"];
+      bindsTo = ["podman.socket"];
+    };
+  };
 }
