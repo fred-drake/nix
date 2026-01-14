@@ -165,11 +165,6 @@ in {
       source = ./weather.sh;
       executable = true;
     };
-
-    ".config/hypr/hyprpaper.conf".text = ''
-      preload = ${home}/Pictures/wallpaper/wp6746982-tokyo-night-wallpapers.jpg
-      wallpaper = ,${home}/Pictures/wallpaper/wp6746982-tokyo-night-wallpapers.jpg
-    '';
   };
 
   services.hypridle = {
@@ -239,13 +234,7 @@ in {
       # exec-once = waybar & hyprpaper & firefox
       # exec-once = "bash ~/.config/hypr/start.sh";
       exec-once = [
-        # "swww init &"
-        # "swww img ~/Pictures/night-desert.png &"
-        # Add pkgs.networkmanagerapplet for this
-        # nm-applet --indicator &
-        # "waybar &"
-        # "dunst &"
-        "${pkgs.hyprpaper}/bin/hyprpaper"
+        "${pkgs.swaybg}/bin/swaybg -i ${home}/Pictures/wallpaper/wp6746982-tokyo-night-wallpapers.jpg -m fill"
         "tmux setenv -g HYPRLAND_INSTANCE_SIGNATURE $HYPRLAND_INSTANCE_SIGNATURE"
       ];
 
