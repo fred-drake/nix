@@ -10,6 +10,7 @@ in {
   imports = [
     ./gnome.nix
     ./hyprland.nix
+    ./gpu-passthrough.nix
   ];
   boot = {
     loader.grub = {
@@ -144,7 +145,7 @@ in {
       isNormalUser = true;
       home = "/home/fdrake";
       description = "Fred Drake";
-      extraGroups = ["wheel"];
+      extraGroups = ["wheel" "libvirtd" "kvm"];
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
       ];
