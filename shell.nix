@@ -83,6 +83,8 @@ in
       nodejs_22
       uv
       deadnix
+      python3
+      python3Packages.pyyaml
 
       # Additional dependencies needed by scripts
       # jq

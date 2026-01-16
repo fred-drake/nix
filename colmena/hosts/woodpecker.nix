@@ -14,6 +14,10 @@ in {
       config = {};
     };
 
+    networking.extraHosts = ''
+      ${soft-secrets.host.gitea.service_ip_address} gitea.${soft-secrets.networking.domain}
+    '';
+
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets
