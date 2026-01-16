@@ -6,6 +6,7 @@
   ...
 }: let
   soft-secrets = import "${secrets}/soft-secrets" {home = null;};
+  nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
 in {
   _woodpecker = {
     nixpkgs = {
@@ -26,6 +27,7 @@ in {
       ../../modules/nixos
       ../../modules/nixos/host/woodpecker/configuration.nix
       ../../modules/secrets/cloudflare.nix
+      nixpkgsVersion
     ];
     deployment = {
       buildOnTarget = false;

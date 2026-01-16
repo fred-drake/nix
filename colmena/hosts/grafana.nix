@@ -6,6 +6,7 @@
   ...
 }: let
   soft-secrets = import "${secrets}/soft-secrets" {home = null;};
+  nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
 in {
   # Base configuration for Grafana
   _grafana = {
@@ -21,6 +22,7 @@ in {
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
       ../../modules/nixos
       ../../modules/nixos/host/grafana/configuration.nix
+      nixpkgsVersion
     ];
     deployment = {
       buildOnTarget = false;

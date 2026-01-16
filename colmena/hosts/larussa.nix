@@ -6,6 +6,7 @@
   ...
 }: let
   soft-secrets = import "${secrets}/soft-secrets" {home = null;};
+  nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
 in {
   # Base configuration for Larussa
   _larussa = {
@@ -24,6 +25,7 @@ in {
       ../../modules/nixos
       ../../modules/nixos/host/larussa/configuration.nix
       ../../modules/nixos/host/larussa/hardware-configuration.nix
+      nixpkgsVersion
     ];
     deployment = {
       buildOnTarget = false;

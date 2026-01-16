@@ -6,6 +6,7 @@
   ...
 }: let
   soft-secrets = import "${secrets}/soft-secrets" {home = null;};
+  nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
 in {
   _paperless = {
     nixpkgs = {
@@ -20,6 +21,7 @@ in {
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
       ../../modules/nixos
       ../../modules/nixos/host/paperless/configuration.nix
+      nixpkgsVersion
     ];
     deployment = {
       buildOnTarget = false;

@@ -51,3 +51,7 @@ update-secrets:
 # Run colmena remote switch on given host
 colmena HOST:
     colmena apply --on {{ HOST }} --impure
+
+# Check nixpkgs age on a colmena host
+colmena-age HOST:
+    @colmena exec --on {{ HOST }} --impure -- 'jq -r ".nixpkgs | \"nixpkgs: \(.shortRev) (\(((now - .lastModified) / 86400) | floor) days old)\"" /etc/nixos/version.json 2>/dev/null || echo "unknown"' 2>&1 | grep -E "^{{ HOST }} \|" | grep -v "Succeeded" | sed "s/^{{ HOST }} | //"
