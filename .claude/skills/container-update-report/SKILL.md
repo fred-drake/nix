@@ -74,7 +74,7 @@ After deployment, provide a summary table:
 | woodpecker-agent/server | woodpecker |
 | n8n | n8n |
 | calibre, sabnzbd, sonarr, radarr | larussa |
-| kavita, lazylibrarian | kavita, larussa |
+| lazylibrarian | larussa |
 | paperless-ngx | paperless |
 
 ## Resources

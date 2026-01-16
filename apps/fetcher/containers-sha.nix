@@ -157,11 +157,6 @@ _: {
     };
   };
   "lscr.io" = {
-    "linuxserver/kavita" = {
-      "latest" = {
-        "linux/amd64" = "lscr.io/linuxserver/kavita@sha256:b470db309ce7356154b21b69e2fde423e144520504093b8cc7176e41bfe4bf91";
-      };
-    };
     "linuxserver/lazylibrarian" = {
       "latest" = {
         "linux/amd64" = "lscr.io/linuxserver/lazylibrarian@sha256:31409c4b67a25520c30bf9629c65dc3faae1d641890858200c03a6b2f724225d";

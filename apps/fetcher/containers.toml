@@ -91,11 +91,6 @@ name = "fred-drake/gitea-check-service"
 tag = "latest"
 architectures = ["linux/amd64"]
 [[containers]]
-repository = "lscr.io"
-name = "linuxserver/kavita"
-tag = "latest"
-architectures = ["linux/amd64"]
-[[containers]]
 repository = "ghcr.io"
 name = "linuxserver/calibre"
 tag = "latest"

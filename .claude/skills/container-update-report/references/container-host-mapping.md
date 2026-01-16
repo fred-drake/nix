@@ -36,7 +36,6 @@ Comprehensive mapping of containers to their NixOS hosts.
 
 | Container | Tag | Host | Config Location |
 |-----------|-----|------|-----------------|
-| linuxserver/kavita | latest | kavita | modules/nixos/host/kavita/kavita.nix |
 | linuxserver/lazylibrarian | latest | larussa | (check larussa config) |
 
 ## docker.gitea.com
@@ -55,7 +54,6 @@ Comprehensive mapping of containers to their NixOS hosts.
 | resume | postgres:16-alpine |
 | n8n | n8n:latest |
 | larussa | calibre, calibre-web, sabnzbd, sonarr, radarr, lazylibrarian |
-| kavita | kavita:latest |
 | uptime-kuma | uptime-kuma:latest |
 
 ## Finding Container Usage

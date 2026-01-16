@@ -78,7 +78,7 @@ ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/journalctl -u 
 
 All other hosts are LXC containers. Use `pct list` on Proxmox hosts to see VMIDs.
 
-Common hosts: gitea, gitea-runner-1/2/3, prometheus, grafana, uptime-kuma, sonarqube, jellyseerr, prowlarr, n8n, minio, kavita, scanner, paperless, woodpecker, resume, glance, external-metrics
+Common hosts: gitea, gitea-runner-1/2/3, prometheus, grafana, uptime-kuma, sonarqube, jellyseerr, prowlarr, n8n, minio, scanner, paperless, woodpecker, resume, glance, external-metrics
 
 ## Troubleshooting Workflows
 
