@@ -7,6 +7,7 @@
   ...
 }: let
   soft-secrets = import "${secrets}/soft-secrets" {home = null;};
+  nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
 in {
   # Base configuration
   _dns2 = {
@@ -23,9 +24,10 @@ in {
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
       ../../modules/nixos
       ../../modules/nixos/host/dns2/configuration.nix
+      nixpkgsVersion
     ];
     deployment = {
-      buildOnTarget = false;
+      buildOnTarget = true;
       targetHost = soft-secrets.host.dns2.admin_ip_address;
       targetUser = "default";
     };

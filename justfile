@@ -54,4 +54,4 @@ colmena HOST:
 
 # Check nixpkgs age on a colmena host
 colmena-age HOST:
-    @colmena exec --on {{ HOST }} --impure -- 'jq -r ".nixpkgs | \"nixpkgs: \(.shortRev) (\(((now - .lastModified) / 86400) | floor) days old)\"" /etc/nixos/version.json 2>/dev/null || echo "unknown"' 2>&1 | grep -E "^{{ HOST }} \|" | grep -v "Succeeded" | sed "s/^{{ HOST }} | //"
+    @colmena exec --on {{ HOST }} --impure -- 'jq -r ".nixpkgs | \"nixpkgs: \(.shortRev) (\(((now - .lastModified) / 86400) | floor) days old)\"" /etc/nixos/version.json 2>/dev/null || echo "unknown"' 2>&1 | grep -E "^\s*{{ HOST }} \|" | grep -v "Succeeded" | sed "s/^[[:space:]]*{{ HOST }} | //"
