@@ -16,3 +16,8 @@ devenv.local.nix
 # Node.js dependencies
 node_modules/
 .claude/settings.local.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
