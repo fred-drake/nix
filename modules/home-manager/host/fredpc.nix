@@ -39,8 +39,9 @@
     '';
 
     packages = with pkgs; [
-      appimage-run
-      droidcam
+      appimage-run # Run AppImage applications
+      bluetui # Bluetooth TUI
+      droidcam # Use phone as webcam
     ];
   };
 

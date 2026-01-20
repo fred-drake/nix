@@ -167,21 +167,21 @@ in {
 
     # Install packages using Home Manager
     packages =
-      [agent-browser]
+      [agent-browser] # Playwright browser automation
       ++ (with pkgs; [
         age # Modern encryption tool
         bat # Cat clone with syntax highlighting
         btop # System monitor
-        ccusage
-        ccstatusline
-        chafa # Image resizer
+        ccusage # Claude Code usage tracker
+        ccstatusline # Claude Code statusline
+        chafa # Image to terminal converter
         curl # URL retrieval utility
         delta # Syntax-highlighting pager
         devenv # Development environment manager
         direnv # Environment variable manager
         docker-compose # Compose multiple containers
-        dua
-        duf # Disk usage analyzer
+        dua # Disk usage analyzer with interactive mode
+        duf # Disk usage overview
         eza # File explorer
         fastfetch # System information tool
         fd # Fast directory walker
@@ -189,7 +189,8 @@ in {
         ghq # Remote repository management
         git # Version control system
         gnupg # GNU Privacy Guard
-        hclfmt # HCL formatter imagemagick # Image manipulation tools
+        hclfmt # HCL formatter
+        imagemagick # Image manipulation tools
         highlight # Syntax highlighting
         imgcat # Image viewer
         inetutils # Network utilities
@@ -199,15 +200,15 @@ in {
         kubectl # Kubernetes command-line tool
         lazydocker # Docker CLI with auto-completion and syntax highlighting
         llama-cpp # Text generation
-        localsend
-        lsof
+        localsend # Local network file sharing
+        lsof # List open files
         meld # Visual diff and merge tool
-        minio-client
-        ncdu
-        neofetch
-        nixd # Nix daemon for IDE
+        minio-client # MinIO object storage client
+        ncdu # NCurses disk usage analyzer
+        neofetch # System information display
+        nixd # Nix language server
         oh-my-posh # Prompt theme engine
-        openssl
+        openssl # Cryptography toolkit
         presenterm # Presentation in markdown
         ripgrep # Fast grep alternative
         rsync # File synchronization tool
@@ -215,12 +216,12 @@ in {
         sops # Secret management tool
         stc-cli # Syncthing CLI
         syncthing # File synchronization tool
-        tdd-guard
-        tldr # Documentation tool
+        tdd-guard # Test-driven development watcher
+        tldr # Simplified man pages
         tmux # Terminal multiplexer
         tmux-mem-cpu-load # CPU and memory usage monitor
         tokei # Code statistics tool
-        unzip
+        unzip # ZIP archive extractor
         # wezterm
         wiki-tui # Wikipedia TUI
         wireguard-tools # VPN tools
@@ -246,8 +247,8 @@ in {
             slack # Team communication tool
             spotify # Music streaming service
             inkscape # Vector graphics editor
-            podman
-            podman-tui
+            podman # Container runtime
+            podman-tui # Podman terminal UI
           ]
         else []
       )
