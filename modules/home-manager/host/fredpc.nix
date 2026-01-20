@@ -1,9 +1,25 @@
-# Configuration specific to the MacBook Pro device.
+# Configuration specific to fredpc (desktop workstation)
 {
   pkgs,
   config,
   ...
 }: {
+  # Scream audio receiver for Windows VM
+  systemd.user.services.scream = {
+    Unit = {
+      Description = "Scream audio receiver for Windows VM";
+      After = ["pipewire.service" "pipewire-pulse.service"];
+    };
+    Service = {
+      ExecStartPre = "${pkgs.bash}/bin/bash -c 'until ${pkgs.iproute2}/bin/ip link show virbr0 2>/dev/null; do sleep 1; done'";
+      ExecStart = "${pkgs.scream}/bin/scream -i virbr0 -o pulse";
+      Restart = "on-failure";
+      RestartSec = 5;
+    };
+    Install = {
+      WantedBy = ["default.target"];
+    };
+  };
   # wayland.windowManager.hyprland = {
   #   enable = true;
   #   package = pkgs.hyprland;
