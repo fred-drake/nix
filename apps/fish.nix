@@ -80,6 +80,10 @@ in {
             set devdir (echo "$devdir" | sed "s|\$HOME|$HOME|g")
             # Replace $domain placeholder if present
             set devdir (echo "$devdir" | sed "s|\$domain|$domain|g")
+            # If devdir is ".", use current directory
+            if test "$devdir" = "."
+              set devdir (pwd)
+            end
           end
         else
           # If config file doesn't exist, use current directory
