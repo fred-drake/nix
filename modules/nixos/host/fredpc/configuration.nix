@@ -57,6 +57,30 @@ in {
       enable = false;
     };
     xserver.videoDrivers = ["nvidia"];
+
+    # Samba for sharing files with Windows VM
+    samba = {
+      enable = true;
+      settings = {
+        global = {
+          "workgroup" = "WORKGROUP";
+          "server string" = "fredpc";
+          "security" = "user";
+          "hosts allow" = "192.168.122. 127.0.0.1 localhost";
+          "hosts deny" = "0.0.0.0/0";
+          "guest account" = "nobody";
+          "map to guest" = "bad user";
+        };
+        home = {
+          path = "/home/fdrake";
+          browseable = "yes";
+          "read only" = "no";
+          "valid users" = "fdrake";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+        };
+      };
+    };
   };
 
   environment.systemPackages = with pkgs; [

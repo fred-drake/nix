@@ -112,6 +112,6 @@
   # LOOKING GLASS - kvmfr device permissions
   # ============================================
   services.udev.extraRules = ''
-    SUBSYSTEM=="kvmfr", OWNER="fdrake", GROUP="libvirtd", MODE="0660"
+    SUBSYSTEM=="kvmfr", KERNEL=="kvmfr0", RUN+="${pkgs.coreutils}/bin/chown fdrake:libvirtd /dev/kvmfr0", RUN+="${pkgs.coreutils}/bin/chmod 0660 /dev/kvmfr0"
   '';
 }
