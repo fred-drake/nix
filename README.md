@@ -22,7 +22,6 @@ This repository contains Nix configurations for managing both personal workstati
 - **Build Machines**:
   - `fredpc`: Builds x86_64-linux configurations
   - `nixosaarch64vm`: Builds aarch64-linux configurations
-  - `arm64builder`: Dedicated aarch64-linux build server
 - **Infrastructure Services** (Managed via Colmena):
   - `dns1`, `dns2`: DNS servers
   - `gitea`: Git repository hosting
