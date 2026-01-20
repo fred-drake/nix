@@ -3,9 +3,9 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "agent-browser" = {
-    "version" = "0.5.0";
-    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.5.0.tgz";
-    "url-hash" = "sha256-IdeLrmuExcdV4V3h3IGeB8Q8jliLHqrran5ewP+k56A=";
+    "version" = "0.6.0";
+    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.6.0.tgz";
+    "url-hash" = "sha256-sf+IP0rQqZiboL7E9j2YVQBGtPPtMvcE/R9fplWyknk=";
   };
   "ccstatusline" = {
     "version" = "2.0.23";
