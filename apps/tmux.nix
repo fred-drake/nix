@@ -5,10 +5,19 @@
     shell = "${pkgs.fish}/bin/fish";
     terminal = "tmux-256color";
     plugins = with pkgs; [
+      tmuxPlugins.resurrect
       tmuxPlugins.continuum
       tmuxPlugins.tmux-fzf
     ];
     extraConfig = ''
+      # Resurrect - save/restore sessions
+      set -g @resurrect-capture-pane-contents 'on'
+      set -g @resurrect-strategy-nvim 'session'
+
+      # Continuum - automatic save/restore
+      set -g @continuum-restore 'on'
+      set -g @continuum-save-interval '15'
+
       # remap prefix from 'C-b' to 'C-a'
       unbind C-b
       set-option -g prefix C-a
