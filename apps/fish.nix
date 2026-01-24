@@ -8,6 +8,9 @@ in {
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
+      # Ensure ~/.local/bin is in PATH (idempotent)
+      fish_add_path --path $HOME/.local/bin
+
       # Kill stock greeting
       set fish_greeting
 
