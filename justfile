@@ -14,7 +14,7 @@ build: _rebuild-pre
     system-flake-rebuild build
 
 # Update everything
-update-all: update update-npm-packages update-repos update-container-digests update-secrets
+update-all: update update-npm-packages update-repos update-container-digests update-secrets claude
 
 # Pull the latest hashes and shas from the repos in apps/fetcher/repos.toml
 update-repos:
@@ -27,6 +27,10 @@ update-container-digests:
 # Update NPM packages
 update-npm-packages:
     update-npm-packages
+
+# Update Claude Code binary metadata
+claude:
+    ./apps/fetcher/update-claude-code.sh
 
 # Run colmena on only the DNS hosts
 colmena-dns: update-secrets

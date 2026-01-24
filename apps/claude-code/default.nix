@@ -1,50 +1,64 @@
 {
+  lib,
   stdenv,
   fetchurl,
-  nodejs,
+  patchelf,
+  bun,
   makeWrapper,
+  glibc,
 }: let
-  npm-packages = import ../fetcher/npm-packages.nix;
+  binaryMeta = import ../fetcher/claude-code-binary.nix;
 
-  # Main package
-  claudeCode = stdenv.mkDerivation rec {
+  # Map Nix platform to Claude Code platform names
+  platformMap = {
+    "x86_64-linux" = "linux-x64";
+    "aarch64-linux" = "linux-arm64";
+    "x86_64-darwin" = "darwin-x64";
+    "aarch64-darwin" = "darwin-arm64";
+  };
+
+  platform = platformMap.${stdenv.hostPlatform.system}
+    or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
+
+  platformMeta = binaryMeta.platforms.${platform};
+in
+  stdenv.mkDerivation {
     pname = "claude-code";
-    inherit (npm-packages.claude-code) version;
+    inherit (binaryMeta) version;
 
     src = fetchurl {
-      inherit (npm-packages.claude-code) url;
-      hash = npm-packages.claude-code.url-hash;
+      url = "${binaryMeta.baseUrl}/${binaryMeta.version}/${platform}/claude";
+      inherit (platformMeta) hash;
     };
 
-    nativeBuildInputs = [makeWrapper];
+    nativeBuildInputs = [makeWrapper] ++ lib.optionals stdenv.isLinux [patchelf];
 
-    # We don't need to build anything, just unpack and install
+    buildInputs = [bun];
+
+    # No unpacking needed - it's a single binary
+    dontUnpack = true;
     dontBuild = true;
-
-    unpackPhase = ''
-      # Unpack the tarball
-      mkdir -p source
-      tar -xzf $src -C source
-    '';
+    # Don't strip - it breaks Bun single-file executables
+    dontStrip = true;
+    # Don't run fixup hooks that might modify the binary
+    dontPatchELF = true;
 
     installPhase = ''
-      # Create the directory structure
-      mkdir -p $out/lib/node_modules/@anthropic-ai/claude-code
-      mkdir -p $out/bin
-
-      # Copy all the necessary files
-      cp -r source/package/* $out/lib/node_modules/@anthropic-ai/claude-code/
-
-      # Create a wrapper script for the CLI
-      makeWrapper ${nodejs}/bin/node $out/bin/claude \
-        --add-flags "$out/lib/node_modules/@anthropic-ai/claude-code/cli.js"
+      runHook preInstall
+      install -Dm755 $src $out/bin/.claude-unwrapped
+      ${lib.optionalString stdenv.isLinux ''
+        # Patch only the interpreter, preserving the rest of the binary
+        patchelf --set-interpreter ${glibc}/lib/ld-linux-x86-64.so.2 $out/bin/.claude-unwrapped
+      ''}
+      makeWrapper $out/bin/.claude-unwrapped $out/bin/claude \
+        --prefix PATH : ${lib.makeBinPath [bun]}
+      runHook postInstall
     '';
 
     meta = {
       description = "Claude Code CLI tool";
       homepage = "https://www.anthropic.com/claude-code";
-      mainProgram = "claude-code";
+      mainProgram = "claude";
+      platforms = lib.attrNames platformMap;
     };
-  };
-in
-  claudeCode
+  }
