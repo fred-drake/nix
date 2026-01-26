@@ -9,11 +9,13 @@
   ccstatusline = pkgs.callPackage ../../apps/ccstatusline.nix {
     npm-packages = import ../../apps/fetcher/npm-packages.nix;
   };
+  claude-usage = pkgs.callPackage ../../apps/claude-usage.nix {};
 in {
   # Add Claude Code and Gitea MCP packages
   home.packages = [
     claude-code # Claude Code CLI tool
     gitea-mcp # Gitea MCP server
+    claude-usage # Claude Code usage JSON fetcher
   ];
 
   # SOPS templates for MCP configuration

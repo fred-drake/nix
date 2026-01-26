@@ -24,9 +24,6 @@
   mermaid-cli-wrapped = pkgs.callPackage ../../apps/mermaid-cli-wrapped.nix {
     inherit (pkgs) stdenv;
   };
-  ccusage = pkgs.callPackage ../../apps/ccusage.nix {
-    npm-packages = import ../../apps/fetcher/npm-packages.nix;
-  };
   ccstatusline = pkgs.callPackage ../../apps/ccstatusline.nix {
     npm-packages = import ../../apps/fetcher/npm-packages.nix;
   };
@@ -172,7 +169,6 @@ in {
         age # Modern encryption tool
         bat # Cat clone with syntax highlighting
         btop # System monitor
-        ccusage # Claude Code usage tracker
         ccstatusline # Claude Code statusline
         chafa # Image to terminal converter
         curl # URL retrieval utility
