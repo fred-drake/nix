@@ -212,6 +212,18 @@ in {
         key = "mcp-url";
       };
 
+      zohomail-client-id = {
+        sopsFile = config.secrets.workstation.zohomail;
+        mode = "0400";
+        key = "client-id";
+      };
+
+      zohomail-client-secret = {
+        sopsFile = config.secrets.workstation.zohomail;
+        mode = "0400";
+        key = "client-secret";
+      };
+
       resume-credentials = {
         sopsFile = config.secrets.workstation.resume-credentials;
         mode = "0400";
