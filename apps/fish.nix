@@ -7,10 +7,11 @@
 in {
   programs.fish = {
     enable = true;
+    shellInit = ''
+      # Ensure ~/.local/bin is in PATH for all shell contexts (idempotent)
+      fish_add_path $HOME/.local/bin
+    '';
     interactiveShellInit = ''
-      # Ensure ~/.local/bin is in PATH (idempotent)
-      fish_add_path --path $HOME/.local/bin
-
       # Kill stock greeting
       set fish_greeting
 
