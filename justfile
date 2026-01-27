@@ -5,13 +5,13 @@ default:
 _rebuild-pre:
     git add *.nix
 
-# Switch the system in its current form
-switch: _rebuild-pre
-    system-flake-rebuild switch
+# Switch the system in its current form (auto-updates secrets)
+switch: _rebuild-pre update-secrets
+    sudo system-flake-rebuild switch
 
-# Build the system in its current form
-build: _rebuild-pre
-    system-flake-rebuild build
+# Build the system in its current form (auto-updates secrets)
+build: _rebuild-pre update-secrets
+    sudo system-flake-rebuild build
 
 # Update everything
 update-all: update update-npm-packages update-repos update-container-digests update-secrets claude
