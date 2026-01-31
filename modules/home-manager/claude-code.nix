@@ -306,6 +306,8 @@ in {
     ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
 
     ".claude/settings.json".text = builtins.toJSON {
+      DISABLE_AUTOUPDATER = "1";
+
       statusLine = {
         type = "command";
         command = "${ccstatusline}/bin/ccstatusline";
