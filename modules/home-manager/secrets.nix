@@ -236,6 +236,12 @@ in {
         key = "data";
         path = "${home}/.config/fish/conf.d/woodpecker-env.fish";
       };
+
+      icloud-bridge-api-key = {
+        sopsFile = config.secrets.workstation.icloud-bridge;
+        mode = "0400";
+        key = "api-key";
+      };
     };
   };
 
