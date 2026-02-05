@@ -255,6 +255,18 @@ in {
         mode = "0400";
         key = "api-key";
       };
+
+      dalaran-username = {
+        sopsFile = config.secrets.switch.dalaran.credentials;
+        mode = "0400";
+        key = "username";
+      };
+
+      dalaran-password = {
+        sopsFile = config.secrets.switch.dalaran.credentials;
+        mode = "0400";
+        key = "password";
+      };
     };
   };
 
