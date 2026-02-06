@@ -307,6 +307,7 @@ in {
 
     ".claude/settings.json".text = builtins.toJSON {
       DISABLE_AUTOUPDATER = "1";
+      CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
 
       statusLine = {
         type = "command";
