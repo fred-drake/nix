@@ -306,8 +306,10 @@ in {
     ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
 
     ".claude/settings.json".text = builtins.toJSON {
-      DISABLE_AUTOUPDATER = "1";
-      CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+      env = {
+        DISABLE_AUTOUPDATER = "1";
+        CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+      };
 
       statusLine = {
         type = "command";
