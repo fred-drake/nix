@@ -267,6 +267,18 @@ in {
         mode = "0400";
         key = "password";
       };
+
+      hetzner-home-api-token = {
+        sopsFile = config.secrets.workstation.hetzner-home;
+        mode = "0400";
+        key = "api-token";
+      };
+
+      hetzner-home-storage-box-password = {
+        sopsFile = config.secrets.workstation.hetzner-home;
+        mode = "0400";
+        key = "storage-box-password";
+      };
     };
   };
 

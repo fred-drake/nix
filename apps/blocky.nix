@@ -1,9 +1,13 @@
 {config, ...}: let
   inherit (config.soft-secrets) blocky;
+  adminIp = config.soft-secrets.host.${config.networking.hostName}.admin_ip_address;
 in {
   services.blocky = {
     enable = true;
     settings = {
+      ports = {
+        http = "${adminIp}:4000";
+      };
       upstreams = {
         timeout = "1s";
         groups = {
