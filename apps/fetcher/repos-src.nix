@@ -5,8 +5,8 @@
   outline-nvim-src = pkgs.fetchFromGitHub {
     owner = "hedyhli";
     repo = "outline.nvim";
-    rev = "1967ef50036b0b1eac4977aeede55915a741afe0";
-    hash = "sha256-gaXo4jVG1CVq9AnEUTl0yt+2IIWUd8AmKe1dXJgNqTw=";
+    rev = "ead1820d49c8e79ce89cab1c2c318981b695c9d2";
+    hash = "sha256-+jN6VV7McqszRLHPx7sYme2mq3BzaOr5IOHbF+uZPrc=";
   };
   container-digest-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
@@ -54,20 +54,20 @@
   kuma-waybar-src = pkgs.fetchFromGitHub {
     owner = "WebTender";
     repo = "kuma-waybar";
-    rev = "cf4cd08296f3ec1d85495c8753fe53a202db0f29";
-    hash = "sha256-GUubLfkkQ1KR306/9ild8Cga0a9Yzhqq+qFOi5kMCjc=";
+    rev = "e0ce1a0e8be727dfb572d4b51075d7cd00615044";
+    hash = "sha256-KSnFFXer4cda4krIjpuF89Mwx00zsLYUSCO2Ffnokoc=";
   };
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "d9a66bcf3c16a776c656488f509d0d4120ecab58";
-    hash = "sha256-zVlz8mFb9LDbg+uWMJ6lO5Gu+MJy34NYYHTEN6H7ABY=";
+    rev = "bb522f8bf4d782372efb78aebb0e913e6771b6cf";
+    hash = "sha256-RReVJ+tJtXuglcEDmryqQYGUM9tpN6CSH3Sj1i8H1fI=";
   };
   tdd-guard-src = pkgs.fetchFromGitHub {
     owner = "nizos";
     repo = "tdd-guard";
-    rev = "0f01104ebd2c87956467d89a63cdf7749e7d099f";
-    hash = "sha256-YHyScDD7UcodT/tXJD+bHZQke7eJIHFeER/gyDisPo8=";
+    rev = "be09a94d6b050b913f8084ddad9799d2e059c493";
+    hash = "sha256-7knQ+QsGl5cKBYx/ZkqQ7KDDkH5E/RCp+68OzyqkWxY=";
   };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";

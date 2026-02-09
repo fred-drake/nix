@@ -1,7 +1,4 @@
 [[npm-repository]]
-name = "claude-code"
-repo = "@anthropic-ai/claude-code"
-[[npm-repository]]
 name = "mermaid-cli"
 repo = "mermaid-cli"
 [[npm-repository]]

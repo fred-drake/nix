@@ -3,19 +3,14 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "agent-browser" = {
-    "version" = "0.6.0";
-    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.6.0.tgz";
-    "url-hash" = "sha256-sf+IP0rQqZiboL7E9j2YVQBGtPPtMvcE/R9fplWyknk=";
+    "version" = "0.9.1";
+    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.9.1.tgz";
+    "url-hash" = "sha256-UzVsbst81dJTuCje9DwXJ9L2Cm8CLIG5O6KWRvogvHs=";
   };
   "ccstatusline" = {
-    "version" = "2.0.23";
-    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.0.23.tgz";
-    "url-hash" = "sha256-HRFmV9B7REhYsDmVK4mSda2bJ21/4smJj9uc/zASHPE=";
-  };
-  "claude-code" = {
-    "version" = "2.1.15";
-    "url" = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.15.tgz";
-    "url-hash" = "sha256-6B3q0Z2AXqD8UCvuCjyx90LxYrjZDgfa7y6htBicqL4=";
+    "version" = "2.0.25";
+    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.0.25.tgz";
+    "url-hash" = "sha256-x4fqm2TCAILvnOMQTwkkYAjzEjUIaao1wnC6MhXX1rs=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";

@@ -63,8 +63,11 @@ in
       # Copy ws
       cp -r ws/package/* $out/lib/node_modules/ws/
 
+      # Ensure the bin script is executable (npm tarballs may not preserve permissions)
+      chmod +x $out/lib/node_modules/agent-browser/bin/agent-browser.js
+
       # Create wrapper script that sets PLAYWRIGHT_BROWSERS_PATH and adds node to PATH
-      makeWrapper $out/lib/node_modules/agent-browser/bin/agent-browser $out/bin/agent-browser \
+      makeWrapper $out/lib/node_modules/agent-browser/bin/agent-browser.js $out/bin/agent-browser \
         --set PLAYWRIGHT_BROWSERS_PATH "${playwright-driver.browsers}" \
         --set NODE_PATH "$out/lib/node_modules" \
         --prefix PATH : "${nodejs}/bin"
