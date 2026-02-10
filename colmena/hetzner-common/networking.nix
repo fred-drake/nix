@@ -29,13 +29,6 @@ in {
         "8.8.8.8"
       ];
       defaultGateway = gatewayAddress;
-      defaultGateway6 = {
-        address = "";
-        interface =
-          if isGateway
-          then "eth0"
-          else "enp7s0";
-      };
       dhcpcd.enable = false;
       usePredictableInterfaceNames = lib.mkForce true;
       interfaces = lib.mkMerge [
@@ -61,12 +54,6 @@ in {
               {
                 address = gatewayAddress;
                 prefixLength = 32;
-              }
-            ];
-            ipv6.routes = [
-              {
-                address = "";
-                prefixLength = 128;
               }
             ];
             # External IP should be set in the host-specific config like:
