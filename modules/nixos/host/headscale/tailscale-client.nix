@@ -4,6 +4,7 @@
     openFirewall = true;
     useRoutingFeatures = "server";
     extraUpFlags = [
+      "--login-server=https://headscale.brainrush.ai"
       "--advertise-routes=10.1.0.0/16"
       "--accept-routes"
       "--advertise-exit-node"
