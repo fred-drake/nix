@@ -5,7 +5,6 @@
   sops-nix,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
   nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
 in {
   # Base configuration for Headscale
