@@ -279,6 +279,18 @@ in {
         mode = "0400";
         key = "storage-box-password";
       };
+
+      cloudflare-api-key = {
+        sopsFile = config.secrets.workstation.cloudflare;
+        mode = "0400";
+        key = "api-key";
+      };
+
+      cloudflare-account-id = {
+        sopsFile = config.secrets.workstation.cloudflare;
+        mode = "0400";
+        key = "account-id";
+      };
     };
   };
 
