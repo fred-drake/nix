@@ -19,9 +19,11 @@ in {
   };
 
   config = {
-    # Disable wait-online service to prevent deployment failures
-    # The network is functional (routable/online) but systemd-networkd
-    # never considers the interface fully "configured" due to IPv6 issues
+    # Disable systemd-networkd entirely — we use scripted networking.
+    # The nixos-infect generated config enables systemd-networkd with DHCP,
+    # and when it stops (e.g. during a Colmena deploy) it tears down addresses
+    # that scripted networking had already configured.
+    systemd.network.enable = lib.mkForce false;
     systemd.network.wait-online.enable = false;
 
     networking = {
