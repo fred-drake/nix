@@ -65,7 +65,7 @@
     masApps = {
       # Mac App Store applications
       # "DaVinci Resolve" = 571213070; # Disabled due to mas-cli bug: https://github.com/mas-cli/mas/issues/1029
-      "Pages" = 409201541;
+      # "Pages" = 409201541; # Disabled: cross-device link errors on external volume
       "RunCat" = 1429033973;
       "The Unarchiver" = 425424353;
       "WireGuard" = 1451685025;
