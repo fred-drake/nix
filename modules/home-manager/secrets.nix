@@ -268,6 +268,24 @@ in {
         key = "password";
       };
 
+      karazhan-username = {
+        sopsFile = config.secrets.router.karazhan.credentials;
+        mode = "0400";
+        key = "username";
+      };
+
+      karazhan-password = {
+        sopsFile = config.secrets.router.karazhan.credentials;
+        mode = "0400";
+        key = "password";
+      };
+
+      karazhan-tailscale-auth = {
+        sopsFile = config.secrets.router.karazhan.credentials;
+        mode = "0400";
+        key = "tailscale-auth";
+      };
+
       hetzner-home-api-token = {
         sopsFile = config.secrets.workstation.hetzner-home;
         mode = "0400";
