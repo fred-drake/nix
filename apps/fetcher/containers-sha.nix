@@ -17,7 +17,7 @@ _: {
   "docker.io" = {
     "amruthpillai/reactive-resume" = {
       "latest" = {
-        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:7367994fc100d6b397eb525521175a320c2c5376f03a13949bff6ddcf2747cf8";
+        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:b90fc7503e64b5fe16625b339b537bd13c54a5c95ea960f14ca5f20978f8b3c8";
       };
     };
     "apache/tika" = {

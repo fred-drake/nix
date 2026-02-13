@@ -9,7 +9,7 @@
   gatewayAddress =
     if serverType == "gateway"
     then "172.31.1.1"
-    else "10.0.0.1";
+    else "10.1.0.1";
   isGateway = serverType == "gateway";
 in {
   options.networking.serverType = lib.mkOption {

@@ -29,6 +29,7 @@
   woodpecker = import ./hosts/woodpecker.nix {inherit self nixpkgs-stable secrets sops-nix;};
   resume = import ./hosts/resume.nix {inherit self nixpkgs-stable secrets sops-nix;};
   headscale = import ./hosts/headscale.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  ironforge = import ./hosts/ironforge.nix {inherit self nixpkgs-stable secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -58,6 +59,7 @@ in {
   inherit (woodpecker) _woodpecker;
   inherit (resume) _resume;
   inherit (headscale) _headscale;
+  inherit (ironforge) _ironforge;
 
   # Init configurations
   "dns1-init" = dns1."dns1-init";
@@ -82,6 +84,7 @@ in {
   "woodpecker-init" = woodpecker."woodpecker-init";
   "resume-init" = resume."resume-init";
   "headscale-init" = headscale."headscale-init";
+  "ironforge-init" = ironforge."ironforge-init";
 
   # Full configurations
   "dns1" = dns1."dns1";
@@ -106,4 +109,5 @@ in {
   "woodpecker" = woodpecker."woodpecker";
   "resume" = resume."resume";
   "headscale" = headscale."headscale";
+  "ironforge" = ironforge."ironforge";
 }
