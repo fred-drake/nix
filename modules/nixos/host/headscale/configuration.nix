@@ -24,6 +24,17 @@ _: {
             prefixLength = 32;
           }
         ];
+        ipv4.routes = [
+          {
+            address = "10.1.0.1";
+            prefixLength = 32;
+          }
+          {
+            address = "10.0.0.0";
+            prefixLength = 8;
+            via = "10.1.0.1";
+          }
+        ];
         ipv6.addresses = [
           {
             address = "fe80::8400:ff:fe7b:4d41";
@@ -41,5 +52,7 @@ _: {
 
   networking.firewall.extraCommands = ''
     iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -o eth0 -j MASQUERADE
+    iptables -A FORWARD -i enp7s0 -o eth0 -j ACCEPT
+    iptables -A FORWARD -i eth0 -o enp7s0 -m state --state RELATED,ESTABLISHED -j ACCEPT
   '';
 }
