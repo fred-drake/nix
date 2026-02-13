@@ -7,11 +7,6 @@
         mode = "0400";
         key = "data";
       };
-      minio-env-file = {
-        sopsFile = config.secrets.host.minio.minio-env-file;
-        mode = "0400";
-        key = "data";
-      };
       postgresql-env = {
         sopsFile = config.secrets.host.resume.postgresql-env;
         mode = "0400";

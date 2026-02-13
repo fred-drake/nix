@@ -36,7 +36,6 @@ This repository contains Nix configurations for managing both personal workstati
   - `n8n`: Workflow automation
   - `external-metrics`: External metrics collection
   - `glance`: Dashboard application
-  - `minio`: Object storage
 
 ## Network Overview
 

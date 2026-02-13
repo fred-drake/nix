@@ -23,7 +23,6 @@
   larussa = import ./hosts/larussa.nix {inherit self nixpkgs-stable secrets sops-nix;};
   external-metrics = import ./hosts/external-metrics.nix {inherit self nixpkgs-stable secrets sops-nix;};
   glance = import ./hosts/glance.nix {inherit self nixpkgs-stable secrets sops-nix;};
-  minio = import ./hosts/minio.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   scanner = import ./hosts/scanner.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   paperless = import ./hosts/paperless.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   woodpecker = import ./hosts/woodpecker.nix {inherit self nixpkgs-stable secrets sops-nix;};
@@ -53,7 +52,6 @@ in {
   inherit (larussa) _larussa;
   inherit (external-metrics) _external-metrics;
   inherit (glance) _glance;
-  inherit (minio) _minio;
   inherit (scanner) _scanner;
   inherit (paperless) _paperless;
   inherit (woodpecker) _woodpecker;
@@ -78,7 +76,6 @@ in {
   "larussa-init" = larussa."larussa-init";
   "external-metrics-init" = external-metrics."external-metrics-init";
   "glance-init" = glance."glance-init";
-  "minio-init" = minio."minio-init";
   "scanner-init" = scanner."scanner-init";
   "paperless-init" = paperless."paperless-init";
   "woodpecker-init" = woodpecker."woodpecker-init";
@@ -103,7 +100,6 @@ in {
   "larussa" = larussa."larussa";
   "external-metrics" = external-metrics."external-metrics";
   "glance" = glance."glance";
-  "minio" = minio."minio";
   "scanner" = scanner."scanner";
   "paperless" = paperless."paperless";
   "woodpecker" = woodpecker."woodpecker";
