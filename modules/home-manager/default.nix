@@ -31,6 +31,40 @@
     npm-packages = import ../../apps/fetcher/npm-packages.nix;
     inherit (pkgs) playwright-driver;
   };
+  discordo-config = ''
+    [theme.title]
+    alignment = "left"
+    normal_style = { attributes = "dim" }
+    active_style = { foreground = "purple", attributes = "bold" }
+
+    [theme.footer]
+    alignment = "left"
+    normal_style = { attributes = "dim" }
+    active_style = { foreground = "purple", attributes = "bold" }
+
+    [theme.border]
+    enabled = true
+    padding = [0, 0, 1, 1]
+    normal_style = { foreground = "purple", attributes = "dim" }
+    active_style = { foreground = "purple", attributes = "bold" }
+    normal_set = "round"
+    active_set = "round"
+
+    [theme.guilds_tree]
+    auto_expand_folders = true
+    graphics = true
+    graphics_color = "purple"
+
+    [theme.messages_list]
+    reply_indicator = ">"
+    forwarded_indicator = "<"
+    mention_style = { foreground = "yellow", attributes = "bold" }
+    emoji_style = { foreground = "yellow" }
+    url_style = { foreground = "aqua" }
+    attachment_style = { foreground = "aqua" }
+    message_style = { attributes = "dim" }
+    selected_message_style = { attributes = "reverse" }
+  '';
   # Build tdd-guard with nixpkgs-stable to avoid npm 10+ ENOTCACHED issues
   pkgsStable = import inputs.nixpkgs-stable {
     inherit (pkgs.stdenv.hostPlatform) system;
@@ -121,6 +155,12 @@ in {
       // (
         if pkgs.stdenv.isDarwin
         then {
+          "Library/Application Support/discordo/config.toml" = {
+            text = discordo-config;
+          };
+          ".config/discordo/config.toml" = {
+            text = discordo-config;
+          };
           "Library/Application Support/Code/User/settings.json" = {
             text = builtins.toJSON vscode-config.globalSettings;
           };
@@ -141,6 +181,9 @@ in {
           };
         }
         else {
+          ".config/discordo/config.toml" = {
+            text = discordo-config;
+          };
           ".config/Code/User/settings.json" = {
             text = builtins.toJSON vscode-config.globalSettings;
           };
@@ -175,6 +218,7 @@ in {
         delta # Syntax-highlighting pager
         devenv # Development environment manager
         direnv # Environment variable manager
+        discordo
         docker-compose # Compose multiple containers
         dua # Disk usage analyzer with interactive mode
         duf # Disk usage overview

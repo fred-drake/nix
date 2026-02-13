@@ -309,6 +309,18 @@ in {
         mode = "0400";
         key = "account-id";
       };
+
+      gitea-storage-username = {
+        sopsFile = config.secrets.host.ironforge.gitea-storage;
+        mode = "0400";
+        key = "username";
+      };
+
+      gitea-storage-password = {
+        sopsFile = config.secrets.host.ironforge.gitea-storage;
+        mode = "0400";
+        key = "password";
+      };
     };
   };
 
