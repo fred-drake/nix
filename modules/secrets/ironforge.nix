@@ -32,6 +32,43 @@
         mode = "0400";
         key = "data";
       };
+      woodpecker-postgresql-env = {
+        sopsFile = config.secrets.host.woodpecker.postgresql-env;
+        mode = "0400";
+        key = "data";
+      };
+      woodpecker-env = {
+        sopsFile = config.secrets.host.woodpecker.woodpecker-env;
+        mode = "0400";
+        key = "data";
+      };
+      woodpecker-agent-env = {
+        sopsFile = config.secrets.host.woodpecker.woodpecker-agent-env;
+        mode = "0400";
+        key = "data";
+      };
+      gitea-check-service-env = {
+        sopsFile = config.secrets.host.gitea.check-service-env;
+        mode = "0400";
+        key = "data";
+      };
+      gitea-storage-username = {
+        sopsFile = config.secrets.host.ironforge.gitea-storage;
+        mode = "0400";
+        key = "username";
+      };
+      gitea-storage-password = {
+        sopsFile = config.secrets.host.ironforge.gitea-storage;
+        mode = "0400";
+        key = "password";
+      };
+    };
+    templates."gitea-storage-credentials" = {
+      content = ''
+        username=${config.sops.placeholder."gitea-storage-username"}
+        password=${config.sops.placeholder."gitea-storage-password"}
+      '';
+      mode = "0400";
     };
   };
 }

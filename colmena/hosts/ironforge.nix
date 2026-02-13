@@ -5,6 +5,7 @@
   sops-nix,
   ...
 }: let
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
   nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
 in {
   # Base configuration for Ironforge
@@ -14,6 +15,9 @@ in {
       overlays = [];
       config = {};
     };
+    networking.extraHosts = ''
+      127.0.0.1 gitea.${soft-secrets.networking.domain}
+    '';
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets
@@ -27,6 +31,7 @@ in {
     deployment = {
       buildOnTarget = true;
       targetHost = "10.1.1.3";
+      targetPort = 2222;
       targetUser = "root";
     };
   };
@@ -46,6 +51,8 @@ in {
       self.colmena._ironforge
       ../../modules/secrets/ironforge.nix
       ../../modules/nixos/host/ironforge/resume.nix
+      ../../modules/nixos/host/ironforge/woodpecker.nix
+      ../../modules/nixos/host/ironforge/gitea.nix
       (nodeExporter.mkNodeExporter "ironforge")
     ];
 

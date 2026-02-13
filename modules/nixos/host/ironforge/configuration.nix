@@ -17,6 +17,11 @@
     };
   };
 
+  services.openssh = {
+    ports = [2222];
+    settings.ListenAddress = "0.0.0.0";
+  };
+
   virtualisation = {
     containers.enable = true;
     podman = {
@@ -28,6 +33,7 @@
 
   networking = {
     hostName = "ironforge";
+    firewall.allowedTCPPorts = [2222];
     interfaces = {
       enp7s0 = {
         ipv4.addresses = [
