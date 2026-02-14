@@ -310,6 +310,18 @@ in {
         key = "account-id";
       };
 
+      cloudflare-r2-access-key = {
+        sopsFile = config.secrets.workstation.cloudflare;
+        mode = "0400";
+        key = "r2-access-key";
+      };
+
+      cloudflare-r2-secret-key = {
+        sopsFile = config.secrets.workstation.cloudflare;
+        mode = "0400";
+        key = "r2-secret-key";
+      };
+
       gitea-storage-username = {
         sopsFile = config.secrets.host.ironforge.gitea-storage;
         mode = "0400";
