@@ -11,8 +11,6 @@
   dns2 = import ./hosts/dns2.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   jellyseerr = import ./hosts/jellyseerr.nix {inherit self nixpkgs-stable secrets sops-nix;};
   prowlarr = import ./hosts/prowlarr.nix {inherit self nixpkgs-stable secrets sops-nix;};
-  n8n = import ./hosts/n8n.nix {inherit self nixpkgs-stable secrets sops-nix;};
-  gitea = import ./hosts/gitea.nix {inherit self nixpkgs-stable secrets sops-nix;};
   gitea-runner-1 = import ./hosts/gitea-runner-1.nix {inherit self nixpkgs-stable secrets sops-nix;};
   gitea-runner-2 = import ./hosts/gitea-runner-2.nix {inherit self nixpkgs-stable secrets sops-nix;};
   gitea-runner-3 = import ./hosts/gitea-runner-3.nix {inherit self nixpkgs-stable secrets sops-nix;};
@@ -24,7 +22,6 @@
   external-metrics = import ./hosts/external-metrics.nix {inherit self nixpkgs-stable secrets sops-nix;};
   glance = import ./hosts/glance.nix {inherit self nixpkgs-stable secrets sops-nix;};
   scanner = import ./hosts/scanner.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
-  woodpecker = import ./hosts/woodpecker.nix {inherit self nixpkgs-stable secrets sops-nix;};
   resume = import ./hosts/resume.nix {inherit self nixpkgs-stable secrets sops-nix;};
   headscale = import ./hosts/headscale.nix {inherit self nixpkgs-stable secrets sops-nix;};
   ironforge = import ./hosts/ironforge.nix {inherit self nixpkgs-stable secrets sops-nix;};
@@ -39,8 +36,6 @@ in {
   inherit (dns2) _dns2;
   inherit (jellyseerr) _jellyseerr;
   inherit (prowlarr) _prowlarr;
-  inherit (n8n) _n8n;
-  inherit (gitea) _gitea;
   inherit (gitea-runner-1) _gitea-runner-1;
   inherit (gitea-runner-2) _gitea-runner-2;
   inherit (gitea-runner-3) _gitea-runner-3;
@@ -52,7 +47,6 @@ in {
   inherit (external-metrics) _external-metrics;
   inherit (glance) _glance;
   inherit (scanner) _scanner;
-  inherit (woodpecker) _woodpecker;
   inherit (resume) _resume;
   inherit (headscale) _headscale;
   inherit (ironforge) _ironforge;
@@ -62,8 +56,6 @@ in {
   "dns2-init" = dns2."dns2-init";
   "jellyseerr-init" = jellyseerr."jellyseerr-init";
   "prowlarr-init" = prowlarr."prowlarr-init";
-  "n8n-init" = n8n."n8n-init";
-  "gitea-init" = gitea."gitea-init";
   "gitea-runner-1-init" = gitea-runner-1."gitea-runner-1-init";
   "gitea-runner-2-init" = gitea-runner-2."gitea-runner-2-init";
   "gitea-runner-3-init" = gitea-runner-3."gitea-runner-3-init";
@@ -75,7 +67,6 @@ in {
   "external-metrics-init" = external-metrics."external-metrics-init";
   "glance-init" = glance."glance-init";
   "scanner-init" = scanner."scanner-init";
-  "woodpecker-init" = woodpecker."woodpecker-init";
   "resume-init" = resume."resume-init";
   "headscale-init" = headscale."headscale-init";
   "ironforge-init" = ironforge."ironforge-init";
@@ -85,8 +76,6 @@ in {
   "dns2" = dns2."dns2";
   "jellyseerr" = jellyseerr."jellyseerr";
   "prowlarr" = prowlarr."prowlarr";
-  "n8n" = n8n."n8n";
-  "gitea" = gitea."gitea";
   "gitea-runner-1" = gitea-runner-1."gitea-runner-1";
   "gitea-runner-2" = gitea-runner-2."gitea-runner-2";
   "gitea-runner-3" = gitea-runner-3."gitea-runner-3";
@@ -98,7 +87,6 @@ in {
   "external-metrics" = external-metrics."external-metrics";
   "glance" = glance."glance";
   "scanner" = scanner."scanner";
-  "woodpecker" = woodpecker."woodpecker";
   "resume" = resume."resume";
   "headscale" = headscale."headscale";
   "ironforge" = ironforge."ironforge";

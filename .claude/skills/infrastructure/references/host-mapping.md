@@ -9,13 +9,13 @@ This reference maps hostnames to their Proxmox container IDs and physical locati
 | 100 | jellyseerr | running |
 | 103 | radarr | stopped |
 | 104 | prowlarr | running |
-| 106 | n8n | running |
-| 107 | gitea | running |
+| 106 | n8n | removed |
+| 107 | gitea | removed (migrated to ironforge) |
 | 109 | brainrush-dev | running |
 | 110 | uptime-kuma | running |
 | 112 | grafana | running |
 | 118 | gitea-runner-3 | running |
-| 122 | woodpecker | running |
+| 122 | woodpecker | removed (migrated to ironforge) |
 | 123 | resume | running |
 | 700 | brainrush-auth | stopped |
 
