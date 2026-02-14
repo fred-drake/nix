@@ -147,7 +147,7 @@ in {
 
     shellAbbrs = {
       cm = "chezmoi";
-      cld = "claude --dangerously-skip-permissions --add-dir ~/Screenshots --model opus";
+      cld = "claude --add-dir ~/Screenshots --model opus";
       df = "duf";
       k = "kubectl";
       telnet = "nc -zv";

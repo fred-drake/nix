@@ -317,7 +317,10 @@ in {
         padding = 0;
       };
 
+      skipDangerousModePermissionPrompt = true;
+
       permissions = {
+        defaultMode = "bypassPermissions";
         allow = [];
 
         deny = [];
