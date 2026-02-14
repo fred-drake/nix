@@ -53,6 +53,7 @@ in {
       ../../modules/nixos/host/ironforge/resume.nix
       ../../modules/nixos/host/ironforge/woodpecker.nix
       ../../modules/nixos/host/ironforge/gitea.nix
+      ../../modules/nixos/host/ironforge/paperless.nix
       (nodeExporter.mkNodeExporter "ironforge")
     ];
 

@@ -333,6 +333,18 @@ in {
         mode = "0400";
         key = "password";
       };
+
+      paperless-storage-username = {
+        sopsFile = config.secrets.host.ironforge.paperless-storage;
+        mode = "0400";
+        key = "username";
+      };
+
+      paperless-storage-password = {
+        sopsFile = config.secrets.host.ironforge.paperless-storage;
+        mode = "0400";
+        key = "password";
+      };
     };
   };
 

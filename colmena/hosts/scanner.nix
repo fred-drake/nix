@@ -25,7 +25,7 @@ in {
       nixpkgsVersion
     ];
     deployment = {
-      buildOnTarget = false;
+      buildOnTarget = true;
       targetHost = soft-secrets.host.scanner.admin_ip_address;
       targetUser = "default";
     };

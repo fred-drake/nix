@@ -29,7 +29,7 @@ in {
       #!${pkgs.bash}/bin/bash
 
       SOURCE_DIR="/home/default/scans"
-      DEST_SERVER="default@${config.soft-secrets.host.paperless.admin_ip_address}"
+      DEST_SERVER="root@10.1.1.3"
       DEST_DIR="/var/paperless/consume"
 
       # Function to transfer a file
@@ -37,7 +37,7 @@ in {
           local filepath="$1"
           echo "$(date): Transferring: $filepath"
 
-          ${pkgs.rsync}/bin/rsync -av -e "${pkgs.openssh}/bin/ssh" --remove-source-files "$filepath" "''${DEST_SERVER}:''${DEST_DIR}/"
+          ${pkgs.rsync}/bin/rsync -av -e "${pkgs.openssh}/bin/ssh -p 2222" --remove-source-files "$filepath" "''${DEST_SERVER}:''${DEST_DIR}/"
 
           if [ $? -eq 0 ]; then
               echo "$(date): Successfully transferred: $filepath"
