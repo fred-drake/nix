@@ -73,8 +73,6 @@ After deployment, provide a summary table:
 | redis | paperless |
 | woodpecker-agent/server | woodpecker |
 | n8n | n8n |
-| calibre, sabnzbd, sonarr, radarr | larussa |
-| lazylibrarian | larussa |
 | paperless-ngx | paperless |
 
 ## Resources

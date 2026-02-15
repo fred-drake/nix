@@ -30,7 +30,6 @@ This repository contains Nix configurations for managing both personal workstati
   - `prometheus`: Metrics collection
   - `grafana`: Metrics visualization
   - `sonarqube`: Code quality analysis
-  - `larussa`: Media server (Jellyfin, Radarr, Sonarr)
   - `jellyseerr`: Media request management
   - `prowlarr`: Indexer management
   - `n8n`: Workflow automation

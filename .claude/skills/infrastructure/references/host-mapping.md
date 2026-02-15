@@ -40,7 +40,6 @@ This reference maps hostnames to their Proxmox container IDs and physical locati
 |----------|------|--------------|-------|
 | dns1 | Raspberry Pi | aarch64 | Primary DNS, Blocky |
 | dns2 | Raspberry Pi | aarch64 | Secondary DNS, Blocky |
-| larussa | Bare Metal | x86_64 | Media storage, NAS |
 | nixosaarch64vm | VM | aarch64 | Build host for arm64 deploys |
 
 ## Quick Lookup Commands

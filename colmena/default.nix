@@ -19,7 +19,6 @@
   sonarqube = import ./hosts/sonarqube.nix {inherit self nixpkgs-stable secrets sops-nix;};
   prometheus = import ./hosts/prometheus.nix {inherit self nixpkgs-stable secrets sops-nix;};
   grafana = import ./hosts/grafana.nix {inherit self nixpkgs-stable secrets sops-nix;};
-  larussa = import ./hosts/larussa.nix {inherit self nixpkgs-stable secrets sops-nix;};
   external-metrics = import ./hosts/external-metrics.nix {inherit self nixpkgs-stable secrets sops-nix;};
   glance = import ./hosts/glance.nix {inherit self nixpkgs-stable secrets sops-nix;};
   scanner = import ./hosts/scanner.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
@@ -44,7 +43,6 @@ in {
   inherit (sonarqube) _sonarqube;
   inherit (prometheus) _prometheus;
   inherit (grafana) _grafana;
-  inherit (larussa) _larussa;
   inherit (external-metrics) _external-metrics;
   inherit (glance) _glance;
   inherit (scanner) _scanner;
@@ -64,7 +62,6 @@ in {
   "sonarqube-init" = sonarqube."sonarqube-init";
   "prometheus-init" = prometheus."prometheus-init";
   "grafana-init" = grafana."grafana-init";
-  "larussa-init" = larussa."larussa-init";
   "external-metrics-init" = external-metrics."external-metrics-init";
   "glance-init" = glance."glance-init";
   "scanner-init" = scanner."scanner-init";
@@ -84,7 +81,6 @@ in {
   "sonarqube" = sonarqube."sonarqube";
   "prometheus" = prometheus."prometheus";
   "grafana" = grafana."grafana";
-  "larussa" = larussa."larussa";
   "external-metrics" = external-metrics."external-metrics";
   "glance" = glance."glance";
   "scanner" = scanner."scanner";

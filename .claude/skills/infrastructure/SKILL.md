@@ -7,7 +7,6 @@ description: |
 
   IMPORTANT architecture notes:
   - dns1 and dns2 are critical infrastructure. NEVER deploy both simultaneously - deploy dns1 first, verify DNS works, then deploy dns2.
-  - larussa is bare metal (not Proxmox LXC) - media storage and containers.
   - All other servers are Proxmox LXC containers.
 ---
 
@@ -69,51 +68,6 @@ ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/journalctl -u 
 |------|--------------|-------|
 | dns1 | aarch64 (Raspberry Pi) | Critical DNS - deploy sequentially, verify before dns2 |
 | dns2 | aarch64 (Raspberry Pi) | Critical DNS - deploy only after dns1 verified |
-| larussa | x86_64 (bare metal) | Media storage, containers, NVIDIA GPU |
-
-### Larussa Post-Deploy Verification
-
-After deploying to larussa, **always verify GPU access**:
-
-```bash
-# 1. Deploy to larussa
-colmena apply --on larussa --impure
-
-# 2. Verify NVIDIA GPU is accessible
-ssh larussa nvidia-smi
-```
-
-**If `nvidia-smi` errors out**, the NVIDIA driver failed to reload properly. Reboot is required:
-
-```bash
-# Reboot larussa
-ssh larussa sudo reboot
-```
-
-**Recovery timeline:**
-- Machine reboot: ~3-4 minutes
-- Podman containers start: additional ~1-2 minutes
-- Total: ~5-6 minutes before fully operational
-
-**Verify recovery:**
-```bash
-# Check if machine is back
-ssh larussa hostname
-
-# Verify GPU after reboot
-ssh larussa nvidia-smi
-
-# Check podman containers are running
-ssh larussa podman ps
-```
-
-**If issues persist**, use SSH to diagnose:
-```bash
-ssh larussa journalctl -u nvidia-persistenced -n 50
-ssh larussa systemctl status podman.socket
-ssh larussa podman ps -a
-```
-
 ### Proxmox LXC Containers
 
 All other hosts are LXC containers. Use `pct list` on Proxmox hosts to see VMIDs.

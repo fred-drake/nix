@@ -25,18 +25,7 @@ Comprehensive mapping of containers to their NixOS hosts.
 
 | Container | Tag | Host | Config Location |
 |-----------|-----|------|-----------------|
-| linuxserver/calibre | latest | larussa | (check larussa config) |
-| linuxserver/calibre-web | latest | larussa | (check larussa config) |
-| linuxserver/sabnzbd | latest | larussa | (check larussa config) |
-| linuxserver/sonarr | latest | larussa | (check larussa config) |
-| linuxserver/radarr | latest | larussa | (check larussa config) |
 | paperless-ngx/paperless-ngx | latest | paperless | modules/nixos/host/paperless/paperless.nix |
-
-## lscr.io
-
-| Container | Tag | Host | Config Location |
-|-----------|-----|------|-----------------|
-| linuxserver/lazylibrarian | latest | larussa | (check larussa config) |
 
 ## docker.gitea.com
 
@@ -53,7 +42,6 @@ Comprehensive mapping of containers to their NixOS hosts.
 | sonarqube | postgres:17 |
 | resume | postgres:16-alpine |
 | n8n | n8n:latest |
-| larussa | calibre, calibre-web, sabnzbd, sonarr, radarr, lazylibrarian |
 | uptime-kuma | uptime-kuma:latest |
 
 ## Finding Container Usage
@@ -70,6 +58,5 @@ grep "container-name" apps/fetcher/containers-sha.nix
 
 ## Notes
 
-- **larussa** is bare metal (not Proxmox LXC) - handles media containers
 - **dns1/dns2** are Raspberry Pis (aarch64) - no containers, run Blocky natively
 - Most other hosts are Proxmox LXC containers
