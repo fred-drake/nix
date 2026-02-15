@@ -281,6 +281,9 @@ in {
 
   # Claude Code configuration files
   home.file = {
+    # Symlink so the native installer check finds claude at ~/.local/bin/claude
+    ".local/bin/claude".source = config.lib.file.mkOutOfStoreSymlink "/etc/profiles/per-user/${config.home.username}/bin/claude";
+
     # Claude command files
     ".claude/commands" = {
       source = ../../apps/claude-code/commands;
