@@ -28,7 +28,7 @@ in {
       nixpkgsVersion
     ];
     deployment = {
-      buildOnTarget = false;
+      buildOnTarget = true;
       targetHost = soft-secrets.host.larussa.admin_ip_address;
       targetUser = "default";
     };

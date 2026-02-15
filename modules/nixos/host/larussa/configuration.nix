@@ -25,6 +25,7 @@
     nvidia-container-toolkit
     nvidia-vaapi-driver
     pciutils
+    rsync
   ];
 
   # Needed for NFS server
