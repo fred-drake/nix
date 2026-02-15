@@ -334,6 +334,42 @@ in {
         key = "password";
       };
 
+      videos-storage-username = {
+        sopsFile = config.secrets.host.ironforge.videos-storage;
+        mode = "0400";
+        key = "username";
+      };
+
+      videos-storage-password = {
+        sopsFile = config.secrets.host.ironforge.videos-storage;
+        mode = "0400";
+        key = "password";
+      };
+
+      calibre-storage-username = {
+        sopsFile = config.secrets.host.ironforge.calibre-storage;
+        mode = "0400";
+        key = "username";
+      };
+
+      calibre-storage-password = {
+        sopsFile = config.secrets.host.ironforge.calibre-storage;
+        mode = "0400";
+        key = "password";
+      };
+
+      downloads-storage-username = {
+        sopsFile = config.secrets.host.ironforge.downloads-storage;
+        mode = "0400";
+        key = "username";
+      };
+
+      downloads-storage-password = {
+        sopsFile = config.secrets.host.ironforge.downloads-storage;
+        mode = "0400";
+        key = "password";
+      };
+
       paperless-storage-username = {
         sopsFile = config.secrets.host.ironforge.paperless-storage;
         mode = "0400";
