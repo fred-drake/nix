@@ -32,10 +32,6 @@ update-npm-packages:
 update-claude:
     ./apps/fetcher/update-claude-code.sh
 
-# Run colmena on only the DNS hosts
-colmena-dns: update-secrets
-    just colmena dns1,dns2
-
 # Format all .nix files with alejandra
 format:
     alejandra .

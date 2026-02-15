@@ -8,8 +8,6 @@
   ...
 }: let
   # Import host configurations
-  dns1 = import ./hosts/dns1.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
-  dns2 = import ./hosts/dns2.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   jellyseerr = import ./hosts/jellyseerr.nix {inherit self nixpkgs-stable secrets sops-nix;};
   prowlarr = import ./hosts/prowlarr.nix {inherit self nixpkgs-stable secrets sops-nix;};
   gitea-runner-1 = import ./hosts/gitea-runner-1.nix {inherit self nixpkgs-stable secrets sops-nix;};
@@ -32,8 +30,6 @@ in {
 
   # Merge all host configurations
   # Base configurations
-  inherit (dns1) _dns1;
-  inherit (dns2) _dns2;
   inherit (jellyseerr) _jellyseerr;
   inherit (prowlarr) _prowlarr;
   inherit (gitea-runner-1) _gitea-runner-1;
@@ -51,8 +47,6 @@ in {
   inherit (ironforge) _ironforge;
 
   # Init configurations
-  "dns1-init" = dns1."dns1-init";
-  "dns2-init" = dns2."dns2-init";
   "jellyseerr-init" = jellyseerr."jellyseerr-init";
   "prowlarr-init" = prowlarr."prowlarr-init";
   "gitea-runner-1-init" = gitea-runner-1."gitea-runner-1-init";
@@ -70,8 +64,6 @@ in {
   "ironforge-init" = ironforge."ironforge-init";
 
   # Full configurations
-  "dns1" = dns1."dns1";
-  "dns2" = dns2."dns2";
   "jellyseerr" = jellyseerr."jellyseerr";
   "prowlarr" = prowlarr."prowlarr";
   "gitea-runner-1" = gitea-runner-1."gitea-runner-1";

@@ -6,8 +6,7 @@ description: |
   Use when: (1) Deploying NixOS configurations with colmena, (2) Managing Proxmox LXC containers (start, stop, reboot, status), (3) Troubleshooting server issues via SSH or pct exec, (4) Checking service status across hosts, (5) Any infrastructure maintenance task.
 
   IMPORTANT architecture notes:
-  - dns1 and dns2 are critical infrastructure. NEVER deploy both simultaneously - deploy dns1 first, verify DNS works, then deploy dns2.
-  - All other servers are Proxmox LXC containers.
+  - All servers are Proxmox LXC containers.
 ---
 
 # Infrastructure Management
@@ -62,12 +61,6 @@ ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/journalctl -u 
 | sylvanas | Proxmox cluster node |
 | voljin | Proxmox cluster node |
 
-### Special Hosts (NOT on Proxmox)
-
-| Host | Architecture | Notes |
-|------|--------------|-------|
-| dns1 | aarch64 (Raspberry Pi) | Critical DNS - deploy sequentially, verify before dns2 |
-| dns2 | aarch64 (Raspberry Pi) | Critical DNS - deploy only after dns1 verified |
 ### Proxmox LXC Containers
 
 All other hosts are LXC containers. Use `pct list` on Proxmox hosts to see VMIDs.
@@ -116,63 +109,6 @@ If colmena fails with SSH errors:
 1. Verify container is running on Proxmox
 2. Check if SSH is listening: `pct exec <vmid> -- /run/current-system/sw/bin/ss -tlnp | grep 22`
 3. Reboot container if necessary
-
-## DNS Server Deployment (Critical Infrastructure)
-
-dns1 and dns2 are the backbone of the entire DNS infrastructure. **NEVER deploy both simultaneously.**
-
-### Sequential Deployment Procedure
-
-**Step 1: Deploy dns1**
-```bash
-colmena apply --on dns1 --impure
-```
-
-**Step 2: Verify dns1 is working**
-```bash
-# Test DNS resolution through dns1
-dig @dns1 google.com
-
-# Check that dns1 responds correctly
-ssh dns1 systemctl status blocky
-```
-
-**Step 3: Only after dns1 is verified, deploy dns2**
-```bash
-colmena apply --on dns2 --impure
-```
-
-**Step 4: Verify dns2 is working**
-```bash
-# Test DNS resolution through dns2
-dig @dns2 google.com
-
-# Check that dns2 responds correctly
-ssh dns2 systemctl status blocky
-```
-
-### DNS Verification Commands
-
-```bash
-# Quick DNS health check
-dig @dns1 google.com +short
-dig @dns2 google.com +short
-
-# Check service status
-ssh dns1 systemctl status blocky
-ssh dns2 systemctl status blocky
-
-# View recent logs
-ssh dns1 journalctl -u blocky -n 20
-ssh dns2 journalctl -u blocky -n 20
-```
-
-### If DNS Fails After Deploy
-
-1. Check if the service is running: `ssh dns1 systemctl status blocky`
-2. Check logs for errors: `ssh dns1 journalctl -u blocky -n 50`
-3. Verify network connectivity: `ssh dns1 ping -c 3 8.8.8.8`
-4. If necessary, reboot: `ssh dns1 sudo reboot`
 
 ## Common Colmena Patterns
 

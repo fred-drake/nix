@@ -23,7 +23,6 @@ This repository contains Nix configurations for managing both personal workstati
   - `fredpc`: Builds x86_64-linux configurations
   - `nixosaarch64vm`: Builds aarch64-linux configurations
 - **Infrastructure Services** (Managed via Colmena):
-  - `dns1`, `dns2`: DNS servers
   - `gitea`: Git repository hosting
   - `gitea-runner-1`, `gitea-runner-2`, `gitea-runner-3`: CI/CD runners
   - `uptime-kuma`: Uptime monitoring
@@ -98,7 +97,6 @@ This project uses `just` for task automation. Here are the available targets:
 - `format` - Format all .nix files with alejandra
 - `lint` - Linting for the project with statix
 - `colmena HOST` - Runs colmena remote switch on the specified host
-- `colmena-dns` - Runs colmena apply on dns1 and dns2 hosts
 
 ## Container Management
 

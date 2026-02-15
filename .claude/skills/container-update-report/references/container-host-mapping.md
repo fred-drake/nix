@@ -58,5 +58,4 @@ grep "container-name" apps/fetcher/containers-sha.nix
 
 ## Notes
 
-- **dns1/dns2** are Raspberry Pis (aarch64) - no containers, run Blocky natively
-- Most other hosts are Proxmox LXC containers
+- Most hosts are Proxmox LXC containers
