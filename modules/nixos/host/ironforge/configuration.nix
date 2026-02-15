@@ -31,6 +31,11 @@
     };
   };
 
+  fileSystems."/var/lib/containers" = {
+    device = "/dev/disk/by-uuid/69caea45-e319-47d5-b088-b8155a301e12";
+    fsType = "ext4";
+  };
+
   networking = {
     hostName = "ironforge";
     firewall.allowedTCPPorts = [2222];

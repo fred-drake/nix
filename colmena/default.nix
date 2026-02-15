@@ -4,6 +4,7 @@
   nixos-hardware,
   secrets,
   sops-nix,
+  nixarr,
   ...
 }: let
   # Import host configurations
@@ -24,7 +25,7 @@
   scanner = import ./hosts/scanner.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   resume = import ./hosts/resume.nix {inherit self nixpkgs-stable secrets sops-nix;};
   headscale = import ./hosts/headscale.nix {inherit self nixpkgs-stable secrets sops-nix;};
-  ironforge = import ./hosts/ironforge.nix {inherit self nixpkgs-stable secrets sops-nix;};
+  ironforge = import ./hosts/ironforge.nix {inherit self nixpkgs-stable secrets sops-nix nixarr;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};

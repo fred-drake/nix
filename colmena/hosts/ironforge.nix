@@ -3,6 +3,7 @@
   nixpkgs-stable,
   secrets,
   sops-nix,
+  nixarr,
   ...
 }: let
   soft-secrets = import "${secrets}/soft-secrets" {home = null;};
@@ -13,15 +14,29 @@ in {
     nixpkgs = {
       system = "x86_64-linux";
       overlays = [];
-      config = {};
+      config = {
+        allowUnfreePredicate = pkg:
+          builtins.elem (pkg.pname or "") [
+            "unrar"
+          ];
+      };
     };
     networking.extraHosts = ''
       127.0.0.1 gitea.${soft-secrets.networking.domain}
+      127.0.0.1 jellyfin.${soft-secrets.networking.domain}
+      127.0.0.1 jellyseerr.${soft-secrets.networking.domain}
+      127.0.0.1 sonarr.${soft-secrets.networking.domain}
+      127.0.0.1 radarr.${soft-secrets.networking.domain}
+      127.0.0.1 lidarr.${soft-secrets.networking.domain}
+      127.0.0.1 prowlarr.${soft-secrets.networking.domain}
+      127.0.0.1 sabnzbd.${soft-secrets.networking.domain}
+      127.0.0.1 bazarr.${soft-secrets.networking.domain}
     '';
     imports = [
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets
       sops-nix.nixosModules.sops
+      nixarr.nixosModules.default
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
       ../hetzner-common
       ../../modules/nixos
@@ -55,6 +70,7 @@ in {
       ../../modules/nixos/host/ironforge/gitea.nix
       ../../modules/nixos/host/ironforge/paperless.nix
       ../../modules/nixos/host/ironforge/calibre.nix
+      ../../modules/nixos/host/ironforge/nixarr.nix
       (nodeExporter.mkNodeExporter "ironforge")
     ];
 

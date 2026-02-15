@@ -112,6 +112,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.hyprlang.follows = "hyprland/hyprlang";
     };
+
+    nixarr = {
+      url = "github:nix-media-server/nixarr";
+    };
   };
 
   # Output configuration
@@ -134,6 +138,7 @@
     sops-nix,
     nix-jetbrains-plugins,
     nix4vscode,
+    nixarr,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -180,7 +185,7 @@
       };
 
       colmena = import ./colmena {
-        inherit self nixpkgs-stable nixos-hardware secrets sops-nix;
+        inherit self nixpkgs-stable nixos-hardware secrets sops-nix nixarr;
       };
 
       # Library functions
