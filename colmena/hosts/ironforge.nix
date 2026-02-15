@@ -54,6 +54,7 @@ in {
       ../../modules/nixos/host/ironforge/woodpecker.nix
       ../../modules/nixos/host/ironforge/gitea.nix
       ../../modules/nixos/host/ironforge/paperless.nix
+      ../../modules/nixos/host/ironforge/calibre.nix
       (nodeExporter.mkNodeExporter "ironforge")
     ];
 

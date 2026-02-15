@@ -82,20 +82,39 @@
         mode = "0400";
         key = "data";
       };
+      calibre-storage-username = {
+        sopsFile = config.secrets.host.ironforge.calibre-storage;
+        mode = "0400";
+        key = "username";
+      };
+      calibre-storage-password = {
+        sopsFile = config.secrets.host.ironforge.calibre-storage;
+        mode = "0400";
+        key = "password";
+      };
     };
-    templates."gitea-storage-credentials" = {
-      content = ''
-        username=${config.sops.placeholder."gitea-storage-username"}
-        password=${config.sops.placeholder."gitea-storage-password"}
-      '';
-      mode = "0400";
-    };
-    templates."paperless-storage-credentials" = {
-      content = ''
-        username=${config.sops.placeholder."paperless-storage-username"}
-        password=${config.sops.placeholder."paperless-storage-password"}
-      '';
-      mode = "0400";
+    templates = {
+      "gitea-storage-credentials" = {
+        content = ''
+          username=${config.sops.placeholder."gitea-storage-username"}
+          password=${config.sops.placeholder."gitea-storage-password"}
+        '';
+        mode = "0400";
+      };
+      "paperless-storage-credentials" = {
+        content = ''
+          username=${config.sops.placeholder."paperless-storage-username"}
+          password=${config.sops.placeholder."paperless-storage-password"}
+        '';
+        mode = "0400";
+      };
+      "calibre-storage-credentials" = {
+        content = ''
+          username=${config.sops.placeholder."calibre-storage-username"}
+          password=${config.sops.placeholder."calibre-storage-password"}
+        '';
+        mode = "0400";
+      };
     };
   };
 }
