@@ -295,6 +295,7 @@ in {
       ++ (
         if pkgs.stdenv.hostPlatform.isDarwin
         then [
+          (pkgs.writeShellScriptBin "docker" ''exec podman "$@"'') # Docker compat for Darwin (NixOS uses virtualisation.podman.dockerCompat)
           mermaid-cli-wrapped # Mermaid CLI with Chrome support (Darwin only)
           (pkgs.writeShellScriptBin "windsurf-code" ''
             EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
