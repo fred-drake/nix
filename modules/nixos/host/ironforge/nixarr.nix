@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }: let
@@ -118,6 +119,17 @@ in {
       };
     };
   };
+
+  # Override nixarr's hardcoded permissions = "775" for sabnzbd.
+  # CIFS mounts don't support chmod, so sabnzbd must not attempt it.
+  # Also reduce cache_limit to avoid OOM on this memory-constrained host.
+  systemd.services.sabnzbd.serviceConfig.ExecStartPre = lib.mkAfter [
+    (pkgs.writeShellScript "sabnzbd-cifs-fixup" ''
+      ini="/data/.state/nixarr/sabnzbd/sabnzbd.ini"
+      ${pkgs.gnused}/bin/sed -i 's/^permissions = .*/permissions = /' "$ini"
+      ${pkgs.gnused}/bin/sed -i 's/^cache_limit = .*/cache_limit = 256M/' "$ini"
+    '')
+  ];
 
   # ACME certificates for all media services
   security.acme.certs = builtins.foldl' (acc: p: acc // p.acmeCert) {} proxies;

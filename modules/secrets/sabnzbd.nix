@@ -61,7 +61,7 @@
         username = ""
         password = ""
         bandwidth_max = 100M
-        cache_limit = 977.9 M
+        cache_limit = 256M
         web_dir = Glitter
         web_color = Auto
         https_cert = server.cert
@@ -72,7 +72,7 @@
         api_key = ${config.sops.placeholder.sabnzbd-api-key}
         nzb_key = ${config.sops.placeholder.sabnzbd-nzb-key}
         socks5_proxy_url = ""
-        permissions = ""
+        permissions = 775
         download_dir = /storage/sabnzbd_downloads_incomplete
         download_free = ""
         complete_dir = /storage/sabnzbd_downloads
