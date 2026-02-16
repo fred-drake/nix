@@ -8,6 +8,7 @@
   containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};
 in {
   imports = [
+    ./glance.nix
     ./gnome.nix
     ./hyprland.nix
     ./gpu-passthrough.nix

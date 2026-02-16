@@ -1,8 +1,4 @@
 {
-  server = {
-    port = 8080;
-  };
-
   pages = [
     {
       name = "Home";

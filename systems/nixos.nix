@@ -75,6 +75,7 @@ in {
     };
     modules = [
       secrets.nixosModules.soft-secrets
+      secrets.nixosModules.secrets
       sops-nix.nixosModules.sops
       ../modules/nixos
       ../modules/nixos/host/fredpc/configuration.nix

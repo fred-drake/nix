@@ -18,7 +18,6 @@
   prometheus = import ./hosts/prometheus.nix {inherit self nixpkgs-stable secrets sops-nix;};
   grafana = import ./hosts/grafana.nix {inherit self nixpkgs-stable secrets sops-nix;};
   external-metrics = import ./hosts/external-metrics.nix {inherit self nixpkgs-stable secrets sops-nix;};
-  glance = import ./hosts/glance.nix {inherit self nixpkgs-stable secrets sops-nix;};
   scanner = import ./hosts/scanner.nix {inherit self nixpkgs-stable nixos-hardware secrets sops-nix;};
   resume = import ./hosts/resume.nix {inherit self nixpkgs-stable secrets sops-nix;};
   headscale = import ./hosts/headscale.nix {inherit self nixpkgs-stable secrets sops-nix;};
@@ -40,7 +39,6 @@ in {
   inherit (prometheus) _prometheus;
   inherit (grafana) _grafana;
   inherit (external-metrics) _external-metrics;
-  inherit (glance) _glance;
   inherit (scanner) _scanner;
   inherit (resume) _resume;
   inherit (headscale) _headscale;
@@ -57,7 +55,6 @@ in {
   "prometheus-init" = prometheus."prometheus-init";
   "grafana-init" = grafana."grafana-init";
   "external-metrics-init" = external-metrics."external-metrics-init";
-  "glance-init" = glance."glance-init";
   "scanner-init" = scanner."scanner-init";
   "resume-init" = resume."resume-init";
   "headscale-init" = headscale."headscale-init";
@@ -74,7 +71,6 @@ in {
   "prometheus" = prometheus."prometheus";
   "grafana" = grafana."grafana";
   "external-metrics" = external-metrics."external-metrics";
-  "glance" = glance."glance";
   "scanner" = scanner."scanner";
   "resume" = resume."resume";
   "headscale" = headscale."headscale";

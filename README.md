@@ -13,7 +13,7 @@ This repository contains Nix configurations for managing both personal workstati
   - `macbook-pro`
   - `laisas-mac-mini`
 - **Linux Workstations**:
-  - `fredpc` (x86_64-linux with GUI, NVIDIA CUDA support)
+  - `fredpc` (x86_64-linux with GUI, NVIDIA CUDA support, glance dashboard)
   - `macbookx86` (x86_64-linux on Apple T2 hardware)
   - `nixosaarch64vm` (aarch64-linux)
 
@@ -33,7 +33,7 @@ This repository contains Nix configurations for managing both personal workstati
   - `prowlarr`: Indexer management
   - `n8n`: Workflow automation
   - `external-metrics`: External metrics collection
-  - `glance`: Dashboard application
+  - `ironforge`: Multi-service host (gitea, woodpecker, paperless, calibre, nixarr, resume)
 
 ## Network Overview
 

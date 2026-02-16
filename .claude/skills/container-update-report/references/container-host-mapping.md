@@ -56,6 +56,24 @@ grep -r "container-name" --include="*.nix" apps/ modules/
 grep "container-name" apps/fetcher/containers-sha.nix
 ```
 
+## Ironforge Services
+
+| Service | Container | Config Location |
+|---------|-----------|-----------------|
+| gitea | gitea/gitea | modules/nixos/host/ironforge/gitea.nix |
+| woodpecker | woodpecker-server, woodpecker-agent | modules/nixos/host/ironforge/woodpecker.nix |
+| paperless | paperless-ngx, postgres, redis | modules/nixos/host/ironforge/paperless.nix |
+| calibre | calibre, calibre-web | modules/nixos/host/ironforge/calibre.nix |
+| resume | resume containers | modules/nixos/host/ironforge/resume.nix |
+
+## Native NixOS Services (non-containerized)
+
+| Service | Host | Config Location |
+|---------|------|-----------------|
+| glance | fredpc | modules/nixos/host/fredpc/glance.nix |
+
 ## Notes
 
 - Most hosts are Proxmox LXC containers
+- ironforge is a Hetzner dedicated server hosting multiple services
+- glance runs as a native NixOS service on fredpc (residential IP avoids API blocks)
