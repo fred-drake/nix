@@ -330,6 +330,8 @@ in {
 
     # Set session variables
     sessionVariables = {
+      LANG = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
       TERM = "xterm-256color";
       PAGER = "less";
       CLICOLOR = 1;
