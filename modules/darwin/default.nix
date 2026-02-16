@@ -95,6 +95,7 @@
       "sourcetree"
       # "tailscale"
       "vlc"
+      "whatsapp"
       "zen"
       "zoom"
     ];
