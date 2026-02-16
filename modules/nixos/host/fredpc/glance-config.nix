@@ -159,7 +159,7 @@
                 }
                 {
                   type = "reddit";
-                  subreddit = "windsurf";
+                  subreddit = "claudecode";
                   show-thumbnails = true;
                 }
                 {
@@ -174,7 +174,7 @@
                 }
                 {
                   type = "reddit";
-                  subreddit = "PFSENSE";
+                  subreddit = "mikrotik";
                   show-thumbnails = true;
                 }
               ];
