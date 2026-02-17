@@ -74,6 +74,10 @@
       url = "github:sst/homebrew-tap";
       flake = false;
     };
+    homebrew-steipete = {
+      url = "github:steipete/homebrew-tap";
+      flake = false;
+    };
 
     # Nix User Repository: User contributed nix packages
     nur.url = "github:nix-community/NUR";
@@ -134,6 +138,7 @@
     homebrew-fdrake,
     homebrew-nikitabobko,
     homebrew-sst,
+    homebrew-steipete,
     secrets,
     sops-nix,
     nix-jetbrains-plugins,
@@ -181,6 +186,7 @@
           homebrew-fdrake
           homebrew-nikitabobko
           homebrew-sst
+          homebrew-steipete
           ;
       };
 

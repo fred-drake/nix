@@ -418,6 +418,22 @@
         "type": "github"
       }
     },
+    "homebrew-steipete": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1771223140,
+        "narHash": "sha256-F+hJm88+HAQ5kMKnve3Atf3mfwlRTZgE7e4b9mo66iI=",
+        "owner": "steipete",
+        "repo": "homebrew-tap",
+        "rev": "b3d483692d3343deeaf74b222e6c50586af349ca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "steipete",
+        "repo": "homebrew-tap",
+        "type": "github"
+      }
+    },
     "hyprcursor": {
       "inputs": {
         "hyprlang": [
@@ -1087,6 +1103,7 @@
         "homebrew-fdrake": "homebrew-fdrake",
         "homebrew-nikitabobko": "homebrew-nikitabobko",
         "homebrew-sst": "homebrew-sst",
+        "homebrew-steipete": "homebrew-steipete",
         "hyprland": "hyprland",
         "nix-homebrew": "nix-homebrew",
         "nix-jetbrains-plugins": "nix-jetbrains-plugins",

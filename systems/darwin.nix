@@ -12,6 +12,7 @@
   homebrew-bundle,
   homebrew-nikitabobko,
   homebrew-sst,
+  homebrew-steipete,
   homebrew-fdrake,
   nix-jetbrains-plugins,
   ...
@@ -107,6 +108,7 @@
                 "nikitabobko/homebrew-tap" = homebrew-nikitabobko;
                 "fred-drake/homebrew-tap" = homebrew-fdrake;
                 "sst/homebrew-tap" = homebrew-sst;
+                "steipete/homebrew-tap" = homebrew-steipete;
               };
               mutableTaps = false;
             };
