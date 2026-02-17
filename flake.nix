@@ -148,7 +148,11 @@
   } @ inputs: let
     inherit (self) outputs;
   in
-    inputs.flake-utils.lib.eachDefaultSystem (_system: {})
+    inputs.flake-utils.lib.eachDefaultSystem (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      devShells.default = import ./shell.nix {inherit pkgs;};
+    })
     // {
       # NixOS configurations
       nixosConfigurations = import ./systems/nixos.nix {
