@@ -22,6 +22,7 @@
   resume = import ./hosts/resume.nix {inherit self nixpkgs-stable secrets sops-nix;};
   headscale = import ./hosts/headscale.nix {inherit self nixpkgs-stable secrets sops-nix;};
   ironforge = import ./hosts/ironforge.nix {inherit self nixpkgs-stable secrets sops-nix nixarr;};
+  orgrimmar = import ./hosts/orgrimmar.nix {inherit self nixpkgs-stable secrets sops-nix;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -43,6 +44,7 @@ in {
   inherit (resume) _resume;
   inherit (headscale) _headscale;
   inherit (ironforge) _ironforge;
+  inherit (orgrimmar) _orgrimmar;
 
   # Init configurations
   "jellyseerr-init" = jellyseerr."jellyseerr-init";
@@ -59,6 +61,7 @@ in {
   "resume-init" = resume."resume-init";
   "headscale-init" = headscale."headscale-init";
   "ironforge-init" = ironforge."ironforge-init";
+  "orgrimmar-init" = orgrimmar."orgrimmar-init";
 
   # Full configurations
   "jellyseerr" = jellyseerr."jellyseerr";
@@ -75,4 +78,5 @@ in {
   "resume" = resume."resume";
   "headscale" = headscale."headscale";
   "ironforge" = ironforge."ironforge";
+  "orgrimmar" = orgrimmar."orgrimmar";
 }

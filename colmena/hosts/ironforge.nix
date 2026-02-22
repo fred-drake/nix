@@ -22,7 +22,6 @@ in {
       };
     };
     networking.extraHosts = ''
-      127.0.0.1 gitea.${soft-secrets.networking.domain}
       127.0.0.1 jellyfin.${soft-secrets.networking.domain}
       127.0.0.1 jellyseerr.${soft-secrets.networking.domain}
       127.0.0.1 sonarr.${soft-secrets.networking.domain}
@@ -65,11 +64,6 @@ in {
     imports = [
       self.colmena._ironforge
       ../../modules/secrets/ironforge.nix
-      ../../modules/nixos/host/ironforge/resume.nix
-      ../../modules/nixos/host/ironforge/woodpecker.nix
-      ../../modules/nixos/host/ironforge/gitea.nix
-      ../../modules/nixos/host/ironforge/paperless.nix
-      ../../modules/nixos/host/ironforge/calibre.nix
       ../../modules/nixos/host/ironforge/nixarr.nix
       (nodeExporter.mkNodeExporter "ironforge")
     ];

@@ -29,7 +29,7 @@ in {
       #!${pkgs.bash}/bin/bash
 
       SOURCE_DIR="/home/default/scans"
-      DEST_SERVER="root@10.1.1.3"
+      DEST_SERVER="root@10.1.1.4"
       DEST_DIR="/var/paperless/consume"
 
       # Function to transfer a file
