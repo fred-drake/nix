@@ -10,12 +10,16 @@
     npm-packages = import ../../apps/fetcher/npm-packages.nix;
   };
   claude-usage = pkgs.callPackage ../../apps/claude-usage.nix {};
+  cclsp = pkgs.callPackage ../../apps/cclsp.nix {
+    npm-packages = import ../../apps/fetcher/npm-packages.nix;
+  };
 in {
   # Add Claude Code and Gitea MCP packages
   home.packages = [
     claude-code # Claude Code CLI tool
     gitea-mcp # Gitea MCP server
     claude-usage # Claude Code usage JSON fetcher
+    cclsp # LSP-to-MCP bridge server
   ];
 
   # SOPS templates for MCP configuration
@@ -273,6 +277,17 @@ in {
           zohomail = {
             command = "npx";
             args = ["mcp-remote" config.sops.secrets.zohomail-mcp-url "--transport" "http-only"];
+          };
+        };
+      };
+    };
+    mcp-cclsp = {
+      mode = "0400";
+      path = "${home}/mcp/cclsp.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          cclsp = {
+            command = "${cclsp}/bin/cclsp";
           };
         };
       };

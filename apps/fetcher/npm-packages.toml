@@ -10,4 +10,7 @@ repo = "tdd-guard"
 [[npm-repository]]
 name = "agent-browser"
 repo = "agent-browser"
+[[npm-repository]]
+name = "cclsp"
+repo = "cclsp"
 
