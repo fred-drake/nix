@@ -1158,11 +1158,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771733384,
-        "narHash": "sha256-GL50xYBghBa2kET7k5rAOlKM5cFK8ym2mgFWkavpspU=",
+        "lastModified": 1772234956,
+        "narHash": "sha256-NxpYMXp6q5ZdIL+siZytxtLSjsr6W2qKAJ9tgBfoAcc=",
         "ref": "refs/heads/master",
-        "rev": "ec53c52ac9c2616e306746a4d05169dc1f4e9db6",
-        "revCount": 240,
+        "rev": "32c66f273a09803eb2564202b7bf5d95bc234dc9",
+        "revCount": 241,
         "type": "git",
         "url": "ssh://git@github.com/fred-drake/nix-secrets.git"
       },
