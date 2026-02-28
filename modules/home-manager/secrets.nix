@@ -298,6 +298,12 @@ in {
         key = "storage-box-password";
       };
 
+      hetzner-restic-password = {
+        sopsFile = config.secrets.workstation.hetzner-home;
+        mode = "0400";
+        key = "restic-password";
+      };
+
       cloudflare-api-key = {
         sopsFile = config.secrets.workstation.cloudflare;
         mode = "0400";

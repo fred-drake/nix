@@ -12,6 +12,7 @@ in {
     ./gnome.nix
     ./hyprland.nix
     ./gpu-passthrough.nix
+    ./restic-backup.nix
   ];
   boot = {
     loader.grub = {

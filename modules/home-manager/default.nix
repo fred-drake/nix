@@ -251,6 +251,7 @@ in {
         openssl # Cryptography toolkit
         presenterm # Presentation in markdown
         ripgrep # Fast grep alternative
+        restic # Backup tool with deduplication
         rsync # File synchronization tool
         skim # Fuzzy finder
         sops # Secret management tool

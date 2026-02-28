@@ -34,6 +34,10 @@
       device = "/dev/disk/by-label/STORAGE1";
       fsType = "ext4";
     };
+    "/mnt/hetzner-backup" = {
+      device = "/dev/disk/by-label/HETZNER-BACKUP";
+      fsType = "ext4";
+    };
   };
 
   swapDevices = [];
