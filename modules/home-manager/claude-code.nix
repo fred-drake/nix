@@ -4,22 +4,30 @@
   ...
 }: let
   home = config.home.homeDirectory;
-  claude-code = pkgs.callPackage ../../apps/claude-code {};
+  claude-code = pkgs.callPackage ../../apps/claude-code {
+    pluginDirs = [
+      "$HOME/.claude/lsp-plugin"
+    ];
+  };
   gitea-mcp = pkgs.callPackage ../../apps/gitea-mcp.nix {};
   ccstatusline = pkgs.callPackage ../../apps/ccstatusline.nix {
     npm-packages = import ../../apps/fetcher/npm-packages.nix;
   };
   claude-usage = pkgs.callPackage ../../apps/claude-usage.nix {};
-  cclsp = pkgs.callPackage ../../apps/cclsp.nix {
-    npm-packages = import ../../apps/fetcher/npm-packages.nix;
-  };
 in {
   # Add Claude Code and Gitea MCP packages
   home.packages = [
     claude-code # Claude Code CLI tool
     gitea-mcp # Gitea MCP server
     claude-usage # Claude Code usage JSON fetcher
-    cclsp # LSP-to-MCP bridge server
+
+    # LSP servers (used by the nix-managed-lsp plugin)
+    pkgs.nil # Nix
+    pkgs.pyright # Python
+    pkgs.typescript-language-server # TypeScript/JavaScript
+    pkgs.gopls # Go
+    pkgs.rust-analyzer # Rust
+    pkgs.jdt-language-server # Java
   ];
 
   # SOPS templates for MCP configuration
@@ -281,17 +289,6 @@ in {
         };
       };
     };
-    mcp-cclsp = {
-      mode = "0400";
-      path = "${home}/mcp/cclsp.json";
-      content = builtins.toJSON {
-        mcpServers = {
-          cclsp = {
-            command = "${cclsp}/bin/cclsp";
-          };
-        };
-      };
-    };
   };
 
   # Claude Code configuration files
@@ -321,12 +318,19 @@ in {
       recursive = true;
     };
 
+    # LSP plugin (loaded via --plugin-dir in the claude wrapper)
+    ".claude/lsp-plugin" = {
+      source = ../../apps/claude-code/lsp-plugin;
+      recursive = true;
+    };
+
     ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
 
     ".claude/settings.json".text = builtins.toJSON {
       env = {
         DISABLE_AUTOUPDATER = "1";
         CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+        ENABLE_LSP_TOOL = "1";
       };
 
       statusLine = {
@@ -399,8 +403,6 @@ in {
         ];
       };
       includeCoAuthoredBy = false;
-      env = {
-      };
     };
   };
 }

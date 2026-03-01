@@ -7,11 +7,6 @@
     "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.15.1.tgz";
     "url-hash" = "sha256-DY69oGftjNwiaIXWVBvI9mB9ET2g0HU4RPNLVeGmsPo=";
   };
-  "cclsp" = {
-    "version" = "0.7.0";
-    "url" = "https://registry.npmjs.org/cclsp/-/cclsp-0.7.0.tgz";
-    "url-hash" = "sha256-v0MZTBG3HNWL+V/X2o7pldxF+jdHWOwHytjB4ti8pZc=";
-  };
   "ccstatusline" = {
     "version" = "2.0.29";
     "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.0.29.tgz";

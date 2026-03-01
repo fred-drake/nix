@@ -6,6 +6,7 @@
   bun,
   makeWrapper,
   glibc,
+  pluginDirs ? [],
 }: let
   binaryMeta = import ../fetcher/claude-code-binary.nix;
 
@@ -21,6 +22,8 @@
     or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 
   platformMeta = binaryMeta.platforms.${platform};
+
+  pluginFlags = lib.concatMapStrings (dir: " --add-flags '--plugin-dir ${dir}'") pluginDirs;
 in
   stdenv.mkDerivation {
     pname = "claude-code";
@@ -51,7 +54,7 @@ in
         patchelf --set-interpreter ${glibc}/lib/ld-linux-x86-64.so.2 $out/bin/.claude-unwrapped
       ''}
       makeWrapper $out/bin/.claude-unwrapped $out/bin/claude \
-        --prefix PATH : ${lib.makeBinPath [bun]}
+        --prefix PATH : ${lib.makeBinPath [bun]}${pluginFlags}
       runHook postInstall
     '';
 
