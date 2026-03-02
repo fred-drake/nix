@@ -225,6 +225,7 @@ in {
         eza # File explorer
         fastfetch # System information tool
         fd # Fast directory walker
+        ffmpeg # Audio/video processing toolkit
         fzf # Command-line fuzzy finder
         ghq # Remote repository management
         git # Version control system
@@ -248,6 +249,7 @@ in {
         neofetch # System information display
         nixd # Nix language server
         oh-my-posh # Prompt theme engine
+        openai-whisper # Speech-to-text transcription
         openssl # Cryptography toolkit
         presenterm # Presentation in markdown
         ripgrep # Fast grep alternative
@@ -542,7 +544,10 @@ in {
     };
 
     # Yazi file manager
-    yazi.enable = true;
+    yazi = {
+      enable = true;
+      shellWrapperName = "y";
+    };
 
     zoxide.enable = true;
   };
