@@ -387,6 +387,12 @@ in {
         mode = "0400";
         key = "password";
       };
+
+      telegram-api-key = {
+        sopsFile = config.secrets.workstation.telegram;
+        mode = "0400";
+        key = "api-key";
+      };
     };
   };
 
