@@ -392,6 +392,43 @@ in {
         sopsFile = config.secrets.workstation.telegram;
         mode = "0400";
         key = "api-key";
+        path = "${home}/.carapace/credentials/plugins/telegram/bot-token";
+      };
+
+      emulation-storage-username = {
+        sopsFile = config.secrets.host.ironforge.emulation-storage;
+        mode = "0400";
+        key = "username";
+      };
+
+      emulation-storage-password = {
+        sopsFile = config.secrets.host.ironforge.emulation-storage;
+        mode = "0400";
+        key = "password";
+      };
+
+      nintendopower-storage-username = {
+        sopsFile = config.secrets.host.ironforge.nintendopower-storage;
+        mode = "0400";
+        key = "username";
+      };
+
+      nintendopower-storage-password = {
+        sopsFile = config.secrets.host.ironforge.nintendopower-storage;
+        mode = "0400";
+        key = "password";
+      };
+
+      wowclient-storage-username = {
+        sopsFile = config.secrets.host.ironforge.wowclient-storage;
+        mode = "0400";
+        key = "username";
+      };
+
+      wowclient-storage-password = {
+        sopsFile = config.secrets.host.ironforge.wowclient-storage;
+        mode = "0400";
+        key = "password";
       };
     };
   };
