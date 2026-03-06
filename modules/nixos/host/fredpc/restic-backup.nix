@@ -1,74 +1,131 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: let
+  storageBox = "u543742.your-storagebox.de";
+  resticRepo = "/mnt/hetzner-backup/restic-repo";
+  resticPasswordFile = "/home/fdrake/.config/sops-nix/secrets/hetzner-restic-password";
+  sopsBase = "/home/fdrake/.config/sops-nix/secrets";
+  mount = "${pkgs.util-linux}/bin/mount";
+  umount = "${pkgs.util-linux}/bin/umount";
+
+  # Each storage sub-account to back up
+  storages = {
+    videos = "sub2";
+    gitea = "sub3";
+    paperless = "sub4";
+    calibre = "sub5";
+    wowclient = "sub7";
+    emulation = "sub8";
+    nintendopower = "sub9";
+  };
+
+  # Script to create credentials and mount a single CIFS share
+  mountOne = name: sub: ''
+    cat > /run/backup-creds/${name} <<CRED
+    username=$(cat ${sopsBase}/${name}-storage-username)
+    password=$(cat ${sopsBase}/${name}-storage-password)
+    CRED
+    chmod 0400 /run/backup-creds/${name}
+    ${mount} -t cifs //${storageBox}/u543742-${sub} /mnt/backup-${name} \
+      -o credentials=/run/backup-creds/${name},uid=0,gid=0,dir_mode=0755,file_mode=0644,iocharset=utf8
+  '';
+
+  unmountOne = name: ''
+    ${umount} /mnt/backup-${name} 2>/dev/null || true
+    rm -f /run/backup-creds/${name}
+  '';
+
+  # Mount/unmount scripts for the main backup (all except videos)
+  mainStorages = lib.filterAttrs (n: _: n != "videos") storages;
+  mountAllMain = lib.concatStringsSep "\n" (lib.mapAttrsToList mountOne mainStorages);
+  unmountAllMain = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: _: unmountOne name) mainStorages);
+in {
   environment.systemPackages = with pkgs; [
-    sshfs
+    cifs-utils
     restic
   ];
 
-  # Allow FUSE mounts to be accessed by other users (needed for sshfs + restic)
-  programs.fuse.userAllowOther = true;
+  # Create mount points and credential directory
+  systemd = {
+    tmpfiles.rules =
+      ["d /run/backup-creds 0700 root root -"]
+      ++ lib.mapAttrsToList (name: _: "d /mnt/backup-${name} 0755 root root -") storages;
 
-  # Create sshfs mount point
-  systemd.tmpfiles.rules = [
-    "d /mnt/hetzner-sftp 0755 root root -"
-  ];
-
-  # sshfs mount unit that keeps the FUSE mount alive
-  systemd.services.hetzner-sftp-mount = {
-    description = "SSHFS mount for Hetzner Storage Box";
-    after = ["network-online.target"];
-    wants = ["network-online.target"];
-    serviceConfig = {
-      Type = "forking";
-      ExecStartPre = "-${pkgs.fuse}/bin/fusermount -u /mnt/hetzner-sftp";
-      ExecStart = ''
-        ${pkgs.sshfs}/bin/sshfs \
-          -o Port=23,IdentityFile=/home/fdrake/.ssh/id_ed25519,StrictHostKeyChecking=no,allow_other,ServerAliveInterval=15,ServerAliveCountMax=3,reconnect \
-          u543742@u543742.your-storagebox.de:. /mnt/hetzner-sftp
-      '';
-      ExecStop = "${pkgs.fuse}/bin/fusermount -u /mnt/hetzner-sftp";
-      Restart = "on-failure";
-      RestartSec = "10s";
+    services = {
+      # Disable PrivateTmp so CIFS mounts in prepare scripts are visible to restic
+      restic-backups-hetzner-home-videos.serviceConfig.PrivateTmp = lib.mkForce false;
+      restic-backups-hetzner-storage = {
+        serviceConfig.PrivateTmp = lib.mkForce false;
+        # Ensure storage backup waits for home-videos to finish (avoid overloading storage box)
+        after = ["restic-backups-hetzner-home-videos.service"];
+      };
     };
   };
 
-  services.restic.backups.hetzner-storage = {
-    repository = "/mnt/hetzner-backup/restic-repo";
-    passwordFile = "/home/fdrake/.config/sops-nix/secrets/hetzner-restic-password";
+  services.restic.backups = {
+    # Dedicated home-videos backup (runs first at 1 AM)
+    hetzner-home-videos = {
+      repository = resticRepo;
+      passwordFile = resticPasswordFile;
+      extraBackupArgs = ["--retry-lock=15m"];
 
-    paths = [
-      "/mnt/hetzner-sftp/calibre"
-      "/mnt/hetzner-sftp/emulation"
-      "/mnt/hetzner-sftp/gitea"
-      "/mnt/hetzner-sftp/nintendopower"
-      "/mnt/hetzner-sftp/paperless"
-      "/mnt/hetzner-sftp/wowclient"
-      "/mnt/hetzner-sftp/videos/library/home-videos"
-    ];
+      paths = [
+        "/mnt/backup-videos/library/home-videos"
+      ];
 
-    backupPrepareCommand = ''
-      # Start the sshfs mount service
-      ${pkgs.systemd}/bin/systemctl start hetzner-sftp-mount.service
+      backupPrepareCommand = ''
+        mkdir -p /run/backup-creds
+        ${mountOne "videos" storages.videos}
+      '';
 
-      # Verify mount succeeded
-      if ! ${pkgs.util-linux}/bin/mountpoint -q /mnt/hetzner-sftp; then
-        echo "ERROR: sshfs mount failed"
-        exit 1
-      fi
-    '';
+      backupCleanupCommand = unmountOne "videos";
 
-    backupCleanupCommand = ''
-      ${pkgs.systemd}/bin/systemctl stop hetzner-sftp-mount.service
-    '';
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 6"
+      ];
 
-    pruneOpts = [
-      "--keep-daily 7"
-      "--keep-weekly 4"
-      "--keep-monthly 6"
-    ];
+      timerConfig = {
+        OnCalendar = "01:00";
+        Persistent = true;
+      };
+    };
 
-    timerConfig = {
-      OnCalendar = "02:00";
-      Persistent = true;
+    # Main backup for everything else (runs at 2 AM)
+    hetzner-storage = {
+      repository = resticRepo;
+      passwordFile = resticPasswordFile;
+      extraBackupArgs = ["--retry-lock=15m"];
+
+      paths = [
+        "/mnt/backup-calibre"
+        "/mnt/backup-emulation"
+        "/mnt/backup-gitea"
+        "/mnt/backup-nintendopower"
+        "/mnt/backup-paperless"
+        "/mnt/backup-wowclient"
+      ];
+
+      backupPrepareCommand = ''
+        mkdir -p /run/backup-creds
+        ${mountAllMain}
+      '';
+
+      backupCleanupCommand = unmountAllMain;
+
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 6"
+      ];
+
+      timerConfig = {
+        OnCalendar = "02:00";
+        Persistent = true;
+      };
     };
   };
 }
