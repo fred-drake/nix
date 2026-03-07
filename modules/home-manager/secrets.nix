@@ -430,6 +430,12 @@ in {
         mode = "0400";
         key = "password";
       };
+
+      silvermoon-password = {
+        sopsFile = config.secrets.switch.silvermoon.credentials;
+        mode = "0400";
+        key = "password";
+      };
     };
   };
 
