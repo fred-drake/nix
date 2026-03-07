@@ -37,10 +37,63 @@
     rm -f /run/backup-creds/${name}
   '';
 
-  # Mount/unmount scripts for the main backup (all except videos)
+  pruneOpts = [
+    "--keep-daily 7"
+    "--keep-weekly 4"
+    "--keep-monthly 6"
+  ];
+
+  # Generate a sequential backup job for a single sub-account
+  mkBackupJob = name: sub: {
+    repository = resticRepo;
+    passwordFile = resticPasswordFile;
+    extraBackupArgs = ["--retry-lock=15m"];
+
+    paths = [
+      "/mnt/backup-${name}"
+    ];
+
+    backupPrepareCommand = ''
+      mkdir -p /run/backup-creds
+      ${mountOne name sub}
+    '';
+
+    backupCleanupCommand = unmountOne name;
+
+    inherit pruneOpts;
+
+    timerConfig = {
+      OnCalendar = "02:00";
+      Persistent = true;
+    };
+  };
+
+  # All sub-accounts except videos (which has its own schedule)
   mainStorages = lib.filterAttrs (n: _: n != "videos") storages;
-  mountAllMain = lib.concatStringsSep "\n" (lib.mapAttrsToList mountOne mainStorages);
-  unmountAllMain = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: _: unmountOne name) mainStorages);
+
+  # Ordered list for chaining services sequentially
+  mainStorageNames = lib.attrNames mainStorages;
+
+  # Build the chain: each service runs after the previous one
+  mkServiceChain = let
+    indexed = lib.imap0 (i: name: {inherit i name;}) mainStorageNames;
+  in
+    builtins.listToAttrs (map (
+        entry: let
+          serviceName = "restic-backups-hetzner-${entry.name}";
+          prevService =
+            if entry.i == 0
+            then "restic-backups-hetzner-home-videos.service"
+            else "restic-backups-hetzner-${lib.elemAt mainStorageNames (entry.i - 1)}.service";
+        in {
+          name = serviceName;
+          value = {
+            serviceConfig.PrivateTmp = lib.mkForce false;
+            after = [prevService];
+          };
+        }
+      )
+      indexed);
 in {
   environment.systemPackages = with pkgs; [
     cifs-utils
@@ -53,79 +106,45 @@ in {
       ["d /run/backup-creds 0700 root root -"]
       ++ lib.mapAttrsToList (name: _: "d /mnt/backup-${name} 0755 root root -") storages;
 
-    services = {
-      # Disable PrivateTmp so CIFS mounts in prepare scripts are visible to restic
-      restic-backups-hetzner-home-videos.serviceConfig.PrivateTmp = lib.mkForce false;
-      restic-backups-hetzner-storage = {
-        serviceConfig.PrivateTmp = lib.mkForce false;
-        # Ensure storage backup waits for home-videos to finish (avoid overloading storage box)
-        after = ["restic-backups-hetzner-home-videos.service"];
-      };
-    };
+    services =
+      {
+        # Disable PrivateTmp so CIFS mounts in prepare scripts are visible to restic
+        restic-backups-hetzner-home-videos.serviceConfig.PrivateTmp = lib.mkForce false;
+      }
+      // mkServiceChain;
   };
 
-  services.restic.backups = {
-    # Dedicated home-videos backup (runs first at 1 AM)
-    hetzner-home-videos = {
-      repository = resticRepo;
-      passwordFile = resticPasswordFile;
-      extraBackupArgs = ["--retry-lock=15m"];
+  services.restic.backups =
+    {
+      # Dedicated home-videos backup (runs first at 1 AM)
+      hetzner-home-videos = {
+        repository = resticRepo;
+        passwordFile = resticPasswordFile;
+        extraBackupArgs = ["--retry-lock=15m"];
 
-      paths = [
-        "/mnt/backup-videos/library/home-videos"
-      ];
+        paths = [
+          "/mnt/backup-videos/library/home-videos"
+        ];
 
-      backupPrepareCommand = ''
-        mkdir -p /run/backup-creds
-        ${mountOne "videos" storages.videos}
-      '';
+        backupPrepareCommand = ''
+          mkdir -p /run/backup-creds
+          ${mountOne "videos" storages.videos}
+        '';
 
-      backupCleanupCommand = unmountOne "videos";
+        backupCleanupCommand = unmountOne "videos";
 
-      pruneOpts = [
-        "--keep-daily 7"
-        "--keep-weekly 4"
-        "--keep-monthly 6"
-      ];
+        inherit pruneOpts;
 
-      timerConfig = {
-        OnCalendar = "01:00";
-        Persistent = true;
+        timerConfig = {
+          OnCalendar = "01:00";
+          Persistent = true;
+        };
       };
-    };
-
-    # Main backup for everything else (runs at 2 AM)
-    hetzner-storage = {
-      repository = resticRepo;
-      passwordFile = resticPasswordFile;
-      extraBackupArgs = ["--retry-lock=15m"];
-
-      paths = [
-        "/mnt/backup-calibre"
-        "/mnt/backup-emulation"
-        "/mnt/backup-gitea"
-        "/mnt/backup-nintendopower"
-        "/mnt/backup-paperless"
-        "/mnt/backup-wowclient"
-      ];
-
-      backupPrepareCommand = ''
-        mkdir -p /run/backup-creds
-        ${mountAllMain}
-      '';
-
-      backupCleanupCommand = unmountAllMain;
-
-      pruneOpts = [
-        "--keep-daily 7"
-        "--keep-weekly 4"
-        "--keep-monthly 6"
-      ];
-
-      timerConfig = {
-        OnCalendar = "02:00";
-        Persistent = true;
-      };
-    };
-  };
+    }
+    # Sequential per-sub-account backups (each triggered at 2 AM, chained via after=)
+    // lib.mapAttrs' (name: sub: {
+      name = "hetzner-${name}";
+      value = mkBackupJob name sub;
+    })
+    mainStorages;
 }
