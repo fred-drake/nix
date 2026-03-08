@@ -48,7 +48,7 @@
     domain = "gitea.com";
     owner = "fdrake";
     repo = "gitea-mcp";
-    rev = "comment-index";
+    tag = "comment-index";
     hash = "sha256-8L2VQcU2mhRimWr2qGDRw7f/yYO5V+1kswuLlCqhpio=";
   };
   kuma-waybar-src = pkgs.fetchFromGitHub {
@@ -60,20 +60,26 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "bb522f8bf4d782372efb78aebb0e913e6771b6cf";
-    hash = "sha256-RReVJ+tJtXuglcEDmryqQYGUM9tpN6CSH3Sj1i8H1fI=";
+    rev = "394c6c4cc7c0e6d9f3d9dd8c622057f9487db199";
+    hash = "sha256-JcqiV4rdCWhEkCetF+enOzsWLfr0xJ7+8gdxeLTPoM4=";
   };
   tdd-guard-src = pkgs.fetchFromGitHub {
     owner = "nizos";
     repo = "tdd-guard";
-    rev = "be09a94d6b050b913f8084ddad9799d2e059c493";
-    hash = "sha256-7knQ+QsGl5cKBYx/ZkqQ7KDDkH5E/RCp+68OzyqkWxY=";
+    rev = "f0eacb8fb6a036618df1224221c251e4408617f2";
+    hash = "sha256-uwGvbJch+DeCvC64LVO9C7nBt9K0rbGILJ9LfOHEUcw=";
   };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
     repo = "spotifatius";
     rev = "6eceb8e992ba2d1d89d370961a18a1fdeae729fa";
     hash = "sha256-esQiz9nduOm7nAUIq/Y5dMMxpKo2m19lEbZl6iRcxpo=";
+  };
+  gws-skills-src = pkgs.fetchFromGitHub {
+    owner = "googleworkspace";
+    repo = "cli";
+    rev = "95bb24e9c2d5dd165fb0b3c81ad82a42ad31fc3f";
+    hash = "sha256-0G40XB6d+ST2O64KuXZrgnm1mxvEtXUM3XCqKuKjfhQ=";
   };
   scanimage-web-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";

@@ -4,6 +4,7 @@
   ...
 }: let
   home = config.home.homeDirectory;
+  repos-src = import ../../apps/fetcher/repos-src.nix {inherit pkgs;};
   claude-code = pkgs.callPackage ../../apps/claude-code {
     pluginDirs = [
       "$HOME/.claude/lsp-plugin"
@@ -14,6 +15,15 @@
     npm-packages = import ../../apps/fetcher/npm-packages.nix;
   };
   claude-usage = pkgs.callPackage ../../apps/claude-usage.nix {};
+
+  # Skills fetched from external repositories
+  gws-skills = [
+    "gws-shared"
+    "gws-gmail"
+    "gws-gmail-send"
+    "gws-gmail-triage"
+    "gws-gmail-watch"
+  ];
 in {
   # Add Claude Code and Gitea MCP packages
   home.packages = [
@@ -292,117 +302,129 @@ in {
   };
 
   # Claude Code configuration files
-  home.file = {
-    # Symlink so the native installer check finds claude at ~/.local/bin/claude
-    ".local/bin/claude".source = config.lib.file.mkOutOfStoreSymlink "/etc/profiles/per-user/${config.home.username}/bin/claude";
+  home.file =
+    {
+      # Symlink so the native installer check finds claude at ~/.local/bin/claude
+      ".local/bin/claude".source = config.lib.file.mkOutOfStoreSymlink "/etc/profiles/per-user/${config.home.username}/bin/claude";
 
-    # Claude command files
-    ".claude/commands" = {
-      source = ../../apps/claude-code/commands;
-      recursive = true;
-    };
-
-    ".claude/agents" = {
-      source = ../../apps/claude-code/agents;
-      recursive = true;
-    };
-
-    ".claude/skills" = {
-      source = ../../apps/claude-code/skills;
-      recursive = true;
-    };
-
-    # Ralph Wiggum assets (scripts and hooks for the ralph-loop command)
-    ".claude/assets/ralph-wiggum" = {
-      source = ../../apps/claude-code/assets/ralph-wiggum;
-      recursive = true;
-    };
-
-    # LSP plugin (loaded via --plugin-dir in the claude wrapper)
-    ".claude/lsp-plugin" = {
-      source = ../../apps/claude-code/lsp-plugin;
-      recursive = true;
-    };
-
-    ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
-
-    ".claude/settings.json".text = builtins.toJSON {
-      env = {
-        DISABLE_AUTOUPDATER = "1";
-        CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
-        ENABLE_LSP_TOOL = "1";
+      # Claude command files
+      ".claude/commands" = {
+        source = ../../apps/claude-code/commands;
+        recursive = true;
       };
 
-      statusLine = {
-        type = "command";
-        command = "${ccstatusline}/bin/ccstatusline";
-        padding = 0;
+      ".claude/agents" = {
+        source = ../../apps/claude-code/agents;
+        recursive = true;
       };
 
-      skipDangerousModePermissionPrompt = true;
-
-      permissions = {
-        defaultMode = "bypassPermissions";
-        allow = [];
-
-        deny = [];
+      ".claude/skills" = {
+        source = ../../apps/claude-code/skills;
+        recursive = true;
       };
 
-      hooks = {
-        UserPromptSubmit = [
-          {
-            hooks = [
-              {
-                type = "command";
-                command = "tdd-guard";
-              }
-            ];
-          }
-        ];
-        SessionStart = [
-          {
-            matcher = "startup|resume|clear";
-            hooks = [
-              {
-                type = "command";
-                command = "tdd-guard";
-              }
-            ];
-          }
-        ];
-        Stop = [
-          {
-            # Ralph Wiggum stop hook - intercepts exit when loop is active
-            hooks = [
-              {
-                type = "command";
-                command = "$HOME/.claude/assets/ralph-wiggum/hooks/stop-hook.sh";
-              }
-            ];
-          }
-          {
-            matcher = "";
-            hooks = [
-              {
-                command = "PROJECT_NAME=\${PROJECT_ROOT##*/}; PROJECT_NAME=\${PROJECT_NAME:-'project'}; [ -n \"$CLAUDE_NOTIFICATION_SLACK_URL\" ] && curl -X POST -H 'Content-type: application/json' --data \"{\\\"text\\\":\\\"Task completed in $PROJECT_NAME\\\"}\" \"$CLAUDE_NOTIFICATION_SLACK_URL\" || true";
-                type = "command";
-              }
-            ];
-          }
-        ];
-        PostToolUse = [
-          {
-            matcher = "Write|Edit|MultiEdit";
-            hooks = [
-              {
-                command = "just format || npm run format || true";
-                type = "command";
-              }
-            ];
-          }
-        ];
+      # GWS skills fetched from github.com/googleworkspace/cli
+    }
+    // builtins.listToAttrs (map (skill: {
+        name = ".claude/skills/${skill}";
+        value = {
+          source = "${repos-src.gws-skills-src}/skills/${skill}";
+          recursive = true;
+        };
+      })
+      gws-skills)
+    // {
+      # Ralph Wiggum assets (scripts and hooks for the ralph-loop command)
+      ".claude/assets/ralph-wiggum" = {
+        source = ../../apps/claude-code/assets/ralph-wiggum;
+        recursive = true;
       };
-      includeCoAuthoredBy = false;
+
+      # LSP plugin (loaded via --plugin-dir in the claude wrapper)
+      ".claude/lsp-plugin" = {
+        source = ../../apps/claude-code/lsp-plugin;
+        recursive = true;
+      };
+
+      ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
+
+      ".claude/settings.json".text = builtins.toJSON {
+        env = {
+          DISABLE_AUTOUPDATER = "1";
+          CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+          ENABLE_LSP_TOOL = "1";
+        };
+
+        statusLine = {
+          type = "command";
+          command = "${ccstatusline}/bin/ccstatusline";
+          padding = 0;
+        };
+
+        skipDangerousModePermissionPrompt = true;
+
+        permissions = {
+          defaultMode = "bypassPermissions";
+          allow = [];
+
+          deny = [];
+        };
+
+        hooks = {
+          UserPromptSubmit = [
+            {
+              hooks = [
+                {
+                  type = "command";
+                  command = "tdd-guard";
+                }
+              ];
+            }
+          ];
+          SessionStart = [
+            {
+              matcher = "startup|resume|clear";
+              hooks = [
+                {
+                  type = "command";
+                  command = "tdd-guard";
+                }
+              ];
+            }
+          ];
+          Stop = [
+            {
+              # Ralph Wiggum stop hook - intercepts exit when loop is active
+              hooks = [
+                {
+                  type = "command";
+                  command = "$HOME/.claude/assets/ralph-wiggum/hooks/stop-hook.sh";
+                }
+              ];
+            }
+            {
+              matcher = "";
+              hooks = [
+                {
+                  command = "PROJECT_NAME=\${PROJECT_ROOT##*/}; PROJECT_NAME=\${PROJECT_NAME:-'project'}; [ -n \"$CLAUDE_NOTIFICATION_SLACK_URL\" ] && curl -X POST -H 'Content-type: application/json' --data \"{\\\"text\\\":\\\"Task completed in $PROJECT_NAME\\\"}\" \"$CLAUDE_NOTIFICATION_SLACK_URL\" || true";
+                  type = "command";
+                }
+              ];
+            }
+          ];
+          PostToolUse = [
+            {
+              matcher = "Write|Edit|MultiEdit";
+              hooks = [
+                {
+                  command = "just format || npm run format || true";
+                  type = "command";
+                }
+              ];
+            }
+          ];
+        };
+        includeCoAuthoredBy = false;
+      };
     };
-  };
 }
