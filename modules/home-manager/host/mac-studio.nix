@@ -34,7 +34,7 @@
       ProgramArguments = [
         "/bin/sh"
         "-c"
-        "export PATH=\"$HOME/.local/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH\" && cd $HOME/Source/gitea.internal.freddrake.com/fdrake/PKM-Personal && claude --model sonnet -p /archive-obvious"
+        "export PATH=\"$HOME/.local/bin:$HOME/.nix-profile/bin:/etc/profiles/per-user/fdrake/bin:/nix/var/nix/profiles/default/bin:$PATH\" && cd $HOME/Source/gitea.internal.freddrake.com/fdrake/PKM-Personal && claude --model sonnet --verbose --output-format stream-json -p /archive-obvious"
       ];
       StartInterval = 14400; # every 4 hours (in seconds)
       StandardOutPath = "/tmp/archive-email.log";
