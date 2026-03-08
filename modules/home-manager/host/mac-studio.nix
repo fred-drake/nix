@@ -26,4 +26,19 @@
       '';
     };
   };
+
+  launchd.agents.archive-email = {
+    enable = true;
+    config = {
+      Label = "com.freddrake.archive-email";
+      ProgramArguments = [
+        "/bin/sh"
+        "-c"
+        "cd $HOME/Source/gitea.internal.freddrake.com/fdrake/PKM-Personal && claude --model sonnet -p /archive-obvious"
+      ];
+      StartInterval = 14400; # every 4 hours (in seconds)
+      StandardOutPath = "/tmp/archive-email.log";
+      StandardErrorPath = "/tmp/archive-email.err";
+    };
+  };
 }
