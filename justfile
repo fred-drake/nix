@@ -14,7 +14,7 @@ build: _rebuild-pre update-secrets
     sudo system-flake-rebuild build
 
 # Update everything
-update-all: update update-npm-packages update-repos update-container-digests update-secrets update-claude
+update-all: update update-npm-packages update-repos update-container-digests update-secrets update-claude update-gws
 
 # Pull the latest hashes and shas from the repos in apps/fetcher/repos.toml
 update-repos:
@@ -31,6 +31,10 @@ update-npm-packages:
 # Update Claude Code binary metadata
 update-claude:
     ./apps/fetcher/update-claude-code.sh
+
+# Update GWS CLI binary metadata
+update-gws:
+    ./apps/fetcher/update-gws.sh
 
 # Format all .nix files with alejandra
 format:

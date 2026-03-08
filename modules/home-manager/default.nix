@@ -71,6 +71,7 @@
     config.allowUnfree = true;
   };
   tdd-guard = pkgsStable.callPackage ../../apps/tdd-guard.nix {};
+  gws = pkgs.callPackage ../../apps/gws.nix {};
 in {
   # Import additional configuration files
   imports = [
@@ -207,7 +208,7 @@ in {
 
     # Install packages using Home Manager
     packages =
-      [agent-browser] # Playwright browser automation
+      [agent-browser gws] # Playwright browser automation, Google Workspace CLI
       ++ (with pkgs; [
         age # Modern encryption tool
         bat # Cat clone with syntax highlighting
