@@ -148,6 +148,7 @@ in {
     shellAbbrs = {
       cm = "chezmoi";
       cld = "claude --add-dir ~/Screenshots";
+      cldc = "claude --add-dir ~/Screenshots --continue";
       df = "duf";
       k = "kubectl";
       telnet = "nc -zv";
