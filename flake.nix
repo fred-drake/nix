@@ -102,6 +102,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-jetbrains-plugins.url = "github:theCapypara/nix-jetbrains-plugins";
 
     nix4vscode = {

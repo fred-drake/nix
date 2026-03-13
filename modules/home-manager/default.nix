@@ -374,6 +374,9 @@ in {
     carapace.enable = true;
     direnv.enable = true;
 
+    nix-index.enable = true;
+    nix-index-database.comma.enable = true;
+
     fish.enable = true;
     fzf = {
       enable = true; # Fuzzy finder

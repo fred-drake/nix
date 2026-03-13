@@ -14,6 +14,7 @@
       inputs.secrets.nixosModules.soft-secrets
       inputs.secrets.nixosModules.secrets
       inputs.nixvim.homeModules.nixvim
+      inputs.nix-index-database.homeModules.nix-index
       # ({pkgs, ...}: {
       #   home.packages =
       #     (builtins.attrValues (import ./mk-neovim-packages.nix {
