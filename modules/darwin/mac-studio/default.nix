@@ -9,7 +9,7 @@
 
   homebrew = {
     brews = ["container" "steipete/tap/remindctl"];
-    casks = ["mutedeck" "proxy-audio-device" "elgato-stream-deck" "elgato-camera-hub" "vmware-fusion"] ++ non-mac-mini-casks;
+    casks = ["mutedeck" "naps2" "proxy-audio-device" "elgato-stream-deck" "elgato-camera-hub" "vmware-fusion"] ++ non-mac-mini-casks;
     masApps = {
       "iWallpaper - Live Wallpaper" = 1552826194;
     };
