@@ -36,7 +36,56 @@
         "-c"
         "export PATH=\"$HOME/.local/bin:$HOME/.nix-profile/bin:/etc/profiles/per-user/fdrake/bin:/nix/var/nix/profiles/default/bin:$PATH\" && cd $HOME/Source/gitea.internal.freddrake.com/fdrake/PKM-Personal && claude --model sonnet --verbose --output-format stream-json -p /archive-obvious"
       ];
-      StartInterval = 14400; # every 4 hours (in seconds)
+      StartCalendarInterval = [
+        {
+          Minute = 0;
+          Hour = 0;
+        }
+        {
+          Minute = 0;
+          Hour = 2;
+        }
+        {
+          Minute = 0;
+          Hour = 4;
+        }
+        {
+          Minute = 0;
+          Hour = 6;
+        }
+        {
+          Minute = 0;
+          Hour = 8;
+        }
+        {
+          Minute = 0;
+          Hour = 10;
+        }
+        {
+          Minute = 0;
+          Hour = 12;
+        }
+        {
+          Minute = 0;
+          Hour = 14;
+        }
+        {
+          Minute = 0;
+          Hour = 16;
+        }
+        {
+          Minute = 0;
+          Hour = 18;
+        }
+        {
+          Minute = 0;
+          Hour = 20;
+        }
+        {
+          Minute = 0;
+          Hour = 22;
+        }
+      ];
       StandardOutPath = "/tmp/archive-email.log";
       StandardErrorPath = "/tmp/archive-email.err";
     };
