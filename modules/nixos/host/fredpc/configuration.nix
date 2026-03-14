@@ -97,6 +97,7 @@ in {
     alsa-tools
     alsa-utils
     bitwarden-desktop
+    hdparm
     usbutils
     kitty
     krita
