@@ -19,6 +19,7 @@ in
     };
 
     nativeBuildInputs = lib.optionals stdenv.isLinux [autoPatchelfHook];
+    buildInputs = lib.optionals stdenv.isLinux [stdenv.cc.cc.lib];
 
     dontBuild = true;
 
