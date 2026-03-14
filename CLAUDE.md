@@ -148,9 +148,11 @@ MCP servers are configured via SOPS templates in `modules/home-manager/claude-co
 
 ## Build Commands
 
+**IMPORTANT:** Do NOT use `sudo` with `just` commands — they handle `sudo` internally.
+
 ```bash
 # Rebuild NixOS system
-sudo just switch
+just switch
 
 # Build NixOS system only
 just build

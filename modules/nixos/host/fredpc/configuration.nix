@@ -13,6 +13,7 @@ in {
     ./hyprland.nix
     ./gpu-passthrough.nix
     ./restic-backup.nix
+    ./borg-backup.nix
   ];
   boot = {
     loader.grub = {

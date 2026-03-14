@@ -304,6 +304,12 @@ in {
         key = "restic-password";
       };
 
+      hetzner-borg-passphrase = {
+        sopsFile = config.secrets.workstation.hetzner-home;
+        mode = "0400";
+        key = "borg-password";
+      };
+
       cloudflare-api-key = {
         sopsFile = config.secrets.workstation.cloudflare;
         mode = "0400";

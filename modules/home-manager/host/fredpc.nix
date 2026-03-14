@@ -58,6 +58,9 @@
       appimage-run # Run AppImage applications
       bluetui # Bluetooth TUI
       droidcam # Use phone as webcam
+      gptfdisk # sgdisk, gdisk - GPT partition tools
+      parted # Partition editor
+      smartmontools # smartctl - disk health monitoring
     ];
   };
 
