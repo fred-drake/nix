@@ -48,7 +48,7 @@ in {
             proxy_send_timeout 300;
             proxy_read_timeout 300;
 
-            client_max_body_size 50M;
+            client_max_body_size 250M;
           '';
         };
       };
