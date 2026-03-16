@@ -247,7 +247,7 @@ in {
         meld # Visual diff and merge tool
         minio-client # MinIO object storage client
         ncdu # NCurses disk usage analyzer
-        neofetch # System information display
+        fastfetch # System information display
         nixd # Nix language server
         oh-my-posh # Prompt theme engine
         openai-whisper # Speech-to-text transcription
