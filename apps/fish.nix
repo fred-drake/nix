@@ -125,6 +125,9 @@ in {
       # oh-my-posh init fish --config ~/.config/oh-my-posh/config.toml | source
 
       zoxide init fish | source
+
+      # television smart autocomplete and shell history
+      tv init fish | source
     '';
     plugins = [
       {

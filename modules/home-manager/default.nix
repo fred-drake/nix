@@ -144,6 +144,14 @@ in {
           app-notifications = no-clipboard-copy
         '';
 
+        # Television configuration
+        ".config/television/config.toml".text = ''
+          [shell_integration.channel_triggers]
+          "git-branch" = ["git checkout", "git branch"]
+          "files" =  ["cat", "less", "bat", "vim", "nvim", "hx"]
+          "dirs" = ["cd"]
+        '';
+
         "Pictures" = {
           source = ../../homefiles/Pictures;
           recursive = true;
@@ -261,6 +269,7 @@ in {
         stc-cli # Syncthing CLI
         syncthing # File synchronization tool
         tdd-guard # Test-driven development watcher
+        television # Terminal fuzzy finder
         tldr # Simplified man pages
         tmux # Terminal multiplexer
         tmux-mem-cpu-load # CPU and memory usage monitor
