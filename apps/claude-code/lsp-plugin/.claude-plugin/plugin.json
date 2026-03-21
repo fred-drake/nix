@@ -1,5 +1,0 @@
-{
-  "name": "nix-managed-lsp",
-  "version": "1.0.0",
-  "description": "Declarative LSP servers managed via Nix home-manager"
-}

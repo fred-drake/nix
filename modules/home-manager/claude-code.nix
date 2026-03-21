@@ -5,6 +5,11 @@
 }: let
   home = config.home.homeDirectory;
   repos-src = import ../../apps/fetcher/repos-src.nix {inherit pkgs;};
+  claude-plugins-src = import ../../apps/fetcher/claude-plugins-src.nix {inherit pkgs;};
+  lsp-plugin = import ../../apps/claude-code/lsp-plugin.nix {
+    inherit pkgs;
+    inherit (claude-plugins-src) claude-plugins-official-src;
+  };
   claude-code = pkgs.callPackage ../../apps/claude-code {
     pluginDirs = [
       "$HOME/.claude/lsp-plugin"
@@ -340,9 +345,9 @@ in {
         recursive = true;
       };
 
-      # LSP plugin (loaded via --plugin-dir in the claude wrapper)
+      # LSP plugin (generated from claude-plugins-official + custom nil config)
       ".claude/lsp-plugin" = {
-        source = ../../apps/claude-code/lsp-plugin;
+        source = lsp-plugin;
         recursive = true;
       };
 

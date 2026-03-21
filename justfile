@@ -28,8 +28,9 @@ update-container-digests:
 update-npm-packages:
     update-npm-packages
 
-# Update Claude Code binary metadata
+# Update Claude Code binary and plugin repos
 update-claude:
+    update-claude-plugins
     ./apps/fetcher/update-claude-code.sh
 
 # Update GWS CLI binary metadata

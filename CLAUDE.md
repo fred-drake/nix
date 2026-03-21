@@ -36,111 +36,100 @@ apps/claude-code/
 
 Commands in `apps/claude-code/commands/` are symlinked to `~/.claude/commands/` via home-manager. Each `.md` file becomes a `/command-name` slash command.
 
-## Converting Plugins to Direct Installation
+## Declarative Plugin Installation
 
-The Claude Code plugin system uses feature flags that may not be enabled. To install plugins declaratively via Nix, convert them to direct commands/assets.
+Plugins are installed declaratively via Nix using `--plugin-dir` flags,
+bypassing Claude Code's mutable marketplace/cache system entirely.
 
-### Plugin Conversion Pattern
+### How It Works
 
-Given a plugin with this structure:
-```
-plugin-name/
-├── .claude-plugin/
-│   └── plugin.json
-├── commands/
-│   ├── command1.md
-│   └── command2.md
-├── hooks/
-│   └── some-hook.sh
-└── scripts/
-    └── helper-script.sh
-```
+1. Plugin git repos are pinned in `apps/fetcher/claude-plugins.toml`
+2. `update-claude-plugins` fetches latest commits and generates
+   `apps/fetcher/claude-plugins-src.nix` with pinned rev/hash
+3. Plugins are symlinked to `~/.claude/` via home-manager
+4. The `pluginDirs` list in `apps/claude-code/default.nix` passes
+   `--plugin-dir` flags to the claude wrapper automatically
 
-Convert it as follows:
+Nothing changes unless you explicitly update the pinned hashes.
 
-#### 1. Create Assets Directory
+### Adding a Self-Contained Plugin
 
-Create `apps/claude-code/assets/<plugin-name>/` with scripts and hooks:
+Most plugins (not LSP) are self-contained with a proper
+`.claude-plugin/plugin.json`. To add one:
 
-```
-apps/claude-code/assets/<plugin-name>/
-├── scripts/
-│   └── helper-script.sh
-└── hooks/
-    └── some-hook.sh
+#### 1. Add to `apps/fetcher/claude-plugins.toml`
+
+```toml
+[[repos]]
+name = "my-plugin-src"
+url = "https://github.com/owner/repo"
 ```
 
-#### 2. Fix Shebangs
+#### 2. Run `just update-claude` (or `update-claude-plugins`)
 
-Change `#!/bin/bash` to `#!/usr/bin/env bash` for NixOS compatibility.
+This generates the pinned entry in `claude-plugins-src.nix`.
 
-#### 3. Patch Command Files
+#### 3. Wire into `modules/home-manager/claude-code.nix`
 
-Copy command `.md` files to `apps/claude-code/commands/`.
-
-Replace `${CLAUDE_PLUGIN_ROOT}` references with `$HOME/.claude/assets/<plugin-name>`:
-
-```markdown
-# Before
-allowed-tools: ["Bash(${CLAUDE_PLUGIN_ROOT}/scripts/helper.sh)"]
-
-# After
-allowed-tools: ["Bash($HOME/.claude/assets/<plugin-name>/scripts/helper.sh)"]
-```
-
-Also patch any bash code blocks:
-```bash
-# Before
-"${CLAUDE_PLUGIN_ROOT}/scripts/helper.sh"
-
-# After
-"$HOME/.claude/assets/<plugin-name>/scripts/helper.sh"
-```
-
-#### 4. Add to Nix Config
-
-In `modules/home-manager/claude-code.nix`, add the assets directory:
-
+Symlink the plugin directory:
 ```nix
-".claude/assets/<plugin-name>" = {
-  source = ../../apps/claude-code/assets/<plugin-name>;
+".claude/plugins/my-plugin" = {
+  source = "${claude-plugins-src.my-plugin-src}";  # or a subdir
   recursive = true;
 };
 ```
 
-Commands are automatically included since the entire `commands/` directory is already sourced.
-
-#### 5. Add Hooks to settings.json
-
-If the plugin has hooks, add them to the appropriate hook type in `settings.json`:
-
+Add to `pluginDirs` in the `claude-code` package call:
 ```nix
-hooks = {
-  Stop = [
-    {
-      hooks = [
-        {
-          type = "command";
-          command = "$HOME/.claude/assets/<plugin-name>/hooks/some-hook.sh";
-        }
-      ];
-    }
+claude-code = pkgs.callPackage ../../apps/claude-code {
+  pluginDirs = [
+    "$HOME/.claude/lsp-plugin"
+    "$HOME/.claude/plugins/my-plugin"
   ];
 };
 ```
 
-### Example: ralph-wiggum
+#### 4. `just switch`
 
-The ralph-wiggum plugin was converted following this pattern:
+### LSP Plugin (Special Case)
 
-**Commands created:**
-- `/ralph-loop` - Start iterative development loop
-- `/cancel-ralph` - Cancel active loop
-- `/ralph-help` - Show documentation
+LSP plugins in `claude-plugins-official` are not self-contained — their
+config lives centrally in `marketplace.json`. The LSP plugin is
+generated at Nix build time by `apps/claude-code/lsp-plugin.nix`:
 
-**Assets location:** `apps/claude-code/assets/ralph-wiggum/`
+1. Parses `marketplace.json` from the pinned `claude-plugins-official`
+   repo and extracts all `lspServers` entries
+2. Merges in custom LSP servers not available upstream (e.g. `nil`
+   for Nix) defined in `customLspServers` in `lsp-plugin.nix`
+3. Produces a plugin directory with `.claude-plugin/plugin.json`
+   and `.lsp.json`
 
-**Stop hook:** Added to settings.json to intercept session exit when loop is active.
+To add a custom LSP server, add it to `customLspServers` in
+`apps/claude-code/lsp-plugin.nix`.
+
+### Updating Plugins
+
+`just update-claude` updates both the Claude Code binary and all
+plugin repos in `claude-plugins.toml`. Repos are only updated when
+you run this — pinned hashes guarantee idempotency.
+
+### Converting Plugins to Direct Installation (Legacy)
+
+For plugins that need decomposition (e.g. extracting commands/hooks
+into the local `apps/claude-code/` structure), see the ralph-wiggum
+example:
+
+1. Copy commands to `apps/claude-code/commands/`
+2. Copy scripts/hooks to `apps/claude-code/assets/<plugin-name>/`
+3. Fix shebangs: `#!/bin/bash` → `#!/usr/bin/env bash`
+4. Replace `${CLAUDE_PLUGIN_ROOT}` with
+   `$HOME/.claude/assets/<plugin-name>`
+5. Add `home.file` entry for the assets directory
+6. Add hooks to `settings.json` if needed
+
+**Example:** ralph-wiggum plugin lives at
+`apps/claude-code/assets/ralph-wiggum/` with commands at
+`/ralph-loop`, `/cancel-ralph`, `/ralph-help`.
 
 ## MCP Server Configuration
 

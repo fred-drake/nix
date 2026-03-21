@@ -65,6 +65,31 @@
     ${pkgs.alejandra}/bin/alejandra --quiet $SHA_FILE
   '';
 
+  update-claude-plugins = pkgs.writeShellScriptBin "update-claude-plugins" ''
+    SRCFILE=''${PROJECT_ROOT:-$(pwd)}/apps/fetcher/claude-plugins-src.nix
+    TOMLFILE=''${PROJECT_ROOT:-$(pwd)}/apps/fetcher/claude-plugins.toml
+    echo "####################################" > $SRCFILE
+    echo "# Auto-generated -- do not modify! #" >> $SRCFILE
+    echo "####################################" >> $SRCFILE
+    echo "{pkgs, ...}: {" >> $SRCFILE
+    ${pkgs.tomlq}/bin/tq --file $TOMLFILE --output json '.repos' | \
+    ${pkgs.jq}/bin/jq -c '.[]' | \
+    while IFS= read -r repo; do
+      name=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.name')
+      url=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.url')
+      rev=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.rev // empty')
+
+      if [ -n "$rev" ]; then
+        processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" "$rev" | tr -d '\n')
+      else
+        processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" | tr -d '\n')
+      fi
+      echo "  ''${name} = ''${processed_url};"
+    done >> $SRCFILE
+    echo "}" >> $SRCFILE
+    ${pkgs.alejandra}/bin/alejandra --quiet $SRCFILE
+  '';
+
   update-npm-packages = pkgs.writeShellScriptBin "update-npm-packages" ''
     TOML_FILE=''${PROJECT_ROOT:-$(pwd)}/apps/fetcher/npm-packages.toml
     NIX_FILE=''${PROJECT_ROOT:-$(pwd)}/apps/fetcher/npm-packages.nix
@@ -95,6 +120,7 @@ in
 
       # Helper scripts
       update-fetcher-repos
+      update-claude-plugins
       system-flake-rebuild
       update-container-digests
       update-npm-packages
