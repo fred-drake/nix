@@ -131,12 +131,12 @@ in
     AIDER_TEST_CMD = "just build";
     AIDER_AUTO_TEST = "true";
 
-    # Set PROJECT_ROOT for scripts
-    PROJECT_ROOT = toString ./.;
-
     shellHook = ''
       # Add user's local bin to PATH
       export PATH="$PATH:$HOME/.local/bin"
+
+      # Set PROJECT_ROOT to the actual working directory, not the nix store copy
+      export PROJECT_ROOT="$PWD"
 
       echo "Nix development shell activated"
       echo "Project root: $PROJECT_ROOT"
