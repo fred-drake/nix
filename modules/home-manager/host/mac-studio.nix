@@ -39,51 +39,6 @@
       StartCalendarInterval = [
         {
           Minute = 0;
-          Hour = 0;
-        }
-        {
-          Minute = 0;
-          Hour = 2;
-        }
-        {
-          Minute = 0;
-          Hour = 4;
-        }
-        {
-          Minute = 0;
-          Hour = 6;
-        }
-        {
-          Minute = 0;
-          Hour = 8;
-        }
-        {
-          Minute = 0;
-          Hour = 10;
-        }
-        {
-          Minute = 0;
-          Hour = 12;
-        }
-        {
-          Minute = 0;
-          Hour = 14;
-        }
-        {
-          Minute = 0;
-          Hour = 16;
-        }
-        {
-          Minute = 0;
-          Hour = 18;
-        }
-        {
-          Minute = 0;
-          Hour = 20;
-        }
-        {
-          Minute = 0;
-          Hour = 22;
         }
       ];
       StandardOutPath = "/tmp/archive-email.log";
