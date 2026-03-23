@@ -13,6 +13,7 @@
 
   # Sub-accounts to back up with borg
   storages = {
+    videos = "sub2";
     calibre = "sub5";
     gitea = "sub3";
     paperless = "sub4";
@@ -20,8 +21,12 @@
     wowclient = "sub7";
   };
 
-  # Explicit execution order (most important first)
-  storageNames = ["calibre" "gitea" "paperless" "nintendopower" "wowclient"];
+  # Backup groups by frequency
+  dailyNames = ["gitea" "paperless"];
+  weeklyNames = ["calibre"];
+  monthlyNames = ["videos" "nintendopower" "wowclient"];
+
+  allNames = dailyNames ++ weeklyNames ++ monthlyNames;
 
   # Script to create credentials and mount a single CIFS share (with retry)
   mountOne = name: sub: ''
@@ -45,10 +50,15 @@
     rm -f /run/backup-creds/${name}
   '';
 
+  # Custom paths per sub-account (default: entire mount)
+  storagePaths = {
+    videos = ["/mnt/backup-videos/library/home-videos"];
+  };
+
   # Generate a borg backup job for a single sub-account
   mkBorgJob = name: sub: {
     repo = "${borgRepoBase}/${name}";
-    paths = ["/mnt/backup-${name}"];
+    paths = storagePaths.${name} or ["/mnt/backup-${name}"];
 
     encryption = {
       mode = "repokey-blake2";
@@ -56,7 +66,7 @@
     };
 
     compression = "auto,zstd";
-    startAt = []; # Driven by wrapper service
+    startAt = []; # Driven by wrapper services
     doInit = true;
     privateTmp = false;
     failOnWarnings = false; # CIFS xattr warnings are benign
@@ -83,46 +93,90 @@
 
     extraCreateArgs = ["--stats" "--checkpoint-interval" "600"];
   };
+
+  # Generate a sequential wrapper script for a group of backups
+  mkWrapperScript = groupName: names: let
+    backupCommands =
+      lib.imap0 (i: name: ''
+        ${lib.optionalString (i > 0) ''
+          echo "Waiting 30s before next backup..."
+          sleep 30
+        ''}
+        echo "=== Starting ${groupName} backup: ${name} ==="
+        ${systemctl} start --wait borgbackup-job-hetzner-${name}.service && \
+          echo "=== Completed: ${name} ===" || \
+          echo "=== WARNING: ${name} backup failed ==="
+      '')
+      names;
+  in
+    lib.concatStringsSep "\n" backupCommands;
 in {
-  # Create mount points and credential directory
+  environment.systemPackages = [pkgs.cifs-utils];
+
   systemd = {
     tmpfiles.rules =
       ["d /run/backup-creds 0700 root root -"]
-      ++ map (name: "d /mnt/backup-${name} 0755 root root -") storageNames
+      ++ map (name: "d /mnt/backup-${name} 0755 root root -") allNames
       ++ ["d ${borgRepoBase} 0700 root root -"];
 
-    # Wrapper service that runs each borg backup sequentially
-    services.borg-backup-all-storage = {
-      description = "Sequential borg backups for all storage sub-accounts";
-      after = ["network-online.target"];
-      wants = ["network-online.target"];
-      serviceConfig = {
-        Type = "oneshot";
-        TimeoutStartSec = "24h";
+    services = {
+      borg-backup-daily = {
+        description = "Sequential borg backups (daily: gitea, paperless)";
+        after = ["network-online.target"];
+        wants = ["network-online.target"];
+        serviceConfig = {
+          Type = "oneshot";
+          TimeoutStartSec = "24h";
+        };
+        script = mkWrapperScript "daily" dailyNames;
       };
-      script = let
-        backupCommands =
-          lib.imap0 (i: name: ''
-            ${lib.optionalString (i > 0) ''
-              echo "Waiting 30s before next backup..."
-              sleep 30
-            ''}
-            echo "=== Starting backup: ${name} ==="
-            ${systemctl} start --wait borgbackup-job-hetzner-${name}.service && \
-              echo "=== Completed: ${name} ===" || \
-              echo "=== WARNING: ${name} backup failed ==="
-          '')
-          storageNames;
-      in
-        lib.concatStringsSep "\n" backupCommands;
+
+      borg-backup-weekly = {
+        description = "Sequential borg backups (weekly: calibre)";
+        after = ["network-online.target"];
+        wants = ["network-online.target"];
+        serviceConfig = {
+          Type = "oneshot";
+          TimeoutStartSec = "24h";
+        };
+        script = mkWrapperScript "weekly" weeklyNames;
+      };
+
+      borg-backup-monthly = {
+        description = "Sequential borg backups (monthly: videos, nintendopower, wowclient)";
+        after = ["network-online.target"];
+        wants = ["network-online.target"];
+        serviceConfig = {
+          Type = "oneshot";
+          TimeoutStartSec = "24h";
+        };
+        script = mkWrapperScript "monthly" monthlyNames;
+      };
     };
 
-    # Wrapper timer triggers sequential backups at 2 AM
-    timers.borg-backup-all-storage = {
-      wantedBy = ["timers.target"];
-      timerConfig = {
-        OnCalendar = "02:00";
-        Persistent = true;
+    timers = {
+      borg-backup-daily = {
+        wantedBy = ["timers.target"];
+        timerConfig = {
+          OnCalendar = "02:00";
+          Persistent = true;
+        };
+      };
+
+      borg-backup-weekly = {
+        wantedBy = ["timers.target"];
+        timerConfig = {
+          OnCalendar = "Sun 02:00";
+          Persistent = true;
+        };
+      };
+
+      borg-backup-monthly = {
+        wantedBy = ["timers.target"];
+        timerConfig = {
+          OnCalendar = "*-*-01 02:00";
+          Persistent = true;
+        };
       };
     };
   };
@@ -131,5 +185,5 @@ in {
       name = "hetzner-${name}";
       value = mkBorgJob name storages.${name};
     })
-    storageNames);
+    allNames);
 }
