@@ -20,7 +20,6 @@ window#waybar.hidden {
 
 /* - General rules for visible modules -- */
 #custom-osicon,
-#custom-kuma-waybar,
 #custom-weather,
 #clock,
 #cpu,
@@ -47,7 +46,6 @@ window#waybar.hidden {
 
 /* Force label padding */
 #custom-osicon label,
-#custom-kuma-waybar label,
 #custom-weather label,
 #clock label,
 #cpu label,
@@ -76,8 +74,7 @@ window#waybar.hidden {
 #custom-weather,
 #custom-power,
 #custom-spotify,
-#custom-ccusage,
-#custom-kuma-waybar {
+#custom-ccusage {
   margin-left: 5px;
   border-left: 1px solid #7aa2f7;
   border-top-left-radius: 10px;
@@ -88,7 +85,6 @@ window#waybar.hidden {
 #custom-osicon,
 #clock,
 #disk,
-#custom-kuma-waybar,
 #idle_inhibitor,
 #custom-weather,
 #custom-power,
@@ -219,10 +215,6 @@ window#waybar.hidden {
 #network {
   padding-right: 13px;
   color: #e0af68;
-}
-
-#custom-kuma-waybar {
-  padding-right: 15px;
 }
 
 #custom-weather {

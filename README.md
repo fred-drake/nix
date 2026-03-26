@@ -23,17 +23,9 @@ This repository contains Nix configurations for managing both personal workstati
   - `fredpc`: Builds x86_64-linux configurations
   - `nixosaarch64vm`: Builds aarch64-linux configurations
 - **Infrastructure Services** (Managed via Colmena):
-  - `gitea`: Git repository hosting
-  - `gitea-runner-1`, `gitea-runner-2`, `gitea-runner-3`: CI/CD runners
-  - `uptime-kuma`: Uptime monitoring
-  - `prometheus`: Metrics collection
-  - `grafana`: Metrics visualization
-  - `sonarqube`: Code quality analysis
-  - `jellyseerr`: Media request management
-  - `prowlarr`: Indexer management
-  - `n8n`: Workflow automation
-  - `external-metrics`: External metrics collection
-  - `ironforge`: Multi-service host (gitea, woodpecker, paperless, calibre, nixarr, resume)
+  - `headscale`: VPN coordination
+  - `ironforge`: Multi-service host (nixarr with jellyfin, jellyseerr, sonarr, radarr, prowlarr, sabnzbd, bazarr, lidarr)
+  - `orgrimmar`: Multi-service host (gitea, woodpecker, paperless, calibre, resume)
 
 ## Network Overview
 
@@ -43,12 +35,6 @@ The infrastructure uses multiple VLANs for security and organization:
 - **Services (VLAN 50)**: Public-facing services and applications
 - **IoT (VLAN 40)**: Internet of Things devices (isolated)
 - **Workstations (VLAN 30)**: User devices and workstations
-
-## Monitoring
-
-- **Uptime Monitoring**: Uptime Kuma tracks service availability and SSL certificates
-- **Metrics**: Prometheus collects system and application metrics
-- **Alerting**: Configured for both critical and warning-level notifications
 
 ## Prerequisites
 

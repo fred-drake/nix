@@ -108,23 +108,6 @@ in {
         };
       };
     };
-    mcp-sonarqube = {
-      mode = "0400";
-      path = "${home}/mcp/sonarqube.json";
-      content = builtins.toJSON {
-        mcpServers = {
-          sonarqube = {
-            command = "podman";
-            args = ["run" "-i" "--rm" "-e" "SONARQUBE_TOKEN" "-e" "SONARQUBE_URL" "-e" "TELEMETRY_DISABLED" "mcp/sonarqube"];
-            env = {
-              SONARQUBE_URL = "https://sonarqube.${config.soft-secrets.networking.domain}";
-              SONARQUBE_TOKEN = config.sops.placeholder.sonarqube-token;
-              TELEMETRY_DISABLED = "true";
-            };
-          };
-        };
-      };
-    };
     mcp-gitea-personal = {
       mode = "0400";
       path = "${home}/mcp/gitea-personal.json";

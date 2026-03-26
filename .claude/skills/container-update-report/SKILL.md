@@ -69,11 +69,11 @@ After deployment, provide a summary table:
 
 | Container | Typical Host |
 |-----------|--------------|
-| postgres | woodpecker, paperless, sonarqube, resume |
-| redis | paperless |
-| woodpecker-agent/server | woodpecker |
-| n8n | n8n |
-| paperless-ngx | paperless |
+| postgres | orgrimmar (woodpecker, resume), ironforge (paperless) |
+| redis | ironforge (paperless) |
+| woodpecker-agent/server | orgrimmar |
+| paperless-ngx | ironforge |
+| reactive-resume, minio, chromium | orgrimmar |
 
 ## Resources
 

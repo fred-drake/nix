@@ -51,12 +51,6 @@
     tag = "comment-index";
     hash = "sha256-8L2VQcU2mhRimWr2qGDRw7f/yYO5V+1kswuLlCqhpio=";
   };
-  kuma-waybar-src = pkgs.fetchFromGitHub {
-    owner = "WebTender";
-    repo = "kuma-waybar";
-    rev = "e0ce1a0e8be727dfb572d4b51075d7cd00615044";
-    hash = "sha256-KSnFFXer4cda4krIjpuF89Mwx00zsLYUSCO2Ffnokoc=";
-  };
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";

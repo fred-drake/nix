@@ -2,37 +2,13 @@
 
 This reference maps hostnames to their Proxmox container IDs and physical locations.
 
-## thrall (Proxmox Host)
+## Active Colmena Hosts
 
-| VMID | Hostname | Status |
-|------|----------|--------|
-| 100 | jellyseerr | running |
-| 103 | radarr | stopped |
-| 104 | prowlarr | running |
-| 106 | n8n | removed |
-| 107 | gitea | removed (migrated to ironforge) |
-| 109 | brainrush-dev | running |
-| 110 | uptime-kuma | running |
-| 112 | grafana | running |
-| 118 | gitea-runner-3 | running |
-| 122 | woodpecker | removed (migrated to ironforge) |
-| 123 | resume | running |
-| 700 | brainrush-auth | stopped |
-
-## sylvanas (Proxmox Host)
-
-*Update this section when hosts are discovered*
-
-| VMID | Hostname | Status |
-|------|----------|--------|
-| TBD | TBD | TBD |
-
-## voljin (Proxmox Host)
-
-*Update this section when hosts are discovered*
-
-| VMID | Hostname | Status |
-|------|----------|--------|
+| Hostname | Type | Services |
+|----------|------|----------|
+| headscale | Hetzner VPS | Headscale VPN |
+| ironforge | Hetzner dedicated | gitea, woodpecker, paperless, calibre, nixarr (jellyfin, jellyseerr, sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr) |
+| orgrimmar | Hetzner dedicated | gitea, woodpecker, paperless, calibre, resume |
 
 ## Non-Proxmox Hosts
 

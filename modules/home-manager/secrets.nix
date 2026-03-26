@@ -126,12 +126,6 @@ in {
         path = "${home}/.docker/config.json";
       };
 
-      sonarqube-token = {
-        sopsFile = config.secrets.workstation.sonarqube-token;
-        mode = "0400";
-        key = "token";
-      };
-
       personal-gitea-token = {
         sopsFile = config.secrets.workstation.gitea-tokens;
         mode = "0400";

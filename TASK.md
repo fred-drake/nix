@@ -27,7 +27,7 @@ This file tracks active tasks, backlog, and milestones for the Nix configuration
 ### Code Refactoring
 
 - [ ] Extract NGINX/ACME boilerplate into `lib/mk-nginx-proxy.nix` helper function
-  - Affects: prometheus, grafana, jellyseerr, gitea, uptime-kuma, prowlarr, n8n
+  - Affects: gitea, woodpecker, resume, paperless, calibre, nixarr services
   - Benefits: DRY principle, easier SSL management, consistent proxy configuration
 - [ ] Create `lib/mk-container-service.nix` for standardized container management
   - Add health checks, restart policies, resource limits
@@ -137,8 +137,6 @@ This file tracks active tasks, backlog, and milestones for the Nix configuration
 
 ### Infrastructure
 
-- [x] Set up Prometheus monitoring
-- [x] Configure Grafana dashboards
 - [x] Implement backup solutions (partial - needs improvement)
 
 ### Development Environment

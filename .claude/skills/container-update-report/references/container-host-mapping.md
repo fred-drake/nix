@@ -6,43 +6,64 @@ Comprehensive mapping of containers to their NixOS hosts.
 
 | Container | Tag | Host | Config Location |
 |-----------|-----|------|-----------------|
-| library/redis | latest | paperless | modules/nixos/host/paperless/paperless.nix |
-| postgres | 16-alpine | resume | apps/resume.nix |
-| postgres | 17 | paperless, sonarqube | modules/nixos/host/paperless/paperless.nix, apps/sonarqube.nix |
-| postgres | 18 | woodpecker | apps/woodpecker.nix |
-| woodpeckerci/woodpecker-agent | v3 | woodpecker | apps/woodpecker.nix |
-| woodpeckerci/woodpecker-server | v3 | woodpecker | apps/woodpecker.nix |
-| louislam/uptime-kuma | latest | uptime-kuma | (check apps/ or modules/) |
-| solarkennedy/ipmi-kvm-docker | latest | (check usage) | apps/fetcher/containers-sha.nix |
-
-## docker.n8n.io
-
-| Container | Tag | Host | Config Location |
-|-----------|-----|------|-----------------|
-| n8nio/n8n | latest | n8n | (check apps/ or modules/) |
-
-## ghcr.io
-
-| Container | Tag | Host | Config Location |
-|-----------|-----|------|-----------------|
-| paperless-ngx/paperless-ngx | latest | paperless | modules/nixos/host/paperless/paperless.nix |
+| amruthpillai/reactive-resume | latest | orgrimmar | modules/nixos/host/orgrimmar/resume.nix |
+| apache/tika | latest | ironforge | modules/nixos/host/ironforge/paperless.nix |
+| clusterzx/paperless-ai | latest | ironforge | modules/nixos/host/ironforge/paperless.nix |
+| gotenberg/gotenberg | latest | ironforge | modules/nixos/host/ironforge/paperless.nix |
+| jellyfin/jellyfin | latest | ironforge | modules/nixos/host/ironforge/nixarr.nix |
+| library/redis | latest | ironforge | modules/nixos/host/ironforge/paperless.nix |
+| postgres | 16-alpine | orgrimmar | modules/nixos/host/orgrimmar/resume.nix |
+| postgres | 17 | ironforge | modules/nixos/host/ironforge/paperless.nix |
+| postgres | 18 | orgrimmar | modules/nixos/host/orgrimmar/woodpecker.nix |
+| woodpeckerci/woodpecker-agent | v3 | orgrimmar | modules/nixos/host/orgrimmar/woodpecker.nix |
+| woodpeckerci/woodpecker-server | v3 | orgrimmar | modules/nixos/host/orgrimmar/woodpecker.nix |
 
 ## docker.gitea.com
 
 | Container | Tag | Host | Config Location |
 |-----------|-----|------|-----------------|
-| act_runner | latest | gitea-runner | (check gitea-runner config) |
+| gitea | 1-rootless | orgrimmar | modules/nixos/host/orgrimmar/gitea.nix |
+| act_runner | latest | (gitea-runner hosts - currently unused) | apps/gitea-runner/default.nix |
+
+## ghcr.io
+
+| Container | Tag | Host | Config Location |
+|-----------|-----|------|-----------------|
+| browserless/chromium | v2.18.0 | orgrimmar | modules/nixos/host/orgrimmar/resume.nix |
+| fred-drake/gitea-check-service | latest | orgrimmar | modules/nixos/host/orgrimmar/gitea.nix |
+| linuxserver/calibre | latest | ironforge | modules/nixos/host/ironforge/calibre.nix |
+| linuxserver/calibre-web | latest | ironforge | modules/nixos/host/ironforge/calibre.nix |
+| linuxserver/radarr | latest | ironforge | modules/nixos/host/ironforge/nixarr.nix |
+| linuxserver/sabnzbd | latest | ironforge | modules/nixos/host/ironforge/nixarr.nix |
+| linuxserver/sonarr | latest | ironforge | modules/nixos/host/ironforge/nixarr.nix |
+| monstermuffin/mergerfs-cache-mover | latest | (check usage) | apps/fetcher/containers-sha.nix |
+| paperless-ngx/paperless-ngx | latest | ironforge | modules/nixos/host/ironforge/paperless.nix |
+
+## quay.io
+
+| Container | Tag | Host | Config Location |
+|-----------|-----|------|-----------------|
+| minio/minio | latest | orgrimmar | modules/nixos/host/orgrimmar/resume.nix |
+
+## lscr.io
+
+| Container | Tag | Host | Config Location |
+|-----------|-----|------|-----------------|
+| linuxserver/lazylibrarian | latest | ironforge | modules/nixos/host/ironforge/calibre.nix |
 
 ## Host Summary
 
 | Host | Containers |
 |------|------------|
-| woodpecker | postgres:18, woodpecker-agent:v3, woodpecker-server:v3 |
-| paperless | postgres:17, redis:latest, paperless-ngx:latest |
-| sonarqube | postgres:17 |
-| resume | postgres:16-alpine |
-| n8n | n8n:latest |
-| uptime-kuma | uptime-kuma:latest |
+| orgrimmar | gitea, gitea-check-service, woodpecker-server, woodpecker-agent, postgres:18, postgres:16-alpine, reactive-resume, minio, browserless/chromium |
+| ironforge | jellyfin, calibre, calibre-web, lazylibrarian, radarr, sabnzbd, sonarr, paperless-ngx, paperless-ai, postgres:17, redis, tika, gotenberg, mergerfs-cache-mover |
+
+## Native NixOS Services (non-containerized)
+
+| Service | Host | Config Location |
+|---------|------|-----------------|
+| glance | fredpc | modules/nixos/host/fredpc/glance.nix |
+| nixarr (jellyseerr, prowlarr, etc.) | ironforge | modules/nixos/host/ironforge/nixarr.nix |
 
 ## Finding Container Usage
 
@@ -55,25 +76,3 @@ grep -r "container-name" --include="*.nix" apps/ modules/
 # Search in containers-sha.nix for the full image reference
 grep "container-name" apps/fetcher/containers-sha.nix
 ```
-
-## Ironforge Services
-
-| Service | Container | Config Location |
-|---------|-----------|-----------------|
-| gitea | gitea/gitea | modules/nixos/host/ironforge/gitea.nix |
-| woodpecker | woodpecker-server, woodpecker-agent | modules/nixos/host/ironforge/woodpecker.nix |
-| paperless | paperless-ngx, postgres, redis | modules/nixos/host/ironforge/paperless.nix |
-| calibre | calibre, calibre-web | modules/nixos/host/ironforge/calibre.nix |
-| resume | resume containers | modules/nixos/host/ironforge/resume.nix |
-
-## Native NixOS Services (non-containerized)
-
-| Service | Host | Config Location |
-|---------|------|-----------------|
-| glance | fredpc | modules/nixos/host/fredpc/glance.nix |
-
-## Notes
-
-- Most hosts are Proxmox LXC containers
-- ironforge is a Hetzner dedicated server hosting multiple services
-- glance runs as a native NixOS service on fredpc (residential IP avoids API blocks)

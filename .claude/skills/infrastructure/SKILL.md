@@ -65,7 +65,7 @@ ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/journalctl -u 
 
 All other hosts are LXC containers. Use `pct list` on Proxmox hosts to see VMIDs.
 
-Common hosts: gitea-runner-1/2/3, prometheus, grafana, uptime-kuma, sonarqube, jellyseerr, prowlarr, n8n, minio, scanner, external-metrics, ironforge (gitea, woodpecker, paperless, calibre, nixarr, resume)
+Active Colmena hosts: headscale, ironforge (gitea, woodpecker, paperless, calibre, nixarr), orgrimmar (gitea, woodpecker, paperless, calibre, resume)
 
 ### NixOS Workstation Services
 
@@ -116,14 +116,9 @@ If colmena fails with SSH errors:
 
 ## Common Colmena Patterns
 
-### Deploy All Gitea Runners
+### Deploy All Hosts
 ```bash
-colmena apply --on gitea-runner-1,gitea-runner-2,gitea-runner-3 --impure
-```
-
-### Deploy Monitoring Stack
-```bash
-colmena apply --on prometheus,grafana --impure
+colmena apply --on headscale,ironforge,orgrimmar --impure
 ```
 
 ### Update Secrets Before Deploy
