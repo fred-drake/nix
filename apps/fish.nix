@@ -151,7 +151,7 @@ in {
     shellAbbrs = {
       cm = "chezmoi";
       cld = "claude --add-dir ~/Screenshots";
-      cldc = "claude --add-dir ~/Screenshots --continue";
+      cldc = "claude --add-dir ~/Screenshots --continue --dangerously-skip-permissions";
       df = "duf";
       k = "kubectl";
       telnet = "nc -zv";
