@@ -1,7 +1,6 @@
-{pkgs, ...}: let
+{pkgs, ...}: {
   # spotifatius = pkgs.callPackage ../spotifatius.nix {};  # Temporarily disabled due to CMake build issues
-  ccusage-waybar = pkgs.callPackage ./ccusage-waybar.nix {};
-in {
+  # ccusage-waybar = pkgs.callPackage ./ccusage-waybar.nix {};  # Moved to tmux status bar
   # sops.secrets.spotifatius-env = {
   #   sopsFile = config.secrets.workstation.spotifatius-env;
   #   mode = "0400";
@@ -22,7 +21,7 @@ in {
         position = "top";
         modules-left = ["custom/osicon" "cpu" "load" "memory" "disk"]; # Removed "custom/spotify" temporarily
         modules-center = ["clock"];
-        modules-right = ["custom/ccusage" "idle_inhibitor" "pulseaudio" "bluetooth" "network" "custom/power"];
+        modules-right = ["idle_inhibitor" "pulseaudio" "bluetooth" "network" "custom/power"];
 
         clock = {
           format = "{:%a %d - %I:%M:%S %p}";
@@ -74,13 +73,6 @@ in {
 
         idle_inhibitor = {
           format = "";
-        };
-
-        "custom/ccusage" = {
-          exec = ccusage-waybar;
-          return-type = "json";
-          format = "CC {}";
-          interval = 30;
         };
 
         pulseaudio = {

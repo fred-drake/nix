@@ -1,4 +1,6 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  ccusage-tmux = import ./ccusage-tmux.nix {inherit pkgs;};
+in {
   # Tmux multiplexer configuration
   programs.tmux = {
     enable = true;
@@ -130,8 +132,8 @@
       # memory and cpu usage
       set -g status-interval 2
       set -g status-left '  #[fg=cyan]#S'
-      set -g status-right '#[fg=yellow]#(hostname --short) #[fg=#222222,bg=#333333]#[fg=green,bg=#222222] #(tmux-mem-cpu-load --interval 2)'
-      set -g status-right-length 100
+      set -g status-right '#[fg=magenta]#(${ccusage-tmux}) #[fg=#444444]| #[fg=yellow]#(hostname --short) #[fg=#222222,bg=#333333]#[fg=green,bg=#222222] #(tmux-mem-cpu-load --interval 2)'
+      set -g status-right-length 140
     '';
   };
 }
