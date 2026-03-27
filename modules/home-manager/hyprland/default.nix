@@ -254,7 +254,7 @@ in {
         "QT_STYLE_OVERRIDE,Adwaita-Dark"
         "QT_QPA_PLATFORMTHEME,gtk3"
         # Gaming performance optimizations
-        "SDL_VIDEODRIVER,wayland"
+        "SDL_VIDEODRIVER,wayland,x11"
         "__GL_VRR_ALLOWED,0"
         "WLR_DRM_NO_ATOMIC,1"
       ];
