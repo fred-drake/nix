@@ -112,7 +112,10 @@ in {
       resume-chrome = {
         image = containers-sha."ghcr.io"."browserless/chromium"."v2.18.0"."linux/amd64";
         autoStart = true;
-        extraOptions = ["--network=resume-net"];
+        extraOptions = [
+          "--network=resume-net"
+          "--add-host=${host}.${config.soft-secrets.networking.domain}:host-gateway"
+        ];
         environment = {
           TIMEOUT = "10000";
           CONCURRENT = "10";
