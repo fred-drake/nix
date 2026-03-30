@@ -263,8 +263,8 @@ in {
         gopls # Go language server
         clang-tools # C/C++ language server (clangd) and formatter
         vscode-langservers-extracted # HTML/CSS/JSON language servers
-        nodePackages.yaml-language-server # YAML language server
-        nodePackages.prettier # Code formatter for web languages
+        yaml-language-server # YAML language server
+        prettier # Code formatter for web languages
         taplo # TOML language server and formatter
         jdt-language-server # Java language server
         marksman # Markdown language server
@@ -587,7 +587,7 @@ in {
           };
 
           yaml = {
-            command = "${pkgs.nodePackages.yaml-language-server}/bin/yaml-language-server";
+            command = "${pkgs.yaml-language-server}/bin/yaml-language-server";
             args = ["--stdio"];
           };
 
@@ -643,7 +643,7 @@ in {
             auto-format = true;
             language-servers = ["html"];
             formatter = {
-              command = "${lib.getExe pkgs.nodePackages.prettier}";
+              command = "${lib.getExe pkgs.prettier}";
               args = ["--stdin-filepath" "file.html"];
             };
           }
@@ -652,7 +652,7 @@ in {
             auto-format = true;
             language-servers = ["css"];
             formatter = {
-              command = "${lib.getExe pkgs.nodePackages.prettier}";
+              command = "${lib.getExe pkgs.prettier}";
               args = ["--stdin-filepath" "file.css"];
             };
           }
@@ -688,7 +688,7 @@ in {
             auto-format = true;
             language-servers = ["markdown-oxide" "marksman"];
             formatter = {
-              command = "${lib.getExe pkgs.nodePackages.prettier}";
+              command = "${lib.getExe pkgs.prettier}";
               args = ["--stdin-filepath" "file.md"];
             };
           }
