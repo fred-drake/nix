@@ -5,8 +5,8 @@
   outline-nvim-src = pkgs.fetchFromGitHub {
     owner = "hedyhli";
     repo = "outline.nvim";
-    rev = "ead1820d49c8e79ce89cab1c2c318981b695c9d2";
-    hash = "sha256-+jN6VV7McqszRLHPx7sYme2mq3BzaOr5IOHbF+uZPrc=";
+    rev = "c293eb56db880a0539bf9d85b4a27816960b863e";
+    hash = "sha256-xKu05IgOpgtt2W+WqXuTUjX66ffDrU8BDi8z7M6M1q4=";
   };
   container-digest-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
@@ -29,8 +29,8 @@
   fzf-fish-src = pkgs.fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
-    rev = "8920367cf85eee5218cc25a11e209d46e2591e7a";
-    hash = "sha256-T8KYLA/r/gOKvAivKRoeqIwE2pINlxFQtZJHpOy9GMM=";
+    rev = "0069dbbe06cc05482bfb13063b4b4eac26318992";
+    hash = "sha256-H7HgYT+okuVXo2SinrSs+hxAKCn4Q4su7oMbebKd/7s=";
   };
   fish-abbreviation-tips-src = pkgs.fetchFromGitHub {
     owner = "gazorby";
@@ -54,14 +54,14 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "394c6c4cc7c0e6d9f3d9dd8c622057f9487db199";
-    hash = "sha256-JcqiV4rdCWhEkCetF+enOzsWLfr0xJ7+8gdxeLTPoM4=";
+    rev = "3dc9b3c54b7107c20c34221085b0a95857f95947";
+    hash = "sha256-q0a51k7JN2RlTyD94Wahe/mQlX5VkpBkngC1cnJ1tdw=";
   };
   tdd-guard-src = pkgs.fetchFromGitHub {
     owner = "nizos";
     repo = "tdd-guard";
-    rev = "f0eacb8fb6a036618df1224221c251e4408617f2";
-    hash = "sha256-uwGvbJch+DeCvC64LVO9C7nBt9K0rbGILJ9LfOHEUcw=";
+    rev = "2bc01d285f45110ad61e13d410d1acf3fcb010da";
+    hash = "sha256-zGxyVn9kpX56m2AfjC7VP1Zp9y5JEgsvrEENykr6TOs=";
   };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
@@ -72,8 +72,8 @@
   gws-skills-src = pkgs.fetchFromGitHub {
     owner = "googleworkspace";
     repo = "cli";
-    rev = "95bb24e9c2d5dd165fb0b3c81ad82a42ad31fc3f";
-    hash = "sha256-0G40XB6d+ST2O64KuXZrgnm1mxvEtXUM3XCqKuKjfhQ=";
+    rev = "c7c6646d7a3ab1851e535afc8fdbcc311ab4d440";
+    hash = "sha256-7bkTSDX6Mr/QcHkqCAI6oTAjLWdWzNicnvUu0IG/ejQ=";
   };
   scanimage-web-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";

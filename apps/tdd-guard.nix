@@ -44,7 +44,7 @@ in
     # NOTE: This package must be built with nixpkgs-stable (not bleeding edge) because
     # npm 10+ requires registry metadata caching which buildNpmPackage doesn't support.
     # See: https://github.com/NixOS/nixpkgs/issues/261137
-    npmDepsHash = "sha256-NJzHv2GwmTrrgfsJmjMsno3PUo1yAgLIH12cVC6yTk4=";
+    npmDepsHash = "sha256-N0kmI9zH72COPCsOd1KjID8WOcUIO6Ub2wqK6aWisAI=";
 
     # We need to build the project to generate dist/
     # dontNpmBuild = true;
