@@ -45,7 +45,6 @@ in {
     pkgs = import nixpkgs {
       system = "x86_64-linux";
       config.allowUnfree = true;
-      config.cudaSupport = true;
       overlays = [
         (import ../overlays/default.nix {inherit inputs;})
         nix4vscode.overlays.forVscode
@@ -62,15 +61,18 @@ in {
     };
     specialArgs = {
       inherit inputs outputs nixpkgs nixpkgs-unstable nix4vscode;
-      pkgsUnstable = import nixpkgs-unstable {
+      pkgsCuda = import nixpkgs {
         system = "x86_64-linux";
         config.allowUnfree = true;
         config.cudaSupport = true;
       };
+      pkgsUnstable = import nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
       pkgsStable = import nixpkgs-stable {
         system = "x86_64-linux";
         config.allowUnfree = true;
-        config.cudaSupport = true;
       };
     };
     modules = [

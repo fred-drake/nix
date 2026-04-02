@@ -1,6 +1,7 @@
 {
   inputs,
   pkgs,
+  pkgsCuda,
   pkgsUnstable,
   config,
   ...
@@ -46,7 +47,7 @@ in {
     ratbagd.enable = true;
     ollama = {
       enable = false; # Running it from podman for now
-      package = pkgs.ollama-cuda;
+      package = pkgsCuda.ollama-cuda;
       openFirewall = true;
       host = "0.0.0.0";
       port = 11434;
@@ -113,9 +114,9 @@ in {
     piper
 
     # CUDA
-    cudaPackages.cudatoolkit
+    pkgsCuda.cudaPackages.cudatoolkit
     pkgsUnstable.cudaPackages.cudnn
-    nvidia-container-toolkit
+    pkgsCuda.nvidia-container-toolkit
     crun
 
     zed-editor
@@ -258,7 +259,7 @@ in {
         engine = {
           runtimes = {
             nvidia = [
-              "${pkgs.nvidia-container-toolkit}/bin/nvidia-container-runtime"
+              "${pkgsCuda.nvidia-container-toolkit}/bin/nvidia-container-runtime"
             ];
           };
         };
@@ -291,7 +292,7 @@ in {
   # This is a hack, but podman/crun insists on looking at this location for the CDI hook,
   # so at least this will persist with upgrades
   systemd.tmpfiles.rules = [
-    "L+ /usr/bin/nvidia-cdi-hook - - - - ${pkgs.nvidia-container-toolkit.tools}/bin/nvidia-cdi-hook"
+    "L+ /usr/bin/nvidia-cdi-hook - - - - ${pkgsCuda.nvidia-container-toolkit.tools}/bin/nvidia-cdi-hook"
   ];
 
   system.stateVersion = "24.11";
