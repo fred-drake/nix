@@ -13,7 +13,10 @@ in {
     nixpkgs = {
       system = "x86_64-linux";
       overlays = [];
-      config = {};
+      config = {
+        allowUnfree = true;
+        cudaSupport = true;
+      };
     };
     imports = [
       nixos-wsl.nixosModules.default
