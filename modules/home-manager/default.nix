@@ -413,6 +413,7 @@ in {
     # Git configuration
     git = {
       enable = true;
+      signing.format = null;
       settings = {
         core.pager = "delta";
         credential.helper = "store";
