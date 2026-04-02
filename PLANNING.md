@@ -23,6 +23,8 @@ This repository serves as the single source of truth for infrastructure as code 
    - `macbook-pro` (macOS with nix-darwin)
 
 2. **Remotely Configured Hosts** (via Colmena):
+   - Hetzner servers (x86_64-linux): headscale, ironforge, orgrimmar
+   - WSL hosts: `anton` (x86_64-linux, Windows laptop for gaming and AI processing)
    - x86_64-linux: Built on `fredpc`
    - aarch64-linux: Built on `nixosaarch64vm`
 
@@ -55,9 +57,10 @@ This repository serves as the single source of truth for infrastructure as code 
 
 ### Servers
 
-- Use the latest stable NixOS release (currently **25.05**)
-- All server configurations are pinned to this release for stability
+- Hetzner servers use the latest stable NixOS release (currently **25.05**)
+- All Hetzner server configurations are pinned to this release for stability
 - Updates to the next stable release should be tested thoroughly before deployment
+- WSL hosts (anton) use `nixpkgs-unstable` to match their NixOS release channel
 
 ## Container Management
 

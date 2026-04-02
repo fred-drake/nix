@@ -1,32 +1,24 @@
-# Host to Proxmox VMID Mapping
+# Host Mapping Reference
 
-This reference maps hostnames to their Proxmox container IDs and physical locations.
+This reference maps hostnames to their types, locations, and services.
 
-## Active Colmena Hosts
+## Hetzner Servers (Colmena-managed)
 
-| Hostname | Type | Services |
-|----------|------|----------|
-| headscale | Hetzner VPS | Headscale VPN |
-| ironforge | Hetzner dedicated | gitea, woodpecker, paperless, calibre, nixarr (jellyfin, jellyseerr, sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr) |
-| orgrimmar | Hetzner dedicated | gitea, woodpecker, paperless, calibre, resume |
+| Hostname | Type | Deploy User | SSH Port | Services |
+|----------|------|-------------|----------|----------|
+| headscale | Hetzner VPS | root | 22 | Headscale VPN, Tailscale client |
+| ironforge | Hetzner dedicated | root | 2222 | nixarr (jellyfin, jellyseerr, sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr) |
+| orgrimmar | Hetzner dedicated | root | 2222 | gitea, woodpecker, paperless, calibre, resume |
 
-## Non-Proxmox Hosts
+## WSL Hosts (Colmena-managed)
 
-| Hostname | Type | Architecture | Notes |
-|----------|------|--------------|-------|
-| nixosaarch64vm | VM | aarch64 | Build host for arm64 deploys |
+| Hostname | Type | Deploy User | SSH Port | Purpose |
+|----------|------|-------------|----------|---------|
+| anton | WSL NixOS on Windows | nixos (sudo) | 22 | Gaming and AI processing |
 
-## Quick Lookup Commands
+## On-Prem Workstations (locally configured)
 
-Find which Proxmox host has a container:
-```bash
-for host in thrall sylvanas voljin; do
-  echo "=== $host ==="
-  ssh $host "pct list" 2>/dev/null | grep -i "<hostname>"
-done
-```
-
-Get VMID for a hostname on specific Proxmox host:
-```bash
-ssh <proxmox-host> "pct list | grep <hostname>"
-```
+| Hostname | Architecture | Notes |
+|----------|-------------|-------|
+| fredpc | x86_64-linux | GUI, NVIDIA CUDA, glance dashboard, x86_64 build host |
+| nixosaarch64vm | aarch64-linux | ARM64 build host |

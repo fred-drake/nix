@@ -14,6 +14,7 @@ This repository contains Nix configurations for managing both personal workstati
   - `laisas-mac-mini`
 - **Linux Workstations**:
   - `fredpc` (x86_64-linux with GUI, NVIDIA CUDA support, glance dashboard)
+  - `anton` (x86_64-linux WSL on Windows, gaming and AI processing)
   - `macbookx86` (x86_64-linux on Apple T2 hardware)
   - `nixosaarch64vm` (aarch64-linux)
 
@@ -26,6 +27,7 @@ This repository contains Nix configurations for managing both personal workstati
   - `headscale`: VPN coordination
   - `ironforge`: Multi-service host (nixarr with jellyfin, jellyseerr, sonarr, radarr, prowlarr, sabnzbd, bazarr, lidarr)
   - `orgrimmar`: Multi-service host (gitea, woodpecker, paperless, calibre, resume)
+  - `anton`: WSL NixOS on Windows laptop (gaming and AI processing)
 
 ## Network Overview
 

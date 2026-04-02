@@ -1,12 +1,13 @@
 ---
 name: infrastructure
 description: |
-  Manage NixOS infrastructure for this nix flake project. Deploy configurations with Colmena, manage Proxmox LXC containers, troubleshoot services, and maintain servers.
+  Manage NixOS infrastructure for this nix flake project. Deploy configurations with Colmena, troubleshoot services, and maintain servers.
 
-  Use when: (1) Deploying NixOS configurations with colmena, (2) Managing Proxmox LXC containers (start, stop, reboot, status), (3) Troubleshooting server issues via SSH or pct exec, (4) Checking service status across hosts, (5) Any infrastructure maintenance task.
+  Use when: (1) Deploying NixOS configurations with colmena, (2) Troubleshooting server issues via SSH, (3) Checking service status across hosts, (4) Any infrastructure maintenance task.
 
   IMPORTANT architecture notes:
-  - All servers are Proxmox LXC containers.
+  - Hetzner servers are remote VPS/dedicated hosts, deployed as root.
+  - anton is a WSL NixOS host on a Windows laptop, deployed as the nixos user via sudo.
 ---
 
 # Infrastructure Management
@@ -26,99 +27,77 @@ colmena apply --on host1,host2,host3 --impure
 colmena build --on <hostname> --impure
 ```
 
-### Proxmox Container Management
-
-SSH to Proxmox host first, then use `pct`:
-
-```bash
-# List containers on a host
-ssh <proxmox-host> "pct list"
-
-# Container status
-ssh <proxmox-host> "pct status <vmid>"
-ssh <proxmox-host> "pct status <vmid> --verbose"
-
-# Start/stop/reboot
-ssh <proxmox-host> "pct start <vmid>"
-ssh <proxmox-host> "pct stop <vmid>"
-ssh <proxmox-host> "pct reboot <vmid>"
-
-# Execute command in container
-ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/<command>"
-
-# Common commands via pct exec
-ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/systemctl status <service>"
-ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/journalctl -u <service> -n 50"
-```
-
 ## Server Inventory
 
-### Proxmox Hosts
+### Hetzner Servers (Colmena-managed, root user)
 
-| Host | Description |
-|------|-------------|
-| thrall | Proxmox cluster node |
-| sylvanas | Proxmox cluster node |
-| voljin | Proxmox cluster node |
+| Host | Type | Services |
+|------|------|----------|
+| headscale | Hetzner VPS | Headscale VPN, Tailscale client |
+| ironforge | Hetzner dedicated | nixarr (jellyfin, jellyseerr, sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr) |
+| orgrimmar | Hetzner dedicated | gitea, woodpecker, paperless, calibre, resume |
 
-### Proxmox LXC Containers
+### WSL Hosts (Colmena-managed, nixos user with sudo)
 
-All other hosts are LXC containers. Use `pct list` on Proxmox hosts to see VMIDs.
+| Host | Type | Purpose |
+|------|------|---------|
+| anton | WSL NixOS on Windows laptop | Gaming and AI processing |
 
-Active Colmena hosts: headscale, ironforge (gitea, woodpecker, paperless, calibre, nixarr), orgrimmar (gitea, woodpecker, paperless, calibre, resume)
+### On-Prem Workstations (locally configured)
 
-### NixOS Workstation Services
-
-- `fredpc`: glance dashboard (native NixOS module, port 8084)
+| Host | Type | Notes |
+|------|------|-------|
+| fredpc | x86_64-linux | GUI, NVIDIA CUDA, glance dashboard |
+| nixosaarch64vm | aarch64-linux | ARM64 build host |
 
 ## Troubleshooting Workflows
-
-### Container Won't Respond
-
-1. Check status: `ssh <proxmox-host> "pct status <vmid> --verbose"`
-2. If running but commands fail: `ssh <proxmox-host> "pct reboot <vmid>"`
-3. Wait 15-30 seconds, verify: `ssh <proxmox-host> "pct status <vmid>"`
-4. Re-deploy if needed: `colmena apply --on <hostname> --impure`
 
 ### Service Not Working
 
 1. Check service status:
    ```bash
-   ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/systemctl status <service>"
+   ssh <hostname> "systemctl status <service>"
    ```
 2. Check logs:
    ```bash
-   ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/journalctl -u <service> -n 100"
+   ssh <hostname> "journalctl -u <service> -n 100"
    ```
 3. Restart service:
    ```bash
-   ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/systemctl restart <service>"
+   ssh <hostname> "systemctl restart <service>"
    ```
+
+Note: For Hetzner servers, SSH as root. For anton, SSH as nixos and use sudo.
 
 ### Podman/Container Issues
 
 Check socket status:
 ```bash
-ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/systemctl status podman.socket"
+ssh <hostname> "systemctl status podman.socket"
 ```
 
 List running containers:
 ```bash
-ssh <proxmox-host> "pct exec <vmid> -- /run/current-system/sw/bin/podman ps -a"
+ssh <hostname> "podman ps -a"
 ```
 
 ### SSH Connection Issues
 
 If colmena fails with SSH errors:
-1. Verify container is running on Proxmox
-2. Check if SSH is listening: `pct exec <vmid> -- /run/current-system/sw/bin/ss -tlnp | grep 22`
-3. Reboot container if necessary
+1. Verify the host is reachable: `ping <hostname>`
+2. Check if SSH is listening: `ssh <hostname> "ss -tlnp | grep 22"`
+3. For Hetzner servers, check via Hetzner console if needed
 
 ## Common Colmena Patterns
 
-### Deploy All Hosts
+### Deploy All Hetzner Hosts
 ```bash
 colmena apply --on headscale,ironforge,orgrimmar --impure
+```
+
+### Deploy All Hosts
+```bash
+colmena apply --on headscale,ironforge,orgrimmar,anton --impure
 ```
 
 ### Update Secrets Before Deploy
@@ -132,6 +111,8 @@ colmena apply --on <hostname> --impure
 | Purpose | Path |
 |---------|------|
 | Colmena host configs | `colmena/hosts/<hostname>.nix` |
+| Hetzner common modules | `colmena/hetzner-common/` |
+| WSL common modules | `colmena/wsl-common/` |
 | NixOS host configs | `modules/nixos/host/<hostname>/configuration.nix` |
 | Application configs | `apps/<appname>.nix` |
 | Secrets configs | `modules/secrets/<hostname>.nix` |
@@ -140,5 +121,4 @@ colmena apply --on <hostname> --impure
 
 ## Related Skills
 
-- **provision-nixos-server**: Create new servers from scratch
-- For creating new hosts, use `/provision-nixos-server` skill instead
+- **provision-nixos-server**: Create new Hetzner servers from scratch
