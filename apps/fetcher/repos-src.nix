@@ -48,8 +48,8 @@
     domain = "gitea.com";
     owner = "fdrake";
     repo = "gitea-mcp";
-    tag = "comment-index";
-    hash = "sha256-8L2VQcU2mhRimWr2qGDRw7f/yYO5V+1kswuLlCqhpio=";
+    tag = "v0.3.0";
+    hash = "sha256-hJQ0ryEcPg/WOi54RLZswhWZOjkbllZWOsYyOhe+4AA=";
   };
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";

@@ -22,7 +22,7 @@ url = "https://github.com/nickeb96/puffer-fish"
 [[repos]]
 name = "gitea-mcp-src"
 url = "https://gitea.com/fdrake/gitea-mcp"
-rev = "comment-index"
+rev = "v0.3.0"
 [[repos]]
 name = "vicinae-src"
 url = "https://github.com/vicinaehq/vicinae.git"

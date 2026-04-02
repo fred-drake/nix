@@ -14,7 +14,7 @@ in
     # Fix vendor inconsistency
     proxyVendor = true;
 
-    vendorHash = "sha256-2bJBB8o7yH5wYW4NfiYB9pQYWTmWnl+13VOSew8Nbyw=";
+    vendorHash = "sha256-UEFE6B7fsIHED5KvRK0iD350NyQIP/mm2BlH06hjg5M=";
 
     # Build with version information like the Makefile does
     ldflags = [
