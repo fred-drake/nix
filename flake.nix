@@ -31,6 +31,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     # A collection of NixOS modules covering hardware quirks.
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
@@ -200,7 +205,8 @@
       };
 
       colmena = import ./colmena {
-        inherit self nixpkgs-stable nixos-hardware secrets sops-nix nixarr;
+        inherit self nixpkgs-stable nixpkgs-unstable nixos-hardware secrets sops-nix nixarr;
+        inherit (inputs) nixos-wsl;
       };
 
       # Library functions

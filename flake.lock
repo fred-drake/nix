@@ -184,6 +184,22 @@
         "type": "github"
       }
     },
+    "flake-compat_4": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767039857,
+        "narHash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -888,6 +904,27 @@
         "type": "github"
       }
     },
+    "nixos-wsl": {
+      "inputs": {
+        "flake-compat": "flake-compat_4",
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1774972752,
+        "narHash": "sha256-DnLIpFxznohpLkIFs390uZ0gxwkVyhtknhKNu+lQJK8=",
+        "owner": "nix-community",
+        "repo": "NixOS-WSL",
+        "rev": "d97e078f4788cddb8d11c3c99f72a4bb9ddec221",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NixOS-WSL",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1774106199,
@@ -1131,6 +1168,7 @@
         "nix4vscode": "nix4vscode",
         "nixarr": "nixarr",
         "nixos-hardware": "nixos-hardware",
+        "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-fred-testing": "nixpkgs-fred-testing",
         "nixpkgs-fred-unstable": "nixpkgs-fred-unstable",
@@ -1179,11 +1217,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773452634,
-        "narHash": "sha256-SF++dEVJFhPlxsBCK73EqenGWUaV7sbN0awdl5WAVpY=",
+        "lastModified": 1775095535,
+        "narHash": "sha256-FOlOhtmNWj7NXxxVCn0uzuCdosnGJNQBjsE+07TfM54=",
         "ref": "refs/heads/master",
-        "rev": "87402ac160f5e963634a275f6d34462715fe9bbe",
-        "revCount": 247,
+        "rev": "95fdc69908b64099bca93f4e960d2873e4c1dc03",
+        "revCount": 248,
         "type": "git",
         "url": "ssh://git@github.com/fred-drake/nix-secrets.git"
       },
