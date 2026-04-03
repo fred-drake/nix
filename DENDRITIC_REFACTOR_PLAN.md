@@ -240,17 +240,18 @@ using `mkIf` platform guards.
 - [x] **2.18** `modules/darwin/features/workstation-apps.nix` — Done (Phase 2b)
 - [x] **2.21** `modules/home-manager/features/linux-apps.nix` — Done (Phase 2c)
 
-#### Achievable now (Phase 2d)
+#### Completed (Phase 2d)
 
-- [ ] **2.19a** Consolidate `modules/home-manager/hyprland/` (4 files) into
-  `modules/home-manager/features/hyprland.nix`. NixOS side stays at
-  `modules/nixos/host/fredpc/hyprland.nix` until deferredModule is available.
-- [ ] **2.24** Move `modules/home-manager/darwin.nix` to
-  `modules/home-manager/features/darwin-hm.nix`, update import in
+- [x] **2.19a** Consolidated `modules/home-manager/hyprland/` into
+  `modules/home-manager/features/hyprland/default.nix` (waybar merged in).
+  NixOS side stays at `modules/nixos/host/fredpc/hyprland.nix` until
+  deferredModule is available.
+- [x] **2.24** Moved `modules/home-manager/darwin.nix` to
+  `modules/home-manager/features/darwin-hm.nix`, updated imports in
   `modules/infra/darwin.nix`
-- [ ] **2.26** Delete `modules/home-manager/hyprland/` directory (after 2.19a)
-- [ ] **2.27** Fold `modules/home-manager/tmux-windev-settings.nix` into
-  `modules/home-manager/features/terminal.nix` or move to `features/`
+- [x] **2.26** Deleted `modules/home-manager/hyprland/` directory
+- [x] **2.27** Moved `modules/home-manager/tmux-windev-settings.nix` to
+  `modules/home-manager/features/tmux-windev-settings.nix`
 
 #### Deferred — require deferredModule infrastructure (Phase 1 gap)
 

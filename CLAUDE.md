@@ -12,13 +12,15 @@ This is a Nix flake-based configuration repository managing:
 
 - `apps/` - Custom packages and Claude Code configurations
 - `modules/` - NixOS and Home Manager modules
-- `systems/` - Per-machine system configurations
+- `modules/infra/` - Flake-parts infrastructure modules
+- `modules/home-manager/features/` - Home Manager feature modules
+- `modules/darwin/features/` - Darwin feature modules
 - `homefiles/` - Dotfiles and home directory configurations
 - `overlays/` - Nix package overlays
 
 ## Claude Code Configuration
 
-Claude Code is configured declaratively via Nix in `modules/home-manager/claude-code.nix`.
+Claude Code is configured declaratively via Nix in `modules/home-manager/features/claude-code.nix`.
 
 ### Structure
 
@@ -69,7 +71,7 @@ url = "https://github.com/owner/repo"
 
 This generates the pinned entry in `claude-plugins-src.nix`.
 
-#### 3. Wire into `modules/home-manager/claude-code.nix`
+#### 3. Wire into `modules/home-manager/features/claude-code.nix`
 
 Symlink the plugin directory:
 ```nix
@@ -133,7 +135,7 @@ example:
 
 ## MCP Server Configuration
 
-MCP servers are configured via SOPS templates in `modules/home-manager/claude-code.nix`. Each server gets its own JSON file in `~/mcp/` with secrets injected at activation time.
+MCP servers are configured via SOPS templates in `modules/home-manager/features/claude-code.nix`. Each server gets its own JSON file in `~/mcp/` with secrets injected at activation time.
 
 ## Service Management
 

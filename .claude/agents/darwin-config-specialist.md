@@ -22,7 +22,7 @@ flake-based infrastructure repository.
 
 - `systems/darwin.nix` — Darwin system definitions and Colmena-like config
 - `modules/darwin/` — nix-darwin specific modules (if exists)
-- `modules/home-manager/darwin.nix` — Darwin-specific Home Manager config
+- `modules/home-manager/features/darwin-hm.nix` — Darwin-specific Home Manager config
 - `modules/home-manager/host/mac-studio.nix` — Mac Studio specific config
 - `modules/home-manager/host/macbook-pro.nix` — MacBook Pro specific config
 

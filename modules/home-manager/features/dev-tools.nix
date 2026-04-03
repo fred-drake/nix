@@ -62,6 +62,7 @@
     ghq
     jaq
     kind
+    kubectl
     lazydocker
     meld
     tokei
