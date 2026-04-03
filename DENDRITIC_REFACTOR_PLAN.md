@@ -253,31 +253,10 @@ using `mkIf` platform guards.
 - [x] **2.27** Moved `modules/home-manager/tmux-windev-settings.nix` to
   `modules/home-manager/features/tmux-windev-settings.nix`
 
-#### Deferred — require deferredModule infrastructure (Phase 1 gap)
+#### Deferred — see [Deferred Tasks](#deferred-tasks) appendix
 
-- [ ] **2.19b** Add NixOS deferredModule to `hyprland-desktop.nix`:
-  `programs.hyprland.enable`, system packages (waybar, wofi, hyprshot),
-  XDG portal, polkit. Requires deferredModule option types in
-  `modules/infra/nixos.nix`.
-- [ ] **2.20** Create `modules/features/gnome-desktop.nix`:
-  NixOS deferredModule (services.desktopManager.gnome, GDM, dconf profiles) +
-  HM deferredModule (dconf settings, gnome-tweaks, extensions).
-  Requires deferredModule. HM dconf content is already in
-  `features/linux-apps.nix`.
-- [ ] **2.22** Create `modules/features/pipewire-audio.nix`:
-  NixOS deferredModule (services.pipewire, pulse, alsa, wireplumber).
-  Requires deferredModule. Currently in host configs for fredpc and macbookx86.
-
-#### Cleanup — after all features migrated
-
-- [ ] **2.23** Delete `modules/home-manager/default.nix` — currently the
-  import hub; can only be removed when HM infrastructure uses deferredModule
-  to compose features without a central import list
-- [ ] **2.25** ~~Delete `modules/home-manager/linux-desktop.nix`~~ — Already
-  done (renamed to `features/linux-apps.nix` in Phase 2c)
-- [ ] **2.28** Delete `modules/darwin/default.nix` — currently the import hub;
-  same dependency as 2.23
-- [ ] **2.29** Verify `nix flake check` and `just build` / `home-manager switch`
+Tasks 2.19b, 2.20, 2.22, 2.23, 2.28, 2.29 are blocked on deferredModule
+infrastructure. See the appendix for details and prerequisites.
 
 ---
 
@@ -287,7 +266,16 @@ using `mkIf` platform guards.
 Extract server services into self-contained feature modules, each owning its
 own secrets. Decompose the monolithic per-host secrets files.
 
-### Tasks
+### Completed
+
+- [x] **3.2** `modules/services/hetzner-server.nix` — re-exports
+  `colmena/hetzner-common/` for headscale, ironforge, orgrimmar
+- [x] **3.3** `modules/services/wsl-server.nix` — re-exports
+  `colmena/wsl-common/` for anton
+- [x] **3.4** `modules/services/podman-server.nix` — extracted shared podman
+  config from ironforge and orgrimmar
+
+### Remaining — NixOS-only services (no deferredModule needed)
 
 - [ ] **3.1** Create `modules/services/nginx-acme-proxy.nix`:
   - Reusable nginx + ACME + Cloudflare DNS validation pattern
@@ -295,22 +283,6 @@ own secrets. Decompose the monolithic per-host secrets files.
     (5 services)
   - Parameterized: takes domain, upstream port, optional extra config
   - Owns the shared `cloudflare-api-key` sops secret
-
-- [ ] **3.2** Create `modules/services/hetzner-server.nix`:
-  - Migrate from `colmena/hetzner-common/`
-  - SOPS age key path, zram, openssh, authorized_keys, nix.settings
-  - Hardware config (qemu-guest, grub, /dev/sda filesystems)
-  - Networking with `serverType` option (normal | gateway)
-  - Firewall (22/80/443), SSH hardening, useDHCP=false
-
-- [ ] **3.3** Create `modules/services/wsl-server.nix`:
-  - Migrate from `colmena/wsl-common/`
-  - WSL-specific base configuration
-
-- [ ] **3.4** Create `modules/services/podman-server.nix`:
-  - Shared podman configuration for container-running servers
-  - Separate disk mount for `/var/lib/containers`
-  - Used by ironforge and orgrimmar
 
 - [ ] **3.5** Create `modules/services/gitea.nix`:
   - Migrate from `modules/nixos/host/orgrimmar/gitea.nix`
@@ -363,20 +335,6 @@ own secrets. Decompose the monolithic per-host secrets files.
   - Glance dashboard with IPMI KVM container
   - **Owns its secrets**: glance-env
 
-- [ ] **3.13** Create `modules/services/borg-backup.nix`:
-  - **NixOS deferredModule**: Borg backup services + Hetzner storage box targets
-    (migrate from `modules/nixos/host/fredpc/borg-backup.nix`)
-  - **HM deferredModule**: Storage credential SOPS secrets (deduplicate between
-    NixOS borg-backup.nix and HM secrets.nix)
-  - Cross-cutting: NixOS + HM in one file
-
-- [ ] **3.14** Create `modules/services/gpu-passthrough.nix`:
-  - **NixOS deferredModule**: VFIO, libvirtd, QEMU, virt-manager, kvmfr,
-    Looking Glass (from `modules/nixos/host/fredpc/gpu-passthrough.nix`)
-  - **HM deferredModule**: Scream audio user service (from
-    `modules/home-manager/host/fredpc.nix`)
-  - Cross-cutting: NixOS + HM in one file
-
 - [ ] **3.15** Create `modules/services/gaming.nix`:
   - Steam, gamescope, gamemode, protonup-qt, xpadneo controller
   - Bluetooth for controller support
@@ -388,14 +346,10 @@ own secrets. Decompose the monolithic per-host secrets files.
   - Configurable: `wsl.useWindowsDriver` (anton) vs native driver (fredpc)
   - CUDA cachix substituter (anton)
 
-- [ ] **3.17** Delete `modules/secrets/orgrimmar.nix` (decomposed into service files)
-- [ ] **3.18** Delete `modules/secrets/ironforge.nix` (merged into media-server.nix)
-- [ ] **3.19** Delete `modules/secrets/sabnzbd.nix` (merged into media-server.nix)
-- [ ] **3.20** Delete `modules/secrets/cloudflare.nix` (moved to nginx-acme-proxy.nix)
-- [ ] **3.21** Delete `colmena/` directory (migrated to infra/colmena.nix + hosts)
-- [ ] **3.22** Delete `modules/nixos/host/` directory (migrated to services + hosts)
-- [ ] **3.23** Verify `nix flake check`, `just build`, and
-  `colmena build --on HOST --impure` for all hosts
+### Deferred — see [Deferred Tasks](#deferred-tasks) appendix
+
+Tasks 3.13, 3.14, 3.17-3.23 are blocked on deferredModule or on
+completion of the service extraction above. See the appendix for details.
 
 ---
 
@@ -535,6 +489,82 @@ are thin — they select features and provide host-specific overrides.
 - **flake-parts** — `github:hercules-ci/flake-parts`
 - **import-tree** — `github:vic/import-tree`
 - **den** — `github:vic/den` (optional: aspect-oriented dendritic framework)
+
+---
+
+## Deferred Tasks
+
+All deferred tasks are blocked on implementing `deferredModule` option types
+in the flake-parts infrastructure modules. This is the core dendritic
+mechanism that allows a single feature file to contribute configuration to
+multiple configuration classes (NixOS, Home Manager, Darwin) simultaneously.
+
+### Prerequisite: Implement deferredModule Infrastructure
+
+**What**: Add `lib.types.deferredModule` option containers to
+`modules/infra/nixos.nix`, `modules/infra/darwin.nix`, and
+`modules/infra/home-manager.nix`. These allow feature modules to register
+NixOS/Darwin/HM config fragments that get composed into system configurations
+at build time.
+
+**Why it's needed**: Without deferredModule, a feature file can only be ONE
+type of module (NixOS OR HM OR Darwin). Cross-cutting features like
+hyprland-desktop (needs both NixOS `programs.hyprland.enable` and HM
+`wayland.windowManager.hyprland` config) cannot live in a single file.
+
+**What it enables**: Every deferred task below, plus the ability to
+eliminate `specialArgs`, wire centralized `pkgs.nix` into system builders,
+and eventually delete the `default.nix` import hubs.
+
+**Specific implementation needed**:
+1. `modules/infra/nixos.nix` — define
+   `options.flake.modules.nixos = mkOption { type = lazyAttrsOf deferredModule; }`
+   so feature files can set `config.flake.modules.nixos.<feature> = { ... };`
+2. `modules/infra/darwin.nix` — same pattern for Darwin
+3. `modules/infra/home-manager.nix` — define HM deferredModule container
+4. Each infrastructure module assembles the deferredModules into the
+   system builder call (`nixosSystem`, `darwinSystem`)
+5. Eliminate `specialArgs` — `inputs` available via flake-parts module args,
+   pkgs variants from `perSystem` options
+6. Lift `config.my.*` options from HM-only to flake-parts top level
+
+**Reference**: See the dendritic pattern skill at
+`.claude/skills/nix-dendritic-pattern.md` for the `deferredModule` mechanism.
+
+### Phase 2 Deferred Tasks
+
+| Task | Description | Specific blocker |
+|------|-------------|-----------------|
+| **2.19b** | Add NixOS deferredModule to hyprland feature | Needs `options.flake.modules.nixos` in `infra/nixos.nix` to register NixOS-level hyprland config (`programs.hyprland.enable`, waybar, wofi system packages, XDG portal, polkit) |
+| **2.20** | Create `gnome-desktop.nix` cross-cutting feature | Needs both NixOS deferredModule (`services.desktopManager.gnome`, GDM) and HM deferredModule (dconf settings, gnome-tweaks). HM dconf content is already in `features/linux-apps.nix` — would be moved here |
+| **2.22** | Create `pipewire-audio.nix` NixOS feature | Needs NixOS deferredModule to extract `services.pipewire` config from `modules/nixos/host/fredpc/configuration.nix` and `macbookx86/configuration.nix` into a shared feature |
+| **2.23** | Delete `modules/home-manager/default.nix` | Import hub can only be removed when deferredModule composes HM features without a central import list |
+| **2.28** | Delete `modules/darwin/default.nix` | Same as 2.23 — Darwin import hub depends on deferredModule composition |
+| **2.29** | Full Phase 2 verification | Blocked on all Phase 2 tasks completing |
+
+### Phase 3 Deferred Tasks
+
+| Task | Description | Specific blocker |
+|------|-------------|-----------------|
+| **3.13** | Create `borg-backup.nix` cross-cutting service | Needs NixOS deferredModule (borg services from `host/fredpc/borg-backup.nix`) + HM deferredModule (storage credential SOPS secrets that currently live in both NixOS and HM). Cannot unify without deferredModule. |
+| **3.14** | Create `gpu-passthrough.nix` cross-cutting service | Needs NixOS deferredModule (VFIO, libvirtd, QEMU from `host/fredpc/gpu-passthrough.nix`) + HM deferredModule (scream audio user service from `host/fredpc.nix`). Cannot unify without deferredModule. |
+| **3.17** | Delete `modules/secrets/orgrimmar.nix` | Blocked on 3.5-3.9 completing (secrets decomposed into per-service files) |
+| **3.18** | Delete `modules/secrets/ironforge.nix` | Blocked on 3.10 completing (merged into media-server.nix) |
+| **3.19** | Delete `modules/secrets/sabnzbd.nix` | Blocked on 3.10 completing |
+| **3.20** | Delete `modules/secrets/cloudflare.nix` | Blocked on 3.1 completing (moved to nginx-acme-proxy.nix) |
+| **3.21** | Delete `colmena/` directory | Blocked on all service extraction completing + Phase 4 host composition replacing Colmena host files |
+| **3.22** | Delete `modules/nixos/host/` directory | Blocked on all service extraction completing + Phase 4 host composition |
+| **3.23** | Full Phase 3 verification | Blocked on all Phase 3 tasks completing |
+
+### Phase 4 Deferred Context
+
+All Phase 4 tasks (host composition modules) depend on:
+1. deferredModule infrastructure being in place
+2. Phase 3 service extraction being complete
+3. `specialArgs` elimination (so hosts compose features via the module
+   system, not by threading args through system builder calls)
+
+Phase 4 cannot begin until the deferredModule prerequisite is implemented.
 
 ---
 
