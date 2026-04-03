@@ -111,7 +111,7 @@ in {
           home-manager = mkHomeManager {
             hostName = "mac-studio";
             imports = [
-              ../../modules/home-manager/darwin.nix
+              ../../modules/home-manager/features/darwin-hm.nix
               ../../modules/home-manager/host/mac-studio.nix
             ];
           };
@@ -126,7 +126,7 @@ in {
           home-manager = mkHomeManager {
             hostName = "macbook-pro";
             imports = [
-              ../../modules/home-manager/darwin.nix
+              ../../modules/home-manager/features/darwin-hm.nix
               ../../modules/home-manager/host/macbook-pro.nix
             ];
           };
@@ -141,7 +141,7 @@ in {
           home-manager = mkHomeManager {
             hostName = "laisas-mac-mini";
             imports = [
-              ../../modules/home-manager/darwin.nix
+              ../../modules/home-manager/features/darwin-hm.nix
             ];
           };
         }

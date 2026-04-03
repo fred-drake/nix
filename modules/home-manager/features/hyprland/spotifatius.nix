@@ -1,5 +1,5 @@
 {pkgs ? import <nixpkgs> {}}: let
-  repos-src = import ../../../apps/fetcher/repos-src.nix {inherit pkgs;};
+  repos-src = import ../../../../apps/fetcher/repos-src.nix {inherit pkgs;};
 in
   (pkgs.rustPlatform.buildRustPackage {
     pname = "spotifatius";

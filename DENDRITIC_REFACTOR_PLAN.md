@@ -220,146 +220,62 @@ using `mkIf` platform guards.
 
 ### Tasks
 
-- [ ] **2.1** Create `modules/features/shells.nix`:
-  - System-level: `programs.fish.enable`, `programs.zsh.enable` (NixOS + Darwin)
-  - HM-level: oh-my-posh, fzf, zoxide, carapace, fish config
-  - `home.sessionVariables` (LANG, TERM, PAGER, CLICOLOR, GHQ_ROOT, etc.)
-  - `home.shellAliases` (man=batman, lg, ranger=yy, vpn-*)
-  - Imports `apps/zsh.nix`, `apps/fish.nix`
-  - Darwin-only: HOMEBREW_* session vars (via `mkIf isDarwin`)
+- [x] **2.1** `modules/home-manager/features/shells.nix` — Done (Phase 2a)
+- [x] **2.2** `modules/home-manager/features/editor.nix` — Done (Phase 2a)
+- [x] **2.3** `modules/home-manager/features/dev-tools.nix` — Done (Phase 2a)
+- [x] **2.4** `modules/home-manager/features/terminal.nix` — Done (Phase 2a)
+- [x] **2.5** `modules/home-manager/features/dotfiles.nix` — Done (Phase 2a)
+- [x] **2.6** `modules/home-manager/features/vscode-family.nix` — Done (Phase 2a)
+- [x] **2.7** `modules/home-manager/features/media-apps.nix` — Done (Phase 2a)
+- [x] **2.8** `modules/home-manager/features/network-tools.nix` — Done (Phase 2a)
+- [x] **2.9** `modules/home-manager/features/ai-tools.nix` — Done (Phase 2a)
+- [x] **2.10** `modules/home-manager/features/claude-code.nix` — Done (Phase 2c)
+- [x] **2.11** `modules/home-manager/features/secrets.nix` — Done (Phase 2c)
+- [x] **2.12** `modules/home-manager/features/nixvim.nix` — Done (Phase 2b)
+- [x] **2.13** `modules/darwin/features/nix-daemon.nix` — Done (Phase 2b)
+- [x] **2.14** `modules/darwin/features/fonts.nix` — Done (Phase 2b)
+- [x] **2.15** `modules/darwin/features/user-fdrake.nix` — Done (Phase 2b)
+- [x] **2.16** `modules/darwin/features/macos-prefs.nix` — Done (Phase 2b)
+- [x] **2.17** `modules/darwin/features/macos-security.nix` — Done (Phase 2b)
+- [x] **2.18** `modules/darwin/features/workstation-apps.nix` — Done (Phase 2b)
+- [x] **2.21** `modules/home-manager/features/linux-apps.nix` — Done (Phase 2c)
 
-- [ ] **2.2** Create `modules/features/editor.nix`:
-  - `programs.helix` (full config: theme, settings, keys, language servers, languages)
-  - `programs.lazygit`
-  - `programs.jq`
-  - `editorconfig` settings
+#### Achievable now (Phase 2d)
 
-- [ ] **2.3** Create `modules/features/dev-tools.nix`:
-  - `programs.git` (full config with delta, lfs, signing)
-  - `programs.direnv`, `programs.atuin`
-  - `programs.nix-index`, `programs.nix-index-database.comma`
-  - Language server packages: nil, nixd, rust-analyzer, pylyzer, gopls,
-    clang-tools, vscode-langservers-extracted, yaml-language-server, prettier,
-    taplo, jdt-language-server, marksman, markdown-oxide
-  - Dev packages: age, delta, devenv, fd, ghq, gnupg, jaq, ripgrep, tokei
-  - Container tools: docker-compose, kind, kubectl, lazydocker
-  - Darwin brew additions: cmake, ruby-install (via `mkIf isDarwin`)
+- [ ] **2.19a** Consolidate `modules/home-manager/hyprland/` (4 files) into
+  `modules/home-manager/features/hyprland.nix`. NixOS side stays at
+  `modules/nixos/host/fredpc/hyprland.nix` until deferredModule is available.
+- [ ] **2.24** Move `modules/home-manager/darwin.nix` to
+  `modules/home-manager/features/darwin-hm.nix`, update import in
+  `modules/infra/darwin.nix`
+- [ ] **2.26** Delete `modules/home-manager/hyprland/` directory (after 2.19a)
+- [ ] **2.27** Fold `modules/home-manager/tmux-windev-settings.nix` into
+  `modules/home-manager/features/terminal.nix` or move to `features/`
 
-- [ ] **2.4** Create `modules/features/terminal.nix`:
-  - Imports `apps/tmux.nix`, tmux-windev-settings
-  - `programs.bat` (with bat-extras), `programs.bottom`, `programs.yazi`
-  - Packages: btop, chafa, curl, dua, duf, eza, fastfetch, highlight, imgcat,
-    ncdu, skim, television, tldr, tmux, tmux-mem-cpu-load
-  - Platform split: `wl-clipboard` (Linux), `mermaid-cli-wrapped` (Darwin)
+#### Deferred — require deferredModule infrastructure (Phase 1 gap)
 
-- [ ] **2.5** Create `modules/features/dotfiles.nix`:
-  - `home.file` entries: SSH config (from soft-secrets), `.ssh/*`, `.config/*`,
-    ghostty config, television config, Pictures, `.hgignore_global`,
-    `.ideavimrc`, `.wezterm.lua`
-  - `home.activation` entries: ssh-restrict, ssh-authorized-keys-copy,
-    zed-settings-copy
-  - Platform-conditional paths for discordo config
-
-- [ ] **2.6** Create `modules/features/vscode-family.nix`:
-  - VS Code / Cursor / Windsurf settings.json and keybindings.json
-  - Platform-conditional paths: `Library/Application Support/` (Darwin) vs
-    `.config/` (Linux)
-  - `windsurf-code` wrapper script (Darwin only)
-
-- [ ] **2.7** Create `modules/features/media-apps.nix`:
-  - Packages: ffmpeg, imagemagick, openai-whisper, yt-dlp, chafa
-  - Workstation-only packages (gated by `config.my.isWorkstation`): discord,
-    slack, spotify, inkscape, podman, podman-tui
-  - localsend, wiki-tui
-
-- [ ] **2.8** Create `modules/features/network-tools.nix`:
-  - Packages: curl, wget, inetutils, lsof, rsync, wireguard-tools,
-    minio-client, restic, syncthing, stc-cli, woodpecker-cli, hclfmt,
-    openssl, sops, unzip
-
-- [ ] **2.9** Create `modules/features/ai-tools.nix`:
-  - Packages: llama-cpp, tdd-guard, agent-browser, ccstatusline, gws
-  - `SOPS_AGE_KEY_FILE`, `PODMAN_COMPOSE_WARNING_LOGS` session vars
-
-- [ ] **2.10** Create `modules/features/claude-code.nix`:
-  - Migrate from `modules/home-manager/claude-code.nix`
-  - Claude Code package, MCP SOPS templates, `.claude/*` files, agents, skills,
-    commands, assets, LSP plugin
-  - Deduplicate LSP packages shared with dev-tools
-
-- [ ] **2.11** Create `modules/features/secrets.nix` (HM secrets):
-  - Migrate from `modules/home-manager/secrets.nix`
-  - Workstation sops declarations
-  - Darwin launchd sops-nix PATH workaround (via `mkIf isDarwin`)
-
-- [ ] **2.12** Create `modules/features/nixvim.nix`:
-  - Nixvim import (from `apps/nixvim`)
-  - Currently imported as part of HM base — becomes its own feature
-
-- [ ] **2.13** Create `modules/features/nix-daemon.nix`:
-  - `nix.gc`, `nix.settings`, `nix.optimise`, `nix.extraOptions`
-  - `trusted-users`, `sandbox` settings
-  - Shared between NixOS and Darwin (both support these options)
-
-- [ ] **2.14** Create `modules/features/fonts.nix`:
-  - `fonts.packages` — nerd-fonts.hack, jetbrains-mono, meslo-lg
-  - Shared between NixOS and Darwin
-
-- [ ] **2.15** Create `modules/features/user-fdrake.nix`:
-  - NixOS: `users.users.fdrake` definition
-  - Darwin: `users.knownUsers`, `users.users.fdrake` with uid/home/shell
-  - Darwin: `system.primaryUser = "fdrake"`
-  - Platform-conditional via `mkIf`
-
-- [ ] **2.16** Create `modules/features/macos-prefs.nix`:
-  - `system.defaults.*` (dock, finder, trackpad, NSGlobalDomain,
-    screencapture, SoftwareUpdate, WindowManager, menuExtraClock)
-  - `system.stateVersion = 4`
-  - Darwin-only feature
-
-- [ ] **2.17** Create `modules/features/macos-security.nix`:
-  - Touch ID sudo (`security.pam.services.sudo_local.touchIdAuth`)
-  - pam-reattach (`environment.etc."pam.d/sudo_local"`)
-  - Darwin-only feature
-
-- [ ] **2.18** Create `modules/features/workstation-apps.nix`:
-  - Homebrew casks list (gated by `config.my.isWorkstation`)
-  - masApps (RunCat, Unarchiver, WireGuard, Xcode)
-  - `homebrew.onActivation`, `homebrew.global.brewfile`
-  - Darwin-only feature
-
-- [ ] **2.19** Create `modules/features/hyprland-desktop.nix`:
-  - **NixOS deferredModule**: `programs.hyprland.enable`, system packages
-    (waybar, wofi, hyprshot), XDG portal, polkit
-  - **HM deferredModule**: `wayland.windowManager.hyprland` settings, waybar
-    config, spotifatius, mako notifications, hypridle, hyprlock, GTK/Qt dark
-    themes, wlogout
-  - Consolidates `modules/nixos/host/fredpc/hyprland.nix` +
-    `modules/home-manager/hyprland/*`
-
+- [ ] **2.19b** Add NixOS deferredModule to `hyprland-desktop.nix`:
+  `programs.hyprland.enable`, system packages (waybar, wofi, hyprshot),
+  XDG portal, polkit. Requires deferredModule option types in
+  `modules/infra/nixos.nix`.
 - [ ] **2.20** Create `modules/features/gnome-desktop.nix`:
-  - **NixOS deferredModule**: services.desktopManager.gnome, GDM, dconf
-    profiles
-  - **HM deferredModule**: dconf settings, gnome-tweaks, extensions
-  - Consolidates `modules/nixos/host/fredpc/gnome.nix` + parts of
-    `modules/home-manager/linux-desktop.nix`
-
-- [ ] **2.21** Create `modules/features/linux-apps.nix`:
-  - HM packages: albert, bitwarden-desktop, brave, gnome-tweaks, zed-editor
-  - `services.mako` (notification daemon)
-  - `programs.firefox` with addons (guarded by `inputs.firefox-addons`)
-  - Linux-only feature
-
+  NixOS deferredModule (services.desktopManager.gnome, GDM, dconf profiles) +
+  HM deferredModule (dconf settings, gnome-tweaks, extensions).
+  Requires deferredModule. HM dconf content is already in
+  `features/linux-apps.nix`.
 - [ ] **2.22** Create `modules/features/pipewire-audio.nix`:
-  - NixOS: Pipewire stack (services.pipewire, pulse, alsa, wireplumber)
-  - Used by fredpc and macbookx86
+  NixOS deferredModule (services.pipewire, pulse, alsa, wireplumber).
+  Requires deferredModule. Currently in host configs for fredpc and macbookx86.
 
-- [ ] **2.23** Delete `modules/home-manager/default.nix`
-- [ ] **2.24** Delete `modules/home-manager/darwin.nix`
-- [ ] **2.25** Delete `modules/home-manager/linux-desktop.nix`
-- [ ] **2.26** Delete `modules/home-manager/hyprland/` directory
-- [ ] **2.27** Delete `modules/home-manager/tmux-windev-settings.nix`
-- [ ] **2.28** Delete `modules/darwin/default.nix` (content migrated to features)
+#### Cleanup — after all features migrated
+
+- [ ] **2.23** Delete `modules/home-manager/default.nix` — currently the
+  import hub; can only be removed when HM infrastructure uses deferredModule
+  to compose features without a central import list
+- [ ] **2.25** ~~Delete `modules/home-manager/linux-desktop.nix`~~ — Already
+  done (renamed to `features/linux-apps.nix` in Phase 2c)
+- [ ] **2.28** Delete `modules/darwin/default.nix` — currently the import hub;
+  same dependency as 2.23
 - [ ] **2.29** Verify `nix flake check` and `just build` / `home-manager switch`
 
 ---

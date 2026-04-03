@@ -1,5 +1,5 @@
 {pkgs, ...}: let
-  claude-usage = pkgs.callPackage ../../../../apps/claude-usage.nix {};
+  claude-usage = pkgs.callPackage ../../../../../apps/claude-usage.nix {};
 in
   pkgs.writeShellScript "claude-usage-waybar" ''
     # claude-usage-waybar.sh - Claude Code usage monitor for Waybar

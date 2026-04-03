@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   home = {
     file = {
-      ".finicky.js" = {source = ../../homefiles/finicky.js;};
+      ".finicky.js" = {source = ../../../homefiles/finicky.js;};
       "Screenshots/.keep" = {
         text = "";
       }; # Ensure Screenshots directory exists for macOS screenshots

@@ -5,7 +5,7 @@
 in {
   imports = [
     ../../../apps/tmux.nix
-    ../tmux-windev-settings.nix
+    ./tmux-windev-settings.nix
   ];
 
   programs = {
