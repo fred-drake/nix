@@ -138,5 +138,10 @@
   outputs = inputs: let
     import-tree = import inputs.import-tree;
   in
-    inputs.flake-parts.lib.mkFlake {inherit inputs;} (import-tree ./modules/infra);
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        (import-tree ./modules/infra)
+        (import-tree ./modules/hosts)
+      ];
+    };
 }

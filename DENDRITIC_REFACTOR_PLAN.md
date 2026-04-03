@@ -359,7 +359,26 @@ completion of the service extraction above. See the appendix for details.
 Each host becomes a flake-parts module that composes features. Host files
 are thin — they select features and provide host-specific overrides.
 
+### Phase 4a: Extract host definitions from infra (DONE)
+
+Host definitions extracted from `modules/infra/{nixos,darwin}.nix` into
+`modules/hosts/{nixos,darwin}.nix`. Shared infrastructure (commonModules,
+mkDarwinSystem, etc.) moved to `lib/{nixos,darwin}-infra.nix`.
+
+Due to the per-host file limitation (see Phase 0 notes), hosts are grouped
+per-platform rather than one file per host. Per-host files become possible
+after `specialArgs` elimination removes the `inputs.self` reference.
+
 ### Tasks
+
+- [x] **4.1a** Extract NixOS hosts to `modules/hosts/nixos.nix`
+- [x] **4.1b** Extract Darwin hosts to `modules/hosts/darwin.nix`
+- [x] **4.1c** Create `lib/nixos-infra.nix` (shared NixOS infrastructure)
+- [x] **4.1d** Create `lib/darwin-infra.nix` (shared Darwin infrastructure)
+- [x] **4.1e** Update `flake.nix` to import `modules/hosts/` via import-tree
+- [x] **4.1f** Reduce `modules/infra/{nixos,darwin}.nix` to empty placeholders
+
+### Phase 4b: Feature composition (blocked on Phase 2/3)
 
 - [ ] **4.1** Create `modules/hosts/fredpc.nix`:
   - Hardware configuration (inline or import)
@@ -558,13 +577,12 @@ and eventually delete the `default.nix` import hubs.
 
 ### Phase 4 Deferred Context
 
-All Phase 4 tasks (host composition modules) depend on:
-1. deferredModule infrastructure being in place
-2. Phase 3 service extraction being complete
-3. `specialArgs` elimination (so hosts compose features via the module
+Phase 4a (host extraction from infra) is complete. Phase 4b (per-host
+feature composition) depends on:
+1. Phase 2/3 feature and service extraction being complete
+2. `specialArgs` elimination (so hosts compose features via the module
    system, not by threading args through system builder calls)
-
-Phase 4 cannot begin until the deferredModule prerequisite is implemented.
+3. Resolving the per-host file limitation (see Phase 0 notes)
 
 ---
 
@@ -588,18 +606,29 @@ right call — `./modules` would pick up legacy NixOS/HM/Darwin modules that
 aren't flake-parts modules.
 
 **import-tree widening strategy**: As Phases 2-4 add new subdirectories, use
-multiple `import-tree` calls merged into a list (flake-parts `mkFlake` accepts
-a list of modules):
+multiple `import-tree` calls merged via `imports` (flake-parts `mkFlake` takes
+a single module, not a list):
 ```nix
-inputs.flake-parts.lib.mkFlake {inherit inputs;} [
-  (import-tree ./modules/infra)
-  (import-tree ./modules/features)   # added in Phase 2
-  (import-tree ./modules/services)   # added in Phase 3
-  (import-tree ./modules/hosts)      # added in Phase 4
-];
+inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+  imports = [
+    (import-tree ./modules/infra)
+    (import-tree ./modules/features)   # added in Phase 2
+    (import-tree ./modules/services)   # added in Phase 3
+    (import-tree ./modules/hosts)      # added in Phase 4
+  ];
+};
 ```
 Collapse to `(import-tree ./modules)` only after Phase 4 deletes all legacy
 directories.
+
+**Per-host file limitation**: `flake.nixosConfigurations` and
+`flake.darwinConfigurations` cannot be set from multiple flake-parts modules
+without infinite recursion (even though the type is `lazyAttrsOf raw`, the
+merge across modules triggers evaluation of `inputs.self` in `specialArgs`).
+Host definitions must be grouped per-platform in a single module file
+(`modules/hosts/nixos.nix`, `modules/hosts/darwin.nix`). Per-host files are
+possible only once `specialArgs` elimination removes the `inputs.self`
+reference, or by using a different sharing mechanism.
 
 ### Notes
 
