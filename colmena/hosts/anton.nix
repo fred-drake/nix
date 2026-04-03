@@ -23,7 +23,7 @@ in {
       secrets.nixosModules.soft-secrets
       secrets.nixosModules.secrets
       sops-nix.nixosModules.sops
-      ../wsl-common
+      ../../modules/services/wsl-server.nix
       ../../modules/nixos
       ../../modules/nixos/host/anton/configuration.nix
       nixpkgsVersion

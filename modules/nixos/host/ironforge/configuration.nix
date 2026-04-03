@@ -1,10 +1,6 @@
-{
-  pkgs,
-  config,
-  ...
-}: {
-  environment.systemPackages = with pkgs; [
-    podman-tui
+{config, ...}: {
+  imports = [
+    ../../../services/podman-server.nix
   ];
 
   security.acme = {
@@ -20,15 +16,6 @@
   services.openssh = {
     ports = [2222];
     settings.ListenAddress = "0.0.0.0";
-  };
-
-  virtualisation = {
-    containers.enable = true;
-    podman = {
-      enable = true;
-      dockerCompat = true;
-      defaultNetwork.settings.dns_enabled = true;
-    };
   };
 
   fileSystems."/var/lib/containers" = {

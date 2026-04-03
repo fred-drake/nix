@@ -19,7 +19,7 @@ in {
       secrets.nixosModules.secrets
       sops-nix.nixosModules.sops
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
-      ../hetzner-common
+      ../../modules/services/hetzner-server.nix
       ../../modules/nixos/host/headscale/configuration.nix
       nixpkgsVersion
     ];

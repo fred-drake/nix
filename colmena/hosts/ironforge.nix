@@ -37,7 +37,7 @@ in {
       sops-nix.nixosModules.sops
       nixarr.nixosModules.default
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
-      ../hetzner-common
+      ../../modules/services/hetzner-server.nix
       ../../modules/nixos
       ../../modules/nixos/host/ironforge/configuration.nix
       nixpkgsVersion
