@@ -618,3 +618,86 @@ are thin — they select features and provide host-specific overrides.
 - **flake-parts** — `github:hercules-ci/flake-parts`
 - **import-tree** — `github:vic/import-tree`
 - **den** — `github:vic/den` (optional: aspect-oriented dendritic framework)
+
+---
+
+## Phase 0 Review Findings (2026-04-03)
+
+Reviewed by: flake-manager, nix-module-architect, code-architect
+
+### Warnings
+
+**W1: `x86_64-darwin` dropped from supported systems**
+`modules/infra/systems.nix` lists 3 systems (`x86_64-linux`, `aarch64-linux`,
+`aarch64-darwin`). The original `flake-utils.lib.eachDefaultSystem` included
+`x86_64-darwin` as a 4th system. This means `devShells` and future `perSystem`
+outputs won't be available on Intel Macs. Likely intentional (no x86 Macs in
+fleet) but is a behavioral change from the original.
+
+**W2: import-tree scope diverges from plan**
+Plan task 0.4 shows the target as `(inputs.import-tree ./modules)` but the
+implementation correctly uses `(import-tree ./modules/infra)`. This is the
+right call — `./modules` would pick up legacy NixOS/HM/Darwin modules that
+aren't flake-parts modules.
+
+**import-tree widening strategy**: As Phases 2-4 add new subdirectories, use
+multiple `import-tree` calls merged into a list (flake-parts `mkFlake` accepts
+a list of modules):
+```nix
+inputs.flake-parts.lib.mkFlake {inherit inputs;} [
+  (import-tree ./modules/infra)
+  (import-tree ./modules/features)   # added in Phase 2
+  (import-tree ./modules/services)   # added in Phase 3
+  (import-tree ./modules/hosts)      # added in Phase 4
+];
+```
+Collapse to `(import-tree ./modules)` only after Phase 4 deletes all legacy
+directories.
+
+### Notes
+
+**N1: Pre-existing bug — macbookx86 overlay path**
+`systems/nixos.nix:18` (macbookx86 definition) uses
+`import ./overlays/default.nix {inherit inputs;}` which resolves to
+`systems/overlays/default.nix` — a path that doesn't exist. The fredpc block
+correctly uses `../overlays/default.nix`. This means macbookx86 may have never
+included the custom overlays. Pre-existing, not caused by Phase 0. Fix
+separately.
+
+**N2: Three flake-parts versions in flake.lock**
+The lock contains three distinct `flake-parts` revisions:
+- `flake-parts` (root) — latest
+- `flake-parts_2` (nixvim's transitive dep) — ~2 months old
+- `flake-parts_3` (nur's transitive dep) — Dec 2024, quite stale
+
+Could be deduplicated by adding follows:
+```nix
+nixvim.inputs.flake-parts.follows = "flake-parts";
+nur.inputs.flake-parts.follows = "flake-parts";
+```
+Not a correctness issue. Optional cleanup.
+
+**N3: Unused args in wrapper modules**
+- `colmena-config.nix` passes `nixos-hardware` to `colmena/default.nix` but
+  it's never used (captured by `...`). Pre-existing in original flake.nix.
+- `nixos-configs.nix` passes `colmena` to `systems/nixos.nix` but it's never
+  used. Same situation. Both harmless and will be eliminated when the wrappers
+  are replaced in Phase 1.
+
+**N4: `outputs = inputs.self` correctness**
+The wrappers use `outputs = inputs.self` where the original had
+`inherit (self) outputs` (which computes `self.outputs`). In standard flake
+evaluation `self` IS the outputs attrset, so `self.outputs` is technically a
+self-reference. The wrapper's approach is arguably more correct. No behavioral
+difference due to lazy evaluation.
+
+**N5: devshell.nix dual-use preserved**
+`shell.nix` has `pkgs ? import <nixpkgs> {}` as its default arg. In
+flake-parts context, `perSystem` provides `pkgs` from the flake's nixpkgs.
+Both `nix develop` (flake) and `nix-shell shell.nix` (legacy) continue to
+work correctly.
+
+**N6: nixvim and nixarr pin their own nixpkgs**
+Neither `nixvim` nor `nixarr` have `inputs.nixpkgs.follows = "nixpkgs"`,
+meaning they evaluate against their own pinned nixpkgs. This is pre-existing
+and intentional for compatibility. Not introduced by Phase 0.
