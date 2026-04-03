@@ -35,26 +35,7 @@
     };
   };
 
-  # Shared options module injected into every Darwin config.
-  # Provides config.my.* for host metadata so deferred modules can self-guard.
-  darwinOptionsModule = {lib, ...}: {
-    options.my = {
-      hostName = lib.mkOption {
-        type = lib.types.str;
-        description = "The hostname of the current system being configured.";
-      };
-      isWorkstation = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Whether this host is a full workstation.";
-      };
-      username = lib.mkOption {
-        type = lib.types.str;
-        default = "fdrake";
-        description = "The primary user account name.";
-      };
-    };
-  };
+  darwinOptionsModule = import ./my-options-module.nix;
 
   # deferredModule fragments contributed by feature modules
   deferredDarwinModules = builtins.attrValues config.my.modules.darwin;
@@ -95,7 +76,7 @@
       pkgs = systemPkgs;
       specialArgs = {
         inherit inputs non-mac-mini-casks;
-        outputs = inputs.self;
+
         nixpkgs = inputs.nixpkgs;
         nix-jetbrains-plugins = inputs.nix-jetbrains-plugins;
         pkgsUnstable = import inputs.nixpkgs-unstable {

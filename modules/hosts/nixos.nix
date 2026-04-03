@@ -20,7 +20,7 @@ in {
       };
       specialArgs = {
         inherit inputs;
-        outputs = inputs.self;
+
         nixpkgs = inputs.nixpkgs;
       };
       modules =
@@ -64,7 +64,7 @@ in {
       };
       specialArgs = {
         inherit inputs;
-        outputs = inputs.self;
+
         nixpkgs = inputs.nixpkgs;
         nixpkgs-unstable = inputs.nixpkgs-unstable;
         nix4vscode = inputs.nix4vscode;
@@ -114,7 +114,7 @@ in {
       };
       specialArgs = {
         inherit inputs;
-        outputs = inputs.self;
+
         nixpkgs = inputs.nixpkgs;
         nixpkgs-unstable = inputs.nixpkgs-unstable;
         nix4vscode = inputs.nix4vscode;

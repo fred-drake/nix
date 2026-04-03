@@ -1,26 +1,7 @@
 # Build the home-manager attrset for a given host.
-# Called by modules/infra/nixos.nix and modules/infra/darwin.nix.
+# Called by modules/hosts/nixos.nix and modules/hosts/darwin.nix.
 {inputs}: let
-  # Shared options module injected into every HM config.
-  # Provides config.my.* for host metadata (replaces hostArgs/specialArgs).
-  myOptionsModule = {lib, ...}: {
-    options.my = {
-      hostName = lib.mkOption {
-        type = lib.types.str;
-        description = "The hostname of the current system being configured.";
-      };
-      isWorkstation = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Whether this host is a workstation (controls cask/app installation).";
-      };
-      username = lib.mkOption {
-        type = lib.types.str;
-        default = "fdrake";
-        description = "The primary user account name.";
-      };
-    };
-  };
+  myOptionsModule = import ./my-options-module.nix;
 in
   {
     hostName,
