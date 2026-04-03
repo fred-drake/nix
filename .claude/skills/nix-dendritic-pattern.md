@@ -72,8 +72,8 @@ home-manager, and whatever else it touches — it doesn't live inside a
 │  └──────────┘ └──────────┘ └──────────────────┘ │
 │                                                   │
 │  Lower-level configs stored as option values:     │
-│  config.flake.modules.nixos.<feature>             │
-│  config.flake.modules.home-manager.<feature>      │
+│  config.my.modules.nixos.<feature>             │
+│  config.my.modules.home-manager.<feature>      │
 │  config.configurations.nixos.<name>.module         │
 └─────────────────────────────────────────────────┘
 ```
@@ -86,7 +86,7 @@ composed and merged properly before they're evaluated in their target context.
 
 ```nix
 # Declaring a container for NixOS feature modules
-options.flake.modules.nixos = lib.mkOption {
+options.my.modules.nixos = lib.mkOption {
   type = lib.types.lazyAttrsOf lib.types.deferredModule;
   default = {};
 };
@@ -154,7 +154,7 @@ Any module can access `config.username` — no `specialArgs` needed.
 ```nix
 { config, ... }:
 {
-  flake.modules = {
+  my.modules = {
     nixos.pc = {
       # Grant wheel group membership on NixOS
       users.groups.wheel.members = [ config.username ];
@@ -203,7 +203,7 @@ then assembles them into actual `nixosConfigurations`.
 ```nix
 { config, ... }:
 let
-  inherit (config.flake.modules) nixos;
+  inherit (config.my.modules) nixos;
 in
 {
   configurations.nixos.desktop.module = {
@@ -214,7 +214,7 @@ in
 ```
 
 The desktop configuration imports feature modules (`admin`, `shell`) that
-were registered in `config.flake.modules.nixos` by other files.
+were registered in `config.my.modules.nixos` by other files.
 
 ## Anti-Pattern: `specialArgs` Pass-Through
 

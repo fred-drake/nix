@@ -8,13 +8,35 @@
   mkHomeManager = import ../../lib/mk-home-manager.nix {inherit inputs;};
   inherit (inputs) home-manager disko nixos-hardware secrets sops-nix;
 
+  # Shared options module injected into every NixOS config.
+  # Provides config.my.* for host metadata so deferred modules can self-guard.
+  nixosOptionsModule = {lib, ...}: {
+    options.my = {
+      hostName = lib.mkOption {
+        type = lib.types.str;
+        description = "The hostname of the current system being configured.";
+      };
+      isWorkstation = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether this host is a full workstation.";
+      };
+      username = lib.mkOption {
+        type = lib.types.str;
+        default = "fdrake";
+        description = "The primary user account name.";
+      };
+    };
+  };
+
   # deferredModule fragments contributed by feature modules
-  deferredNixosModules = builtins.attrValues config.flake.modules.nixos;
-  deferredHmModules = builtins.attrValues config.flake.modules.home-manager;
+  deferredNixosModules = builtins.attrValues config.my.modules.nixos;
+  deferredHmModules = builtins.attrValues config.my.modules.home-manager;
 
   # Common NixOS modules included in every NixOS system configuration
   commonModules =
     [
+      nixosOptionsModule
       secrets.nixosModules.soft-secrets
       sops-nix.nixosModules.sops
     ]
@@ -36,6 +58,7 @@ in {
       modules =
         commonModules
         ++ [
+          {my.hostName = "macbookx86";}
           inputs.nur.nixosModules.nur
           ../../modules/nixos/host/macbookx86/configuration.nix
           nixos-hardware.nixosModules.apple-t2
@@ -94,6 +117,7 @@ in {
       modules =
         commonModules
         ++ [
+          {my.hostName = "fredpc";}
           secrets.nixosModules.secrets
           ../../modules/nixos
           ../../modules/nixos/host/fredpc/configuration.nix
@@ -143,6 +167,7 @@ in {
       modules =
         commonModules
         ++ [
+          {my.hostName = "nixosaarch64vm";}
           disko.nixosModules.disko
           ../../modules/nixos
           ../../modules/nixos/host/nixosaarch64vm/configuration.nix

@@ -36,13 +36,35 @@
     };
   };
 
+  # Shared options module injected into every Darwin config.
+  # Provides config.my.* for host metadata so deferred modules can self-guard.
+  darwinOptionsModule = {lib, ...}: {
+    options.my = {
+      hostName = lib.mkOption {
+        type = lib.types.str;
+        description = "The hostname of the current system being configured.";
+      };
+      isWorkstation = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether this host is a full workstation.";
+      };
+      username = lib.mkOption {
+        type = lib.types.str;
+        default = "fdrake";
+        description = "The primary user account name.";
+      };
+    };
+  };
+
   # deferredModule fragments contributed by feature modules
-  deferredDarwinModules = builtins.attrValues config.flake.modules.darwin;
-  deferredHmModules = builtins.attrValues config.flake.modules.home-manager;
+  deferredDarwinModules = builtins.attrValues config.my.modules.darwin;
+  deferredHmModules = builtins.attrValues config.my.modules.home-manager;
 
   # Common Darwin modules included in every Darwin system configuration
   commonModules =
     [
+      darwinOptionsModule
       secrets.nixosModules.soft-secrets
       sops-nix.darwinModules.sops
       ../../modules/darwin
@@ -54,6 +76,7 @@
 
   mkDarwinSystem = {
     hostname,
+    isWorkstation ? true,
     extraModules ? [],
     system ? "aarch64-darwin",
   }: let
@@ -109,7 +132,13 @@
       };
       modules =
         commonModules
-        ++ [../../modules/darwin/${hostname}]
+        ++ [
+          {
+            my.hostName = hostname;
+            my.isWorkstation = isWorkstation;
+          }
+          ../../modules/darwin/${hostname}
+        ]
         ++ extraModules;
     };
 in {
@@ -148,6 +177,7 @@ in {
 
     laisas-mac-mini = mkDarwinSystem {
       hostname = "laisas-mac-mini";
+      isWorkstation = false;
       extraModules = [
         {
           home-manager = mkHomeManager {

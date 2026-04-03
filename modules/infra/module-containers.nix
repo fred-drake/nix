@@ -3,7 +3,7 @@
 # fragments into these containers. The system builders (nixos.nix, darwin.nix)
 # collect them and include them in each host's module list.
 {lib, ...}: {
-  options.flake.modules = {
+  options.my.modules = {
     nixos = lib.mkOption {
       type = lib.types.lazyAttrsOf lib.types.deferredModule;
       default = {};
