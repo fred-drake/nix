@@ -34,7 +34,7 @@ in {
             home-manager = mkHomeManager {
               hostName = "macbookx86";
               imports = [
-                ../../modules/home-manager/linux-desktop.nix
+                ../../modules/home-manager/features/linux-apps.nix
               ];
             };
           }

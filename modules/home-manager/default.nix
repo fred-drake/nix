@@ -10,11 +10,9 @@
     ./features/network-tools.nix
     ./features/media-apps.nix
     ./features/ai-tools.nix
-    ./secrets.nix
-    ./claude-code.nix
+    ./features/secrets.nix
+    ./features/claude-code.nix
   ];
-
-  programs.neovim.enable = false;
 
   home.stateVersion = "24.05";
 }

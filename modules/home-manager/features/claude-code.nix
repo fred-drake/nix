@@ -4,22 +4,22 @@
   ...
 }: let
   home = config.home.homeDirectory;
-  repos-src = import ../../apps/fetcher/repos-src.nix {inherit pkgs;};
-  claude-plugins-src = import ../../apps/fetcher/claude-plugins-src.nix {inherit pkgs;};
-  lsp-plugin = import ../../apps/claude-code/lsp-plugin.nix {
+  repos-src = import ../../../apps/fetcher/repos-src.nix {inherit pkgs;};
+  claude-plugins-src = import ../../../apps/fetcher/claude-plugins-src.nix {inherit pkgs;};
+  lsp-plugin = import ../../../apps/claude-code/lsp-plugin.nix {
     inherit pkgs;
     inherit (claude-plugins-src) claude-plugins-official-src;
   };
-  claude-code = pkgs.callPackage ../../apps/claude-code {
+  claude-code = pkgs.callPackage ../../../apps/claude-code {
     pluginDirs = [
       "$HOME/.claude/lsp-plugin"
     ];
   };
-  gitea-mcp = pkgs.callPackage ../../apps/gitea-mcp.nix {};
-  ccstatusline = pkgs.callPackage ../../apps/ccstatusline.nix {
-    npm-packages = import ../../apps/fetcher/npm-packages.nix;
+  gitea-mcp = pkgs.callPackage ../../../apps/gitea-mcp.nix {};
+  ccstatusline = pkgs.callPackage ../../../apps/ccstatusline.nix {
+    npm-packages = import ../../../apps/fetcher/npm-packages.nix;
   };
-  claude-usage = pkgs.callPackage ../../apps/claude-usage.nix {};
+  claude-usage = pkgs.callPackage ../../../apps/claude-usage.nix {};
 
   # Skills fetched from external repositories
   gws-skills = [
@@ -297,17 +297,17 @@ in {
 
       # Claude command files
       ".claude/commands" = {
-        source = ../../apps/claude-code/commands;
+        source = ../../../apps/claude-code/commands;
         recursive = true;
       };
 
       ".claude/agents" = {
-        source = ../../apps/claude-code/agents;
+        source = ../../../apps/claude-code/agents;
         recursive = true;
       };
 
       ".claude/skills" = {
-        source = ../../apps/claude-code/skills;
+        source = ../../../apps/claude-code/skills;
         recursive = true;
       };
 
@@ -324,7 +324,7 @@ in {
     // {
       # Ralph Wiggum assets (scripts and hooks for the ralph-loop command)
       ".claude/assets/ralph-wiggum" = {
-        source = ../../apps/claude-code/assets/ralph-wiggum;
+        source = ../../../apps/claude-code/assets/ralph-wiggum;
         recursive = true;
       };
 
@@ -334,7 +334,7 @@ in {
         recursive = true;
       };
 
-      ".claude/CLAUDE.md".text = builtins.readFile ../../apps/claude-code/CLAUDE.md;
+      ".claude/CLAUDE.md".text = builtins.readFile ../../../apps/claude-code/CLAUDE.md;
 
       ".claude/settings.json".text = builtins.toJSON {
         env = {

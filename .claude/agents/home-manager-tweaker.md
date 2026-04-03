@@ -17,14 +17,14 @@ repository that manages multiple user environments.
 
 - `modules/home-manager/default.nix` — Shared Home Manager config
 - `modules/home-manager/darwin.nix` — macOS-specific HM config
-- `modules/home-manager/linux-desktop.nix` — Linux desktop HM config
+- `modules/home-manager/features/linux-apps.nix` — Linux desktop HM config
 - `modules/home-manager/host/` — Per-host HM overrides:
   - `fredpc.nix` — Linux workstation
   - `mac-studio.nix` — Primary Mac
   - `macbook-pro.nix` — Laptop
 - `modules/home-manager/hyprland/` — Hyprland window manager config
-- `modules/home-manager/secrets.nix` — SOPS secret integration
-- `modules/home-manager/claude-code.nix` — Claude Code declarative setup
+- `modules/home-manager/features/secrets.nix` — SOPS secret integration
+- `modules/home-manager/features/claude-code.nix` — Claude Code declarative setup
 - `homefiles/` — Raw dotfiles symlinked via `home.file`
 
 ## Managed Applications
