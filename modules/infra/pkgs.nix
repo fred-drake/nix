@@ -13,16 +13,16 @@
       ];
     mkPkgs = nixpkgsSrc: {
       overlays ? baseOverlays,
-      extraConfig ? {},
+      cudaSupport ? false,
     }:
-      import nixpkgsSrc ({
-          inherit system;
-          config.allowUnfree = true;
-        }
-        // extraConfig
-        // {
-          overlays = overlays;
-        });
+      import nixpkgsSrc {
+        inherit system;
+        config = {
+          allowUnfree = true;
+          inherit cudaSupport;
+        };
+        inherit overlays;
+      };
   in {
     _module.args = {
       # Primary nixpkgs (nixos-unstable) with all overlays + nix4vscode
@@ -36,7 +36,7 @@
       # CUDA-enabled pkgs (only meaningful on x86_64-linux, but defined everywhere
       # for simplicity — it just won't be used on other systems)
       pkgsCuda = mkPkgs inputs.nixpkgs {
-        extraConfig.config.cudaSupport = true;
+        cudaSupport = true;
       };
     };
   };
