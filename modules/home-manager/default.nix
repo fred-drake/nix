@@ -1,6 +1,6 @@
 {...}: {
   imports = [
-    ../../apps/nixvim
+    ./features/nixvim.nix
     ./features/shells.nix
     ./features/editor.nix
     ./features/dev-tools.nix
