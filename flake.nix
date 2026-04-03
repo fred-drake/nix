@@ -39,8 +39,10 @@
     # A collection of NixOS modules covering hardware quirks.
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
-    # Pure Nix flake utility functions
-    flake-utils.url = "github:numtide/flake-utils";
+    # Flake framework
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
+    import-tree.flake = false;
 
     # Manage a user environment using Nix
     home-manager = {
@@ -133,86 +135,8 @@
   };
 
   # Output configuration
-  outputs = {
-    self,
-    colmena,
-    nixpkgs,
-    nixpkgs-stable,
-    nixpkgs-unstable,
-    nixpkgs-fred-unstable,
-    nixpkgs-fred-testing,
-    nixos-hardware,
-    homebrew-core,
-    homebrew-cask,
-    homebrew-bundle,
-    homebrew-fdrake,
-    homebrew-nikitabobko,
-    homebrew-sst,
-    homebrew-steipete,
-    secrets,
-    sops-nix,
-    nix-jetbrains-plugins,
-    nix4vscode,
-    nixarr,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
+  outputs = inputs: let
+    import-tree = import inputs.import-tree;
   in
-    inputs.flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      devShells.default = import ./shell.nix {inherit pkgs;};
-    })
-    // {
-      # NixOS configurations
-      nixosConfigurations = import ./systems/nixos.nix {
-        inherit
-          inputs
-          outputs
-          colmena
-          nixpkgs
-          nixpkgs-stable
-          nixpkgs-unstable
-          nixpkgs-fred-unstable
-          nixpkgs-fred-testing
-          secrets
-          nix-jetbrains-plugins
-          nix4vscode
-          ;
-      };
-
-      # Darwin (macOS) configurations
-      darwinConfigurations = import ./systems/darwin.nix {
-        inherit
-          inputs
-          outputs
-          nixpkgs
-          nixpkgs-stable
-          nixpkgs-unstable
-          nixpkgs-fred-unstable
-          nixpkgs-fred-testing
-          secrets
-          nix-jetbrains-plugins
-          nix4vscode
-          homebrew-core
-          homebrew-cask
-          homebrew-bundle
-          homebrew-fdrake
-          homebrew-nikitabobko
-          homebrew-sst
-          homebrew-steipete
-          ;
-      };
-
-      colmena = import ./colmena {
-        inherit self nixpkgs-stable nixpkgs-unstable nixos-hardware secrets sops-nix nixarr;
-        inherit (inputs) nixos-wsl;
-      };
-
-      # Library functions
-      lib = {
-        mkHomeManager = import ./lib/mk-home-manager.nix;
-        mkNeovimPackages = import ./lib/mk-neovim-packages.nix;
-      };
-    };
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} (import-tree ./modules/infra);
 }
