@@ -25,6 +25,7 @@ in
   {
     hostName,
     imports ? [],
+    deferredHomeManagerModules ? [],
   }: {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -42,7 +43,8 @@ in
           my.hostName = hostName;
         }
       ]
-      ++ imports;
+      ++ imports
+      ++ deferredHomeManagerModules;
     # Kept for backwards compatibility — downstream HM modules still reference
     # these. Will be removed when features are migrated in Phase 2.
     extraSpecialArgs = {

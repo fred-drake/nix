@@ -1,6 +1,10 @@
 # Darwin configuration infrastructure — replaces systems/darwin.nix.
 # Each host is defined inline here; in Phase 4 they'll move to modules/hosts/.
-{inputs, ...}: let
+{
+  inputs,
+  config,
+  ...
+}: let
   mkHomeManager = import ../../lib/mk-home-manager.nix {inherit inputs;};
   inherit (inputs) darwin home-manager nix-homebrew secrets sops-nix;
 
@@ -32,15 +36,21 @@
     };
   };
 
+  # deferredModule fragments contributed by feature modules
+  deferredDarwinModules = builtins.attrValues config.flake.modules.darwin;
+  deferredHmModules = builtins.attrValues config.flake.modules.home-manager;
+
   # Common Darwin modules included in every Darwin system configuration
-  commonModules = [
-    secrets.nixosModules.soft-secrets
-    sops-nix.darwinModules.sops
-    ../../modules/darwin
-    nix-homebrew.darwinModules.nix-homebrew
-    homebrewModule
-    home-manager.darwinModules.home-manager
-  ];
+  commonModules =
+    [
+      secrets.nixosModules.soft-secrets
+      sops-nix.darwinModules.sops
+      ../../modules/darwin
+      nix-homebrew.darwinModules.nix-homebrew
+      homebrewModule
+      home-manager.darwinModules.home-manager
+    ]
+    ++ deferredDarwinModules;
 
   mkDarwinSystem = {
     hostname,
@@ -110,6 +120,7 @@ in {
         {
           home-manager = mkHomeManager {
             hostName = "mac-studio";
+            deferredHomeManagerModules = deferredHmModules;
             imports = [
               ../../modules/home-manager/features/darwin-hm.nix
               ../../modules/home-manager/host/mac-studio.nix
@@ -125,6 +136,7 @@ in {
         {
           home-manager = mkHomeManager {
             hostName = "macbook-pro";
+            deferredHomeManagerModules = deferredHmModules;
             imports = [
               ../../modules/home-manager/features/darwin-hm.nix
               ../../modules/home-manager/host/macbook-pro.nix
@@ -140,6 +152,7 @@ in {
         {
           home-manager = mkHomeManager {
             hostName = "laisas-mac-mini";
+            deferredHomeManagerModules = deferredHmModules;
             imports = [
               ../../modules/home-manager/features/darwin-hm.nix
             ];

@@ -1,14 +1,24 @@
 # NixOS configuration infrastructure — replaces systems/nixos.nix.
 # Each host is defined inline here; in Phase 4 they'll move to modules/hosts/.
-{inputs, ...}: let
+{
+  inputs,
+  config,
+  ...
+}: let
   mkHomeManager = import ../../lib/mk-home-manager.nix {inherit inputs;};
   inherit (inputs) home-manager disko nixos-hardware secrets sops-nix;
 
+  # deferredModule fragments contributed by feature modules
+  deferredNixosModules = builtins.attrValues config.flake.modules.nixos;
+  deferredHmModules = builtins.attrValues config.flake.modules.home-manager;
+
   # Common NixOS modules included in every NixOS system configuration
-  commonModules = [
-    secrets.nixosModules.soft-secrets
-    sops-nix.nixosModules.sops
-  ];
+  commonModules =
+    [
+      secrets.nixosModules.soft-secrets
+      sops-nix.nixosModules.sops
+    ]
+    ++ deferredNixosModules;
 in {
   flake.nixosConfigurations = {
     macbookx86 = inputs.nixpkgs.lib.nixosSystem {
@@ -33,6 +43,7 @@ in {
           {
             home-manager = mkHomeManager {
               hostName = "macbookx86";
+              deferredHomeManagerModules = deferredHmModules;
               imports = [
                 ../../modules/home-manager/features/linux-apps.nix
               ];
@@ -91,6 +102,7 @@ in {
           {
             home-manager = mkHomeManager {
               hostName = "fredpc";
+              deferredHomeManagerModules = deferredHmModules;
               imports = [
                 ../../modules/home-manager/host/fredpc.nix
               ];
@@ -138,6 +150,7 @@ in {
           {
             home-manager = mkHomeManager {
               hostName = "nixosaarch64vm";
+              deferredHomeManagerModules = deferredHmModules;
             };
           }
         ];
