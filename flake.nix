@@ -141,6 +141,7 @@
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         (import-tree ./modules/infra)
+        (import-tree ./modules/features)
         (import-tree ./modules/hosts)
       ];
     };

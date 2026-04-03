@@ -27,8 +27,6 @@
   #   systemd.enable = true;
   # };
 
-  imports = [../features/hyprland];
-
   dconf = {
     enable = true;
     settings = {

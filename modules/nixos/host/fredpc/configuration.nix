@@ -11,7 +11,6 @@ in {
   imports = [
     ./glance.nix
     ./gnome.nix
-    ./hyprland.nix
     ./gpu-passthrough.nix
     ./borg-backup.nix
   ];
