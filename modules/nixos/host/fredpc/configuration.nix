@@ -228,12 +228,10 @@ in {
   };
 
   # Sound
-  # Hyprland -- Disabled when using Gnome
   environment.sessionVariables = {
     # If your cursor becomes invisible
     WLR_NO_HARDWARE_CURSORS = "1";
-    # Hint electron apps to use wayland
-    NIXOS_OZONE_WL = "1";
+    # NIXOS_OZONE_WL is set in modules/features/hyprland-desktop.nix
   };
 
   # NVidia
