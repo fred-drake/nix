@@ -96,14 +96,9 @@
       '';
     };
 
-    # Enable the X11 windowing system.
-    # Also disable suspend
-    xserver = {
-      enable = true;
-      displayManager.gdm.enable = true;
-      displayManager.gdm.autoSuspend = false;
-      desktopManager.gnome.enable = true;
-    };
+    # GNOME desktop configured in modules/features/gnome-desktop.nix
+    # GDM auto-suspend disabled here (host-specific)
+    displayManager.gdm.autoSuspend = false;
 
     # Configure keymap in X11
     # xserver.xkb.layout = "us";
@@ -112,13 +107,7 @@
     # Enable CUPS to print documents.
     # printing.enable = true;
 
-    # OR enable pipewire for sound
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
+    # Pipewire configured in modules/features/pipewire-audio.nix
 
     # Enable touchpad support (enabled default in most desktopManager).
     libinput.enable = true;
@@ -127,8 +116,7 @@
     openssh.enable = true;
   };
 
-  # Enable sound.
-  hardware.pulseaudio.enable = false;
+  # PulseAudio disabled in modules/features/pipewire-audio.nix
 
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.fdrake = {

@@ -10,8 +10,6 @@
 in {
   imports = [
     ./glance.nix
-    ./gnome.nix
-    ./gpu-passthrough.nix
     ./borg-backup.nix
   ];
   boot = {
@@ -23,26 +21,18 @@ in {
     };
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
-      xpadneo
+      # xpadneo configured in modules/features/gaming.nix
     ];
     extraModprobeConfig = ''
       options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
     '';
-    kernelModules = ["xpadneo"];
+    # xpadneo kernelModules configured in modules/features/gaming.nix
   };
   services = {
     displayManager.defaultSession = "hyprland";
     openssh.enable = true;
-    blueman.enable = true;
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      jack.enable = true;
-      wireplumber.enable = true;
-    };
-    pulseaudio.enable = false;
+    # blueman configured in modules/features/gaming.nix
+    # Pipewire is configured in modules/features/pipewire-audio.nix
     ratbagd.enable = true;
     ollama = {
       enable = false; # Running it from podman for now
@@ -58,7 +48,7 @@ in {
     mongodb = {
       enable = false;
     };
-    xserver.videoDrivers = ["nvidia"];
+    # NVIDIA videoDrivers set in modules/features/nvidia-cuda.nix
 
     # Samba for sharing files with Windows VM
     samba = {
@@ -103,20 +93,11 @@ in {
     nerd-fonts.jetbrains-mono
     nerd-fonts.hack
 
-    # Gaming
-    gamescope # Wayland micro-compositor for gaming performance
-    protonup-qt # Manage GE-Proton and other custom Proton versions
-    # steam
-    # steamcmd
-    # steam-tui
+    # Gaming packages are in modules/features/gaming.nix
     libratbag
     piper
 
-    # CUDA
-    pkgsCuda.cudaPackages.cudatoolkit
-    pkgsUnstable.cudaPackages.cudnn
-    pkgsCuda.nvidia-container-toolkit
-    crun
+    # CUDA packages are in modules/features/nvidia-cuda.nix
 
     zed-editor
     docker-compose
@@ -180,7 +161,7 @@ in {
 
   security = {
     sudo.wheelNeedsPassword = false;
-    rtkit.enable = true;
+    # rtkit configured in modules/features/pipewire-audio.nix
   };
 
   users.users = {
@@ -201,30 +182,8 @@ in {
   };
 
   hardware = {
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-      settings = {
-        General = {
-          Privacy = "device";
-          JustWorksRepairing = "always";
-          Class = "0x000100";
-          FastConnectable = true;
-        };
-      };
-    };
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-    };
-    nvidia = {
-      package = config.boot.kernelPackages.nvidiaPackages.beta;
-      modesetting.enable = true;
-      nvidiaSettings = true;
-      open = true;
-      powerManagement.enable = false;
-    };
-    nvidia-container-toolkit.enable = true;
+    # Bluetooth configured in modules/features/gaming.nix
+    # NVIDIA + graphics configured in modules/features/nvidia-cuda.nix
   };
 
   # Sound
@@ -236,31 +195,13 @@ in {
 
   # NVidia
 
-  # Steam
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-    localNetworkGameTransfers.openFirewall = true;
-    gamescopeSession.enable = true; # Enable gamescope integration
-  };
-
-  # GameMode - CPU/GPU optimizations for gaming
-  programs.gamemode.enable = true;
+  # Steam + GameMode configured in modules/features/gaming.nix
 
   # Podman
   virtualisation = {
     containers = {
       enable = true;
-      containersConf.settings = {
-        engine = {
-          runtimes = {
-            nvidia = [
-              "${pkgsCuda.nvidia-container-toolkit}/bin/nvidia-container-runtime"
-            ];
-          };
-        };
-      };
+      # NVIDIA container runtime configured in modules/features/nvidia-cuda.nix
     };
     podman = {
       enable = true;
@@ -285,12 +226,7 @@ in {
   # OBS Studio with virtual camera
   security.polkit.enable = true;
 
-  # Create symlink for nvidia-cdi-hook
-  # This is a hack, but podman/crun insists on looking at this location for the CDI hook,
-  # so at least this will persist with upgrades
-  systemd.tmpfiles.rules = [
-    "L+ /usr/bin/nvidia-cdi-hook - - - - ${pkgsCuda.nvidia-container-toolkit.tools}/bin/nvidia-cdi-hook"
-  ];
+  # nvidia-cdi-hook tmpfiles rule in modules/features/nvidia-cuda.nix
 
   system.stateVersion = "24.11";
 }
