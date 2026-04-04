@@ -7,15 +7,6 @@
 }: let
   inherit (inputs) darwin home-manager nix-homebrew secrets sops-nix;
 
-  # Some casks take space on a limited Mac Mini, so only install them
-  # on Mac Studio and MacBook Pro.
-  non-mac-mini-casks = [
-    "godot"
-    "steam"
-    "wine-stable"
-    "winbox"
-  ];
-
   # Homebrew tap wiring — shared across all Darwin hosts
   homebrewModule = {
     nix-homebrew = {
@@ -66,7 +57,7 @@
       inherit system;
       pkgs = allPkgs.pkgs;
       specialArgs = {
-        inherit inputs non-mac-mini-casks;
+        inherit inputs;
         inherit (allPkgs) pkgsUnstable pkgsStable pkgsFredTesting pkgsFredUnstable;
       };
       modules =

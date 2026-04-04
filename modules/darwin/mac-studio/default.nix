@@ -1,9 +1,8 @@
 # Configuration specific to the Mac Studio machine
-{
-  non-mac-mini-casks,
-  lib,
-  ...
-}: {
+{lib, ...}: let
+  # Casks that are too large for the Mac Mini but fine here
+  non-mac-mini-casks = ["godot" "steam" "wine-stable" "winbox"];
+in {
   # User configuration - override home directory for external drive
   users.users.fdrake.home = lib.mkForce "/Volumes/External/Users/fdrake";
 

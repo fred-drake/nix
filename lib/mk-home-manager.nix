@@ -26,11 +26,7 @@ in
       ]
       ++ imports
       ++ deferredHomeManagerModules;
-    # Kept for backwards compatibility — some HM feature modules still
-    # reference inputs/secrets/hostArgs from extraSpecialArgs.
     extraSpecialArgs = {
       inherit inputs;
-      secrets = inputs.secrets;
-      hostArgs = {inherit hostName;};
     };
   }

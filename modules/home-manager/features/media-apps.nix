@@ -1,8 +1,11 @@
 {
   pkgs,
-  hostArgs,
+  lib,
+  osConfig ? {},
   ...
-}: {
+}: let
+  isWorkstation = (osConfig.my or {}).isWorkstation or false;
+in {
   home.packages =
     (with pkgs; [
       ffmpeg
@@ -12,21 +15,12 @@
       localsend
       wiki-tui
     ])
-    ++ (
-      if
-        hostArgs.hostName
-        == "fredpc"
-        || hostArgs.hostName == "macbook-pro"
-        || hostArgs.hostName == "mac-studio"
-      then
-        with pkgs; [
-          discord
-          slack
-          spotify
-          inkscape
-          podman
-          podman-tui
-        ]
-      else []
-    );
+    ++ lib.optionals isWorkstation (with pkgs; [
+      discord
+      slack
+      spotify
+      inkscape
+      podman
+      podman-tui
+    ]);
 }
