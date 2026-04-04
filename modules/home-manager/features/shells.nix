@@ -25,7 +25,7 @@
       enableNushellIntegration = true;
       enableZshIntegration = true;
       enableFishIntegration = true;
-      settings = builtins.fromJSON (builtins.readFile ../../../apps/oh-my-posh/config.json);
+      settings = builtins.fromJSON (builtins.readFile ../../../homefiles/config/oh-my-posh/config.json);
     };
   };
 
