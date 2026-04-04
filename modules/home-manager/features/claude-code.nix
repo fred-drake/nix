@@ -126,10 +126,10 @@ in {
       path = "${home}/mcp/gitea-engineer.json";
       content = builtins.toJSON {
         mcpServers = {
-          gitea-personal = {
+          gitea-engineer = {
             command = "gitea-mcp";
             args = ["-t" "stdio" "--host" "https://gitea.${config.soft-secrets.networking.domain}"];
-            env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.personal-gitea-token;};
+            env = {GITEA_ACCESS_TOKEN = config.sops.placeholder.engineer-gitea-token;};
           };
         };
       };

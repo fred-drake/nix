@@ -63,7 +63,7 @@ in {
   in {
     imports = [
       self.colmena._ironforge
-      ../../modules/secrets/ironforge.nix
+      ../../modules/secrets/cloudflare.nix
       ../../modules/services/media-server.nix
       (nodeExporter.mkNodeExporter "ironforge")
     ];

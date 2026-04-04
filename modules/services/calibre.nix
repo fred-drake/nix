@@ -8,6 +8,26 @@
   contentServerPort = "8081";
   webPort = "8083";
 in {
+  sops.secrets = {
+    calibre-storage-username = {
+      sopsFile = config.secrets.host.ironforge.calibre-storage;
+      mode = "0400";
+      key = "username";
+    };
+    calibre-storage-password = {
+      sopsFile = config.secrets.host.ironforge.calibre-storage;
+      mode = "0400";
+      key = "password";
+    };
+  };
+  sops.templates."calibre-storage-credentials" = {
+    content = ''
+      username=${config.sops.placeholder."calibre-storage-username"}
+      password=${config.sops.placeholder."calibre-storage-password"}
+    '';
+    mode = "0400";
+  };
+
   security.acme.certs = {
     "calibre-desktop.${config.soft-secrets.networking.domain}" = {
       domain = "calibre-desktop.${config.soft-secrets.networking.domain}";

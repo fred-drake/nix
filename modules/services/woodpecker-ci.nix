@@ -7,6 +7,24 @@
   host = "woodpecker";
   proxyPort = "8000";
 in {
+  sops.secrets = {
+    woodpecker-postgresql-env = {
+      sopsFile = config.secrets.host.woodpecker.postgresql-env;
+      mode = "0400";
+      key = "data";
+    };
+    woodpecker-env = {
+      sopsFile = config.secrets.host.woodpecker.woodpecker-env;
+      mode = "0400";
+      key = "data";
+    };
+    woodpecker-agent-env = {
+      sopsFile = config.secrets.host.woodpecker.woodpecker-agent-env;
+      mode = "0400";
+      key = "data";
+    };
+  };
+
   security.acme.certs = {
     "${host}.${config.soft-secrets.networking.domain}" = {
       domain = "${host}.${config.soft-secrets.networking.domain}";

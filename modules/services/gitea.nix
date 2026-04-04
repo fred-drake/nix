@@ -7,6 +7,31 @@
   host = "gitea";
   proxyPort = "3001";
 in {
+  sops.secrets = {
+    gitea-check-service-env = {
+      sopsFile = config.secrets.host.gitea.check-service-env;
+      mode = "0400";
+      key = "data";
+    };
+    gitea-storage-username = {
+      sopsFile = config.secrets.host.ironforge.gitea-storage;
+      mode = "0400";
+      key = "username";
+    };
+    gitea-storage-password = {
+      sopsFile = config.secrets.host.ironforge.gitea-storage;
+      mode = "0400";
+      key = "password";
+    };
+  };
+  sops.templates."gitea-storage-credentials" = {
+    content = ''
+      username=${config.sops.placeholder."gitea-storage-username"}
+      password=${config.sops.placeholder."gitea-storage-password"}
+    '';
+    mode = "0400";
+  };
+
   security.acme.certs = {
     "${host}.${config.soft-secrets.networking.domain}" = {
       domain = "${host}.${config.soft-secrets.networking.domain}";
