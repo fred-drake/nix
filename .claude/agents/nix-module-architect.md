@@ -17,8 +17,9 @@ infrastructure repository.
 
 - `modules/nixos/` — NixOS modules, with per-host configs in `modules/nixos/host/<hostname>/`
 - `modules/home-manager/` — Home Manager modules, per-host in `modules/home-manager/host/`
-- `systems/nixos.nix` — NixOS system definitions
-- `systems/darwin.nix` — nix-darwin system definitions
+- `modules/hosts/nixos.nix` — NixOS system definitions
+- `modules/hosts/darwin.nix` — nix-darwin system definitions
+- `modules/features/` — Deferred feature modules (flake-parts level)
 - `apps/` — Custom packages and derivations
 - `overlays/` — Package overlays
 

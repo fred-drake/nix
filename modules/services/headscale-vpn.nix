@@ -4,9 +4,10 @@
   proxyPort = "8080";
 in {
   imports = [
-    ../secrets/cloudflare.nix
     ./nginx-acme-proxy.nix
   ];
+
+  sops.age.sshKeyPaths = ["/home/default/id_infrastructure"];
 
   security.acme.certs = {
     "${host}.${domain}" = {

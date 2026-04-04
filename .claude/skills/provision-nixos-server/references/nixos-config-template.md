@@ -111,26 +111,26 @@
 }
 ```
 
-## Secrets Module: modules/secrets/<hostname>.nix
+## Secrets (colocated in service modules)
+
+Secrets are declared directly in service modules (`modules/services/<appname>.nix`),
+not in separate files. Example pattern:
 
 ```nix
-{config, ...}: {
-  sops = {
-    age.sshKeyPaths = ["/home/default/id_infrastructure"];
-    defaultSopsFile = config.secrets.sopsYaml;
-    secrets = {
-      # Add secrets as needed, e.g.:
-      postgresql-env = {
-        sopsFile = config.secrets.host.<hostname>.postgresql-env;
-        mode = "0400";
-        key = "data";
-      };
-      <appname>-env = {
-        sopsFile = config.secrets.host.<hostname>.<appname>-env;
-        mode = "0400";
-        key = "data";
-      };
+# Inside modules/services/<appname>.nix
+sops = {
+  defaultSopsFile = config.secrets.sopsYaml;
+  secrets = {
+    postgresql-env = {
+      sopsFile = config.secrets.host.<hostname>.postgresql-env;
+      mode = "0400";
+      key = "data";
+    };
+    <appname>-env = {
+      sopsFile = config.secrets.host.<hostname>.<appname>-env;
+      mode = "0400";
+      key = "data";
     };
   };
-}
+};
 ```

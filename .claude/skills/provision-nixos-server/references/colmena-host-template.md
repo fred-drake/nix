@@ -26,7 +26,6 @@ in {
       "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
       ../../modules/nixos
       ../../modules/nixos/host/<hostname>/configuration.nix
-      ../../modules/secrets/cloudflare.nix  # If using nginx with SSL
     ];
     deployment = {
       buildOnTarget = false;
@@ -48,8 +47,7 @@ in {
   in {
     imports = [
       self.colmena._<hostname>
-      ../../modules/secrets/<hostname>.nix
-      ../../apps/<appname>.nix
+      ../../modules/services/<appname>.nix
       (nodeExporter.mkNodeExporter "<hostname>")
     ];
 

@@ -115,7 +115,7 @@ colmena apply --on <hostname> --impure
 | WSL common modules | `colmena/wsl-common/` |
 | NixOS host configs | `modules/nixos/host/<hostname>/configuration.nix` |
 | Application configs | `apps/<appname>.nix` |
-| Secrets configs | `modules/secrets/<hostname>.nix` |
+| Service modules (incl. secrets) | `modules/services/<service>.nix` |
 | Container image SHAs | `apps/fetcher/containers-sha.nix` |
 | Container definitions | `apps/fetcher/containers.toml` |
 

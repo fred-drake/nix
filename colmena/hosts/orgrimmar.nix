@@ -49,7 +49,6 @@ in {
   in {
     imports = [
       self.colmena._orgrimmar
-      ../../modules/secrets/cloudflare.nix
       ../../modules/services/resume.nix
       ../../modules/services/woodpecker-ci.nix
       ../../modules/services/gitea.nix

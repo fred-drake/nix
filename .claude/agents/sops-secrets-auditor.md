@@ -19,12 +19,12 @@ that uses sops-nix for declarative secret management.
 1. **Secret definitions**: Encrypted in a private `nix-secrets` repo (flake input `secrets`)
 2. **Secret references**: NixOS modules reference secrets via `config.sops.secrets.<name>`
 3. **Secret templates**: SOPS templates in `modules/home-manager/features/claude-code.nix` and
-   `modules/secrets/` inject secrets into config files at activation time
+   service modules (`modules/services/`) inject secrets into config files at activation time
 4. **MCP servers**: Each MCP server gets secrets via individual JSON files in `~/mcp/`
 
 ## Key Files
 
-- `modules/secrets/` — Secret-related module configurations
+- `modules/services/` — Service modules with colocated sops secret declarations
 - `modules/home-manager/features/secrets.nix` — Home Manager secret references
 - `modules/home-manager/features/claude-code.nix` — MCP server secret templates
 - `flake.nix` — `secrets` input definition (git+ssh)

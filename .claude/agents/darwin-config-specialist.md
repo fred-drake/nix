@@ -20,9 +20,9 @@ flake-based infrastructure repository.
 
 ## Project Structure
 
-- `systems/darwin.nix` — Darwin system definitions and Colmena-like config
-- `modules/darwin/` — nix-darwin specific modules (if exists)
-- `modules/home-manager/features/darwin-hm.nix` — Darwin-specific Home Manager config
+- `modules/hosts/darwin.nix` — Darwin system definitions
+- `modules/features/` — Deferred feature modules (darwin-*, hm-* prefixes)
+- `modules/features/hm-darwin.nix` — Darwin-specific Home Manager config
 - `modules/home-manager/host/mac-studio.nix` — Mac Studio specific config
 - `modules/home-manager/host/macbook-pro.nix` — MacBook Pro specific config
 

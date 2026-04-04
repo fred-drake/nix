@@ -104,9 +104,10 @@ Create `apps/<appname>.nix` with:
 - Application container(s)
 - tmpfiles rules for data directories
 
-### Create Secrets Config
+### Add Secrets to Service Module
 
-Create `modules/secrets/<hostname>.nix` referencing SOPS files.
+Add `sops.secrets` declarations directly in the service module
+(`modules/services/<appname>.nix`), colocated with the service config.
 
 User must create SOPS files in secrets repo with:
 - `postgresql-env.sops` (POSTGRES_PASSWORD, POSTGRES_USER, POSTGRES_DB)
@@ -116,8 +117,7 @@ User must create SOPS files in secrets repo with:
 
 In `colmena/hosts/<hostname>.nix`, add to full configuration imports:
 ```nix
-../../modules/secrets/<hostname>.nix
-../../apps/<appname>.nix
+../../modules/services/<appname>.nix
 ```
 
 ## Step 8: Deploy Full Configuration
