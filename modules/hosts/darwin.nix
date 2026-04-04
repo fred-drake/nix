@@ -8,6 +8,10 @@
   root = ../..;
   infra = import ../../lib/darwin-infra.nix {inherit inputs config root;};
   mkHomeManager = import ../../lib/mk-home-manager.nix {inherit inputs;};
+  darwinPkgs = import ../../lib/mkPkgs.nix {
+    inherit inputs;
+    system = "aarch64-darwin";
+  };
   inherit (infra) mkDarwinSystem deferredHmModules;
 in {
   flake.darwinConfigurations = {
@@ -17,6 +21,7 @@ in {
         {
           home-manager = mkHomeManager {
             hostName = "mac-studio";
+            pkgsStable = darwinPkgs.pkgsStable;
             deferredHomeManagerModules = deferredHmModules;
             imports = [
               (root + "/modules/home-manager/host/mac-studio.nix")
@@ -32,6 +37,7 @@ in {
         {
           home-manager = mkHomeManager {
             hostName = "macbook-pro";
+            pkgsStable = darwinPkgs.pkgsStable;
             deferredHomeManagerModules = deferredHmModules;
             imports = [
               (root + "/modules/home-manager/host/macbook-pro.nix")
@@ -48,6 +54,7 @@ in {
         {
           home-manager = mkHomeManager {
             hostName = "laisas-mac-mini";
+            pkgsStable = darwinPkgs.pkgsStable;
             deferredHomeManagerModules = deferredHmModules;
             imports = [];
           };

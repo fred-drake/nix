@@ -1,6 +1,5 @@
 {
   pkgs,
-  inputs,
   config,
   lib,
   osConfig ? {},
@@ -313,7 +312,7 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".hyprland;
+      package = pkgs.hyprland-packages.hyprland;
 
       portalPackage = pkgs.xdg-desktop-portal-hyprland;
 

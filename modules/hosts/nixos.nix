@@ -24,9 +24,6 @@ in {
     macbookx86 = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       pkgs = x86Pkgs.pkgs;
-      specialArgs = {
-        inherit inputs;
-      };
       modules =
         commonModules
         ++ [
@@ -44,6 +41,7 @@ in {
           {
             home-manager = mkHomeManager {
               hostName = "macbookx86";
+              pkgsStable = x86Pkgs.pkgsStable;
               deferredHomeManagerModules = deferredHmModules;
               imports = [];
             };
@@ -67,7 +65,6 @@ in {
           ];
       };
       specialArgs = {
-        inherit inputs;
         inherit (x86Pkgs) pkgsCuda pkgsUnstable pkgsStable;
       };
       modules =
@@ -92,6 +89,7 @@ in {
           {
             home-manager = mkHomeManager {
               hostName = "fredpc";
+              pkgsStable = x86Pkgs.pkgsStable;
               deferredHomeManagerModules = deferredHmModules;
               imports = [
                 (root + "/modules/home-manager/host/fredpc.nix")
@@ -107,8 +105,6 @@ in {
         overlays = [inputs.nix4vscode.overlays.forVscode];
       };
       specialArgs = {
-        inherit inputs;
-        secrets = inputs.secrets;
         # Note: nixosaarch64vm uses x86_64-linux pkgs for unstable/stable
         # with cudaSupport — preserving existing behavior (see plan N6/R6)
         pkgsUnstable = x86Pkgs.mkPkgs inputs.nixpkgs-unstable {cudaSupport = true;};
@@ -125,6 +121,7 @@ in {
           {
             home-manager = mkHomeManager {
               hostName = "nixosaarch64vm";
+              pkgsStable = aarch64Pkgs.pkgsStable;
               deferredHomeManagerModules = deferredHmModules;
             };
           }

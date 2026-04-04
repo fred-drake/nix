@@ -57,7 +57,6 @@
       inherit system;
       pkgs = allPkgs.pkgs;
       specialArgs = {
-        inherit inputs;
         inherit (allPkgs) pkgsUnstable pkgsStable pkgsFredTesting pkgsFredUnstable;
       };
       modules =

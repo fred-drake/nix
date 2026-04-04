@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   pkgsCuda,
   pkgsUnstable,
@@ -81,7 +80,7 @@ in {
     bindfs
     file
     git
-    inputs.zen-browser.packages."x86_64-linux".default
+    zen-browser
     ghostty
     alsa-tools
     alsa-utils

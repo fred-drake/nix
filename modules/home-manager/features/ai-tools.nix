@@ -1,17 +1,8 @@
 {
   pkgs,
-  inputs,
+  pkgsStable ? pkgs,
   ...
 }: let
-  # Use centralized mkPkgs for stable channel to avoid npm 10+ ENOTCACHED
-  # issues with tdd-guard. This uses the same overlays and config as all
-  # other pkgsStable instantiations.
-  pkgsStable =
-    (import ../../../lib/mkPkgs.nix {
-      inherit inputs;
-      inherit (pkgs.stdenv.hostPlatform) system;
-    })
-  .pkgsStable;
   ccstatusline = pkgs.callPackage ../../../apps/ccstatusline.nix {
     npm-packages = import ../../../apps/fetcher/npm-packages.nix;
   };

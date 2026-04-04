@@ -2,9 +2,11 @@
 # Called by modules/hosts/nixos.nix and modules/hosts/darwin.nix.
 {inputs}: let
   myOptionsModule = import ./my-options-module.nix;
+  inherit (inputs) sops-nix secrets nixvim nix-index-database;
 in
   {
     hostName,
+    pkgsStable ? null,
     imports ? [],
     deferredHomeManagerModules ? [],
   }: {
@@ -14,11 +16,11 @@ in
     users.fdrake.imports =
       [
         ../modules/home-manager
-        inputs.sops-nix.homeManagerModules.sops
-        inputs.secrets.nixosModules.soft-secrets
-        inputs.secrets.nixosModules.secrets
-        inputs.nixvim.homeModules.nixvim
-        inputs.nix-index-database.homeModules.nix-index
+        sops-nix.homeManagerModules.sops
+        secrets.nixosModules.soft-secrets
+        secrets.nixosModules.secrets
+        nixvim.homeModules.nixvim
+        nix-index-database.homeModules.nix-index
         myOptionsModule
         {
           my.hostName = hostName;
@@ -26,7 +28,11 @@ in
       ]
       ++ imports
       ++ deferredHomeManagerModules;
-    extraSpecialArgs = {
-      inherit inputs;
-    };
+    extraSpecialArgs =
+      {}
+      // (
+        if pkgsStable != null
+        then {inherit pkgsStable;}
+        else {}
+      );
   }

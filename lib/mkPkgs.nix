@@ -4,9 +4,21 @@
   inputs,
   system,
 }: let
-  baseOverlays = [
-    (import ../overlays/default.nix {inherit inputs;})
+  # Overlays that expose flake-input packages through pkgs, so modules
+  # never need `inputs` in their function arguments.
+  inputPackageOverlays = [
+    (_final: _prev: {
+      hyprland-packages = inputs.hyprland.packages.${system};
+      rose-pine-hyprcursor = inputs.rose-pine-hyprcursor.packages.${system}.default;
+      zen-browser = inputs.zen-browser.packages.${system}.default;
+      firefox-addons = inputs.firefox-addons.packages.${system};
+    })
   ];
+  baseOverlays =
+    [
+      (import ../overlays/default.nix {inherit inputs;})
+    ]
+    ++ inputPackageOverlays;
   vscodeOverlays =
     baseOverlays
     ++ [
