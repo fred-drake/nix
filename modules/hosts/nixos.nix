@@ -28,6 +28,7 @@ in {
         ++ [
           {
             my.hostName = "macbookx86";
+            my.isWorkstation = true;
             my.hasDesktop = true;
             my.hasGnome = true;
             my.hasPipewire = true;

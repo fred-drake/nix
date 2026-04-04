@@ -3,13 +3,18 @@
   inputs,
   config,
   lib,
+  osConfig ? {},
   ...
 }: let
   home = config.home.homeDirectory;
+  # Use osConfig (parent NixOS/Darwin config) for capability flags when
+  # running under a system manager. Falls back to HM-level config.my
+  # for standalone HM usage.
+  hasHyprland = (osConfig.my or {}).hasHyprland or config.my.hasHyprland;
   # spotifatius = pkgs.callPackage ./spotifatius.nix {};  # Temporarily disabled due to CMake build issues
   # ccusage-waybar = pkgs.callPackage ./waybar/ccusage-waybar.nix {};  # Moved to tmux status bar
 in
-  lib.mkIf config.my.hasHyprland {
+  lib.mkIf hasHyprland {
     # sops.secrets.spotifatius-env = {
     #   sopsFile = config.secrets.workstation.spotifatius-env;
     #   mode = "0400";
