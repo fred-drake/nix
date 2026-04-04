@@ -249,31 +249,57 @@ just update-secrets
 
 ### Code Organization
 
-- Repository structure follows a clear hierarchy:
-  - `flake.nix` - Entry point defining all systems
-  - `modules/` - Reusable configuration modules
-  - `apps/` - Application-specific configurations
-  - `colmena/` - Remote server deployment definitions
-  - `systems/` - System builder functions
-  - `lib/` - Helper functions
+The repository uses a **dendritic pattern** built on flake-parts and
+import-tree. Feature modules self-register into deferred module containers
+and are applied to systems automatically.
+
+- Repository structure:
+  - `flake.nix` - Entry point: flake-parts + import-tree
+  - `lib/` - Pure helpers: pkgs factory, capability flags, infra builders
+  - `modules/features/` - Cross-cutting dendritic features (flake-parts modules)
+  - `modules/services/` - Server service modules (NixOS, with inline secrets)
+  - `modules/hosts/` - Host definitions (nixos.nix, darwin.nix)
+  - `modules/infra/` - Flake-parts plumbing (colmena, devshell, pkgs, systems)
+  - `modules/home-manager/` - HM feature implementations + host overrides
+  - `modules/darwin/` - Darwin feature implementations + per-host dirs
+  - `modules/nixos/` - NixOS per-host configs (thin)
+  - `colmena/` - Per-host deployment files + hetzner-common, wsl-common
+  - `apps/` - Custom packages and derivations
 
 ### Module Pattern
 
-All modules follow this structure:
+**Feature modules** (`modules/features/`) are flake-parts modules that
+register deferred NixOS, Darwin, or Home Manager modules:
 ```nix
-{ config, lib, pkgs, ... }:
-with lib;
-{
-  options = { /* module options */ };
-  config = mkIf config.module.enable { /* implementation */ };
+{ lib, ... }: {
+  flake.my.modules.nixos = [
+    ({ config, pkgs, ... }: lib.mkIf config.my.hasDesktop {
+      # configuration here
+    })
+  ];
 }
 ```
 
+**Service modules** (`modules/services/`) are standard NixOS modules that
+own their sops.secrets, nginx vhosts, containers, and systemd units:
+```nix
+{ config, lib, pkgs, ... }: {
+  sops.secrets."service/key" = { /* ... */ };
+  services.nginx.virtualHosts."service.example.com" = { /* ... */ };
+}
+```
+
+**Capability flags** (`lib/my-options-module.nix`) allow features to guard
+on host capabilities: `config.my.hasDesktop`, `config.my.hasNvidia`,
+`config.my.isServer`, etc.
+
 ### Helper Functions
 
-- `lib.mkHomeManager` - Creates home-manager configurations
-- `mkDarwinSystem` - Builds Darwin systems with standard setup
-- `mkColmenaSystem` - Defines remote deployments
+- `lib/mkPkgs.nix` - Centralized pkgs factory (all overlays, cudaSupport)
+- `lib/my-options-module.nix` - Shared capability flag options
+- `lib/nixos-infra.nix` - NixOS commonModules + deferredModule collection
+- `lib/darwin-infra.nix` - Darwin commonModules + mkDarwinSystem builder
+- `lib/mk-home-manager.nix` - Home Manager attrset builder
 
 ### Tooling
 
@@ -294,15 +320,19 @@ with lib;
 ## Common Workflows
 
 ### Adding a new package to home-manager
-1. Edit relevant module in `modules/home-manager/`
+1. Edit or create a feature module in `modules/home-manager/features/`
 2. Add package to `home.packages` or appropriate program config
-3. Run `just switch` to apply
+3. If creating a new feature, register it via a flake-parts module in
+   `modules/features/hm-*.nix`
+4. Run `just switch` to apply
 
 ### Creating a new service module
-1. Create module file in appropriate directory
-2. Follow existing module patterns
-3. Import in relevant system configuration
-4. Add to git before building: `git add path/to/module.nix`
+1. Create module file in `modules/services/`
+2. Define sops.secrets, nginx vhosts, and service config inline
+3. Use `modules/services/nginx-acme-proxy.nix` for shared NGINX/ACME
+   boilerplate
+4. Import in the relevant colmena host file under `colmena/hosts/`
+5. Add to git before building: `git add path/to/module.nix`
 
 ### Updating a container version
 1. Change container tag in configuration

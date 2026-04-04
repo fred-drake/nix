@@ -10,17 +10,25 @@ This is a Nix flake-based configuration repository managing:
 
 ### Key Directories
 
+- `lib/` - Helper functions: `mkPkgs.nix` (centralized pkgs factory),
+  `my-options-module.nix` (capability flags), `nixos-infra.nix`,
+  `darwin-infra.nix`, `mk-home-manager.nix`
+- `modules/features/` - Dendritic feature modules (flake-parts, self-registering)
+- `modules/services/` - NixOS server service modules (with inline sops secrets)
+- `modules/hosts/` - Host definitions (`nixos.nix`, `darwin.nix`)
+- `modules/infra/` - Flake-parts plumbing (colmena, devshell, pkgs, systems)
+- `modules/home-manager/` - Home Manager feature implementations + host overrides
+- `modules/darwin/` - Darwin feature implementations + per-host dirs
+- `modules/nixos/` - NixOS per-host configs (thin)
+- `colmena/` - Per-host deployment files + hetzner-common, wsl-common
 - `apps/` - Custom packages and Claude Code configurations
-- `modules/` - NixOS and Home Manager modules
-- `modules/infra/` - Flake-parts infrastructure modules
-- `modules/home-manager/features/` - Home Manager feature modules
-- `modules/darwin/features/` - Darwin feature modules
 - `homefiles/` - Dotfiles and home directory configurations
-- `overlays/` - Nix package overlays
+- `overlays/` - Package overlays
 
 ## Claude Code Configuration
 
-Claude Code is configured declaratively via Nix in `modules/home-manager/features/claude-code.nix`.
+Claude Code is configured declaratively via Nix in
+`modules/home-manager/features/claude-code.nix`.
 
 ### Structure
 

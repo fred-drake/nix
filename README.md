@@ -2,16 +2,28 @@
 
 ## Overview
 
-This repository contains Nix configurations for managing both personal workstations and homelab infrastructure. It serves as the single source of truth for all system configurations, ensuring consistency, reproducibility, and maintainability across all environments.
+This repository contains Nix configurations for managing both personal
+workstations and homelab infrastructure. It serves as the single source of
+truth for all system configurations, ensuring consistency, reproducibility,
+and maintainability across all environments.
 
 ## System Architecture
+
+### Dendritic Feature Pattern
+
+The repository uses a **dendritic pattern** powered by flake-parts and
+import-tree. Feature modules in `modules/features/` self-register into
+deferred module containers (`my.modules.nixos`, `my.modules.darwin`,
+`my.modules.home-manager`), which are then applied to the appropriate
+systems automatically. Capability flags (`config.my.hasDesktop`,
+`config.my.hasNvidia`, etc.) allow features to guard their configuration
+with `mkIf`, so a single feature module works across all hosts.
 
 ### Workstations
 
 - **macOS Workstations**: Managed via nix-darwin
   - `mac-studio`
   - `macbook-pro`
-  - `laisas-mac-mini`
 - **Linux Workstations**:
   - `fredpc` (x86_64-linux with GUI, NVIDIA CUDA support, glance dashboard)
   - `anton` (x86_64-linux WSL on Windows, gaming and AI processing)
@@ -25,9 +37,53 @@ This repository contains Nix configurations for managing both personal workstati
   - `nixosaarch64vm`: Builds aarch64-linux configurations
 - **Infrastructure Services** (Managed via Colmena):
   - `headscale`: VPN coordination
-  - `ironforge`: Multi-service host (nixarr with jellyfin, jellyseerr, sonarr, radarr, prowlarr, sabnzbd, bazarr, lidarr)
-  - `orgrimmar`: Multi-service host (gitea, woodpecker, paperless, calibre, resume)
+  - `ironforge`: Multi-service host (nixarr with jellyfin, jellyseerr,
+    sonarr, radarr, prowlarr, sabnzbd, bazarr, lidarr)
+  - `orgrimmar`: Multi-service host (gitea, woodpecker, paperless,
+    calibre, resume)
   - `anton`: WSL NixOS on Windows laptop (gaming and AI processing)
+
+## Project Structure
+
+```
+flake.nix                    # Entry point: flake-parts + import-tree
+lib/
+  mkPkgs.nix                # Centralized pkgs factory (all overlays, cudaSupport)
+  my-options-module.nix      # Shared capability flags (hasDesktop, hasNvidia, etc.)
+  nixos-infra.nix            # NixOS commonModules + deferredModule collection
+  darwin-infra.nix           # Darwin commonModules + mkDarwinSystem builder
+  mk-home-manager.nix        # Home Manager attrset builder
+modules/
+  features/                  # Cross-cutting dendritic features (flake-parts modules)
+                             # hm-*, darwin-*, and NixOS features using deferredModules
+  services/                  # Server service modules (NixOS, with inline secrets)
+  hosts/                     # Host definitions (nixos.nix, darwin.nix)
+  infra/                     # Flake-parts plumbing (colmena, devshell, pkgs, etc.)
+  home-manager/              # HM feature implementations + host overrides
+  darwin/                    # Darwin feature implementations + per-host dirs
+  nixos/                     # NixOS per-host configs (thin)
+colmena/                     # Colmena host files + hetzner-common, wsl-common
+apps/                        # Custom packages (claude-code, fetchers, etc.)
+homefiles/                   # Raw dotfiles and config files
+overlays/                    # Package overlays
+```
+
+### Layer Responsibilities
+
+- **`modules/features/`** — Flake-parts modules that register deferred
+  NixOS, Darwin, or Home Manager modules. Each feature is self-contained
+  and guards on capability flags.
+- **`modules/services/`** — NixOS service modules for servers. Each owns
+  its sops.secrets inline and defines a complete service (nginx, containers,
+  systemd units).
+- **`modules/hosts/`** — Host definitions that map hostnames to their
+  system type, capability flags, and per-host overrides.
+- **`modules/infra/`** — Flake-parts plumbing: pkgs instantiation,
+  devshell, colmena config, system builders.
+- **`lib/`** — Pure helper functions: centralized pkgs factory, capability
+  flag options, infrastructure builders.
+- **`colmena/`** — Per-host deployment files plus shared config
+  (hetzner-common, wsl-common).
 
 ## Network Overview
 
@@ -45,17 +101,23 @@ The infrastructure uses multiple VLANs for security and organization:
 3. **Homebrew** installed for package management
 4. **Git** for version control
 
-> **Note**: The `id_ed25519` key is used for personal secrets and must be properly secured with 600 permissions.
+> **Note**: The `id_ed25519` key is used for personal secrets and must be
+> properly secured with 600 permissions.
 
 ## Development Environment
 
-This repository uses [devenv](https://devenv.sh/) to provide a consistent development environment. The `devenv.nix` file contains all the libraries and helper scripts needed for processing this repository.
+This repository uses [devenv](https://devenv.sh/) to provide a consistent
+development environment. The `devenv.nix` file contains all the libraries
+and helper scripts needed for processing this repository.
 
 ### Features Provided by devenv
 
-- **Development Tools**: Includes tools like `colmena`, `just`, `alejandra`, `statix`, and other utilities
-- **Helper Scripts**: Automated scripts for updating NPM packages, container digests, fetcher repos, and more
-- **Consistent Environment**: Ensures all contributors have the same tooling and dependencies
+- **Development Tools**: Includes tools like `colmena`, `just`,
+  `alejandra`, `statix`, and other utilities
+- **Helper Scripts**: Automated scripts for updating NPM packages,
+  container digests, fetcher repos, and more
+- **Consistent Environment**: Ensures all contributors have the same
+  tooling and dependencies
 
 ### Using devenv
 
@@ -66,9 +128,13 @@ cd ~/nix
 devenv shell
 ```
 
-This will load all the tools and environment variables defined in `devenv.nix`. Once inside the environment, you can use the helper scripts and tools without additional installation.
+This will load all the tools and environment variables defined in
+`devenv.nix`. Once inside the environment, you can use the helper scripts
+and tools without additional installation.
 
-If you have [direnv](https://direnv.net/) installed and configured, the development environment will be automatically activated when you enter the repository directory.
+If you have [direnv](https://direnv.net/) installed and configured, the
+development environment will be automatically activated when you enter the
+repository directory.
 
 ## Just Targets
 
@@ -76,10 +142,12 @@ This project uses `just` for task automation. Here are the available targets:
 
 - `switch` - Switches the system to the current configuration
 - `build` - Builds the system in its current form
-- `update-all` - Updates everything (runs update, update-npm-packages, update-repos, update-container-digests, and update-secrets)
+- `update-all` - Updates everything (runs update, update-npm-packages,
+  update-repos, update-container-digests, and update-secrets)
 - `update` - Updates input definitions from remote resources
 - `update-npm-packages` - Updates NPM packages
-- `update-repos` - Pulls the latest hashes and shas from the repos in `apps/fetcher/repos.toml`
+- `update-repos` - Pulls the latest hashes and shas from the repos in
+  `apps/fetcher/repos.toml`
 - `update-container-digests` - Updates the SHA digests of container images
 - `update-secrets` - Updates the secrets flake
 - `format` - Format all .nix files with alejandra
@@ -119,7 +187,6 @@ This project uses Podman for container runtime with the following practices:
 4. Build the flake for your system. This will take a while the first time.
    - Macbook Pro: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.macbook-pro.system`
    - Mac Studio: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.mac-studio.system`
-   - My better half's Mac Mini: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.laisas-mac-mini.system`
    - Linux PC: `nix --extra-experimental-features "nix-command flakes" build .#nixosConfigurations.fredpc.system`
 
 ## Key Management
@@ -140,15 +207,22 @@ This project uses Podman for container runtime with the following practices:
 
 ### Code Organization
 
-- **Modular Design**: Configurations are broken into reusable modules
-- **DRY Principle**: Common patterns are extracted into functions
-- **Naming**: Descriptive and consistent naming conventions are used throughout
+- **Dendritic Pattern**: Features self-register via flake-parts deferred
+  modules, so adding a feature to one platform does not require editing
+  host definitions
+- **Capability Flags**: Shared options (`config.my.hasDesktop`, etc.) let
+  features guard their config with `mkIf`
+- **Centralized Packages**: `lib/mkPkgs.nix` is the single source of
+  truth for overlays and package sets
+- **DRY Principle**: Common patterns are extracted into `lib/` helpers and
+  shared service modules in `modules/services/`
 
 ### Nix Best Practices
 
 - **Package References**: Use `outPath` for symlinks to package locations
 - **VS Code Extensions**: Managed through Home Manager configuration
-- **Remote Deployment**: Colmena is used for managing remote server configurations
+- **Remote Deployment**: Colmena is used for managing remote server
+  configurations
 
 ## Getting Help
 
@@ -160,15 +234,21 @@ For assistance with Nix configurations:
 ## Final Steps
 
 ### For macOS systems:
-1. Run the initial switch into the flake. This will take a long while the first time: `./result/sw/bin/darwin-rebuild switch --flake ~/nix`
+1. Run the initial switch into the flake. This will take a long while the
+   first time: `./result/sw/bin/darwin-rebuild switch --flake ~/nix`
 2. Reboot the machine to ensure all Mac settings were applied.
 
 ### For NixOS systems:
-1. Run the initial switch into the flake: `sudo nixos-rebuild switch --flake ~/nix`
+1. Run the initial switch into the flake:
+   `sudo nixos-rebuild switch --flake ~/nix`
 2. Reboot if needed for hardware changes.
 
 ## Post-setup That Can't Be Automated Yet
 
-1. Allow Apple Watch to be unlock the computer or sudo: `Settings -> Touch ID & Password -> Use Apple Watch to unlock applications and your Mac`
+1. Allow Apple Watch to unlock the computer or sudo:
+   `Settings -> Touch ID & Password -> Use Apple Watch to unlock
+   applications and your Mac`
 2. Open Raycast and import configuration from iCloud Drive
-3. Disable spotlight search: `Settings -> Keyboard shortcuts -> Disable Spotlight Search`. Raycast will now be the default search tool when hitting Cmd+Space.
+3. Disable spotlight search:
+   `Settings -> Keyboard shortcuts -> Disable Spotlight Search`. Raycast
+   will now be the default search tool when hitting Cmd+Space.

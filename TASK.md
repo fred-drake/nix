@@ -26,15 +26,15 @@ This file tracks active tasks, backlog, and milestones for the Nix configuration
 
 ### Code Refactoring
 
-- [ ] Extract NGINX/ACME boilerplate into `lib/mk-nginx-proxy.nix` helper function
-  - Affects: gitea, woodpecker, resume, paperless, calibre, nixarr services
-  - Benefits: DRY principle, easier SSL management, consistent proxy configuration
+- [x] Extract NGINX/ACME boilerplate into shared module
+  - Implemented as `modules/services/nginx-acme-proxy.nix`
+  - Used by gitea, woodpecker, resume, paperless, calibre, nixarr services
 - [ ] Create `lib/mk-container-service.nix` for standardized container management
   - Add health checks, restart policies, resource limits
   - Standardize container network configuration
-- [ ] Extract common user configuration into shared module
-  - Deduplicate `extraGroups` across all NixOS hosts
-  - Centralize SSH key management
+- [x] Extract common user configuration into shared module
+  - Implemented via `lib/my-options-module.nix` capability flags
+  - Features guard on `config.my.hasDesktop`, `config.my.hasNvidia`, etc.
 
 ### Security Improvements
 
@@ -130,7 +130,8 @@ This file tracks active tasks, backlog, and milestones for the Nix configuration
 - [x] Fix Touch ID configuration in `darwin/default.nix` (currently commented out)
 - [ ] Standardize nixpkgs channel usage across all hosts
 - [ ] Clean up deprecated configurations
-- [ ] Refactor legacy module structures
+- [x] Refactor legacy module structures — completed via dendritic pattern
+  (flake-parts + import-tree, deferred modules, capability flags)
 - [ ] Remove unused dependencies
 
 ## Completed Tasks
