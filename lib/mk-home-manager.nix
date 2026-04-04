@@ -26,8 +26,8 @@ in
       ]
       ++ imports
       ++ deferredHomeManagerModules;
-    # Kept for backwards compatibility — downstream HM modules still reference
-    # these. Will be removed when features are migrated in Phase 2.
+    # Kept for backwards compatibility — some HM feature modules still
+    # reference inputs/secrets/hostArgs from extraSpecialArgs.
     extraSpecialArgs = {
       inherit inputs;
       secrets = inputs.secrets;

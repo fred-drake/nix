@@ -41,9 +41,7 @@ in {
             home-manager = mkHomeManager {
               hostName = "macbookx86";
               deferredHomeManagerModules = deferredHmModules;
-              imports = [
-                (root + "/modules/home-manager/features/linux-apps.nix")
-              ];
+              imports = [];
             };
           }
         ];

@@ -1,8 +1,10 @@
 {
   inputs,
+  lib,
   pkgs,
   ...
-}: {
+}:
+lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
   dconf = {
     enable = true;
     settings = {

@@ -1,4 +1,9 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}:
+lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
   home = {
     file = {
       ".finicky.js" = {source = ../../../homefiles/finicky.js;};

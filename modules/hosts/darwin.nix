@@ -19,7 +19,6 @@ in {
             hostName = "mac-studio";
             deferredHomeManagerModules = deferredHmModules;
             imports = [
-              (root + "/modules/home-manager/features/darwin-hm.nix")
               (root + "/modules/home-manager/host/mac-studio.nix")
             ];
           };
@@ -35,7 +34,6 @@ in {
             hostName = "macbook-pro";
             deferredHomeManagerModules = deferredHmModules;
             imports = [
-              (root + "/modules/home-manager/features/darwin-hm.nix")
               (root + "/modules/home-manager/host/macbook-pro.nix")
             ];
           };
@@ -51,9 +49,7 @@ in {
           home-manager = mkHomeManager {
             hostName = "laisas-mac-mini";
             deferredHomeManagerModules = deferredHmModules;
-            imports = [
-              (root + "/modules/home-manager/features/darwin-hm.nix")
-            ];
+            imports = [];
           };
         }
       ];
