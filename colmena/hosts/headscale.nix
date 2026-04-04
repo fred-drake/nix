@@ -43,7 +43,8 @@ in {
   in {
     imports = [
       self.colmena._headscale
-      ../../modules/nixos/host/headscale/tailscale-client.nix
+      ../../modules/services/headscale-vpn.nix
+      ../../modules/services/tailscale-client.nix
       (nodeExporter.mkNodeExporter "headscale")
     ];
 

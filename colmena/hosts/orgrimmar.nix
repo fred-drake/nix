@@ -50,11 +50,11 @@ in {
     imports = [
       self.colmena._orgrimmar
       ../../modules/secrets/orgrimmar.nix
-      ../../modules/nixos/host/orgrimmar/resume.nix
-      ../../modules/nixos/host/orgrimmar/woodpecker.nix
-      ../../modules/nixos/host/orgrimmar/gitea.nix
-      ../../modules/nixos/host/orgrimmar/paperless.nix
-      ../../modules/nixos/host/orgrimmar/calibre.nix
+      ../../modules/services/resume.nix
+      ../../modules/services/woodpecker-ci.nix
+      ../../modules/services/gitea.nix
+      ../../modules/services/paperless.nix
+      ../../modules/services/calibre.nix
       (nodeExporter.mkNodeExporter "orgrimmar")
     ];
 

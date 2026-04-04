@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};
+  containers-sha = import ../../apps/fetcher/containers-sha.nix {inherit pkgs;};
   host = "gitea";
   proxyPort = "3001";
 in {

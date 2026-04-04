@@ -4,43 +4,31 @@
   proxyPort = "8080";
 in {
   imports = [
-    ../../../secrets/cloudflare.nix
+    ../secrets/cloudflare.nix
+    ./nginx-acme-proxy.nix
   ];
 
-  security = {
-    acme = {
-      acceptTerms = true;
-      defaults = {
-        inherit (config.soft-secrets.acme) email;
-        dnsProvider = "cloudflare";
-        environmentFile = config.sops.secrets.cloudflare-api-key.path;
-      };
-      certs = {
-        "${host}.${domain}" = {
-          domain = "${host}.${domain}";
-          dnsProvider = "cloudflare";
-          dnsResolver = "1.1.1.1:53";
-          webroot = null;
-          listenHTTP = null;
-          s3Bucket = null;
-          environmentFile = config.sops.secrets.cloudflare-api-key.path;
-        };
-      };
+  security.acme.certs = {
+    "${host}.${domain}" = {
+      domain = "${host}.${domain}";
+      dnsProvider = "cloudflare";
+      dnsResolver = "1.1.1.1:53";
+      webroot = null;
+      listenHTTP = null;
+      s3Bucket = null;
+      environmentFile = config.sops.secrets.cloudflare-api-key.path;
     };
   };
 
   services = {
-    nginx = {
-      enable = true;
-      virtualHosts = {
-        "${host}.${domain}" = {
-          enableACME = true;
-          forceSSL = true;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:${proxyPort}";
-            proxyWebsockets = true;
-            recommendedProxySettings = true;
-          };
+    nginx.virtualHosts = {
+      "${host}.${domain}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${proxyPort}";
+          proxyWebsockets = true;
+          recommendedProxySettings = true;
         };
       };
     };

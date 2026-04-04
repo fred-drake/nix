@@ -64,7 +64,7 @@ in {
     imports = [
       self.colmena._ironforge
       ../../modules/secrets/ironforge.nix
-      ../../modules/nixos/host/ironforge/nixarr.nix
+      ../../modules/services/media-server.nix
       (nodeExporter.mkNodeExporter "ironforge")
     ];
 

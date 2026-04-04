@@ -9,8 +9,8 @@
   containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};
 in {
   imports = [
-    ./glance.nix
-    ./borg-backup.nix
+    ../../../services/glance-dashboard.nix
+    ../../../services/borg-backup.nix
   ];
   boot = {
     loader.grub = {

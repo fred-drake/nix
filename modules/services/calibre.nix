@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  containers-sha = import ../../../../apps/fetcher/containers-sha.nix {inherit pkgs;};
+  containers-sha = import ../../apps/fetcher/containers-sha.nix {inherit pkgs;};
   desktopPort = "8082";
   contentServerPort = "8081";
   webPort = "8083";

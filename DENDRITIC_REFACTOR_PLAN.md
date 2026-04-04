@@ -275,72 +275,29 @@ own secrets. Decompose the monolithic per-host secrets files.
 - [x] **3.4** `modules/services/podman-server.nix` — extracted shared podman
   config from ironforge and orgrimmar
 
-### Remaining — NixOS-only services (no deferredModule needed)
+### Completed — Service extraction
 
-- [ ] **3.1** Create `modules/services/nginx-acme-proxy.nix`:
-  - Reusable nginx + ACME + Cloudflare DNS validation pattern
-  - Currently duplicated across headscale, ironforge (8 services), orgrimmar
-    (5 services)
-  - Parameterized: takes domain, upstream port, optional extra config
-  - Owns the shared `cloudflare-api-key` sops secret
+- [x] **3.1** `modules/services/nginx-acme-proxy.nix` — shared ACME +
+  Cloudflare DNS + nginx defaults. Imported by ironforge, orgrimmar,
+  headscale. Uses `config.soft-secrets.acme.email` and cloudflare sops secret.
+- [x] **3.5** `modules/services/gitea.nix` — moved from orgrimmar
+- [x] **3.6** `modules/services/woodpecker-ci.nix` — moved from orgrimmar
+- [x] **3.7** `modules/services/paperless.nix` — moved from orgrimmar
+- [x] **3.8** `modules/services/calibre.nix` — moved from orgrimmar
+- [x] **3.9** `modules/services/resume.nix` — moved from orgrimmar
+- [x] **3.10** `modules/services/media-server.nix` — moved from ironforge
+- [x] **3.11** `modules/services/headscale-vpn.nix` +
+  `tailscale-client.nix` — moved from headscale
+- [x] **3.12** `modules/services/glance-dashboard.nix` +
+  `glance-config.nix` — moved from fredpc
+- [x] **3.13** `modules/services/borg-backup.nix` — moved from fredpc
 
-- [ ] **3.5** Create `modules/services/gitea.nix`:
-  - Migrate from `modules/nixos/host/orgrimmar/gitea.nix`
-  - Gitea container + CIFS storage mount + gitea-check-service
-  - **Owns its secrets**: gitea storage credentials, gitea-check-service-env
-    (extracted from `modules/secrets/orgrimmar.nix`)
+### Completed via cross-cutting features (modules/features/)
 
-- [ ] **3.6** Create `modules/services/woodpecker-ci.nix`:
-  - Migrate from `modules/nixos/host/orgrimmar/woodpecker.nix`
-  - Woodpecker server + agent + PostgreSQL + podman networking
-  - **Owns its secrets**: woodpecker-*-env (extracted from
-    `modules/secrets/orgrimmar.nix`)
-
-- [ ] **3.7** Create `modules/services/paperless.nix`:
-  - Migrate from `modules/nixos/host/orgrimmar/paperless.nix`
-  - Full stack: redis, PostgreSQL, gotenberg, tika, paperless-ai, CIFS storage
-  - **Owns its secrets**: paperless-*-env, storage credentials (extracted from
-    `modules/secrets/orgrimmar.nix`)
-
-- [ ] **3.8** Create `modules/services/calibre.nix`:
-  - Migrate from `modules/nixos/host/orgrimmar/calibre.nix`
-  - Calibre + Calibre-web containers + CIFS storage
-  - **Owns its secrets**: calibre storage credentials (extracted from
-    `modules/secrets/orgrimmar.nix`)
-
-- [ ] **3.9** Create `modules/services/resume.nix`:
-  - Migrate from `modules/nixos/host/orgrimmar/resume.nix`
-  - Reactive Resume + PostgreSQL + MinIO + Chromium containers
-  - **Owns its secrets**: postgresql-env, minio-env, chrome-env, resume-env
-    (extracted from `modules/secrets/orgrimmar.nix`)
-
-- [ ] **3.10** Create `modules/services/media-server.nix`:
-  - Migrate from `modules/nixos/host/ironforge/nixarr.nix`
-  - Full nixarr stack: jellyfin, jellyseerr, sonarr, radarr, lidarr, prowlarr,
-    bazarr, sabnzbd, recyclarr
-  - CIFS mounts (videos, downloads storage boxes)
-  - SABnzbd health check systemd service/timer
-  - **Owns its secrets**: ironforge storage credentials, sabnzbd config
-    (merges `modules/secrets/ironforge.nix` + `modules/secrets/sabnzbd.nix`)
-
-- [ ] **3.11** Create `modules/services/headscale-vpn.nix`:
-  - Migrate from `modules/nixos/host/headscale/headscale.nix` +
-    `tailscale-client.nix`
-  - Headscale coordination server + Tailscale client with subnet routing
-  - IP forwarding, NAT/masquerade for private subnet
-  - **Owns its secrets**: cloudflare-api-key (shared via nginx-acme-proxy)
-
-- [ ] **3.12** Create `modules/services/glance-dashboard.nix`:
-  - Migrate from `modules/nixos/host/fredpc/glance.nix` + `glance-config.nix`
-  - Glance dashboard with IPMI KVM container
-  - **Owns its secrets**: glance-env
-
-- [ ] **3.15** Create `modules/services/gaming.nix`:
-  - Steam, gamescope, gamemode, protonup-qt, xpadneo controller
-  - Bluetooth for controller support
-  - From `modules/nixos/host/fredpc/configuration.nix` gaming sections
-
-- [ ] **3.16** Create `modules/services/nvidia-cuda.nix`:
+- [x] **3.15** `modules/features/gaming.nix` — deferredModule, guarded by
+  `my.hasGaming`
+- [x] **3.16** `modules/features/nvidia-cuda.nix` — deferredModule, guarded
+  by `my.hasNvidia`
   - NVIDIA driver + CUDA packages
   - Shared between fredpc (full GPU) and anton (WSL passthrough)
   - Configurable: `wsl.useWindowsDriver` (anton) vs native driver (fredpc)

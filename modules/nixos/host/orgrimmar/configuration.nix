@@ -1,17 +1,8 @@
-{config, ...}: {
+_: {
   imports = [
     ../../../services/podman-server.nix
+    ../../../services/nginx-acme-proxy.nix
   ];
-
-  security.acme = {
-    acceptTerms = true;
-    preliminarySelfsigned = false;
-    defaults = {
-      inherit (config.soft-secrets.acme) email;
-      dnsProvider = "cloudflare";
-      environmentFile = config.sops.secrets.cloudflare-api-key.path;
-    };
-  };
 
   services.openssh = {
     ports = [2222];
