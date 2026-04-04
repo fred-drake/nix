@@ -9,7 +9,7 @@
   # spotifatius = pkgs.callPackage ./spotifatius.nix {};  # Temporarily disabled due to CMake build issues
   # ccusage-waybar = pkgs.callPackage ./waybar/ccusage-waybar.nix {};  # Moved to tmux status bar
 in
-  lib.mkIf (config.my.hostName == "fredpc") {
+  lib.mkIf config.my.hasHyprland {
     # sops.secrets.spotifatius-env = {
     #   sopsFile = config.secrets.workstation.spotifatius-env;
     #   mode = "0400";

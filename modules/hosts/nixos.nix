@@ -26,7 +26,12 @@ in {
       modules =
         commonModules
         ++ [
-          {my.hostName = "macbookx86";}
+          {
+            my.hostName = "macbookx86";
+            my.hasDesktop = true;
+            my.hasGnome = true;
+            my.hasPipewire = true;
+          }
           inputs.nur.nixosModules.nur
           (root + "/modules/nixos/host/macbookx86/configuration.nix")
           nixos-hardware.nixosModules.apple-t2
@@ -85,7 +90,17 @@ in {
       modules =
         commonModules
         ++ [
-          {my.hostName = "fredpc";}
+          {
+            my.hostName = "fredpc";
+            my.isWorkstation = true;
+            my.hasDesktop = true;
+            my.hasHyprland = true;
+            my.hasGnome = true;
+            my.hasNvidia = true;
+            my.hasGaming = true;
+            my.hasGpuPassthrough = true;
+            my.hasPipewire = true;
+          }
           secrets.nixosModules.secrets
           (root + "/modules/nixos")
           (root + "/modules/nixos/host/fredpc/configuration.nix")
@@ -135,7 +150,7 @@ in {
       modules =
         commonModules
         ++ [
-          {my.hostName = "nixosaarch64vm";}
+          {my.hostName = "nixosaarch64vm";} # server — all capability flags default to false
           disko.nixosModules.disko
           (root + "/modules/nixos")
           (root + "/modules/nixos/host/nixosaarch64vm/configuration.nix")

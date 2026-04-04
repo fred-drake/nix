@@ -1,5 +1,5 @@
 # Hyprland desktop feature — contributes to both NixOS and Home Manager
-# via deferredModules. Only applies to fredpc.
+# via deferredModules. Applies to hosts with my.hasHyprland = true.
 {lib, ...}: {
   # NixOS-level Hyprland config — programs, packages, session variables
   my.modules.nixos.hyprland = {
@@ -9,7 +9,7 @@
     inputs,
     ...
   }:
-    lib.mkIf (config.my.hostName == "fredpc") {
+    lib.mkIf config.my.hasHyprland {
       programs.hyprland = {
         enable = true;
         xwayland.enable = true;
