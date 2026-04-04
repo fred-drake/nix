@@ -9,19 +9,23 @@
   mkHomeManager = import ../../lib/mk-home-manager.nix {inherit inputs;};
   inherit (inputs) disko home-manager nixos-hardware secrets;
   inherit (infra) commonModules deferredHmModules;
+
+  # Centralized pkgs for each architecture
+  x86Pkgs = import ../../lib/mkPkgs.nix {
+    inherit inputs;
+    system = "x86_64-linux";
+  };
+  aarch64Pkgs = import ../../lib/mkPkgs.nix {
+    inherit inputs;
+    system = "aarch64-linux";
+  };
 in {
   flake.nixosConfigurations = {
     macbookx86 = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      pkgs = import inputs.nixpkgs {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-        overlays = [import (root + "/overlays/default.nix") {inherit inputs;}];
-      };
+      pkgs = x86Pkgs.pkgs;
       specialArgs = {
         inherit inputs;
-
-        nixpkgs = inputs.nixpkgs;
       };
       modules =
         commonModules
@@ -49,42 +53,22 @@ in {
 
     fredpc = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      pkgs = import inputs.nixpkgs {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-        overlays = [
-          (import (root + "/overlays/default.nix") {inherit inputs;})
-          inputs.nix4vscode.overlays.forVscode
-          (_: _prev: {
-            inherit
-              ((import inputs.nixpkgs-unstable {
-                system = "x86_64-linux";
-                config.allowUnfree = true;
-              }))
-              devenv
-              ;
-          })
-        ];
+      # fredpc has an extra overlay that pins devenv from nixpkgs-unstable
+      pkgs = x86Pkgs.mkPkgs inputs.nixpkgs {
+        overlays =
+          x86Pkgs.vscodeOverlays
+          ++ [
+            (_: _prev: {
+              inherit
+                (x86Pkgs.pkgsUnstable)
+                devenv
+                ;
+            })
+          ];
       };
       specialArgs = {
         inherit inputs;
-
-        nixpkgs = inputs.nixpkgs;
-        nixpkgs-unstable = inputs.nixpkgs-unstable;
-        nix4vscode = inputs.nix4vscode;
-        pkgsCuda = import inputs.nixpkgs {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-          config.cudaSupport = true;
-        };
-        pkgsUnstable = import inputs.nixpkgs-unstable {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-        };
-        pkgsStable = import inputs.nixpkgs-stable {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-        };
+        inherit (x86Pkgs) pkgsCuda pkgsUnstable pkgsStable;
       };
       modules =
         commonModules
@@ -119,32 +103,16 @@ in {
 
     nixosaarch64vm = inputs.nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
-      pkgs = import inputs.nixpkgs {
-        system = "aarch64-linux";
-        config.allowUnfree = true;
-        overlays = [
-          inputs.nix4vscode.overlays.forVscode
-        ];
+      pkgs = aarch64Pkgs.mkPkgs inputs.nixpkgs {
+        overlays = [inputs.nix4vscode.overlays.forVscode];
       };
       specialArgs = {
         inherit inputs;
-
-        nixpkgs = inputs.nixpkgs;
-        nixpkgs-unstable = inputs.nixpkgs-unstable;
-        nix4vscode = inputs.nix4vscode;
         secrets = inputs.secrets;
         # Note: nixosaarch64vm uses x86_64-linux pkgs for unstable/stable
         # with cudaSupport — preserving existing behavior (see plan N6/R6)
-        pkgsUnstable = import inputs.nixpkgs-unstable {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-          config.cudaSupport = true;
-        };
-        pkgsStable = import inputs.nixpkgs-stable {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-          config.cudaSupport = true;
-        };
+        pkgsUnstable = x86Pkgs.mkPkgs inputs.nixpkgs-unstable {cudaSupport = true;};
+        pkgsStable = x86Pkgs.mkPkgs inputs.nixpkgs-stable {cudaSupport = true;};
       };
       modules =
         commonModules

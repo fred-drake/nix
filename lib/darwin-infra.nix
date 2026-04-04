@@ -54,51 +54,20 @@
     ]
     ++ deferredDarwinModules;
 
-  mkOverlays = [
-    (import (root + "/overlays/default.nix") {inherit inputs;})
-    inputs.nix4vscode.overlays.forVscode
-  ];
-
   mkDarwinSystem = {
     hostname,
     isWorkstation ? true,
     extraModules ? [],
     system ? "aarch64-darwin",
   }: let
-    systemPkgs = import inputs.nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-      overlays = mkOverlays;
-    };
+    allPkgs = import ./mkPkgs.nix {inherit inputs system;};
   in
     darwin.lib.darwinSystem {
       inherit system;
-      pkgs = systemPkgs;
+      pkgs = allPkgs.pkgs;
       specialArgs = {
         inherit inputs non-mac-mini-casks;
-
-        nixpkgs = inputs.nixpkgs;
-        nix-jetbrains-plugins = inputs.nix-jetbrains-plugins;
-        pkgsUnstable = import inputs.nixpkgs-unstable {
-          inherit system;
-          config.allowUnfree = true;
-          overlays = mkOverlays;
-        };
-        pkgsStable = import inputs.nixpkgs-stable {
-          inherit system;
-          config.allowUnfree = true;
-          overlays = mkOverlays;
-        };
-        pkgsFredTesting = import inputs.nixpkgs-fred-testing {
-          inherit system;
-          config.allowUnfree = true;
-          overlays = mkOverlays;
-        };
-        pkgsFredUnstable = import inputs.nixpkgs-fred-unstable {
-          inherit system;
-          config.allowUnfree = true;
-          overlays = mkOverlays;
-        };
+        inherit (allPkgs) pkgsUnstable pkgsStable pkgsFredTesting pkgsFredUnstable;
       };
       modules =
         commonModules
