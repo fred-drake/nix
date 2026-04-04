@@ -8,17 +8,17 @@
   proxyPort = "3000";
 in {
   sops.secrets = {
-    postgresql-env = {
+    resume-postgresql-env = {
       sopsFile = config.secrets.host.resume.postgresql-env;
       mode = "0400";
       key = "data";
     };
-    minio-env = {
+    resume-minio-env = {
       sopsFile = config.secrets.host.resume.minio-env;
       mode = "0400";
       key = "data";
     };
-    chrome-env = {
+    resume-chrome-env = {
       sopsFile = config.secrets.host.resume.chrome-env;
       mode = "0400";
       key = "data";
@@ -114,7 +114,7 @@ in {
         environment = {
           TZ = "America/New_York";
         };
-        environmentFiles = [config.sops.secrets.postgresql-env.path];
+        environmentFiles = [config.sops.secrets.resume-postgresql-env.path];
       };
       resume-minio = {
         image = containers-sha."quay.io"."minio/minio"."latest"."linux/amd64";
@@ -130,7 +130,7 @@ in {
         environment = {
           TZ = "America/New_York";
         };
-        environmentFiles = [config.sops.secrets.minio-env.path];
+        environmentFiles = [config.sops.secrets.resume-minio-env.path];
       };
       resume-chrome = {
         image = containers-sha."ghcr.io"."browserless/chromium"."v2.18.0"."linux/amd64";
@@ -146,7 +146,7 @@ in {
           PRE_REQUEST_HEALTH_CHECK = "true";
           TZ = "America/New_York";
         };
-        environmentFiles = [config.sops.secrets.chrome-env.path];
+        environmentFiles = [config.sops.secrets.resume-chrome-env.path];
       };
       resume-app = {
         image = containers-sha."docker.io"."amruthpillai/reactive-resume"."latest"."linux/amd64";
