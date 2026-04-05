@@ -50,7 +50,7 @@
     clang-tools
     vscode-langservers-extracted
     yaml-language-server
-    prettier
+    nodePackages.prettier
     taplo
     jdt-language-server
     marksman

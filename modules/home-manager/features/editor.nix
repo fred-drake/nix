@@ -226,7 +226,7 @@
             auto-format = true;
             language-servers = ["html"];
             formatter = {
-              command = "${lib.getExe pkgs.prettier}";
+              command = "${lib.getExe pkgs.nodePackages.prettier}";
               args = ["--stdin-filepath" "file.html"];
             };
           }
@@ -235,7 +235,7 @@
             auto-format = true;
             language-servers = ["css"];
             formatter = {
-              command = "${lib.getExe pkgs.prettier}";
+              command = "${lib.getExe pkgs.nodePackages.prettier}";
               args = ["--stdin-filepath" "file.css"];
             };
           }
@@ -271,7 +271,7 @@
             auto-format = true;
             language-servers = ["markdown-oxide" "marksman"];
             formatter = {
-              command = "${lib.getExe pkgs.prettier}";
+              command = "${lib.getExe pkgs.nodePackages.prettier}";
               args = ["--stdin-filepath" "file.md"];
             };
           }

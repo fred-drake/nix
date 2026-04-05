@@ -6,15 +6,19 @@
   secrets,
   sops-nix,
   nixarr,
+  home-manager,
+  nixvim,
+  nix-index-database,
   nixosOptionsModule,
   deferredNixosModules,
+  deferredHmModules,
   ...
 }: let
   # Import host configurations
   headscale = import ./hosts/headscale.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
   ironforge = import ./hosts/ironforge.nix {inherit self nixpkgs-stable secrets sops-nix nixarr nixosOptionsModule deferredNixosModules;};
   orgrimmar = import ./hosts/orgrimmar.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
-  anton = import ./hosts/anton.nix {inherit self nixpkgs-unstable nixos-wsl secrets sops-nix nixosOptionsModule deferredNixosModules;};
+  anton = import ./hosts/anton.nix {inherit self nixpkgs-stable nixpkgs-unstable nixos-wsl secrets sops-nix home-manager nixvim nix-index-database nixosOptionsModule deferredNixosModules deferredHmModules;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};

@@ -15,6 +15,9 @@
   deferredNixosModules = builtins.attrValues (
     lib.filterAttrs (name: _: !builtins.elem name desktopOnlyModules) config.my.modules.nixos
   );
+
+  # Home-manager deferred modules for Colmena hosts that need HM
+  deferredHmModules = builtins.attrValues config.my.modules.home-manager;
 in {
   flake.colmena = import ../../colmena {
     inherit (inputs) self;
@@ -27,7 +30,10 @@ in {
       sops-nix
       nixarr
       nixos-wsl
+      home-manager
+      nixvim
+      nix-index-database
       ;
-    inherit nixosOptionsModule deferredNixosModules;
+    inherit nixosOptionsModule deferredNixosModules deferredHmModules;
   };
 }
