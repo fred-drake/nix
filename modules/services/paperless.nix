@@ -5,6 +5,7 @@
   ...
 }: let
   containers-sha = import ../../apps/fetcher/containers-sha.nix {inherit pkgs;};
+  mkPodmanNetwork = import ../../lib/mk-podman-network.nix {inherit pkgs;};
   host = "paperless";
   proxyPort = "8001";
   aiProxyPort = "3002";
@@ -98,23 +99,14 @@ in
           "d /var/paperless/postgresql 0755 999 999 -"
           "d /var/paperless/ai 0755 1000 1000 -"
         ];
-        services.podman-network-paperless = {
-          description = "Create paperless podman network with DNS enabled";
-          wantedBy = ["multi-user.target"];
-          before = [
-            "podman-paperless-redis.service"
-            "podman-paperless-postgres.service"
-            "podman-paperless-gotenberg.service"
-            "podman-paperless-tika.service"
-            "podman-paperless-ngx.service"
-            "podman-paperless-ai.service"
-          ];
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-            ExecStart = "${pkgs.podman}/bin/podman network create --ignore paperless-net";
-          };
-        };
+        services = mkPodmanNetwork "paperless" [
+          "podman-paperless-redis.service"
+          "podman-paperless-postgres.service"
+          "podman-paperless-gotenberg.service"
+          "podman-paperless-tika.service"
+          "podman-paperless-ngx.service"
+          "podman-paperless-ai.service"
+        ];
       };
 
       virtualisation.oci-containers = {

@@ -1,4 +1,4 @@
-# Configuration specific to the Mac Studio machine
+# Configuration specific to Laisa's Mac Mini
 _: {
   homebrew = {
     casks = ["elgato-camera-hub" "elgato-control-center"];

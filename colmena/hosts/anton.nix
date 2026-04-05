@@ -28,7 +28,6 @@ in {
         secrets.nixosModules.secrets
         sops-nix.nixosModules.sops
         ../../modules/services/wsl-server.nix
-        ../../modules/nixos
         ../../modules/nixos/host/anton/configuration.nix
         nixpkgsVersion
       ]

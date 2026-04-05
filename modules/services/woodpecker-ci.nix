@@ -4,6 +4,7 @@
   ...
 }: let
   containers-sha = import ../../apps/fetcher/containers-sha.nix {inherit pkgs;};
+  mkPodmanNetwork = import ../../lib/mk-podman-network.nix {inherit pkgs;};
   host = "woodpecker";
   proxyPort = "8000";
 in {
@@ -60,26 +61,18 @@ in {
       "d /var/woodpecker/data 0755 1000 1000 -"
       "d /var/woodpecker/postgresql 0755 999 999 -"
     ];
-    services = {
-      podman-network-woodpecker = {
-        description = "Create woodpecker podman network with DNS enabled";
-        wantedBy = ["multi-user.target"];
-        before = [
-          "podman-woodpecker-postgres.service"
-          "podman-woodpecker-server.service"
-          "podman-woodpecker-agent.service"
-        ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${pkgs.podman}/bin/podman network create --ignore woodpecker-net";
+    services =
+      (mkPodmanNetwork "woodpecker" [
+        "podman-woodpecker-postgres.service"
+        "podman-woodpecker-server.service"
+        "podman-woodpecker-agent.service"
+      ])
+      // {
+        podman-woodpecker-agent = {
+          after = ["podman.socket"];
+          bindsTo = ["podman.socket"];
         };
       };
-      podman-woodpecker-agent = {
-        after = ["podman.socket"];
-        bindsTo = ["podman.socket"];
-      };
-    };
     sockets.podman = {
       wantedBy = ["sockets.target"];
     };

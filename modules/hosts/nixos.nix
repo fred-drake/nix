@@ -86,7 +86,6 @@ in {
             };
           }
           secrets.nixosModules.secrets
-          (root + "/modules/nixos")
           (root + "/modules/nixos/host/fredpc/configuration.nix")
           (root + "/modules/nixos/host/fredpc/hardware-configuration.nix")
           home-manager.nixosModules.home-manager
@@ -119,7 +118,6 @@ in {
         ++ [
           {my.hostName = "nixosaarch64vm";} # server — all capability flags default to false
           disko.nixosModules.disko
-          (root + "/modules/nixos")
           (root + "/modules/nixos/host/nixosaarch64vm/configuration.nix")
           home-manager.nixosModules.home-manager
           {

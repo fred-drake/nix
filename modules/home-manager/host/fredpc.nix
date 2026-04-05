@@ -9,7 +9,7 @@
   dconf = {
     enable = true;
     settings = {
-      "org/gnome/desktop/interface".color-scheme = "prefer-dark";
+      # color-scheme = "prefer-dark" is set in linux-apps.nix (hasDesktop)
       "org/gnome/settings-daemon/plugins/power" = {
         sleep-inactive-ac-type = "nothing";
         sleep-inactive-battery-type = "nothing";

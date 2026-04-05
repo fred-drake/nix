@@ -4,7 +4,7 @@
 # wsl.useWindowsDriver for GPU passthrough, which is fundamentally
 # different from bare-metal NVIDIA. This module handles bare-metal only.
 _: {
-  my.modules.nixos.nvidia = {
+  my.modules.nixos.nvidia-cuda = {
     config,
     lib,
     pkgs,

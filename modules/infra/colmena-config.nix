@@ -11,7 +11,7 @@
   # servers using the minimal.nix profile. mkIf false still triggers option
   # validation, so we must exclude them. Only server-compatible modules
   # (those that use only base NixOS options) are passed through.
-  desktopOnlyModules = ["gaming" "nvidia" "pipewire" "hyprland" "gnome" "gpu-passthrough"];
+  desktopOnlyModules = ["gaming" "nvidia-cuda" "pipewire-audio" "hyprland" "gnome-desktop" "gpu-passthrough"];
   deferredNixosModules = builtins.attrValues (
     lib.filterAttrs (name: _: !builtins.elem name desktopOnlyModules) config.my.modules.nixos
   );

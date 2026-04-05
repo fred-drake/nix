@@ -34,7 +34,7 @@ _: {
     };
 
   # HM-level Hyprland config — imports the existing feature module.
-  # The feature module itself is guarded with mkIf on hostName.
+  # The feature module uses capability guards (hasHyprland) internally.
   my.modules.home-manager.hyprland = {
     imports = [../home-manager/features/hyprland];
   };

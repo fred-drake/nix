@@ -16,7 +16,6 @@ in
     backupFileExtension = "backup";
     users.${username}.imports =
       [
-        ../modules/home-manager
         sops-nix.homeManagerModules.sops
         secrets.nixosModules.soft-secrets
         secrets.nixosModules.secrets
@@ -25,6 +24,7 @@ in
         myOptionsModule
         {
           my.hostName = hostName;
+          home.stateVersion = "24.05";
         }
       ]
       ++ imports

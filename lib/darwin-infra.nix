@@ -38,7 +38,6 @@
       darwinOptionsModule
       secrets.nixosModules.soft-secrets
       sops-nix.darwinModules.sops
-      (root + "/modules/darwin")
       nix-homebrew.darwinModules.nix-homebrew
       homebrewModule
       home-manager.darwinModules.home-manager

@@ -4,6 +4,7 @@
   ...
 }: let
   containers-sha = import ../../apps/fetcher/containers-sha.nix {inherit pkgs;};
+  mkPodmanNetwork = import ../../lib/mk-podman-network.nix {inherit pkgs;};
   host = "resume";
   proxyPort = "3000";
 in {
@@ -77,21 +78,12 @@ in {
     "d /var/postgresql 0755 999 999 -"
   ];
 
-  systemd.services.podman-network-resume = {
-    description = "Create resume podman network with DNS enabled";
-    wantedBy = ["multi-user.target"];
-    before = [
-      "podman-resume-postgres.service"
-      "podman-resume-minio.service"
-      "podman-resume-chrome.service"
-      "podman-resume-app.service"
-    ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.podman}/bin/podman network create --ignore resume-net";
-    };
-  };
+  systemd.services = mkPodmanNetwork "resume" [
+    "podman-resume-postgres.service"
+    "podman-resume-minio.service"
+    "podman-resume-chrome.service"
+    "podman-resume-app.service"
+  ];
 
   virtualisation.oci-containers = {
     backend = "podman";
