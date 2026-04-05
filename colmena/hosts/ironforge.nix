@@ -4,6 +4,8 @@
   secrets,
   sops-nix,
   nixarr,
+  nixosOptionsModule,
+  deferredNixosModules,
   ...
 }: let
   soft-secrets = import "${secrets}/soft-secrets" {home = null;};
@@ -31,17 +33,22 @@ in {
       127.0.0.1 sabnzbd.${soft-secrets.networking.domain}
       127.0.0.1 bazarr.${soft-secrets.networking.domain}
     '';
-    imports = [
-      secrets.nixosModules.soft-secrets
-      secrets.nixosModules.secrets
-      sops-nix.nixosModules.sops
-      nixarr.nixosModules.default
-      "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
-      ../../modules/services/hetzner-server.nix
-      ../../modules/nixos
-      ../../modules/nixos/host/ironforge/configuration.nix
-      nixpkgsVersion
-    ];
+    imports =
+      [
+        nixosOptionsModule
+        secrets.nixosModules.soft-secrets
+        secrets.nixosModules.secrets
+        sops-nix.nixosModules.sops
+        nixarr.nixosModules.default
+        "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
+        ../../modules/services/hetzner-server.nix
+        ../../modules/nixos
+        ../../modules/nixos/host/ironforge/configuration.nix
+        nixpkgsVersion
+      ]
+      ++ deferredNixosModules;
+    my.hostName = "ironforge";
+    my.isServer = true;
     deployment = {
       buildOnTarget = true;
       targetHost = "10.1.1.3";

@@ -4,6 +4,8 @@
   nixos-wsl,
   secrets,
   sops-nix,
+  nixosOptionsModule,
+  deferredNixosModules,
   ...
 }: let
   nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {nixpkgs-stable = nixpkgs-unstable;};
@@ -18,16 +20,21 @@ in {
         cudaSupport = true;
       };
     };
-    imports = [
-      nixos-wsl.nixosModules.default
-      secrets.nixosModules.soft-secrets
-      secrets.nixosModules.secrets
-      sops-nix.nixosModules.sops
-      ../../modules/services/wsl-server.nix
-      ../../modules/nixos
-      ../../modules/nixos/host/anton/configuration.nix
-      nixpkgsVersion
-    ];
+    imports =
+      [
+        nixosOptionsModule
+        nixos-wsl.nixosModules.default
+        secrets.nixosModules.soft-secrets
+        secrets.nixosModules.secrets
+        sops-nix.nixosModules.sops
+        ../../modules/services/wsl-server.nix
+        ../../modules/nixos
+        ../../modules/nixos/host/anton/configuration.nix
+        nixpkgsVersion
+      ]
+      ++ deferredNixosModules;
+    my.hostName = "anton";
+    my.isServer = true;
     deployment = {
       buildOnTarget = true;
       targetHost = "anton";

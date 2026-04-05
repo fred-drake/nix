@@ -1,4 +1,11 @@
-{inputs, ...}: {
+{
+  inputs,
+  config,
+  ...
+}: let
+  nixosOptionsModule = import ../../lib/my-options-module.nix;
+  deferredNixosModules = builtins.attrValues config.my.modules.nixos;
+in {
   flake.colmena = import ../../colmena {
     inherit (inputs) self;
     inherit
@@ -11,5 +18,6 @@
       nixarr
       nixos-wsl
       ;
+    inherit nixosOptionsModule deferredNixosModules;
   };
 }

@@ -28,6 +28,11 @@
       default = false;
       description = "Full workstation with heavy apps (discord, slack, spotify, etc).";
     };
+    isServer = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Server host (headscale, ironforge, orgrimmar, anton).";
+    };
     hasDesktop = lib.mkOption {
       type = lib.types.bool;
       default = false;

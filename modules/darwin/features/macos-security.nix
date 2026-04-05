@@ -1,6 +1,8 @@
 _: {
   security.pam.services.sudo_local.touchIdAuth = true;
 
+  homebrew.brews = ["pam-reattach"];
+
   environment.etc = {
     "pam.d/sudo_local" = {
       text = ''

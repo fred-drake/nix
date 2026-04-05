@@ -3,6 +3,8 @@
   nixpkgs-stable,
   secrets,
   sops-nix,
+  nixosOptionsModule,
+  deferredNixosModules,
   ...
 }: let
   nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
@@ -14,15 +16,20 @@ in {
       overlays = [];
       config = {};
     };
-    imports = [
-      secrets.nixosModules.soft-secrets
-      secrets.nixosModules.secrets
-      sops-nix.nixosModules.sops
-      "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
-      ../../modules/services/hetzner-server.nix
-      ../../modules/nixos/host/headscale/configuration.nix
-      nixpkgsVersion
-    ];
+    imports =
+      [
+        nixosOptionsModule
+        secrets.nixosModules.soft-secrets
+        secrets.nixosModules.secrets
+        sops-nix.nixosModules.sops
+        "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
+        ../../modules/services/hetzner-server.nix
+        ../../modules/nixos/host/headscale/configuration.nix
+        nixpkgsVersion
+      ]
+      ++ deferredNixosModules;
+    my.hostName = "headscale";
+    my.isServer = true;
     deployment = {
       buildOnTarget = true;
       targetHost = "157.180.42.128";

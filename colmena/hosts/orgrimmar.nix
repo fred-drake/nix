@@ -3,6 +3,8 @@
   nixpkgs-stable,
   secrets,
   sops-nix,
+  nixosOptionsModule,
+  deferredNixosModules,
   ...
 }: let
   soft-secrets = import "${secrets}/soft-secrets" {home = null;};
@@ -17,16 +19,21 @@ in {
     networking.extraHosts = ''
       127.0.0.1 gitea.${soft-secrets.networking.domain}
     '';
-    imports = [
-      secrets.nixosModules.soft-secrets
-      secrets.nixosModules.secrets
-      sops-nix.nixosModules.sops
-      "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
-      ../../modules/services/hetzner-server.nix
-      ../../modules/nixos
-      ../../modules/nixos/host/orgrimmar/configuration.nix
-      nixpkgsVersion
-    ];
+    imports =
+      [
+        nixosOptionsModule
+        secrets.nixosModules.soft-secrets
+        secrets.nixosModules.secrets
+        sops-nix.nixosModules.sops
+        "${nixpkgs-stable}/nixos/modules/profiles/minimal.nix"
+        ../../modules/services/hetzner-server.nix
+        ../../modules/nixos
+        ../../modules/nixos/host/orgrimmar/configuration.nix
+        nixpkgsVersion
+      ]
+      ++ deferredNixosModules;
+    my.hostName = "orgrimmar";
+    my.isServer = true;
     deployment = {
       buildOnTarget = true;
       targetHost = "10.1.1.4";

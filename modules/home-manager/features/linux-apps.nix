@@ -5,6 +5,7 @@
   ...
 }: let
   hasDesktop = (osConfig.my or {}).hasDesktop or false;
+  hasHyprland = (osConfig.my or {}).hasHyprland or false;
 in
   lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && hasDesktop) {
     dconf = {
@@ -44,16 +45,17 @@ in
       };
     };
 
-    home.packages = with pkgs; [
-      albert
-      bitwarden-desktop
-      brave
-      gnome-tweaks
-      zed-editor
-      mako
-    ];
+    home.packages =
+      (with pkgs; [
+        albert
+        bitwarden-desktop
+        brave
+        gnome-tweaks
+        zed-editor
+      ])
+      ++ lib.optionals (!hasHyprland) [pkgs.mako];
 
-    services.mako = {
+    services.mako = lib.mkIf (!hasHyprland) {
       enable = true;
       settings = {
         defaultTimeout = 4000;
