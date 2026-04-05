@@ -1,6 +1,6 @@
 # Pipewire audio feature — contributes to NixOS via deferredModules.
 # Applies to hosts with my.hasPipewire = true.
-{lib, ...}: {
+_: {
   my.modules.nixos.pipewire = {
     config,
     lib,

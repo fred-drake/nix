@@ -1,6 +1,6 @@
 # Hyprland desktop feature — contributes to both NixOS and Home Manager
 # via deferredModules. Applies to hosts with my.hasHyprland = true.
-{lib, ...}: {
+_: {
   # NixOS-level Hyprland config — programs, packages, session variables
   my.modules.nixos.hyprland = {
     config,

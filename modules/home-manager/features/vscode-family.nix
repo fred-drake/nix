@@ -39,7 +39,7 @@
     selected_message_style = { attributes = "reverse" }
   '';
 in {
-  home.file = (
+  home.file =
     if pkgs.stdenv.hostPlatform.isDarwin
     then {
       "Library/Application Support/discordo/config.toml" = {
@@ -89,8 +89,7 @@ in {
       ".config/Windsurf/User/keybindings.json" = {
         text = builtins.toJSON vscode-config.globalKeyBindings;
       };
-    }
-  );
+    };
 
   home.packages =
     (with pkgs; [

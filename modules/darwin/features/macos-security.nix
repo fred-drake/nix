@@ -1,4 +1,4 @@
-{...}: {
+_: {
   security.pam.services.sudo_local.touchIdAuth = true;
 
   environment.etc = {

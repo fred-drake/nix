@@ -1,6 +1,6 @@
 # GPU passthrough feature — contributes to both NixOS and Home Manager
 # via deferredModules. Applies to hosts with my.hasGpuPassthrough = true.
-{lib, ...}: {
+_: {
   # NixOS-level: VFIO, libvirtd, QEMU, kvmfr, Looking Glass
   my.modules.nixos.gpu-passthrough = {
     config,

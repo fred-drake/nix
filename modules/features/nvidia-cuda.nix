@@ -3,7 +3,7 @@
 # NOTE: anton (WSL2) has its own CUDA config via Colmena — it uses
 # wsl.useWindowsDriver for GPU passthrough, which is fundamentally
 # different from bare-metal NVIDIA. This module handles bare-metal only.
-{lib, ...}: {
+_: {
   my.modules.nixos.nvidia = {
     config,
     lib,

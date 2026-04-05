@@ -1,6 +1,6 @@
 # Gaming feature — contributes to NixOS via deferredModules.
 # Applies to hosts with my.hasGaming = true.
-{lib, ...}: {
+_: {
   my.modules.nixos.gaming = {
     config,
     lib,

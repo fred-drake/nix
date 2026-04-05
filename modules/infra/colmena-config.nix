@@ -1,6 +1,6 @@
 {inputs, ...}: {
   flake.colmena = import ../../colmena {
-    self = inputs.self;
+    inherit (inputs) self;
     inherit
       (inputs)
       nixpkgs-stable

@@ -21,7 +21,7 @@ in {
         {
           home-manager = mkHomeManager {
             hostName = "mac-studio";
-            pkgsStable = darwinPkgs.pkgsStable;
+            inherit (darwinPkgs) pkgsStable;
             deferredHomeManagerModules = deferredHmModules;
             imports = [
               (root + "/modules/home-manager/host/mac-studio.nix")
@@ -37,7 +37,7 @@ in {
         {
           home-manager = mkHomeManager {
             hostName = "macbook-pro";
-            pkgsStable = darwinPkgs.pkgsStable;
+            inherit (darwinPkgs) pkgsStable;
             deferredHomeManagerModules = deferredHmModules;
             imports = [
               (root + "/modules/home-manager/host/macbook-pro.nix")
@@ -54,7 +54,7 @@ in {
         {
           home-manager = mkHomeManager {
             hostName = "laisas-mac-mini";
-            pkgsStable = darwinPkgs.pkgsStable;
+            inherit (darwinPkgs) pkgsStable;
             deferredHomeManagerModules = deferredHmModules;
             imports = [];
           };

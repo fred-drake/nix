@@ -55,7 +55,7 @@
   in
     darwin.lib.darwinSystem {
       inherit system;
-      pkgs = allPkgs.pkgs;
+      inherit (allPkgs) pkgs;
       specialArgs = {
         inherit (allPkgs) pkgsUnstable pkgsStable pkgsFredTesting pkgsFredUnstable;
       };

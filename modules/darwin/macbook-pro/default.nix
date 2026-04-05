@@ -1,5 +1,5 @@
 # Configuration specific to the MacBook Pro device.
-{...}: let
+_: let
   # Casks that are too large for the Mac Mini but fine here
   non-mac-mini-casks = ["godot" "steam" "wine-stable" "winbox"];
 in {

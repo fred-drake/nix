@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{...}: {
   imports = [
     ../../../apps/zsh.nix
     ../../../apps/fish.nix

@@ -1,7 +1,6 @@
 {
   pkgs,
   pkgsCuda,
-  pkgsUnstable,
   config,
   ...
 }: let

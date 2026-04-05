@@ -23,16 +23,18 @@ in {
   flake.nixosConfigurations = {
     macbookx86 = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      pkgs = x86Pkgs.pkgs;
+      inherit (x86Pkgs) pkgs;
       modules =
         commonModules
         ++ [
           {
-            my.hostName = "macbookx86";
-            my.isWorkstation = true;
-            my.hasDesktop = true;
-            my.hasGnome = true;
-            my.hasPipewire = true;
+            my = {
+              hostName = "macbookx86";
+              isWorkstation = true;
+              hasDesktop = true;
+              hasGnome = true;
+              hasPipewire = true;
+            };
           }
           inputs.nur.nixosModules.nur
           (root + "/modules/nixos/host/macbookx86/configuration.nix")
@@ -41,7 +43,7 @@ in {
           {
             home-manager = mkHomeManager {
               hostName = "macbookx86";
-              pkgsStable = x86Pkgs.pkgsStable;
+              inherit (x86Pkgs) pkgsStable;
               deferredHomeManagerModules = deferredHmModules;
               imports = [];
             };
@@ -71,15 +73,17 @@ in {
         commonModules
         ++ [
           {
-            my.hostName = "fredpc";
-            my.isWorkstation = true;
-            my.hasDesktop = true;
-            my.hasHyprland = true;
-            my.hasGnome = true;
-            my.hasNvidia = true;
-            my.hasGaming = true;
-            my.hasGpuPassthrough = true;
-            my.hasPipewire = true;
+            my = {
+              hostName = "fredpc";
+              isWorkstation = true;
+              hasDesktop = true;
+              hasHyprland = true;
+              hasGnome = true;
+              hasNvidia = true;
+              hasGaming = true;
+              hasGpuPassthrough = true;
+              hasPipewire = true;
+            };
           }
           secrets.nixosModules.secrets
           (root + "/modules/nixos")
@@ -89,7 +93,7 @@ in {
           {
             home-manager = mkHomeManager {
               hostName = "fredpc";
-              pkgsStable = x86Pkgs.pkgsStable;
+              inherit (x86Pkgs) pkgsStable;
               deferredHomeManagerModules = deferredHmModules;
               imports = [
                 (root + "/modules/home-manager/host/fredpc.nix")
@@ -121,7 +125,7 @@ in {
           {
             home-manager = mkHomeManager {
               hostName = "nixosaarch64vm";
-              pkgsStable = aarch64Pkgs.pkgsStable;
+              inherit (aarch64Pkgs) pkgsStable;
               deferredHomeManagerModules = deferredHmModules;
             };
           }

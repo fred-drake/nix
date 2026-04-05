@@ -1,6 +1,6 @@
 # GNOME desktop feature — contributes to NixOS via deferredModules.
 # Applies to hosts with my.hasGnome = true.
-{lib, ...}: {
+_: {
   my.modules.nixos.gnome = {
     config,
     lib,
