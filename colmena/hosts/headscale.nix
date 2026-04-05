@@ -28,8 +28,11 @@ in {
         nixpkgsVersion
       ]
       ++ deferredNixosModules;
-    my.hostName = "headscale";
-    my.isServer = true;
+    my = {
+      hostName = "headscale";
+      isServer = true;
+      hasMonitoring = true;
+    };
     deployment = {
       buildOnTarget = true;
       targetHost = "157.180.42.128";
@@ -45,14 +48,11 @@ in {
   };
 
   # Full configuration
-  "headscale" = let
-    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
-  in {
+  "headscale" = {
     imports = [
       self.colmena._headscale
       ../../modules/services/headscale-vpn.nix
       ../../modules/services/tailscale-client.nix
-      (nodeExporter.mkNodeExporter "headscale")
     ];
 
     _module.args = {

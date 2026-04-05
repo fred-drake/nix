@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   ...
@@ -99,7 +100,7 @@ in {
       if pkgs.stdenv.hostPlatform.isDarwin
       then [
         (pkgs.writeShellScriptBin "windsurf-code" ''
-          EXT_DIR=$(grep exec /etc/profiles/per-user/fdrake/bin/code | cut -f5 -d' ')
+          EXT_DIR=$(grep exec /etc/profiles/per-user/${config.home.username}/bin/code | cut -f5 -d' ')
           exec /opt/homebrew/bin/windsurf --extensions-dir $EXT_DIR "$@"
         '')
       ]

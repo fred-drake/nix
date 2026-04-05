@@ -1,14 +1,11 @@
 # Configuration specific to the Mac Studio machine
-{lib, ...}: let
-  # Casks that are too large for the Mac Mini but fine here
-  non-mac-mini-casks = ["godot" "steam" "wine-stable" "winbox"];
-in {
+{lib, ...}: {
   # User configuration - override home directory for external drive
   users.users.fdrake.home = lib.mkForce "/Volumes/External/Users/fdrake";
 
   homebrew = {
     brews = ["container" "steipete/tap/remindctl"];
-    casks = ["mutedeck" "naps2" "proxy-audio-device" "elgato-stream-deck" "elgato-camera-hub" "vmware-fusion"] ++ non-mac-mini-casks;
+    casks = ["mutedeck" "naps2" "proxy-audio-device" "elgato-stream-deck" "elgato-camera-hub"];
     masApps = {
       "iWallpaper - Live Wallpaper" = 1552826194;
     };

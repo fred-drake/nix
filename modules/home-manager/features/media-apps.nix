@@ -1,10 +1,11 @@
 {
+  config,
   pkgs,
   lib,
   osConfig ? {},
   ...
 }: let
-  isWorkstation = (osConfig.my or {}).isWorkstation or false;
+  isWorkstation = (osConfig.my or {}).isWorkstation or config.my.isWorkstation;
 in {
   home.packages =
     (with pkgs; [

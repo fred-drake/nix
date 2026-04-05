@@ -6,6 +6,7 @@
 in
   {
     hostName,
+    username ? "fdrake",
     pkgsStable ? null,
     imports ? [],
     deferredHomeManagerModules ? [],
@@ -13,7 +14,7 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "backup";
-    users.fdrake.imports =
+    users.${username}.imports =
       [
         ../modules/home-manager
         sops-nix.homeManagerModules.sops

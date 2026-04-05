@@ -31,15 +31,7 @@ in {
   };
 
   security.acme.certs = {
-    "${host}.${config.soft-secrets.networking.domain}" = {
-      domain = "${host}.${config.soft-secrets.networking.domain}";
-      dnsProvider = "cloudflare";
-      dnsResolver = "1.1.1.1:53";
-      webroot = null;
-      listenHTTP = null;
-      s3Bucket = null;
-      environmentFile = config.sops.secrets.cloudflare-api-key.path;
-    };
+    "${host}.${config.soft-secrets.networking.domain}" = {};
   };
 
   services = {

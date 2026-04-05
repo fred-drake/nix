@@ -47,8 +47,11 @@ in {
         nixpkgsVersion
       ]
       ++ deferredNixosModules;
-    my.hostName = "ironforge";
-    my.isServer = true;
+    my = {
+      hostName = "ironforge";
+      isServer = true;
+      hasMonitoring = true;
+    };
     deployment = {
       buildOnTarget = true;
       targetHost = "10.1.1.3";
@@ -65,13 +68,10 @@ in {
   };
 
   # Full configuration
-  "ironforge" = let
-    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
-  in {
+  "ironforge" = {
     imports = [
       self.colmena._ironforge
       ../../modules/services/media-server.nix
-      (nodeExporter.mkNodeExporter "ironforge")
     ];
 
     _module.args = {

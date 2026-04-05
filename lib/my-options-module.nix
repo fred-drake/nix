@@ -33,6 +33,11 @@
       default = false;
       description = "Server host (headscale, ironforge, orgrimmar, anton).";
     };
+    hasMonitoring = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Prometheus node exporter for monitoring.";
+    };
     hasDesktop = lib.mkOption {
       type = lib.types.bool;
       default = false;

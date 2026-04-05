@@ -8,11 +8,11 @@
   inherit (inputs) darwin home-manager nix-homebrew secrets sops-nix;
 
   # Homebrew tap wiring — shared across all Darwin hosts
-  homebrewModule = {
+  homebrewModule = {config, ...}: {
     nix-homebrew = {
       enable = true;
       enableRosetta = true;
-      user = "fdrake";
+      user = config.my.username;
       taps = {
         "homebrew/homebrew-core" = inputs.homebrew-core;
         "homebrew/homebrew-cask" = inputs.homebrew-cask;

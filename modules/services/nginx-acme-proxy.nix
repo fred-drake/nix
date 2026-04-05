@@ -16,6 +16,9 @@
     defaults = {
       inherit (config.soft-secrets.acme) email;
       dnsProvider = "cloudflare";
+      dnsResolver = "1.1.1.1:53";
+      webroot = null;
+      listenHTTP = null;
       environmentFile = config.sops.secrets.cloudflare-api-key.path;
     };
   };

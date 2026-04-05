@@ -23,7 +23,7 @@ lib.mkMerge [
 
     homebrew = {
       enable = true;
-      user = "fdrake";
+      user = config.my.username;
       caskArgs.no_quarantine = true;
       global.brewfile = true;
     };
@@ -47,6 +47,7 @@ lib.mkMerge [
         "daisydisk"
         "finicky"
         "ghostty"
+        "godot"
         "google-chrome"
         "google-drive"
         "inkscape"
@@ -58,8 +59,12 @@ lib.mkMerge [
         "obsidian"
         "raycast"
         "sourcetree"
+        "steam"
         "vlc"
+        "vmware-fusion"
         "whatsapp"
+        "winbox"
+        "wine-stable"
         "zen"
         "zoom"
       ];

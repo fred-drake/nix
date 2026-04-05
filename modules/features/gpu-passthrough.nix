@@ -95,7 +95,7 @@ _: {
 
       # Looking Glass - kvmfr device permissions
       services.udev.extraRules = ''
-        SUBSYSTEM=="kvmfr", KERNEL=="kvmfr0", RUN+="${pkgs.coreutils}/bin/chown fdrake:libvirtd /dev/kvmfr0", RUN+="${pkgs.coreutils}/bin/chmod 0660 /dev/kvmfr0"
+        SUBSYSTEM=="kvmfr", KERNEL=="kvmfr0", RUN+="${pkgs.coreutils}/bin/chown ${config.my.username}:libvirtd /dev/kvmfr0", RUN+="${pkgs.coreutils}/bin/chmod 0660 /dev/kvmfr0"
       '';
     };
 

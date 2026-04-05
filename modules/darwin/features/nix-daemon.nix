@@ -1,4 +1,4 @@
-_: {
+{config, ...}: {
   nix = {
     extraOptions = ''
       experimental-features = nix-command flakes
@@ -18,7 +18,7 @@ _: {
     settings = {
       cores = 0;
       sandbox = false;
-      trusted-users = ["root" "fdrake"];
+      trusted-users = ["root" config.my.username];
     };
   };
 }

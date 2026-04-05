@@ -1,4 +1,4 @@
-{config, ...}: let
+_: let
   host = "headscale";
   domain = "freddrake.com";
   proxyPort = "8080";
@@ -10,15 +10,7 @@ in {
   sops.age.sshKeyPaths = ["/home/default/id_infrastructure"];
 
   security.acme.certs = {
-    "${host}.${domain}" = {
-      domain = "${host}.${domain}";
-      dnsProvider = "cloudflare";
-      dnsResolver = "1.1.1.1:53";
-      webroot = null;
-      listenHTTP = null;
-      s3Bucket = null;
-      environmentFile = config.sops.secrets.cloudflare-api-key.path;
-    };
+    "${host}.${domain}" = {};
   };
 
   services = {

@@ -1,11 +1,12 @@
 {
+  config,
   lib,
   pkgs,
   osConfig ? {},
   ...
 }: let
-  hasDesktop = (osConfig.my or {}).hasDesktop or false;
-  hasHyprland = (osConfig.my or {}).hasHyprland or false;
+  hasDesktop = (osConfig.my or {}).hasDesktop or config.my.hasDesktop;
+  hasHyprland = (osConfig.my or {}).hasHyprland or config.my.hasHyprland;
 in
   lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && hasDesktop) {
     dconf = {

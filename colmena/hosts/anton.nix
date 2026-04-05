@@ -33,8 +33,10 @@ in {
         nixpkgsVersion
       ]
       ++ deferredNixosModules;
-    my.hostName = "anton";
-    my.isServer = true;
+    my = {
+      hostName = "anton";
+      isServer = true;
+    };
     deployment = {
       buildOnTarget = true;
       targetHost = "anton";

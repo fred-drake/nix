@@ -32,8 +32,11 @@ in {
         nixpkgsVersion
       ]
       ++ deferredNixosModules;
-    my.hostName = "orgrimmar";
-    my.isServer = true;
+    my = {
+      hostName = "orgrimmar";
+      isServer = true;
+      hasMonitoring = true;
+    };
     deployment = {
       buildOnTarget = true;
       targetHost = "10.1.1.4";
@@ -51,9 +54,7 @@ in {
   };
 
   # Full configuration
-  "orgrimmar" = let
-    nodeExporter = import ../../lib/mk-prometheus-node-exporter.nix {inherit secrets;};
-  in {
+  "orgrimmar" = {
     imports = [
       self.colmena._orgrimmar
       ../../modules/services/resume.nix
@@ -61,7 +62,6 @@ in {
       ../../modules/services/gitea.nix
       ../../modules/services/paperless.nix
       ../../modules/services/calibre.nix
-      (nodeExporter.mkNodeExporter "orgrimmar")
     ];
 
     _module.args = {
