@@ -29,5 +29,11 @@
     recommendedOptimisation = true;
     recommendedProxySettings = true;
     recommendedTlsSettings = true;
+    # Increase hash table size for proxy headers — needed when
+    # recommendedProxySettings adds headers alongside per-location ones.
+    appendHttpConfig = ''
+      proxy_headers_hash_max_size 1024;
+      proxy_headers_hash_bucket_size 128;
+    '';
   };
 }

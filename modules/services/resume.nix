@@ -46,27 +46,14 @@ in {
             proxyPass = "http://127.0.0.1:${proxyPort}";
             proxyWebsockets = true;
             extraConfig = ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
-
               proxy_connect_timeout 300;
               proxy_send_timeout 300;
               proxy_read_timeout 300;
-
-              # Handle large uploads for resumes
               client_max_body_size 10M;
             '';
           };
           locations."/storage/" = {
             proxyPass = "http://127.0.0.1:9000/default/";
-            extraConfig = ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
-            '';
           };
         };
       };

@@ -34,12 +34,7 @@ in
             locations."/" = {
               proxyPass = "http://127.0.0.1:${desktopPort}";
               proxyWebsockets = true;
-              extraConfig = ''
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-Forwarded-Proto $scheme;
-              '';
+              extraConfig = "";
             };
           };
           "calibre-desktop-web.${config.soft-secrets.networking.domain}" = {
@@ -48,12 +43,7 @@ in
             locations."/" = {
               proxyPass = "http://127.0.0.1:${contentServerPort}";
               proxyWebsockets = true;
-              extraConfig = ''
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-Forwarded-Proto $scheme;
-              '';
+              extraConfig = "";
             };
           };
           "calibre-web.${config.soft-secrets.networking.domain}" = {
@@ -62,12 +52,7 @@ in
             locations."/" = {
               proxyPass = "http://127.0.0.1:${webPort}";
               proxyWebsockets = true;
-              extraConfig = ''
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-Forwarded-Proto $scheme;
-              '';
+              extraConfig = "";
             };
           };
         };
