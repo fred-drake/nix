@@ -7,20 +7,29 @@
   # Enable OpenGL/Vulkan userspace (required for wsl.useWindowsDriver extraPackages)
   hardware.graphics.enable = true;
 
-  # WSL NVIDIA libs need to be in PATH (nvidia-smi) and LD_LIBRARY_PATH (libnvidia-ml.so)
-  environment.extraInit = ''
-    export PATH="/usr/lib/wsl/lib:$PATH"
-    export LD_LIBRARY_PATH="/usr/lib/wsl/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-  '';
+  environment = {
+    # WSL NVIDIA libs: LD_LIBRARY_PATH for libnvidia-ml.so, PATH for nvidia-smi.
+    variables.LD_LIBRARY_PATH = "/usr/lib/wsl/lib";
+    extraInit = ''
+      export PATH="/usr/lib/wsl/lib:$PATH"
+    '';
 
-  # CUDA development packages
-  environment.systemPackages = with pkgs; [
-    cudaPackages.cudatoolkit
-    cudaPackages.cudnn
-  ];
+    # CUDA development packages
+    systemPackages = with pkgs; [
+      cudaPackages.cudatoolkit
+      cudaPackages.cudnn
+    ];
+  };
 
-  # nix-ld for dynamically linked CUDA binaries (e.g. pip-installed PyTorch)
-  programs.nix-ld.enable = true;
+  # Fish doesn't source extraInit, so also add via fish shellInit.
+  programs = {
+    fish.shellInit = ''
+      fish_add_path /usr/lib/wsl/lib
+    '';
+
+    # nix-ld for dynamically linked CUDA binaries (e.g. pip-installed PyTorch)
+    nix-ld.enable = true;
+  };
 
   # Cachix for pre-built CUDA packages (avoid multi-hour builds)
   nix.settings = {
