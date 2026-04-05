@@ -27,6 +27,26 @@
     };
   };
 
+  launchd.agents.process-daily = {
+    enable = true;
+    config = {
+      Label = "com.freddrake.process-daily";
+      ProgramArguments = [
+        "/bin/sh"
+        "-c"
+        "export PATH=\"$HOME/.local/bin:$HOME/.nix-profile/bin:/etc/profiles/per-user/fdrake/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH\" && YESTERDAY=$(date -v-1d '+%%Y-%%m-%%d') && $HOME/Source/gitea.internal.freddrake.com/fdrake/PKM-Personal/.claude/hooks/process-daily-cron.sh \"$YESTERDAY\""
+      ];
+      StartCalendarInterval = [
+        {
+          Hour = 0;
+          Minute = 0;
+        }
+      ];
+      StandardOutPath = "/tmp/process-daily.log";
+      StandardErrorPath = "/tmp/process-daily.err";
+    };
+  };
+
   launchd.agents.archive-email = {
     enable = true;
     config = {
