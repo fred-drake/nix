@@ -34,7 +34,7 @@
       ProgramArguments = [
         "/bin/sh"
         "-c"
-        "export PATH=\"$HOME/.local/bin:$HOME/.nix-profile/bin:/etc/profiles/per-user/fdrake/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH\" && YESTERDAY=$(date -v-1d '+%%Y-%%m-%%d') && $HOME/Source/gitea.internal.freddrake.com/fdrake/PKM-Personal/.claude/hooks/process-daily-cron.sh \"$YESTERDAY\""
+        "export PATH=\"$HOME/.local/bin:$HOME/.nix-profile/bin:/etc/profiles/per-user/fdrake/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH\" && YESTERDAY=$(date -d 'yesterday' '+%%Y-%%m-%%d') && $HOME/Source/gitea.internal.freddrake.com/fdrake/PKM-Personal/.claude/hooks/process-daily-cron.sh \"$YESTERDAY\""
       ];
       StartCalendarInterval = [
         {
