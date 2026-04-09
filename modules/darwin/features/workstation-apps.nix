@@ -24,7 +24,6 @@ lib.mkMerge [
     homebrew = {
       enable = true;
       user = config.my.username;
-      caskArgs.no_quarantine = true;
       global.brewfile = true;
     };
   }
@@ -44,6 +43,7 @@ lib.mkMerge [
         "bitwarden"
         "bruno"
         "claude"
+        "cursor"
         "daisydisk"
         "finicky"
         "ghostty"
