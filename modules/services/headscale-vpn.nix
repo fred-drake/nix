@@ -16,7 +16,7 @@ in {
   services = {
     nginx.virtualHosts = {
       "${host}.${domain}" = {
-        enableACME = true;
+        useACMEHost = "${host}.${domain}";
         forceSSL = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:${proxyPort}";

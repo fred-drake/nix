@@ -35,7 +35,7 @@ in
           enable = true;
           virtualHosts = {
             "${host}.${config.soft-secrets.networking.domain}" = {
-              enableACME = true;
+              useACMEHost = "${host}.${config.soft-secrets.networking.domain}";
               forceSSL = true;
               locations."/" = {
                 proxyPass = "http://127.0.0.1:${proxyPort}";
@@ -50,7 +50,7 @@ in
               };
             };
             "gitea-status.${config.soft-secrets.networking.domain}" = {
-              enableACME = true;
+              useACMEHost = "gitea-status.${config.soft-secrets.networking.domain}";
               forceSSL = true;
               locations."/" = {
                 proxyPass = "http://127.0.0.1:8080";

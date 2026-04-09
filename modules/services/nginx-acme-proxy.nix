@@ -19,6 +19,7 @@
       dnsResolver = "1.1.1.1:53";
       webroot = null;
       listenHTTP = null;
+      group = "nginx";
       environmentFile = config.sops.secrets.cloudflare-api-key.path;
     };
   };

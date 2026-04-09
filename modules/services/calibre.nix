@@ -29,7 +29,7 @@ in
         enable = true;
         virtualHosts = {
           "calibre-desktop.${config.soft-secrets.networking.domain}" = {
-            enableACME = true;
+            useACMEHost = "calibre-desktop.${config.soft-secrets.networking.domain}";
             forceSSL = true;
             locations."/" = {
               proxyPass = "http://127.0.0.1:${desktopPort}";
@@ -38,7 +38,7 @@ in
             };
           };
           "calibre-desktop-web.${config.soft-secrets.networking.domain}" = {
-            enableACME = true;
+            useACMEHost = "calibre-desktop-web.${config.soft-secrets.networking.domain}";
             forceSSL = true;
             locations."/" = {
               proxyPass = "http://127.0.0.1:${contentServerPort}";
@@ -47,7 +47,7 @@ in
             };
           };
           "calibre-web.${config.soft-secrets.networking.domain}" = {
-            enableACME = true;
+            useACMEHost = "calibre-web.${config.soft-secrets.networking.domain}";
             forceSSL = true;
             locations."/" = {
               proxyPass = "http://127.0.0.1:${webPort}";
