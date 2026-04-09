@@ -141,9 +141,14 @@
             command = "${lib.getExe pkgs.rust-analyzer}";
           };
 
-          pylyzer = {
-            command = "${pkgs.pylyzer}/bin/pylyzer";
-            args = ["--server"];
+          basedpyright = {
+            command = "${pkgs.basedpyright}/bin/basedpyright-langserver";
+            args = ["--stdio"];
+          };
+
+          ruff = {
+            command = "${lib.getExe pkgs.ruff}";
+            args = ["server"];
           };
 
           gopls = {
@@ -208,7 +213,11 @@
           {
             name = "python";
             auto-format = true;
-            language-servers = ["pylyzer"];
+            language-servers = ["basedpyright" "ruff"];
+            formatter = {
+              command = "${lib.getExe pkgs.ruff}";
+              args = ["format" "-"];
+            };
           }
           {
             name = "go";

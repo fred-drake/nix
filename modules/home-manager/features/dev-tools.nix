@@ -45,7 +45,8 @@
     nil
     nixd
     rust-analyzer
-    pylyzer
+    basedpyright
+    ruff
     gopls
     clang-tools
     vscode-langservers-extracted
