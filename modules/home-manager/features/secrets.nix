@@ -201,6 +201,18 @@ in {
         key = "sandbox";
       };
 
+      trello-legacy-api-key = {
+        sopsFile = config.secrets.workstation.trello;
+        mode = "0400";
+        key = "legacy-api-key";
+      };
+
+      trello-legacy-api-token = {
+        sopsFile = config.secrets.workstation.trello;
+        mode = "0400";
+        key = "legacy-api-token";
+      };
+
       google-service-account = {
         sopsFile = config.secrets.workstation.google-service-account;
         mode = "0400";

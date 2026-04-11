@@ -287,6 +287,36 @@ in {
         };
       };
     };
+
+    mcp-trello = {
+      mode = "0400";
+      path = "${home}/mcp/trello.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          trello = {
+            command = "npx";
+            args = ["-y" "@delorenj/mcp-server-trello"];
+            env = {
+              TRELLO_API_KEY = config.sops.placeholder.trello-legacy-api-key;
+              TRELLO_TOKEN = config.sops.placeholder.trello-legacy-api-token;
+            };
+          };
+        };
+      };
+    };
+
+    mcp-figma = {
+      mode = "0400";
+      path = "${home}/mcp/figma.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          figma = {
+            type = "http";
+            url = "https://mcp.figma.com/mcp";
+          };
+        };
+      };
+    };
   };
 
   # Claude Code configuration files
