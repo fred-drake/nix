@@ -5,7 +5,7 @@
   claude-plugins-official-src = pkgs.fetchFromGitHub {
     owner = "anthropics";
     repo = "claude-plugins-official";
-    rev = "1057d02c53077c88d365d160951828c5cba1c69a";
-    hash = "sha256-38zthZnqYBFgubUg48Dp5JpLJDjC9VP1cFXuDfdUJxk=";
+    rev = "7ed523140f506611c968a0ec32e1dfc40a1d5673";
+    hash = "sha256-wt+D1LKRWQDPuLA0f4X2deV5LDL7+x0iz7+2BHkkAYs=";
   };
 }
