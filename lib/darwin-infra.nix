@@ -21,6 +21,7 @@
         "fred-drake/homebrew-tap" = inputs.homebrew-fdrake;
         "sst/homebrew-tap" = inputs.homebrew-sst;
         "steipete/homebrew-tap" = inputs.homebrew-steipete;
+        "facebook/homebrew-fb" = inputs.homebrew-facebook-fb;
       };
       mutableTaps = false;
     };

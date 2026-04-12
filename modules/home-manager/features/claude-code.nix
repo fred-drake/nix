@@ -305,6 +305,19 @@ in {
       };
     };
 
+    mcp-ios-simulator = {
+      mode = "0400";
+      path = "${home}/mcp/ios-simulator.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          ios-simulator = {
+            command = "npx";
+            args = ["-y" "ios-simulator-mcp"];
+          };
+        };
+      };
+    };
+
     mcp-figma = {
       mode = "0400";
       path = "${home}/mcp/figma.json";

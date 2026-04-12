@@ -75,6 +75,7 @@ lib.mkMerge [
         "ruby-install"
         "watch"
         "poppler"
+        "facebook/fb/idb-companion"
       ];
       onActivation = {
         cleanup = "zap";

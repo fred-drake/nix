@@ -85,6 +85,10 @@
       url = "github:steipete/homebrew-tap";
       flake = false;
     };
+    homebrew-facebook-fb = {
+      url = "github:facebook/homebrew-fb";
+      flake = false;
+    };
 
     # Nix User Repository: User contributed nix packages
     nur.url = "github:nix-community/NUR";

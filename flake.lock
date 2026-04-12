@@ -386,6 +386,22 @@
         "type": "github"
       }
     },
+    "homebrew-facebook-fb": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1660825531,
+        "narHash": "sha256-Bs3RMG3Lay0R9u52Ek/y3Sxnp6f1MOc4lUOJtpo/axA=",
+        "owner": "facebook",
+        "repo": "homebrew-fb",
+        "rev": "c0386793f59da10c619787f2aa18d938ef1d69c9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "facebook",
+        "repo": "homebrew-fb",
+        "type": "github"
+      }
+    },
     "homebrew-fdrake": {
       "flake": false,
       "locked": {
@@ -1189,6 +1205,7 @@
         "homebrew-bundle": "homebrew-bundle",
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",
+        "homebrew-facebook-fb": "homebrew-facebook-fb",
         "homebrew-fdrake": "homebrew-fdrake",
         "homebrew-nikitabobko": "homebrew-nikitabobko",
         "homebrew-sst": "homebrew-sst",
