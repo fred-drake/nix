@@ -76,6 +76,7 @@ lib.mkMerge [
         "watch"
         "poppler"
         "facebook/fb/idb-companion"
+        "ios-deploy"
       ];
       onActivation = {
         cleanup = "zap";
