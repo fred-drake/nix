@@ -1,3 +1,11 @@
 [[repos]]
 name = "claude-plugins-official-src"
 url = "https://github.com/anthropics/claude-plugins-official"
+
+[[repos]]
+name = "cc-marketplace-src"
+url = "https://github.com/samber/cc"
+
+[[repos]]
+name = "cc-skills-golang-src"
+url = "https://github.com/samber/cc-skills-golang"

@@ -371,6 +371,19 @@ in {
         recursive = true;
       };
 
+      # Samber marketplace registry
+      ".claude/plugins/marketplaces/cc" = {
+        source = "${claude-plugins-src.cc-marketplace-src}";
+        recursive = true;
+      };
+
+      # Samber Go skills plugin - opt-in, load via:
+      #   claude --plugin-dir ~/plugins/cc-skills-golang
+      "plugins/cc-skills-golang" = {
+        source = "${claude-plugins-src.cc-skills-golang-src}";
+        recursive = true;
+      };
+
       # LSP plugin (generated from claude-plugins-official + custom nil config)
       ".claude/lsp-plugin" = {
         source = lsp-plugin;
