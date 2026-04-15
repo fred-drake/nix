@@ -448,6 +448,25 @@ in {
         mode = "0400";
         key = "password";
       };
+
+      apple-app-store-issuer-id = {
+        sopsFile = config.secrets.workstation.apple-app-store;
+        mode = "0400";
+        key = "issuer-id";
+      };
+
+      apple-app-store-thrifter-local-upload-key-id = {
+        sopsFile = config.secrets.workstation.apple-app-store;
+        mode = "0400";
+        key = "thrifter-local-upload-key-id";
+      };
+
+      apple-app-store-thrifter-local-upload-keyfile = {
+        sopsFile = config.secrets.workstation.apple-app-store;
+        mode = "0600";
+        key = "thrifter-local-upload-keyfile";
+        path = "${home}/.appstoreconnect/private_keys/AuthKey_L32H7BU6AQ.p8";
+      };
     };
   };
 
