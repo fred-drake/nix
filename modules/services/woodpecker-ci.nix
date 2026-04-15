@@ -93,7 +93,10 @@ in {
         autoStart = true;
         dependsOn = ["woodpecker-postgres"];
         extraOptions =
-          ["--network=woodpecker-net"]
+          [
+            "--network=woodpecker-net"
+            "--add-host=gitea.${config.soft-secrets.networking.domain}:host-gateway"
+          ]
           ++ map (dns: "--dns=${dns}") config.soft-secrets.networking.nameservers.internal;
         ports = [
           "127.0.0.1:${proxyPort}:8000"
@@ -117,6 +120,7 @@ in {
         extraOptions =
           [
             "--network=woodpecker-net"
+            "--add-host=gitea.${config.soft-secrets.networking.domain}:host-gateway"
             "--privileged"
             "--security-opt=seccomp=unconfined"
             "--security-opt=apparmor=unconfined"
