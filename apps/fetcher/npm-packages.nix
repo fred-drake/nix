@@ -3,14 +3,14 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "agent-browser" = {
-    "version" = "0.23.0";
-    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.23.0.tgz";
-    "url-hash" = "sha256-m+WLGqGj02GyA0voUpqfTg9eie8Yb57B5JRPukYzN9s=";
+    "version" = "0.25.4";
+    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.25.4.tgz";
+    "url-hash" = "sha256-ryrZNTT2nTbKtnk082PpeeMJz4Yg2MVwmeBojEZLy+I=";
   };
   "ccstatusline" = {
-    "version" = "2.2.7";
-    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.2.7.tgz";
-    "url-hash" = "sha256-vMAoLVLSpY+cov1doxX7247c79H+3fQlxUAffYqfD/Q=";
+    "version" = "2.2.8";
+    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.2.8.tgz";
+    "url-hash" = "sha256-4+fZ8yDlKwi+mJIMHEkPgyt8vA0kN3FcaEmUbXU7ctw=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";
@@ -18,8 +18,8 @@
     "url-hash" = "sha256-LNFoy/TmuAY7BJegdIcXVO3gM2HyiF1rjEX92F6u7+o=";
   };
   "tdd-guard" = {
-    "version" = "1.3.0";
-    "url" = "https://registry.npmjs.org/tdd-guard/-/tdd-guard-1.3.0.tgz";
-    "url-hash" = "sha256-pGXbTJFQjSXD18QNUF0eD2C+szmM8KrK0QTH9shMkqs=";
+    "version" = "1.4.0";
+    "url" = "https://registry.npmjs.org/tdd-guard/-/tdd-guard-1.4.0.tgz";
+    "url-hash" = "sha256-Dky/HRNkZfxazPGgCXhPcm3ca7EfTG05LXjlnapw4c0=";
   };
 }

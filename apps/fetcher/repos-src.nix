@@ -11,8 +11,8 @@
   container-digest-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
     repo = "container-digest";
-    rev = "bcc31e383623403b0a33dd2e21751ddd1f262c28";
-    hash = "sha256-zBQDSr3bXuP9U3YIu9VQkYqfBP5p/5b+uLeai6a82Yk=";
+    rev = "8f71e0622f7f502ae0ba1068dc093e7e1391dd58";
+    hash = "sha256-c+HgcGewHeIUo8I8yQI36QpKH6rWvSmMTHKiCA2l1Xk=";
   };
   npm-refresh-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
@@ -54,8 +54,8 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "3dc9b3c54b7107c20c34221085b0a95857f95947";
-    hash = "sha256-q0a51k7JN2RlTyD94Wahe/mQlX5VkpBkngC1cnJ1tdw=";
+    rev = "8dea928bfea1da8c05527a3f55fe2e159ebf1c9e";
+    hash = "sha256-o9jx6JIzonYliAkAzY8Zpqje3Ve9lyB+N4JujfKVLPc=";
   };
   tdd-guard-src = pkgs.fetchFromGitHub {
     owner = "nizos";
@@ -72,8 +72,8 @@
   gws-skills-src = pkgs.fetchFromGitHub {
     owner = "googleworkspace";
     repo = "cli";
-    rev = "c7c6646d7a3ab1851e535afc8fdbcc311ab4d440";
-    hash = "sha256-7bkTSDX6Mr/QcHkqCAI6oTAjLWdWzNicnvUu0IG/ejQ=";
+    rev = "a3768d0e82ad83cca2da97724e46bea4ff0e6dbd";
+    hash = "sha256-YyNIHbyZrLlXYtWxZY8Um19MsnLharmS+nWGWO89fsA=";
   };
   scanimage-web-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
