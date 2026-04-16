@@ -9,3 +9,7 @@ url = "https://github.com/samber/cc"
 [[repos]]
 name = "cc-skills-golang-src"
 url = "https://github.com/samber/cc-skills-golang"
+
+[[repos]]
+name = "superpowers-src"
+url = "https://github.com/obra/superpowers"

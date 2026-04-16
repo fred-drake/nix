@@ -17,9 +17,4 @@
     "url" = "https://registry.npmjs.org/mermaid-cli/-/mermaid-cli-0.2.4.tgz";
     "url-hash" = "sha256-LNFoy/TmuAY7BJegdIcXVO3gM2HyiF1rjEX92F6u7+o=";
   };
-  "tdd-guard" = {
-    "version" = "1.4.0";
-    "url" = "https://registry.npmjs.org/tdd-guard/-/tdd-guard-1.4.0.tgz";
-    "url-hash" = "sha256-Dky/HRNkZfxazPGgCXhPcm3ca7EfTG05LXjlnapw4c0=";
-  };
 }

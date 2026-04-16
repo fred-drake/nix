@@ -1,8 +1,4 @@
-{
-  pkgs,
-  pkgsStable ? pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   ccstatusline = pkgs.callPackage ../../../apps/ccstatusline.nix {
     npm-packages = import ../../../apps/fetcher/npm-packages.nix;
   };
@@ -10,11 +6,10 @@
     npm-packages = import ../../../apps/fetcher/npm-packages.nix;
     inherit (pkgs) playwright-driver;
   };
-  tdd-guard = pkgsStable.callPackage ../../../apps/tdd-guard.nix {};
   gws = pkgs.callPackage ../../../apps/gws.nix {};
 in {
   home.packages =
-    [agent-browser ccstatusline gws tdd-guard]
+    [agent-browser ccstatusline gws]
     ++ (with pkgs; [
       llama-cpp
     ])

@@ -27,9 +27,6 @@ rev = "v0.3.0"
 name = "vicinae-src"
 url = "https://github.com/vicinaehq/vicinae.git"
 [[repos]]
-name = "tdd-guard-src"
-url = "https://github.com/nizos/tdd-guard.git"
-[[repos]]
 name = "spotifatius-src"
 url = "https://github.com/AndreasBackx/spotifatius"
 [[repos]]

@@ -152,7 +152,7 @@ in {
       cm = "chezmoi";
       cld = "claude --add-dir ~/Screenshots";
       cldc = "claude --add-dir ~/Screenshots --continue --dangerously-skip-permissions";
-      cld-go = "claude --add-dir ~/Screenshots --plugin-dir ~/plugins/cc-skills-golang";
+      cld-go = "claude --add-dir ~/Screenshots --plugin-dir ~/plugins/cc-skills-golang --plugin-dir ~/plugins/superpowers";
       df = "duf";
       k = "kubectl";
       telnet = "nc -zv";

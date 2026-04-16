@@ -20,4 +20,10 @@
     rev = "26524a3381ed93b43f5983c0e1dc53b0dd04af1d";
     hash = "sha256-QA1XWRl36YYcYKts36RQ5SjTsReiSRyOOARnB8XTC1c=";
   };
+  superpowers-src = pkgs.fetchFromGitHub {
+    owner = "obra";
+    repo = "superpowers";
+    rev = "c4bbe651cb1bc5e7bec6f7effae2b946571f3258";
+    hash = "sha256-P2p3jimioQ5OSnwiM7tI+nX1b4xBv7UQ/3bg+c9AyTg=";
+  };
 }

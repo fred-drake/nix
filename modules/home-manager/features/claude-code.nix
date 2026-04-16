@@ -399,6 +399,13 @@ in {
         recursive = true;
       };
 
+      # Superpowers plugin (obra/superpowers) - opt-in, load via:
+      #   claude --plugin-dir ~/plugins/superpowers
+      "plugins/superpowers" = {
+        source = "${claude-plugins-src.superpowers-src}";
+        recursive = true;
+      };
+
       # LSP plugin (generated from claude-plugins-official + custom nil config)
       ".claude/lsp-plugin" = {
         source = lsp-plugin;
@@ -430,27 +437,6 @@ in {
         };
 
         hooks = {
-          UserPromptSubmit = [
-            {
-              hooks = [
-                {
-                  type = "command";
-                  command = "tdd-guard";
-                }
-              ];
-            }
-          ];
-          SessionStart = [
-            {
-              matcher = "startup|resume|clear";
-              hooks = [
-                {
-                  type = "command";
-                  command = "tdd-guard";
-                }
-              ];
-            }
-          ];
           Stop = [
             {
               # Ralph Wiggum stop hook - intercepts exit when loop is active

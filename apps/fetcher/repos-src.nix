@@ -57,12 +57,6 @@
     rev = "8dea928bfea1da8c05527a3f55fe2e159ebf1c9e";
     hash = "sha256-o9jx6JIzonYliAkAzY8Zpqje3Ve9lyB+N4JujfKVLPc=";
   };
-  tdd-guard-src = pkgs.fetchFromGitHub {
-    owner = "nizos";
-    repo = "tdd-guard";
-    rev = "2bc01d285f45110ad61e13d410d1acf3fcb010da";
-    hash = "sha256-zGxyVn9kpX56m2AfjC7VP1Zp9y5JEgsvrEENykr6TOs=";
-  };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
     repo = "spotifatius";
