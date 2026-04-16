@@ -1,6 +1,6 @@
-_: let
+{config, ...}: let
   host = "headscale";
-  domain = "freddrake.com";
+  inherit (config.soft-secrets.networking) domain;
   proxyPort = "8080";
 in {
   imports = [
@@ -62,10 +62,10 @@ in {
 
         dns = {
           magic_dns = true;
-          base_domain = "ts.freddrake.com";
+          base_domain = "ts.${domain}";
           domains = [
-            "freddrake.com"
-            "internal.freddrake.com"
+            domain
+            "internal.${domain}"
           ];
           nameservers = {
             global = [
@@ -73,12 +73,12 @@ in {
               "1.0.0.1"
             ];
             split = {
-              "internal.freddrake.com" = ["192.168.30.1"];
+              "internal.${domain}" = ["192.168.30.1"];
             };
           };
           extra_records = [
             {
-              name = "gateway.ts.freddrake.com";
+              name = "gateway.ts.${domain}";
               type = "A";
               value = "100.64.0.1";
             }
