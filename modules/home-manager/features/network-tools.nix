@@ -10,6 +10,7 @@
     openssl
     restic
     rsync
+    smartmontools
     sops
     stc-cli
     syncthing
