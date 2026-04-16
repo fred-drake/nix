@@ -330,6 +330,21 @@ in {
         };
       };
     };
+    mcp-resume = {
+      mode = "0400";
+      path = "${home}/mcp/resume.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          resume = {
+            type = "http";
+            url = "https://resume.${config.soft-secrets.networking.domain}/mcp";
+            headers = {
+              x-api-key = config.sops.placeholder.resume-api-key;
+            };
+          };
+        };
+      };
+    };
   };
 
   # Claude Code configuration files

@@ -132,9 +132,9 @@ in {
         environment = {
           PORT = "3000";
           NODE_ENV = "production";
-          PUBLIC_URL = "https://${host}.${config.soft-secrets.networking.domain}";
+          APP_URL = "https://${host}.${config.soft-secrets.networking.domain}";
           STORAGE_URL = "https://${host}.${config.soft-secrets.networking.domain}/storage";
-          CHROME_URL = "ws://resume-chrome:3000";
+          PRINTER_ENDPOINT = "ws://resume-chrome:3000";
           STORAGE_ENDPOINT = "resume-minio";
           STORAGE_PORT = "9000";
           STORAGE_REGION = "us-east-1";

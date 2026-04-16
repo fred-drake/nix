@@ -243,10 +243,10 @@ in {
         key = "client-secret";
       };
 
-      resume-credentials = {
-        sopsFile = config.secrets.workstation.resume-credentials;
+      resume-api-key = {
+        sopsFile = config.secrets.workstation.resume;
         mode = "0400";
-        key = "data";
+        key = "api-key";
       };
 
       woodpecker-credentials = {
