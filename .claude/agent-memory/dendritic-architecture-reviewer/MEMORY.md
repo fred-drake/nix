@@ -1,0 +1,2 @@
+- [Colmena infra parallel path](project_colmena_parallel_path.md) — Colmena hosts bypass lib/nixos-infra.nix and re-wire modules in colmena/default.nix; tracked divergence, intentional for minimal.nix profile.
+- [hasDesktop only used via osConfig](project_hasdesktop_usage.md) — hasDesktop is set in hosts but guards only fire in HM modules reading osConfig; no direct NixOS-side consumer.

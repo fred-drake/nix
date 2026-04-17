@@ -1,0 +1,1 @@
+- [Dendritic audit surprises](project_dendritic_audit_surprises.md) — non-obvious findings from reviewing modules/features/

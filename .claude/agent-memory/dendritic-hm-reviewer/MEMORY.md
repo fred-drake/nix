@@ -1,0 +1,1 @@
+- [HM capability-flag fallback idiom](hm_capability_flag_idiom.md) — HM features read capability flags via `(osConfig.my or {}).hasX or config.my.hasX` because HM modules run with their own module system, not the parent NixOS/Darwin config.
