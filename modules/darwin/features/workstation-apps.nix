@@ -75,6 +75,7 @@ lib.mkMerge [
         "ruby-install"
         "watch"
         "poppler"
+        "terminal-notifier"
         "facebook/fb/idb-companion"
         "ios-deploy"
       ];

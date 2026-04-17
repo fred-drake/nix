@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }: let
   home = config.home.homeDirectory;
@@ -436,40 +437,69 @@ in {
           deny = [];
         };
 
-        hooks = {
-          Stop = [
-            {
-              # Ralph Wiggum stop hook - intercepts exit when loop is active
-              hooks = [
+        hooks =
+          {
+            Stop =
+              [
                 {
-                  type = "command";
-                  command = "$HOME/.claude/assets/ralph-wiggum/hooks/stop-hook.sh";
+                  # Ralph Wiggum stop hook - intercepts exit when loop is active
+                  hooks = [
+                    {
+                      type = "command";
+                      command = "$HOME/.claude/assets/ralph-wiggum/hooks/stop-hook.sh";
+                    }
+                  ];
+                }
+                {
+                  matcher = "";
+                  hooks = [
+                    {
+                      command = "PROJECT_NAME=\${PROJECT_ROOT##*/}; PROJECT_NAME=\${PROJECT_NAME:-'project'}; [ -n \"$CLAUDE_NOTIFICATION_SLACK_URL\" ] && curl -X POST -H 'Content-type: application/json' --data \"{\\\"text\\\":\\\"Task completed in $PROJECT_NAME\\\"}\" \"$CLAUDE_NOTIFICATION_SLACK_URL\" || true";
+                      type = "command";
+                    }
+                  ];
+                }
+              ]
+              ++ lib.optionals pkgs.stdenv.isDarwin [
+                {
+                  matcher = "";
+                  hooks = [
+                    {
+                      type = "command";
+                      command = ''/opt/homebrew/bin/terminal-notifier -title "Claude Code $(basename "$PWD")" -message "Finished" -contentImage "$HOME/Pictures/claude_logo.jpg"'';
+                    }
+                  ];
                 }
               ];
-            }
-            {
-              matcher = "";
-              hooks = [
-                {
-                  command = "PROJECT_NAME=\${PROJECT_ROOT##*/}; PROJECT_NAME=\${PROJECT_NAME:-'project'}; [ -n \"$CLAUDE_NOTIFICATION_SLACK_URL\" ] && curl -X POST -H 'Content-type: application/json' --data \"{\\\"text\\\":\\\"Task completed in $PROJECT_NAME\\\"}\" \"$CLAUDE_NOTIFICATION_SLACK_URL\" || true";
-                  type = "command";
-                }
-              ];
-            }
-          ];
-          PostToolUse = [
-            {
-              matcher = "Write|Edit|MultiEdit";
-              hooks = [
-                {
-                  command = "just format || npm run format || true";
-                  type = "command";
-                }
-              ];
-            }
-          ];
-        };
+            PostToolUse = [
+              {
+                matcher = "Write|Edit|MultiEdit";
+                hooks = [
+                  {
+                    command = "just format || npm run format || true";
+                    type = "command";
+                  }
+                ];
+              }
+            ];
+          }
+          // lib.optionalAttrs pkgs.stdenv.isDarwin {
+            Notification = [
+              {
+                matcher = "";
+                hooks = [
+                  {
+                    type = "command";
+                    command = ''/opt/homebrew/bin/terminal-notifier -title "Claude Code $(basename "$PWD")" -message "Needs attention" -contentImage "$HOME/Pictures/claude_logo.jpg"'';
+                  }
+                ];
+              }
+            ];
+          };
         includeCoAuthoredBy = false;
       };
+    }
+    // lib.optionalAttrs pkgs.stdenv.isDarwin {
+      "Pictures/claude_logo.jpg".source = ../../../apps/claude-code/assets/claude_logo.jpg;
     };
 }
