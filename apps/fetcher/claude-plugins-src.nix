@@ -5,8 +5,8 @@
   claude-plugins-official-src = pkgs.fetchFromGitHub {
     owner = "anthropics";
     repo = "claude-plugins-official";
-    rev = "48aa43517886014e90ee80a6461f9de75045369d";
-    hash = "sha256-0NxVFMdpZp8mA2j78DPkxl1mh5ENjuO1qFTnYcngDWQ=";
+    rev = "b992a65037b55f1fef916b32a239dca01d5f6249";
+    hash = "sha256-P6jSbVV/jfGLgKSzNlIkkVUY8WxgggPzSU5yuSdA464=";
   };
   cc-marketplace-src = pkgs.fetchFromGitHub {
     owner = "samber";
@@ -23,7 +23,7 @@
   superpowers-src = pkgs.fetchFromGitHub {
     owner = "obra";
     repo = "superpowers";
-    rev = "c4bbe651cb1bc5e7bec6f7effae2b946571f3258";
-    hash = "sha256-P2p3jimioQ5OSnwiM7tI+nX1b4xBv7UQ/3bg+c9AyTg=";
+    rev = "b55764852ac78870e65c6565fb585b6cd8b3c5c9";
+    hash = "sha256-cobQloF7Y6K0IC0/6xSnA2Io+fKgk2SRmCwoZZtVCco=";
   };
 }
