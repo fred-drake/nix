@@ -5,9 +5,26 @@
 }: let
   containers-sha = import ../../apps/fetcher/containers-sha.nix {inherit pkgs;};
   mkPodmanNetwork = import ../../lib/mk-podman-network.nix {inherit pkgs;};
+  mkNginxProxy = import ../../lib/mk-nginx-proxy.nix {inherit config;};
   host = "resume";
   proxyPort = "3000";
 in {
+  imports = [
+    (mkNginxProxy {
+      inherit host;
+      port = proxyPort;
+      extraConfig = ''
+        proxy_connect_timeout 300;
+        proxy_send_timeout 300;
+        proxy_read_timeout 300;
+        client_max_body_size 10M;
+      '';
+      extraLocations."/storage/" = {
+        proxyPass = "http://127.0.0.1:9000/default/";
+      };
+    })
+  ];
+
   sops.secrets = {
     resume-postgresql-env = {
       sopsFile = config.secrets.host.resume.postgresql-env;
@@ -28,35 +45,6 @@ in {
       sopsFile = config.secrets.host.resume.resume-env;
       mode = "0400";
       key = "data";
-    };
-  };
-
-  security.acme.certs = {
-    "${host}.${config.soft-secrets.networking.domain}" = {};
-  };
-
-  services = {
-    nginx = {
-      enable = true;
-      virtualHosts = {
-        "${host}.${config.soft-secrets.networking.domain}" = {
-          useACMEHost = "${host}.${config.soft-secrets.networking.domain}";
-          forceSSL = true;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:${proxyPort}";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_connect_timeout 300;
-              proxy_send_timeout 300;
-              proxy_read_timeout 300;
-              client_max_body_size 10M;
-            '';
-          };
-          locations."/storage/" = {
-            proxyPass = "http://127.0.0.1:9000/default/";
-          };
-        };
-      };
     };
   };
 

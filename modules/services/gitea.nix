@@ -8,6 +8,14 @@
   host = "gitea";
   proxyPort = "3001";
   mkCifsMount = import ../../lib/mk-cifs-mount.nix {inherit config pkgs;};
+  mkNginxProxy = import ../../lib/mk-nginx-proxy.nix {inherit config;};
+  giteaLongTimeouts = ''
+    client_max_body_size 0;
+    proxy_request_buffering off;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+    proxy_connect_timeout 3600s;
+  '';
   giteaStorage = mkCifsMount {
     name = "gitea";
     sub = "sub3";
@@ -16,55 +24,22 @@
 in
   lib.mkMerge [
     giteaStorage
+    (mkNginxProxy {
+      inherit host;
+      port = proxyPort;
+      extraConfig = giteaLongTimeouts;
+    })
+    (mkNginxProxy {
+      host = "gitea-status";
+      port = 8080;
+      extraConfig = giteaLongTimeouts;
+    })
     {
       sops.secrets = {
         gitea-check-service-env = {
           sopsFile = config.secrets.host.gitea.check-service-env;
           mode = "0400";
           key = "data";
-        };
-      };
-
-      security.acme.certs = {
-        "${host}.${config.soft-secrets.networking.domain}" = {};
-        "gitea-status.${config.soft-secrets.networking.domain}" = {};
-      };
-
-      services = {
-        nginx = {
-          enable = true;
-          virtualHosts = {
-            "${host}.${config.soft-secrets.networking.domain}" = {
-              useACMEHost = "${host}.${config.soft-secrets.networking.domain}";
-              forceSSL = true;
-              locations."/" = {
-                proxyPass = "http://127.0.0.1:${proxyPort}";
-                proxyWebsockets = true;
-                extraConfig = ''
-                  client_max_body_size 0;
-                  proxy_request_buffering off;
-                  proxy_read_timeout 3600s;
-                  proxy_send_timeout 3600s;
-                  proxy_connect_timeout 3600s;
-                '';
-              };
-            };
-            "gitea-status.${config.soft-secrets.networking.domain}" = {
-              useACMEHost = "gitea-status.${config.soft-secrets.networking.domain}";
-              forceSSL = true;
-              locations."/" = {
-                proxyPass = "http://127.0.0.1:8080";
-                proxyWebsockets = true;
-                extraConfig = ''
-                  client_max_body_size 0;
-                  proxy_request_buffering off;
-                  proxy_read_timeout 3600s;
-                  proxy_send_timeout 3600s;
-                  proxy_connect_timeout 3600s;
-                '';
-              };
-            };
-          };
         };
       };
 

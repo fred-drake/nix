@@ -2,28 +2,17 @@
   host = "headscale";
   inherit (config.soft-secrets.networking) domain;
   proxyPort = "8080";
+  mkNginxProxy = import ../../lib/mk-nginx-proxy.nix {inherit config;};
 in {
   imports = [
     ./nginx-acme-proxy.nix
+    (mkNginxProxy {
+      inherit host;
+      port = proxyPort;
+    })
   ];
 
-  security.acme.certs = {
-    "${host}.${domain}" = {};
-  };
-
   services = {
-    nginx.virtualHosts = {
-      "${host}.${domain}" = {
-        useACMEHost = "${host}.${domain}";
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${proxyPort}";
-          proxyWebsockets = true;
-          recommendedProxySettings = true;
-        };
-      };
-    };
-
     headscale = {
       enable = true;
       address = "0.0.0.0";

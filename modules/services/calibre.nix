@@ -9,6 +9,7 @@
   contentServerPort = "8081";
   webPort = "8083";
   mkCifsMount = import ../../lib/mk-cifs-mount.nix {inherit config pkgs;};
+  mkNginxProxy = import ../../lib/mk-nginx-proxy.nix {inherit config;};
   calibreStorage = mkCifsMount {
     name = "calibre";
     sub = "sub5";
@@ -18,46 +19,19 @@
 in
   lib.mkMerge [
     calibreStorage
+    (mkNginxProxy {
+      host = "calibre-desktop";
+      port = desktopPort;
+    })
+    (mkNginxProxy {
+      host = "calibre-desktop-web";
+      port = contentServerPort;
+    })
+    (mkNginxProxy {
+      host = "calibre-web";
+      port = webPort;
+    })
     {
-      security.acme.certs = {
-        "calibre-desktop.${config.soft-secrets.networking.domain}" = {};
-        "calibre-desktop-web.${config.soft-secrets.networking.domain}" = {};
-        "calibre-web.${config.soft-secrets.networking.domain}" = {};
-      };
-
-      services.nginx = {
-        enable = true;
-        virtualHosts = {
-          "calibre-desktop.${config.soft-secrets.networking.domain}" = {
-            useACMEHost = "calibre-desktop.${config.soft-secrets.networking.domain}";
-            forceSSL = true;
-            locations."/" = {
-              proxyPass = "http://127.0.0.1:${desktopPort}";
-              proxyWebsockets = true;
-              extraConfig = "";
-            };
-          };
-          "calibre-desktop-web.${config.soft-secrets.networking.domain}" = {
-            useACMEHost = "calibre-desktop-web.${config.soft-secrets.networking.domain}";
-            forceSSL = true;
-            locations."/" = {
-              proxyPass = "http://127.0.0.1:${contentServerPort}";
-              proxyWebsockets = true;
-              extraConfig = "";
-            };
-          };
-          "calibre-web.${config.soft-secrets.networking.domain}" = {
-            useACMEHost = "calibre-web.${config.soft-secrets.networking.domain}";
-            forceSSL = true;
-            locations."/" = {
-              proxyPass = "http://127.0.0.1:${webPort}";
-              proxyWebsockets = true;
-              extraConfig = "";
-            };
-          };
-        };
-      };
-
       systemd.tmpfiles.rules = [
         "d /var/calibre-web/config 0755 1000 1000 -"
       ];

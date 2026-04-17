@@ -6,9 +6,15 @@
 }: let
   containers-sha = import ../../apps/fetcher/containers-sha.nix {inherit pkgs;};
   mkPodmanNetwork = import ../../lib/mk-podman-network.nix {inherit pkgs;};
+  mkNginxProxy = import ../../lib/mk-nginx-proxy.nix {inherit config;};
   host = "paperless";
   proxyPort = "8001";
   aiProxyPort = "3002";
+  paperlessTimeouts = ''
+    proxy_connect_timeout 300;
+    proxy_send_timeout 300;
+    proxy_read_timeout 300;
+  '';
   mkCifsMount = import ../../lib/mk-cifs-mount.nix {inherit config pkgs;};
   paperlessStorage = mkCifsMount {
     name = "paperless";
@@ -18,6 +24,20 @@
 in
   lib.mkMerge [
     paperlessStorage
+    (mkNginxProxy {
+      inherit host;
+      port = proxyPort;
+      extraConfig =
+        paperlessTimeouts
+        + ''
+          client_max_body_size 250M;
+        '';
+    })
+    (mkNginxProxy {
+      host = "${host}-ai";
+      port = aiProxyPort;
+      extraConfig = paperlessTimeouts;
+    })
     {
       sops.secrets = {
         paperless-postgresql-env = {
@@ -34,44 +54,6 @@ in
           sopsFile = config.secrets.host.paperless.paperless-ai-env;
           mode = "0400";
           key = "data";
-        };
-      };
-
-      security.acme.certs = {
-        "${host}.${config.soft-secrets.networking.domain}" = {};
-        "${host}-ai.${config.soft-secrets.networking.domain}" = {};
-      };
-
-      services.nginx = {
-        enable = true;
-        virtualHosts = {
-          "${host}.${config.soft-secrets.networking.domain}" = {
-            useACMEHost = "${host}.${config.soft-secrets.networking.domain}";
-            forceSSL = true;
-            locations."/" = {
-              proxyPass = "http://127.0.0.1:${proxyPort}";
-              proxyWebsockets = true;
-              extraConfig = ''
-                proxy_connect_timeout 300;
-                proxy_send_timeout 300;
-                proxy_read_timeout 300;
-                client_max_body_size 250M;
-              '';
-            };
-          };
-          "${host}-ai.${config.soft-secrets.networking.domain}" = {
-            useACMEHost = "${host}-ai.${config.soft-secrets.networking.domain}";
-            forceSSL = true;
-            locations."/" = {
-              proxyPass = "http://127.0.0.1:${aiProxyPort}";
-              proxyWebsockets = true;
-              extraConfig = ''
-                proxy_connect_timeout 300;
-                proxy_send_timeout 300;
-                proxy_read_timeout 300;
-              '';
-            };
-          };
         };
       };
 
