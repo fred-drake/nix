@@ -1,10 +1,10 @@
-_: {
+{config, ...}: {
   services.tailscale = {
     enable = true;
     openFirewall = true;
     useRoutingFeatures = "server";
     extraUpFlags = [
-      "--login-server=https://headscale.brainrush.ai"
+      "--login-server=https://headscale.${config.soft-secrets.networking.tailscale-domain}"
       "--advertise-routes=10.1.0.0/16"
       "--accept-routes"
       "--advertise-exit-node"
