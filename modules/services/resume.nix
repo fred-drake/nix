@@ -134,7 +134,8 @@ in {
           NODE_ENV = "production";
           APP_URL = "https://${host}.${config.soft-secrets.networking.domain}";
           STORAGE_URL = "https://${host}.${config.soft-secrets.networking.domain}/storage";
-          PRINTER_ENDPOINT = "ws://resume-chrome:3000";
+          # PRINTER_ENDPOINT is set via resume-env sops secret because v5 embeds
+          # the browserless auth token directly in the URL (?token=...).
           STORAGE_ENDPOINT = "resume-minio";
           STORAGE_PORT = "9000";
           STORAGE_REGION = "us-east-1";
