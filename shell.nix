@@ -102,6 +102,7 @@ in
     buildInputs = with pkgs; [
       colmena
       git
+      gh
       just
       alejandra
       nixos-anywhere
