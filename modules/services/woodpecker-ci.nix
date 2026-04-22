@@ -105,16 +105,17 @@ in {
         image = containers-sha."docker.io"."woodpeckerci/woodpecker-agent"."v3"."linux/amd64";
         autoStart = true;
         dependsOn = ["woodpecker-server"];
-        extraOptions =
-          [
-            "--network=woodpecker-net"
-            "--add-host=gitea.${config.soft-secrets.networking.domain}:host-gateway"
-            "--privileged"
-            "--security-opt=seccomp=unconfined"
-            "--security-opt=apparmor=unconfined"
-            "--security-opt=label=disable"
-          ]
-          ++ map (dns: "--dns=${dns}") config.soft-secrets.networking.nameservers.internal;
+        # Internal nameservers are unroutable from the podman bridge, and aardvark-dns
+        # forwards external queries to them when --dns is set, hanging the agent's
+        # gRPC auth past its deadline. Rely on aardvark's default host-resolver forwarding.
+        extraOptions = [
+          "--network=woodpecker-net"
+          "--add-host=gitea.${config.soft-secrets.networking.domain}:host-gateway"
+          "--privileged"
+          "--security-opt=seccomp=unconfined"
+          "--security-opt=apparmor=unconfined"
+          "--security-opt=label=disable"
+        ];
         volumes = [
           "/run/podman/podman.sock:/var/run/docker.sock"
         ];
