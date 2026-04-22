@@ -55,10 +55,10 @@ _: {
         "linux/amd64" = "docker.io/postgres@sha256:4941ef97aaa2633ce9808f7766f8b8d746dd039ce8c51ca6da185c3dc63ab579";
       };
       "17" = {
-        "linux/amd64" = "docker.io/postgres@sha256:bf7b099328817f46a5248cf0df4c9f03a4c64954b442a4fa796ae84e97b716c7";
+        "linux/amd64" = "docker.io/postgres@sha256:90a60656711b4d18512e293931cc6d500bc0fa5ce21b606d66721c155bc980f2";
       };
       "18" = {
-        "linux/amd64" = "docker.io/postgres@sha256:fbcb3dece453834980f7c89e1adad0d8854ff49032430753beec237a9ff069e0";
+        "linux/amd64" = "docker.io/postgres@sha256:86717e5efb6cbea47812978d06ae953d83acea41f31b796af11087df4b31de52";
       };
     };
     "solarkennedy/ipmi-kvm-docker" = {
@@ -67,12 +67,12 @@ _: {
       };
     };
     "woodpeckerci/woodpecker-agent" = {
-      "v3.13" = {
+      "v3.13.0" = {
         "linux/amd64" = "docker.io/woodpeckerci/woodpecker-agent@sha256:92e1729d00334828ea6d0dc1762e55a0b93b72e01e8e2d4435fe2d91e4a30783";
       };
     };
     "woodpeckerci/woodpecker-server" = {
-      "v3.13" = {
+      "v3.13.0" = {
         "linux/amd64" = "docker.io/woodpeckerci/woodpecker-server@sha256:268f891dd63f2e86f912fc3fbdff0b26552a79c4290b4be66b7c04acbe81fbb9";
       };
     };
@@ -80,7 +80,7 @@ _: {
   "docker.n8n.io" = {
     "n8nio/n8n" = {
       "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:a2960e955034b79ddf82db80126830aa77f131269cbd1ef542a5f1ceb1c3301b";
+        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:f462b5d11bae72b5d4b36c984c2459d4bf2ce17a59c933ddd7db468ef6754e69";
       };
     };
   };

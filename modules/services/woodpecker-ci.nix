@@ -77,7 +77,7 @@ in {
         environmentFiles = [config.sops.secrets.woodpecker-postgresql-env.path];
       };
       woodpecker-server = {
-        image = containers-sha."docker.io"."woodpeckerci/woodpecker-server"."v3.13"."linux/amd64";
+        image = containers-sha."docker.io"."woodpeckerci/woodpecker-server"."v3.13.0"."linux/amd64";
         autoStart = true;
         dependsOn = ["woodpecker-postgres"];
         extraOptions =
@@ -107,7 +107,7 @@ in {
         environmentFiles = [config.sops.secrets.woodpecker-env.path];
       };
       woodpecker-agent = {
-        image = containers-sha."docker.io"."woodpeckerci/woodpecker-agent"."v3.13"."linux/amd64";
+        image = containers-sha."docker.io"."woodpeckerci/woodpecker-agent"."v3.13.0"."linux/amd64";
         autoStart = true;
         dependsOn = ["woodpecker-server"];
         # Internal nameservers are unroutable from the podman bridge, and aardvark-dns

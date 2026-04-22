@@ -103,12 +103,12 @@ architectures = ["linux/amd64"]
 [[containers]]
 repository = "docker.io"
 name = "woodpeckerci/woodpecker-server"
-tag = "v3.13"
+tag = "v3.13.0"
 architectures = ["linux/amd64"]
 [[containers]]
 repository = "docker.io"
 name = "woodpeckerci/woodpecker-agent"
-tag = "v3.13"
+tag = "v3.13.0"
 architectures = ["linux/amd64"]
 [[containers]]
 repository = "docker.io"
