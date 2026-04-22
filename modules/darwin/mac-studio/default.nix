@@ -3,6 +3,8 @@
   # User configuration - override home directory for external drive
   users.users.fdrake.home = lib.mkForce "/Volumes/External/Users/fdrake";
 
+  my.hasWoodpeckerAgent = true;
+
   homebrew = {
     brews = ["container" "steipete/tap/remindctl"];
     casks = ["mutedeck" "naps2" "proxy-audio-device" "elgato-stream-deck" "elgato-camera-hub"];

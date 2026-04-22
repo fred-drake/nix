@@ -62,6 +62,7 @@
     echo "# Auto-generated -- do not modify! #" >> $SHA_FILE
     echo "####################################" >> $SHA_FILE
     ${container-digest}/bin/container-digest --containers ''${PROJECT_ROOT:-$(pwd)}/apps/fetcher/containers.toml --output-format nix >> $SHA_FILE
+    ${pkgs.gnused}/bin/sed -i 's/^{\.\.\.}: {$/_: {/' $SHA_FILE
     ${pkgs.alejandra}/bin/alejandra --quiet $SHA_FILE
   '';
 

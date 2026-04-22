@@ -53,6 +53,12 @@ in
           gitea = {
             image = containers-sha."docker.gitea.com"."gitea"."1-rootless"."linux/amd64";
             autoStart = true;
+            # Resolve woodpecker via the host so webhooks can reach the
+            # nginx proxy without leaving orgrimmar (and without needing
+            # public DNS inside the container's default resolver).
+            extraOptions = [
+              "--add-host=woodpecker.${config.soft-secrets.networking.domain}:host-gateway"
+            ];
             ports = [
               "127.0.0.1:${proxyPort}:3000"
               "0.0.0.0:22:2222"
@@ -66,7 +72,7 @@ in
               PUID = "1000";
               PGID = "1000";
               TZ = "America/New_York";
-              GITEA__webhook__ALLOWED_HOST_LIST = "woodpecker.${config.soft-secrets.networking.domain}";
+              GITEA__webhook__ALLOWED_HOST_LIST = "private";
             };
           };
           gitea-check-service = {

@@ -73,5 +73,10 @@
       default = false;
       description = "Pipewire audio stack.";
     };
+    hasWoodpeckerAgent = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Run a Woodpecker CI agent as a user launchd service (macOS iOS builds).";
+    };
   };
 }

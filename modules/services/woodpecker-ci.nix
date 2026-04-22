@@ -77,7 +77,7 @@ in {
         environmentFiles = [config.sops.secrets.woodpecker-postgresql-env.path];
       };
       woodpecker-server = {
-        image = containers-sha."docker.io"."woodpeckerci/woodpecker-server"."v3"."linux/amd64";
+        image = containers-sha."docker.io"."woodpeckerci/woodpecker-server"."v3.13"."linux/amd64";
         autoStart = true;
         dependsOn = ["woodpecker-postgres"];
         extraOptions =
@@ -88,6 +88,11 @@ in {
           ++ map (dns: "--dns=${dns}") config.soft-secrets.networking.nameservers.internal;
         ports = [
           "127.0.0.1:${proxyPort}:8000"
+          # Expose gRPC on the tailnet interface only so remote agents
+          # (e.g. mac-studio for iOS builds) can dial in without publishing
+          # the port on the public Hetzner IP. Host port is 9010 because
+          # 9000 on 10.1.1.4 is already bound by prometheus node_exporter.
+          "10.1.1.4:9010:9000"
         ];
         volumes = [
           "/var/woodpecker/data:/var/lib/woodpecker"
@@ -102,7 +107,7 @@ in {
         environmentFiles = [config.sops.secrets.woodpecker-env.path];
       };
       woodpecker-agent = {
-        image = containers-sha."docker.io"."woodpeckerci/woodpecker-agent"."v3"."linux/amd64";
+        image = containers-sha."docker.io"."woodpeckerci/woodpecker-agent"."v3.13"."linux/amd64";
         autoStart = true;
         dependsOn = ["woodpecker-server"];
         # Internal nameservers are unroutable from the podman bridge, and aardvark-dns
