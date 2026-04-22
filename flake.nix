@@ -15,6 +15,13 @@
     nixpkgs-fred-testing.url = "github:fred-drake/nixpkgs/fred-unstable"; # Modules that have not yet been pulled into upstream
     # nixpkgs-fred-testing.url = "git+file:///Users/fdrake/Source/github.com/fred-drake/nixpkgs"; # For locally testing my contributions
 
+    # Frozen rev exposing woodpecker-agent 3.13.0. Kept in lockstep with the
+    # Woodpecker server image pinned in apps/fetcher/containers.toml so the
+    # mac-studio agent can't drift past the server on nix flake update.
+    # Bump this rev deliberately when upgrading — see
+    # .claude/skills/woodpecker-upgrade/SKILL.md.
+    nixpkgs-woodpecker-agent.url = "github:nixos/nixpkgs/68d8aa3d661f0e6bd5862291b5bb263b2a6595c9";
+
     # Secrets inputs
     secrets = {
       url = "git+ssh://git@github.com/fred-drake/nix-secrets.git";

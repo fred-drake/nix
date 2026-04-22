@@ -10,6 +10,12 @@
   tailscale = prev.tailscale.overrideAttrs (_: {doCheck = false;});
   inherit (inputs.nixpkgs-stable.legacyPackages.${prev.stdenv.hostPlatform.system}) wireguard-tools;
 
+  # Pin woodpecker-agent to the rev frozen in flake input
+  # nixpkgs-woodpecker-agent so it stays in lockstep with the server
+  # image pinned in apps/fetcher/containers.toml. See
+  # .claude/skills/woodpecker-upgrade/SKILL.md before bumping.
+  inherit (inputs.nixpkgs-woodpecker-agent.legacyPackages.${prev.stdenv.hostPlatform.system}) woodpecker-agent;
+
   # Pull bat-extras from stable and disable tests for all components
   bat-extras = let
     stableBatExtras = inputs.nixpkgs-stable.legacyPackages.${prev.stdenv.hostPlatform.system}.bat-extras;
