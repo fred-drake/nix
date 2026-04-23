@@ -37,8 +37,8 @@ in
           WOODPECKER_GRPC_SECURE = "false";
           WOODPECKER_GRPC_VERIFY = "false";
           WOODPECKER_BACKEND = "local";
-          WOODPECKER_FILTER_LABELS = "platform=darwin,arch=arm64";
-          WOODPECKER_HOSTNAME = "mac-studio";
+          WOODPECKER_FILTER_LABELS = "platform=darwin/*,arch=arm64,org-id=*";
+          WOODPECKER_HOSTNAME = "mac-studio-1";
           WOODPECKER_MAX_WORKFLOWS = "1";
           WOODPECKER_BACKEND_LOCAL_TEMP_DIR = workdir;
           PATH = "/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${home}/.nix-profile/bin:/etc/profiles/per-user/fdrake/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";

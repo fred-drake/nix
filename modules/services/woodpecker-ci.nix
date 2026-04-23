@@ -128,6 +128,8 @@ in {
           WOODPECKER_SERVER = "woodpecker-server:9000";
           WOODPECKER_BACKEND = "docker";
           WOODPECKER_BACKEND_DOCKER_NETWORK = "woodpecker-net";
+          WOODPECKER_HOSTNAME = "orgrimmar-1";
+          WOODPECKER_FILTER_LABELS = "org-id=*,platform=linux/*";
           TZ = "America/New_York";
         };
         environmentFiles = [config.sops.secrets.woodpecker-agent-env.path];
