@@ -316,6 +316,24 @@ in {
         key = "borg-password";
       };
 
+      brainrush-terraform-prod-api-token = {
+        sopsFile = config.secrets.workstation.hetzner-home;
+        mode = "0400";
+        key = "brainrush-terraform-prod-api-token";
+      };
+
+      brainrush-terraform-s3-access-key = {
+        sopsFile = config.secrets.workstation.hetzner-home;
+        mode = "0400";
+        key = "brainrush-terraform-s3-access-key";
+      };
+
+      brainrush-terraform-s3-secret-key = {
+        sopsFile = config.secrets.workstation.hetzner-home;
+        mode = "0400";
+        key = "brainrush-terraform-s3-secret-key";
+      };
+
       cloudflare-api-key = {
         sopsFile = config.secrets.workstation.cloudflare;
         mode = "0400";
