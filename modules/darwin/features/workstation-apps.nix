@@ -78,6 +78,7 @@ lib.mkMerge [
         "terminal-notifier"
         "facebook/fb/idb-companion"
         "ios-deploy"
+        "libimobiledevice"
       ];
       onActivation = {
         cleanup = "zap";
