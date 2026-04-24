@@ -143,6 +143,14 @@
     nixarr = {
       url = "github:nix-media-server/nixarr";
     };
+
+    # Auto Nix GC root retention — prunes stale direnv, result/, and profile
+    # GC roots so nix-collect-garbage can actually free disk.
+    angrr = {
+      url = "github:linyinfeng/angrr";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nix-darwin.follows = "darwin";
+    };
   };
 
   # Output configuration

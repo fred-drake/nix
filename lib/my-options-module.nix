@@ -78,5 +78,10 @@
       default = false;
       description = "Run a Woodpecker CI agent as a user launchd service (macOS iOS builds).";
     };
+    hasAutoGc = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Automatic Nix garbage collection (angrr on NixOS; nix.gc on Darwin).";
+    };
   };
 }
