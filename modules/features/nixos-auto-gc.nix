@@ -7,6 +7,7 @@
   my.modules.nixos.auto-gc = {
     config,
     lib,
+    pkgs,
     ...
   }: {
     # imports is outside the mkIf guard by necessity — NixOS modules can't
@@ -31,6 +32,11 @@
 
       services.angrr = {
         enable = true;
+        # Source the package from angrr's own flake output rather than
+        # pkgs.angrr. nixpkgs-stable (used by Hetzner servers) does not ship
+        # an `angrr` attribute; nixpkgs-unstable does. Routing through the
+        # flake packages works uniformly across every host.
+        package = inputs.angrr.packages.${pkgs.stdenv.hostPlatform.system}.default;
         # Preset: populates temporary-root-policies (.direnv, result*) and
         # profile-policies (both system and user profiles) with keep-since =
         # this period. User profile inclusion means home-manager generations
