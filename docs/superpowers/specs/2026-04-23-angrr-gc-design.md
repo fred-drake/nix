@@ -39,8 +39,10 @@ same timer.
   Periodic `nix.optimise.automatic` is enough and avoids the historical
   store-corruption risk of the build-time variant.
 - Pruning home-manager user-profile generations independently of system
-  profiles. Angrr's preset sets `profile-policies.user.enable = false`;
-  we accept that default.
+  profiles. Angrr's preset enables user-profile policy with the same
+  `keep-since` as system, so home-manager generations older than 14d
+  are pruned alongside system generations — intentional for uniform
+  retention, not a separate knob.
 - Enabling the angrr direnv auto-touch hook in the MVP. See
   [Deferred: direnv auto-touch](#deferred-direnv-auto-touch) below for why.
 - Rolling out to a subset of hosts first. The capability flag defaults to
@@ -53,7 +55,7 @@ same timer.
 | Scope | All NixOS + Darwin hosts | Uniform behavior simplifies reasoning. |
 | Retention | 14 days | Moderate — angrr's preset default. |
 | Cadence | Daily | `nix.gc.dates = "daily"`; angrr rides the same timer via `enableNixGcIntegration`. |
-| Generation safety floor | Keep last 3 system generations | Override the preset's `keep-latest-n = 5` to trim more aggressively. |
+| Generation safety floor | Keep last 3 system generations | The preset sets no `keep-latest-n`; we add it as a safety floor (always keep the 3 newest). |
 | Store optimisation | Periodic only (`nix.optimise.automatic`) | Dedup without build-time latency or corruption risk. |
 | Opt-out mechanism | `my.hasAutoGc` capability flag, default `true` | Matches dendritic pattern; per-host opt-out is one line. |
 
@@ -130,18 +132,30 @@ angrr = {
 ### NixOS feature module (`modules/features/nixos-auto-gc.nix`)
 
 ```nix
+# Automatic Nix garbage collection for NixOS hosts.
+# Combines angrr (prunes stale GC roots) with nix.gc (deletes unreferenced
+# store paths) and nix.optimise (weekly hard-linking of duplicate files).
+# angrr.service runs Before=nix-gc.service via enableNixGcIntegration,
+# which auto-enables whenever nix.gc.automatic = true.
 {inputs, ...}: {
   my.modules.nixos.auto-gc = {
     config,
     lib,
     ...
   }: {
-    imports = [inputs.angrr.nixosModules.default];
+    # imports is outside the mkIf guard by necessity — NixOS modules can't
+    # conditionally import. angrr's option definitions load on every host,
+    # but services.angrr.enable below stays false unless hasAutoGc is true.
+    imports = [inputs.angrr.nixosModules.angrr];
+    # config = wrapper required because we have a top-level imports; can't
+    # combine bare `lib.mkIf { ... }` with imports at the module root.
     config = lib.mkIf config.my.hasAutoGc {
       nix.gc = {
         automatic = true;
         dates = "daily";
         options = "--delete-older-than 14d";
+        # Spread GC start across a 45min window so fleet hosts don't all
+        # fire at the same wall-clock instant.
         randomizedDelaySec = "45min";
       };
       nix.optimise = {
@@ -151,10 +165,13 @@ angrr = {
 
       services.angrr = {
         enable = true;
-        # `period` is a preset: configures temporary-root-policies (direnv, result/)
-        # and profile-policies (system, user) with 14d retention.
+        # Preset: populates temporary-root-policies (.direnv, result*) and
+        # profile-policies (both system and user profiles) with keep-since =
+        # this period. User profile inclusion means home-manager generations
+        # older than 14d are pruned too — intentional for uniform retention.
         period = "14d";
-        # Trim the preset's 5-generation default down to 3 for tighter disk use.
+        # Add a safety floor: always keep the 3 newest system generations,
+        # regardless of age. The preset itself has no keep-latest-n.
         settings.profile-policies.system.keep-latest-n = 3;
       };
     };
@@ -164,8 +181,8 @@ angrr = {
 
 - `services.angrr.period = "14d"` triggers angrr's built-in preset, which
   populates `temporary-root-policies` (matching `.direnv/` paths and
-  `result*` symlinks) and `profile-policies` (system profile, with user
-  profile `enable = false`).
+  `result*` symlinks) and `profile-policies` (both system and user profiles
+  with `keep-since = 14d`).
 - `services.angrr.enableNixGcIntegration` auto-defaults to `true` when
   `nix.gc.automatic = true`, so angrr runs as a `Before=nix-gc.service`
   dependency and shares the daily `nix-gc` timer. We don't set it
@@ -175,8 +192,8 @@ angrr = {
   wall-clock moment.
 - `nix.optimise.dates = ["weekly"]` because optimisation doesn't benefit
   from daily churn.
-- `keep-latest-n = 3` overrides the preset's default of `5`, matching the
-  chosen safety floor.
+- `keep-latest-n = 3` adds a safety floor absent from the preset, ensuring
+  the 3 newest system generations are always retained regardless of age.
 
 ### Darwin feature module (`modules/features/darwin-auto-gc.nix`)
 
