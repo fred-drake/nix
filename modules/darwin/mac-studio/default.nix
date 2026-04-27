@@ -4,6 +4,7 @@
   users.users.fdrake.home = lib.mkForce "/Volumes/External/Users/fdrake";
 
   my.hasWoodpeckerAgent = true;
+  my.hasIosSigning = true;
 
   homebrew = {
     brews = ["container" "steipete/tap/remindctl"];

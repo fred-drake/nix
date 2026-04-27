@@ -78,6 +78,11 @@
       default = false;
       description = "Run a Woodpecker CI agent as a user launchd service (macOS iOS builds).";
     };
+    hasIosSigning = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "iOS code signing identity (.p12) and provisioning profile deployment (Darwin only).";
+    };
     hasAutoGc = lib.mkOption {
       type = lib.types.bool;
       default = true;

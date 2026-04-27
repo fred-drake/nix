@@ -53,6 +53,33 @@ update:
 update-secrets:
     nix flake update secrets
 
+# Import iOS code signing identity (.p12) into the login keychain. One-time per Darwin host.
+bootstrap-signing:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ "$(uname)" != "Darwin" ]]; then
+        echo "bootstrap-signing only runs on macOS" >&2
+        exit 1
+    fi
+    p12="$HOME/.config/sops-nix/secrets/apple-distribution-p12"
+    pass="$HOME/.config/sops-nix/secrets/apple-distribution-p12-passphrase"
+    if [[ ! -f "$p12" || ! -f "$pass" ]]; then
+        echo "Decrypted secrets not found. Run 'just switch' first so sops-nix deploys them." >&2
+        echo "Expected: $p12" >&2
+        echo "Expected: $pass" >&2
+        exit 1
+    fi
+    if security find-identity -v -p codesigning | grep -q "Apple Distribution"; then
+        echo "Apple Distribution identity already present in login keychain — nothing to do."
+        exit 0
+    fi
+    security import "$p12" \
+        -k "$HOME/Library/Keychains/login.keychain-db" \
+        -P "$(cat "$pass")" \
+        -T /usr/bin/codesign \
+        -T /usr/bin/security
+    echo "Imported. Verify with: security find-identity -v -p codesigning"
+
 # Run colmena remote switch on given host
 colmena HOST:
     colmena apply --on {{ HOST }} --impure
