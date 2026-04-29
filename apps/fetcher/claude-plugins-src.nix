@@ -5,8 +5,8 @@
   claude-plugins-official-src = pkgs.fetchFromGitHub {
     owner = "anthropics";
     repo = "claude-plugins-official";
-    rev = "020446a4294f09d9c32e60bff0c4ae8fb39205cb";
-    hash = "sha256-ywyOB23pJaOQHf2nPvis1fNqpNPVUM59upxETzl6KCw=";
+    rev = "0742692199b49af5c6c33cd68ee674fb2e679d50";
+    hash = "sha256-5h7uXbqtuguCw9AMpEFJiKAH7ZmGgJJvm3yyec6+BXE=";
   };
   cc-marketplace-src = pkgs.fetchFromGitHub {
     owner = "samber";
@@ -17,8 +17,8 @@
   cc-skills-golang-src = pkgs.fetchFromGitHub {
     owner = "samber";
     repo = "cc-skills-golang";
-    rev = "937bc72b766e1c5980a8d34b8ed636fda19263a3";
-    hash = "sha256-IHHPdoPH44sHDfV7c7RVr+S/CpayTk4j/3QHEIiab0k=";
+    rev = "bee9d0486d1deb542ef53f8a46d17c70b560891f";
+    hash = "sha256-OMrUVUHtgpNUfTheYH2eOZ8nWbatqW25YY5cz6NU9jw=";
   };
   superpowers-src = pkgs.fetchFromGitHub {
     owner = "obra";
