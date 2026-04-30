@@ -17,8 +17,8 @@
   cc-skills-golang-src = pkgs.fetchFromGitHub {
     owner = "samber";
     repo = "cc-skills-golang";
-    rev = "bee9d0486d1deb542ef53f8a46d17c70b560891f";
-    hash = "sha256-OMrUVUHtgpNUfTheYH2eOZ8nWbatqW25YY5cz6NU9jw=";
+    rev = "2e80a545f54131cc2a1e71e7fc58b4934c60a3f5";
+    hash = "sha256-pjS3/tZiuIaUt3RWA1k5GqdJZ/x0WncsGSBr8FfY8w4=";
   };
   superpowers-src = pkgs.fetchFromGitHub {
     owner = "obra";
