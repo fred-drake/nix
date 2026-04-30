@@ -485,6 +485,12 @@ in {
         key = "thrifter-local-upload-keyfile";
         path = "${home}/.appstoreconnect/private_keys/AuthKey_L32H7BU6AQ.p8";
       };
+
+      thrifter-prod-db-url = {
+        sopsFile = config.secrets.workstation.thrifter-prod-db-url;
+        mode = "0400";
+        key = "data";
+      };
     };
   };
 
