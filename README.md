@@ -24,17 +24,17 @@ with `mkIf`, so a single feature module works across all hosts.
 - **macOS Workstations**: Managed via nix-darwin
   - `mac-studio`
   - `macbook-pro`
+  - `laisas-mac-mini`
 - **Linux Workstations**:
   - `fredpc` (x86_64-linux with GUI, NVIDIA CUDA support, glance dashboard)
   - `anton` (x86_64-linux WSL on Windows, gaming and AI processing)
   - `macbookx86` (x86_64-linux on Apple T2 hardware)
-  - `nixosaarch64vm` (aarch64-linux)
 
 ### Servers
 
-- **Build Machines**:
-  - `fredpc`: Builds x86_64-linux configurations
-  - `nixosaarch64vm`: Builds aarch64-linux configurations
+- **Build / VM Hosts**:
+  - `fredpc`: x86_64-linux build host
+  - `nixosaarch64vm`: aarch64-linux server VM
 - **Infrastructure Services** (Managed via Colmena):
   - `headscale`: VPN coordination
   - `ironforge`: Multi-service host (nixarr with jellyfin, jellyseerr,
@@ -62,7 +62,7 @@ modules/
   home-manager/              # HM feature implementations + host overrides
   darwin/                    # Darwin feature implementations + per-host dirs
   nixos/                     # NixOS per-host configs (thin)
-colmena/                     # Colmena host files + hetzner-common, wsl-common
+colmena/                     # Colmena entry + hosts/, hetzner-common, wsl-common
 apps/                        # Custom packages (claude-code, fetchers, etc.)
 homefiles/                   # Raw dotfiles and config files
 overlays/                    # Package overlays
@@ -106,11 +106,12 @@ The infrastructure uses multiple VLANs for security and organization:
 
 ## Development Environment
 
-This repository uses [devenv](https://devenv.sh/) to provide a consistent
-development environment. The `devenv.nix` file contains all the libraries
-and helper scripts needed for processing this repository.
+This repository exposes a Nix devshell (defined in `shell.nix` and wired
+into the flake via `modules/infra/devshell.nix` as `devShells.default`)
+that contains all the libraries and helper scripts needed to work on
+this repository.
 
-### Features Provided by devenv
+### Features Provided by the devshell
 
 - **Development Tools**: Includes tools like `colmena`, `just`,
   `alejandra`, `statix`, and other utilities
@@ -119,22 +120,22 @@ and helper scripts needed for processing this repository.
 - **Consistent Environment**: Ensures all contributors have the same
   tooling and dependencies
 
-### Using devenv
+### Entering the devshell
 
 To enter the development environment:
 
 ```bash
 cd ~/nix
-devenv shell
+nix develop
 ```
 
 This will load all the tools and environment variables defined in
-`devenv.nix`. Once inside the environment, you can use the helper scripts
+`shell.nix`. Once inside the environment, you can use the helper scripts
 and tools without additional installation.
 
 If you have [direnv](https://direnv.net/) installed and configured, the
 development environment will be automatically activated when you enter the
-repository directory.
+repository directory (via the `use flake` directive in `.envrc`).
 
 ## Just Targets
 
@@ -143,16 +144,22 @@ This project uses `just` for task automation. Here are the available targets:
 - `switch` - Switches the system to the current configuration
 - `build` - Builds the system in its current form
 - `update-all` - Updates everything (runs update, update-npm-packages,
-  update-repos, update-container-digests, and update-secrets)
+  update-repos, update-container-digests, update-secrets, update-claude,
+  and update-gws)
 - `update` - Updates input definitions from remote resources
 - `update-npm-packages` - Updates NPM packages
 - `update-repos` - Pulls the latest hashes and shas from the repos in
   `apps/fetcher/repos.toml`
 - `update-container-digests` - Updates the SHA digests of container images
 - `update-secrets` - Updates the secrets flake
+- `update-claude` - Updates the Claude Code binary and pinned plugin repos
+- `update-gws` - Updates the GWS CLI binary metadata
 - `format` - Format all .nix files with alejandra
 - `lint` - Linting for the project with statix
-- `colmena HOST` - Runs colmena remote switch on the specified host
+- `bootstrap-signing` - Import iOS code signing identity into the macOS
+  login keychain (one-time per Darwin host)
+- `colmena HOST` - Runs `colmena apply` on the specified host
+- `colmena-age HOST` - Reports the age of nixpkgs on a remote colmena host
 
 ## Container Management
 
