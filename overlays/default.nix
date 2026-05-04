@@ -1,10 +1,19 @@
 {inputs, ...}: _final: prev: {
-  # Disable flaky uvloop tests (timing-sensitive tests fail intermittently)
+  # Disable flaky python tests:
+  # - uvloop: timing-sensitive tests fail intermittently
+  # - openai-whisper: tests/test_audio.py spawns ffmpeg, which gets killed in
+  #   the build sandbox while decoding tests/jfk.flac. Tests are gated by
+  #   doInstallCheck (not doCheck) so override that.
   python313Packages = prev.python313Packages.override {
     overrides = _python-final: python-prev: {
       uvloop = python-prev.uvloop.overrideAttrs (_: {doCheck = false;});
+      openai-whisper = python-prev.openai-whisper.overrideAttrs (_: {doInstallCheck = false;});
     };
   };
+
+  # The top-level pkgs.openai-whisper alias is bound before our python
+  # overrides apply, so override it directly too.
+  openai-whisper = prev.openai-whisper.overrideAttrs (_: {doInstallCheck = false;});
 
   # Disable tailscale tests (tsconsensus test times out)
   tailscale = prev.tailscale.overrideAttrs (_: {doCheck = false;});

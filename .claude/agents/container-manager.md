@@ -64,7 +64,6 @@ just update-container-digests
 
 - **orgrimmar**: Gitea, Paperless, Calibre, Woodpecker CI, Resume (reactive-resume)
 - **ironforge**: nixarr media stack
-- **fredpc**: Glance dashboard
 - **headscale**: Headscale VPN server
 
 ## Guidelines

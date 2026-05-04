@@ -97,8 +97,6 @@
       flake = false;
     };
 
-    # Nix User Repository: User contributed nix packages
-    nur.url = "github:nix-community/NUR";
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";

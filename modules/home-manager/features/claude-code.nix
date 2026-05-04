@@ -5,7 +5,6 @@
   ...
 }: let
   home = config.home.homeDirectory;
-  repos-src = import ../../../apps/fetcher/repos-src.nix {inherit pkgs;};
   claude-plugins-src = import ../../../apps/fetcher/claude-plugins-src.nix {inherit pkgs;};
   lsp-plugin = import ../../../apps/claude-code/lsp-plugin.nix {
     inherit pkgs;
@@ -21,15 +20,6 @@
     npm-packages = import ../../../apps/fetcher/npm-packages.nix;
   };
   claude-usage = pkgs.callPackage ../../../apps/claude-usage.nix {};
-
-  # Skills fetched from external repositories
-  gws-skills = [
-    "gws-shared"
-    "gws-gmail"
-    "gws-gmail-send"
-    "gws-gmail-triage"
-    "gws-gmail-watch"
-  ];
 in {
   # Add Claude Code and Gitea MCP packages
   home.packages = [
@@ -370,17 +360,6 @@ in {
         recursive = true;
       };
 
-      # GWS skills fetched from github.com/googleworkspace/cli
-    }
-    // builtins.listToAttrs (map (skill: {
-        name = ".claude/skills/${skill}";
-        value = {
-          source = "${repos-src.gws-skills-src}/skills/${skill}";
-          recursive = true;
-        };
-      })
-      gws-skills)
-    // {
       # Ralph Wiggum assets (scripts and hooks for the ralph-loop command)
       ".claude/assets/ralph-wiggum" = {
         source = ../../../apps/claude-code/assets/ralph-wiggum;

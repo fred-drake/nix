@@ -6,10 +6,9 @@
     npm-packages = import ../../../apps/fetcher/npm-packages.nix;
     inherit (pkgs) playwright-driver;
   };
-  gws = pkgs.callPackage ../../../apps/gws.nix {};
 in {
   home.packages =
-    [agent-browser ccstatusline gws]
+    [agent-browser ccstatusline]
     ++ (with pkgs; [
       llama-cpp
     ])

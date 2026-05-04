@@ -2,11 +2,9 @@
 # Auto-generated -- do not modify! #
 ####################################
 {pkgs, ...}: {
-  claude-plugins-official-src = pkgs.fetchFromGitHub {
-    owner = "anthropics";
-    repo = "claude-plugins-official";
-    rev = "b392f51899343f35a203260a4b344803de236d13";
-    hash = "sha256-zUogHhL7MWXqpRDzjKI3giqyWJMArQDoSKooxhwfj/8=";
+  claude-plugins-official-src = builtins.fetchTarball {
+    url = "https://github.com/anthropics/claude-plugins-official/archive/ac45fdae4b7af187b5624599ab054090dedadd94.tar.gz";
+    sha256 = "1dfxc9rpwlxb1n7ycg99ckb5924y57xvxs3pdbxlxw1lv43wlj34";
   };
   cc-marketplace-src = pkgs.fetchFromGitHub {
     owner = "samber";

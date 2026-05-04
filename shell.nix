@@ -79,13 +79,29 @@
       name=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.name')
       url=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.url')
       rev=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.rev // empty')
+      fetcher=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.fetcher // empty')
 
-      if [ -n "$rev" ]; then
-        processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" "$rev" | tr -d '\n')
+      if [ "$fetcher" = "tarball" ]; then
+        # Resolve to a concrete commit so the URL is reproducible.
+        if [ -n "$rev" ]; then
+          resolved_rev="$rev"
+        else
+          resolved_rev=$(${pkgs.git}/bin/git ls-remote "$url" HEAD | ${pkgs.coreutils}/bin/cut -f1)
+        fi
+        archive_url="$url/archive/''${resolved_rev}.tar.gz"
+        sha256=$(${pkgs.nix}/bin/nix-prefetch-url --type sha256 --unpack "$archive_url" 2>/dev/null)
+        echo "  ''${name} = builtins.fetchTarball {"
+        echo "    url = \"''${archive_url}\";"
+        echo "    sha256 = \"''${sha256}\";"
+        echo "  };"
       else
-        processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" | tr -d '\n')
+        if [ -n "$rev" ]; then
+          processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" "$rev" | tr -d '\n')
+        else
+          processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" | tr -d '\n')
+        fi
+        echo "  ''${name} = ''${processed_url};"
       fi
-      echo "  ''${name} = ''${processed_url};"
     done >> $SRCFILE
     echo "}" >> $SRCFILE
     ${pkgs.alejandra}/bin/alejandra --quiet $SRCFILE

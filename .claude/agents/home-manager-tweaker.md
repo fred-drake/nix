@@ -23,7 +23,6 @@ repository that manages multiple user environments.
   - `nixvim.nix`, `linux-apps.nix`, `darwin-hm.nix`
   - `hyprland/` — Hyprland window manager config
 - `modules/home-manager/host/` — Per-host HM overrides:
-  - `fredpc.nix` — Linux workstation
   - `mac-studio.nix` — Primary Mac
   - `macbook-pro.nix` — Laptop
 - `homefiles/` — Raw dotfiles symlinked via `home.file`

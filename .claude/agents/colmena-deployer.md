@@ -18,13 +18,10 @@ You are a Colmena deployment specialist for a multi-host NixOS infrastructure.
 
 | Host | Role | Notes |
 |------|------|-------|
-| fredpc | Workstation | Hyprland, GPU passthrough, Borg backup |
 | headscale | VPN | Headscale server + Tailscale client |
 | ironforge | Media | nixarr media stack |
 | orgrimmar | Services | Gitea, Paperless, Calibre, Woodpecker CI, Resume |
 | anton | WSL2 | NVIDIA RTX 5090 CUDA |
-| macbookx86 | Legacy | x86 MacBook running NixOS |
-| nixosaarch64vm | VM | aarch64 NixOS VM |
 
 ## Deployment Commands
 
@@ -61,4 +58,3 @@ colmena build --on HOST --impure
 - Check that `just update-secrets` has been run if secrets changed
 - Monitor deployment output for activation script warnings
 - After deployment, suggest verifying critical services on the target host
-- fredpc is a workstation — deployment may affect the user's active session

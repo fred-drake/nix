@@ -25,16 +25,9 @@ with `mkIf`, so a single feature module works across all hosts.
   - `mac-studio`
   - `macbook-pro`
   - `laisas-mac-mini`
-- **Linux Workstations**:
-  - `fredpc` (x86_64-linux with GUI, NVIDIA CUDA support, glance dashboard)
-  - `anton` (x86_64-linux WSL on Windows, gaming and AI processing)
-  - `macbookx86` (x86_64-linux on Apple T2 hardware)
 
 ### Servers
 
-- **Build / VM Hosts**:
-  - `fredpc`: x86_64-linux build host
-  - `nixosaarch64vm`: aarch64-linux server VM
 - **Infrastructure Services** (Managed via Colmena):
   - `headscale`: VPN coordination
   - `ironforge`: Multi-service host (nixarr with jellyfin, jellyseerr,
@@ -144,8 +137,8 @@ This project uses `just` for task automation. Here are the available targets:
 - `switch` - Switches the system to the current configuration
 - `build` - Builds the system in its current form
 - `update-all` - Updates everything (runs update, update-npm-packages,
-  update-repos, update-container-digests, update-secrets, update-claude,
-  and update-gws)
+  update-repos, update-container-digests, update-secrets, and
+  update-claude)
 - `update` - Updates input definitions from remote resources
 - `update-npm-packages` - Updates NPM packages
 - `update-repos` - Pulls the latest hashes and shas from the repos in
@@ -153,7 +146,6 @@ This project uses `just` for task automation. Here are the available targets:
 - `update-container-digests` - Updates the SHA digests of container images
 - `update-secrets` - Updates the secrets flake
 - `update-claude` - Updates the Claude Code binary and pinned plugin repos
-- `update-gws` - Updates the GWS CLI binary metadata
 - `format` - Format all .nix files with alejandra
 - `lint` - Linting for the project with statix
 - `bootstrap-signing` - Import iOS code signing identity into the macOS
@@ -194,7 +186,6 @@ This project uses Podman for container runtime with the following practices:
 4. Build the flake for your system. This will take a while the first time.
    - Macbook Pro: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.macbook-pro.system`
    - Mac Studio: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.mac-studio.system`
-   - Linux PC: `nix --extra-experimental-features "nix-command flakes" build .#nixosConfigurations.fredpc.system`
 
 ## Key Management
 

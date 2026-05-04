@@ -43,13 +43,6 @@ colmena build --on <hostname> --impure
 |------|------|---------|
 | anton | WSL NixOS on Windows laptop | Gaming and AI processing |
 
-### On-Prem Workstations (locally configured)
-
-| Host | Type | Notes |
-|------|------|-------|
-| fredpc | x86_64-linux | GUI, NVIDIA CUDA, glance dashboard |
-| nixosaarch64vm | aarch64-linux | ARM64 build host |
-
 ## Troubleshooting Workflows
 
 ### Service Not Working

@@ -15,10 +15,3 @@ This reference maps hostnames to their types, locations, and services.
 | Hostname | Type | Deploy User | SSH Port | Purpose |
 |----------|------|-------------|----------|---------|
 | anton | WSL NixOS on Windows | nixos (sudo) | 22 | Gaming and AI processing |
-
-## On-Prem Workstations (locally configured)
-
-| Hostname | Architecture | Notes |
-|----------|-------------|-------|
-| fredpc | x86_64-linux | GUI, NVIDIA CUDA, glance dashboard, x86_64 build host |
-| nixosaarch64vm | aarch64-linux | ARM64 build host |

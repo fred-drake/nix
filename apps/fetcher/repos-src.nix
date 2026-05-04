@@ -54,20 +54,14 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "8dea928bfea1da8c05527a3f55fe2e159ebf1c9e";
-    hash = "sha256-o9jx6JIzonYliAkAzY8Zpqje3Ve9lyB+N4JujfKVLPc=";
+    rev = "5ab9b061690e9e8695ec62dc793f9a3bda2eb616";
+    hash = "sha256-tOHe63NSWVFYBry/KSd5wwF9Khha5AXT5Dqx+Z6ICww=";
   };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
     repo = "spotifatius";
     rev = "6eceb8e992ba2d1d89d370961a18a1fdeae729fa";
     hash = "sha256-esQiz9nduOm7nAUIq/Y5dMMxpKo2m19lEbZl6iRcxpo=";
-  };
-  gws-skills-src = pkgs.fetchFromGitHub {
-    owner = "googleworkspace";
-    repo = "cli";
-    rev = "a3768d0e82ad83cca2da97724e46bea4ff0e6dbd";
-    hash = "sha256-YyNIHbyZrLlXYtWxZY8Um19MsnLharmS+nWGWO89fsA=";
   };
   scanimage-web-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";

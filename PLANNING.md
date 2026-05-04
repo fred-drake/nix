@@ -16,8 +16,6 @@ This repository serves as the single source of truth for infrastructure as code 
 
 1. **Directly Configured Hosts** (local configuration):
 
-   - `fredpc` (Linux with GUI)
-   - `nixosaarch64vm` (aarch64 Linux)
    - `laisas-mac-mini` (macOS with nix-darwin)
    - `mac-studio` (macOS with nix-darwin)
    - `macbook-pro` (macOS with nix-darwin)
@@ -25,8 +23,6 @@ This repository serves as the single source of truth for infrastructure as code 
 2. **Remotely Configured Hosts** (via Colmena):
    - Hetzner servers (x86_64-linux): headscale, ironforge, orgrimmar
    - WSL hosts: `anton` (x86_64-linux, Windows laptop for gaming and AI processing)
-   - x86_64-linux: Built on `fredpc`
-   - aarch64-linux: Built on `nixosaarch64vm`
 
 ### Platform-Specific Notes
 
@@ -36,9 +32,7 @@ This repository serves as the single source of truth for infrastructure as code 
 - Homebrew required for initial setup
 
 #### NixOS
-- Direct configurations for local machines
-- Colmena for remote deployments
-- Architecture-specific builders (x86_64 on fredpc, aarch64 on nixosaarch64vm)
+- Colmena for remote deployments (Hetzner servers and WSL hosts)
 
 ## Nix Versioning
 

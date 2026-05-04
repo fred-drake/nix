@@ -1,6 +1,11 @@
 [[repos]]
 name = "claude-plugins-official-src"
 url = "https://github.com/anthropics/claude-plugins-official"
+# Use builtins.fetchTarball so this entry stays platform-independent —
+# claude-code.nix reads its marketplace.json at eval time, which would
+# otherwise require an x86_64-linux builder when evaluating Linux hosts
+# from a Darwin workstation.
+fetcher = "tarball"
 
 [[repos]]
 name = "cc-marketplace-src"

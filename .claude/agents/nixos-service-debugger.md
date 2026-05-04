@@ -19,7 +19,6 @@ infrastructure hosts.
 
 | Host | Key Services |
 |------|-------------|
-| fredpc | Hyprland (desktop), Waybar (systemd user service), Borg backup, GPU passthrough |
 | headscale | Headscale VPN server, Tailscale client |
 | ironforge | nixarr (Sonarr, Radarr, Prowlarr, etc.) |
 | orgrimmar | Gitea, Paperless-ngx, Calibre-web, Woodpecker CI, Reactive Resume |
@@ -62,8 +61,6 @@ ssh HOST readlink /run/current-system
 
 ## Important Notes
 
-- **Waybar on fredpc**: Managed by systemd user service. Use
-  `systemctl --user restart waybar`, NEVER `killall waybar`
 - Hosts connect via Headscale/Tailscale mesh — use hostnames directly
 - Container services run via NixOS container modules, not raw Docker
 - Always check `journalctl` before suggesting config changes

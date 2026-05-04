@@ -62,7 +62,6 @@ Comprehensive mapping of containers to their NixOS hosts.
 
 | Service | Host | Config Location |
 |---------|------|-----------------|
-| glance | fredpc | modules/nixos/host/fredpc/glance.nix |
 | nixarr (jellyseerr, prowlarr, etc.) | ironforge | modules/nixos/host/ironforge/nixarr.nix |
 
 ## Finding Container Usage

@@ -25,8 +25,8 @@ infrastructure repository.
 
 ## Known Hosts
 
-NixOS: fredpc (workstation), headscale (VPN), ironforge (media), orgrimmar (services), anton (WSL2/CUDA), macbookx86, nixosaarch64vm
-Darwin: mac-studio, macbook-pro
+NixOS: headscale (VPN), ironforge (media), orgrimmar (services), anton (WSL2/CUDA)
+Darwin: mac-studio, macbook-pro, laisas-mac-mini
 
 ## Your Responsibilities
 

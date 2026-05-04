@@ -145,13 +145,6 @@ example:
 
 MCP servers are configured via SOPS templates in `modules/home-manager/features/claude-code.nix`. Each server gets its own JSON file in `~/mcp/` with secrets injected at activation time.
 
-## Service Management
-
-Waybar on fredpc is managed by a systemd user service with auto-restart.
-To restart it, use `systemctl --user restart waybar`. Do NOT use
-`killall waybar` followed by `hyprctl dispatch exec waybar` — this
-spawns duplicate instances on top of the systemd-managed one.
-
 ## Build Commands
 
 **IMPORTANT:** Do NOT use `sudo` with `just` commands — they handle `sudo` internally.
