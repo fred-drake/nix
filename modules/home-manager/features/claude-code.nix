@@ -26,6 +26,7 @@ in {
     claude-code # Claude Code CLI tool
     gitea-mcp # Gitea MCP server
     claude-usage # Claude Code usage JSON fetcher
+    pkgs.uv # uvx, used to run workspace-mcp and other Python MCP servers
 
     # LSP servers (used by the nix-managed-lsp plugin)
     pkgs.nil # Nix
@@ -260,6 +261,24 @@ in {
             args = ["--from" "git+https://github.com/fred-drake/gmail-mcp" "gmail-mcp"];
             env = {
               GMAIL_MCP_CREDENTIALS_PATH = config.sops.secrets.google-oauth.path;
+            };
+          };
+        };
+      };
+    };
+
+    mcp-google-workspace = {
+      mode = "0400";
+      path = "${home}/mcp/google-workspace.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          google-workspace = {
+            command = "uvx";
+            args = ["workspace-mcp" "--tools" "gmail"];
+            env = {
+              GOOGLE_OAUTH_CLIENT_ID = config.sops.placeholder.google-workspace-client-id;
+              GOOGLE_OAUTH_CLIENT_SECRET = config.sops.placeholder.google-workspace-client-secret;
+              USER_GOOGLE_EMAIL = "fred.drake@gmail.com";
             };
           };
         };

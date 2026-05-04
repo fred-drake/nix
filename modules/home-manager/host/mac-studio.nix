@@ -54,15 +54,15 @@
       ProgramArguments = [
         "/bin/sh"
         "-c"
-        "export PATH=\"$HOME/.local/bin:$HOME/.nix-profile/bin:/etc/profiles/per-user/fdrake/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH\" && cd $HOME/Source/gitea.${config.soft-secrets.networking.domain}/fdrake/PKM-Personal && timeout 1200 claude --model sonnet --verbose --output-format stream-json -p /archive-obvious"
+        "export PATH=\"$HOME/.local/bin:$HOME/.nix-profile/bin:/etc/profiles/per-user/fdrake/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH\" && cd $HOME/Source/gitea.${config.soft-secrets.networking.domain}/fdrake/PKM-Personal && timeout 1200 claude --model sonnet --verbose --output-format stream-json --mcp-config \"$HOME/mcp/google-workspace.json\" -p /archive-obvious"
       ];
       StartCalendarInterval = [
         {
           Minute = 0;
         }
       ];
-      StandardOutPath = "/tmp/archive-email.log";
-      StandardErrorPath = "/tmp/archive-email.err";
+      StandardOutPath = "${config.home.homeDirectory}/Library/Logs/archive-email.log";
+      StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/archive-email.err";
     };
   };
 }

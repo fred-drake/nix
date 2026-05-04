@@ -225,6 +225,18 @@ in {
         key = "data";
       };
 
+      google-workspace-client-id = {
+        sopsFile = config.secrets.workstation.google-workstation;
+        mode = "0400";
+        key = "client-id";
+      };
+
+      google-workspace-client-secret = {
+        sopsFile = config.secrets.workstation.google-workstation;
+        mode = "0400";
+        key = "client-secret";
+      };
+
       zohomail-mcp-url = {
         sopsFile = config.secrets.workstation.zohomail;
         mode = "0400";
