@@ -503,6 +503,12 @@ in {
         mode = "0400";
         key = "data";
       };
+
+      thrifter-local-api-key = {
+        sopsFile = config.secrets.workstation.thrifter-local;
+        mode = "0400";
+        key = "api-key";
+      };
     };
   };
 
