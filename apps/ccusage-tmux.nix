@@ -8,19 +8,21 @@ in
     CACHE_FILE="/tmp/ccusage-tmux-$USER.json"
     CACHE_MAX_AGE=600  # 10 minutes in seconds
 
-    # Check if cache is fresh enough
+    # Check if cache is fresh enough (GNU coreutils stat — pinned for portability)
     fetch=true
     if [ -f "$CACHE_FILE" ]; then
-        cache_age=$(( $(date +%s) - $(stat -c %Y "$CACHE_FILE") ))
+        mtime=$(${pkgs.coreutils}/bin/stat -c %Y "$CACHE_FILE")
+        cache_age=$(( $(${pkgs.coreutils}/bin/date +%s) - mtime ))
         if [ "$cache_age" -lt "$CACHE_MAX_AGE" ]; then
             fetch=false
         fi
     fi
 
-    # Fetch new data if needed
+    # Fetch new data if needed. The API returns errors as `{"error": {...}}`,
+    # so a valid usage response is one where `.error` is absent.
     if [ "$fetch" = true ]; then
         data=$(${claude-usage}/bin/claude-usage 2>/dev/null)
-        if [ -n "$data" ] && ! echo "$data" | ${pkgs.jq}/bin/jq -e '.type == "error"' >/dev/null 2>&1; then
+        if [ -n "$data" ] && echo "$data" | ${pkgs.jq}/bin/jq -e 'has("error") | not' >/dev/null 2>&1; then
             echo "$data" > "$CACHE_FILE"
         fi
     fi
