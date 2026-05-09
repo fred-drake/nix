@@ -46,6 +46,10 @@ in {
         "uid=${uid}"
         "gid=${gid}"
         "iocharset=utf8"
+        # Read-mostly media share: relax CIFS metadata caching so jellyfin
+        # library walks don't round-trip a stat() per entry to the Storage Box.
+        "cache=loose"
+        "actimeo=60"
       ]
       ++ extraOptions;
   };

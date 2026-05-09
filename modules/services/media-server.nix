@@ -118,6 +118,11 @@ in
         };
 
         systemd = {
+          # Cap jellyfin memory so library scans don't push the rest of the
+          # services into swap. Soft limit — kernel reclaims if exceeded but
+          # the service isn't killed.
+          services.jellyfin.serviceConfig.MemoryHigh = "4G";
+
           # Override nixarr's hardcoded permissions = "775" for sabnzbd.
           # CIFS mounts don't support chmod, so sabnzbd must not attempt it.
           # Also reduce cache_limit to avoid OOM on this memory-constrained host.
