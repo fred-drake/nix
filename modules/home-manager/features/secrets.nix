@@ -479,6 +479,18 @@ in {
         key = "password";
       };
 
+      hearthstone-password = {
+        sopsFile = config.secrets.workstation.hearthstone;
+        mode = "0400";
+        key = "password";
+      };
+
+      hearthstone-tailscale-auth = {
+        sopsFile = config.secrets.workstation.hearthstone;
+        mode = "0400";
+        key = "tailscale-auth";
+      };
+
       apple-app-store-issuer-id = {
         sopsFile = config.secrets.workstation.apple-app-store;
         mode = "0400";
