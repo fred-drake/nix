@@ -491,6 +491,24 @@ in {
         key = "tailscale-auth";
       };
 
+      hearthstone-wifi-main-key = {
+        sopsFile = config.secrets.workstation.hearthstone;
+        mode = "0400";
+        key = "wifi-main-key";
+      };
+
+      hearthstone-wifi-guest-key = {
+        sopsFile = config.secrets.workstation.hearthstone;
+        mode = "0400";
+        key = "wifi-guest-key";
+      };
+
+      hearthstone-wifi-mlo-key = {
+        sopsFile = config.secrets.workstation.hearthstone;
+        mode = "0400";
+        key = "wifi-mlo-key";
+      };
+
       apple-app-store-issuer-id = {
         sopsFile = config.secrets.workstation.apple-app-store;
         mode = "0400";
