@@ -27,6 +27,8 @@
     settings.PasswordAuthentication = false;
   };
 
+  networking.firewall.allowedTCPPorts = [8084];
+
   users.users.fdrake = {
     isNormalUser = true;
     extraGroups = ["wheel"];

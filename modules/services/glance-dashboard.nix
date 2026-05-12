@@ -9,7 +9,6 @@ in {
 
   services.glance = {
     enable = true;
-    environmentFile = config.sops.secrets.glance-env.path;
     settings =
       glanceConfig
       // {
@@ -19,4 +18,8 @@ in {
         };
       };
   };
+
+  systemd.services.glance.serviceConfig.EnvironmentFile = [
+    config.sops.secrets.glance-env.path
+  ];
 }

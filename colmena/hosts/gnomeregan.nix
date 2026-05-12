@@ -48,6 +48,7 @@ in {
   "gnomeregan" = {
     imports = [
       self.colmena._gnomeregan
+      ../../modules/services/glance-dashboard.nix
     ];
   };
 }
