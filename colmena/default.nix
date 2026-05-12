@@ -19,6 +19,7 @@
   ironforge = import ./hosts/ironforge.nix {inherit self nixpkgs-stable secrets sops-nix nixarr nixosOptionsModule deferredNixosModules;};
   orgrimmar = import ./hosts/orgrimmar.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
   anton = import ./hosts/anton.nix {inherit self nixpkgs-stable nixpkgs-unstable nixos-wsl secrets sops-nix home-manager nixvim nix-index-database nixosOptionsModule deferredNixosModules deferredHmModules;};
+  gnomeregan = import ./hosts/gnomeregan.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -30,16 +31,19 @@ in {
   inherit (ironforge) _ironforge;
   inherit (orgrimmar) _orgrimmar;
   inherit (anton) _anton;
+  inherit (gnomeregan) _gnomeregan;
 
   # Init configurations
   "headscale-init" = headscale."headscale-init";
   "ironforge-init" = ironforge."ironforge-init";
   "orgrimmar-init" = orgrimmar."orgrimmar-init";
   "anton-init" = anton."anton-init";
+  "gnomeregan-init" = gnomeregan."gnomeregan-init";
 
   # Full configurations
   "headscale" = headscale."headscale";
   "ironforge" = ironforge."ironforge";
   "orgrimmar" = orgrimmar."orgrimmar";
   "anton" = anton."anton";
+  "gnomeregan" = gnomeregan."gnomeregan";
 }
