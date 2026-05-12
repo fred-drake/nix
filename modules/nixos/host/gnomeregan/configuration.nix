@@ -27,6 +27,12 @@
     settings.PasswordAuthentication = false;
   };
 
+  services.logind = {
+    lidSwitch = "ignore";
+    lidSwitchExternalPower = "ignore";
+    lidSwitchDocked = "ignore";
+  };
+
   networking.firewall.allowedTCPPorts = [8084];
 
   users.users.fdrake = {
