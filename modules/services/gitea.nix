@@ -73,6 +73,7 @@ in
               PGID = "1000";
               TZ = "America/New_York";
               GITEA__webhook__ALLOWED_HOST_LIST = "private";
+              GITEA__cron__cleanup_packages__OLDER_THAN = "2160h";
             };
           };
           gitea-check-service = {
