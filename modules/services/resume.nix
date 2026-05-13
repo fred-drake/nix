@@ -125,7 +125,7 @@ in {
         entrypoint = "/bin/sh";
         cmd = [
           "-c"
-          "sed -i 's|\"http://localhost:3000\"|\"http://127.0.0.1:1\"|g' /app/.output/server/_ssr/client-*.mjs && exec node /app/.output/server/index.mjs"
+          "sed -i 's|\"http://localhost:3000\"|\"http://127.0.0.1:1\"|g' /app/apps/web/.output/server/_ssr/client-*.mjs && exec node /app/apps/web/.output/server/index.mjs"
         ];
         ports = [
           "127.0.0.1:${proxyPort}:3000"
