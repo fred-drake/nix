@@ -12,7 +12,7 @@
 in
   lib.mkIf hasWoodpeckerAgent {
     sops.secrets.woodpecker-agent-token = {
-      sopsFile = config.secrets.host.mac-studio.woodpecker;
+      sopsFile = config.secrets.workstation.host.mac-studio.woodpecker;
       mode = "0400";
       key = "agent-token";
     };

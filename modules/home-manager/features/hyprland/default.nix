@@ -15,7 +15,7 @@
 in
   lib.mkIf hasHyprland {
     # sops.secrets.spotifatius-env = {
-    #   sopsFile = config.secrets.workstation.spotifatius-env;
+    #   sopsFile = config.secrets.workstation.tools.spotifatius-env;
     #   mode = "0400";
     #   key = "data";
     # };

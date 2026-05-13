@@ -6,17 +6,17 @@
 }: {
   sops.secrets = {
     wireguard-office-admin = {
-      sopsFile = config.secrets.host.macbookpro.wireguard-office-admin;
+      sopsFile = config.secrets.workstation.host.macbookpro.wireguard-office-admin;
       mode = "0400";
       key = "data";
     };
     wireguard-office-full = {
-      sopsFile = config.secrets.host.macbookpro.wireguard-office-full;
+      sopsFile = config.secrets.workstation.host.macbookpro.wireguard-office-full;
       mode = "0400";
       key = "data";
     };
     wireguard-office-public-dns = {
-      sopsFile = config.secrets.host.macbookpro.wireguard-office-public-dns;
+      sopsFile = config.secrets.workstation.host.macbookpro.wireguard-office-public-dns;
       mode = "0400";
       key = "data";
     };

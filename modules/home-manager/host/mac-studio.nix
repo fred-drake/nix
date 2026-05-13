@@ -5,7 +5,7 @@
   ...
 }: {
   sops.secrets.wireguard-brainrush-stage = {
-    sopsFile = config.secrets.host.mac-studio.wireguard-brainrush-stage;
+    sopsFile = config.secrets.workstation.host.mac-studio.wireguard-brainrush-stage;
     mode = "0400";
     key = "data";
   };

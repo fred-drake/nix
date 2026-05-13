@@ -11,19 +11,19 @@ in
   lib.mkIf hasIosSigning {
     sops.secrets = {
       apple-distribution-p12 = {
-        sopsFile = config.secrets.workstation.apple-distribution;
+        sopsFile = config.secrets.workstation.ios-signing.apple-distribution;
         mode = "0400";
         key = "data";
       };
 
       apple-distribution-p12-passphrase = {
-        sopsFile = config.secrets.workstation.apple-app-store;
+        sopsFile = config.secrets.workstation.ios-signing.apple-app-store;
         mode = "0400";
         key = "apple-distribution-p12-passphrase";
       };
 
       thrifter-app-store-mobileprovision = {
-        sopsFile = config.secrets.workstation.thrifter-app-store-mobileprovision;
+        sopsFile = config.secrets.workstation.projects.thrifter.app-store-mobileprovision;
         mode = "0400";
         key = "data";
         path = "${provisioningProfilesDir}/thrifter-app-store.mobileprovision";
