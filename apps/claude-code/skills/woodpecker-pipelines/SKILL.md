@@ -53,6 +53,41 @@ Woodpecker pre-processes every `commands:` string through its own templating eng
 
 `woodpecker-cli lint` does **not** catch any of these templating issues — it accepts forms the server later rejects. Treat lint as syntax-only.
 
+## Privileged plugins need two gates open
+
+Plugins that run with `privileged: true` (e.g. `woodpeckerci/plugin-docker-buildx` for image building) require **both** gates to pass:
+
+1. **Agent allowlist** — the agent's `WOODPECKER_PLUGINS_PRIVILEGED` env var must include the plugin image's repo name (without tag). Configured server-side; one agent, one allowlist.
+2. **Repo trust level** — admin must flip the repo's trust flags in the Woodpecker UI: repo Settings → Project → Trust. In Woodpecker v3 the toggles are split into **Network**, **Volumes**, and **Security** — `privileged: true` is gated by **Security**.
+
+If only the agent gate is open, you'll see:
+
+```
+linter: steps.<step-name>: Insufficient trust level to use privileged mode
+```
+
+This is a *parse-time* rejection — the pipeline ends up in `error` status with no step logs. The error is visible in the UI's Errors tab next to the failed pipeline, but `woodpecker-cli pipeline show` won't reveal it.
+
+The trust level is operational state in Woodpecker's database, not anything declarable from the agent/server Nix config. New repos are untrusted by default, so this gate has to be flipped manually the first time a repo wants to run a privileged plugin. There's currently no way to grant trust at repo-creation time from outside the UI.
+
+## Agent label routing in multi-agent setups
+
+When more than one agent is registered with the server (e.g. a Linux docker-backend agent + a macOS local-backend agent for iOS work), a workflow with **no `labels:` block** can be dispatched to *any* eligible agent. Eligibility is broad by default — the server tries to find any agent whose declared labels don't *conflict* with the workflow's requirements, and a workflow without labels has no requirements to conflict with.
+
+Failure mode: a linux/amd64 docker build gets picked up by the macOS local-backend agent, which tries to `exec "alpine/git"` as a literal path on the Mac and errors out with `stat alpine/git: no such file or directory`.
+
+The agent's `WOODPECKER_FILTER_LABELS` env var (set on the agent) declares **what the agent advertises**, not what jobs it accepts. So an agent advertising `org-id=*,platform=linux/*` is saying "I'm a linux/* agent for any org-id" — but if a job doesn't filter on either, the scheduler may still pick the macOS agent that advertises nothing.
+
+**Always include a `labels:` block on every workflow in a multi-agent server**, matching the advertised labels on the agent you want:
+
+```yaml
+labels:
+  org-id: <whatever>
+  platform: linux/*    # ← LITERAL string; must match the agent's filter value exactly
+```
+
+Per the literal-comparison gotcha in the "Diagnosing failures" section below, `platform: linux/*` is compared as the 7-character string `linux/*`, not a glob. If your agent advertises `platform=linux/*`, your job must say `platform: linux/*` verbatim (not `linux/amd64`).
+
 ## Diagnosing failures: `error` ≠ `failure`
 
 The two pipeline statuses look similar but mean different things and require different tools.
@@ -78,6 +113,7 @@ Common error messages and what they mean:
 - `"unable to parse variable name"` — bare `$word` form Woodpecker can't resolve. See variable interpolation section above.
 - `"missing closing brace"` — confused `${...}` parse, often from `$${VAR}`.
 - `"no agent for the pipeline"` — `labels:` filter doesn't match any agent's `custom_labels`. Note that label values are compared **literally**: `darwin/*` on the agent side is a literal 7-char string, not a glob; `*` only acts as a wildcard when it's the **entire** value.
+- `"Insufficient trust level to use privileged mode"` — repo's trust flags aren't set in Woodpecker UI. See "Privileged plugins need two gates open" above.
 
 ## Local backend gotchas (Mac/Linux agents, no Docker)
 
