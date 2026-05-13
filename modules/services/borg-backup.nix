@@ -1,12 +1,12 @@
 {
+  config,
   pkgs,
   lib,
   ...
 }: let
   storageBox = "u543742.your-storagebox.de";
   borgRepoBase = "/mnt/hetzner-backup/borg-repos";
-  sopsBase = "/home/fdrake/.config/sops-nix/secrets";
-  borgPassCommand = "cat ${sopsBase}/hetzner-borg-passphrase";
+  borgPassCommand = "cat ${config.sops.secrets.hetzner-borg-passphrase.path}";
   mount = "${pkgs.util-linux}/bin/mount";
   umount = "${pkgs.util-linux}/bin/umount";
   systemctl = "${pkgs.systemd}/bin/systemctl";
@@ -28,17 +28,12 @@
 
   allNames = dailyNames ++ weeklyNames ++ monthlyNames;
 
-  # Script to create credentials and mount a single CIFS share (with retry)
+  # Mount a single CIFS share using a sops-rendered credentials file (with retry)
   mountOne = name: sub: ''
-    cat > /run/backup-creds/${name} <<CRED
-    username=$(cat ${sopsBase}/${name}-storage-username)
-    password=$(cat ${sopsBase}/${name}-storage-password)
-    CRED
-    chmod 0400 /run/backup-creds/${name}
     for attempt in 1 2 3 4 5; do
       echo "Mount attempt $attempt for ${name}..."
       ${mount} -t cifs //${storageBox}/u543742-${sub} /mnt/backup-${name} \
-        -o credentials=/run/backup-creds/${name},uid=0,gid=0,dir_mode=0755,file_mode=0644,iocharset=utf8 && break
+        -o credentials=${config.sops.templates."${name}-storage-credentials".path},uid=0,gid=0,dir_mode=0755,file_mode=0644,iocharset=utf8 && break
       echo "Mount failed, waiting 30s before retry..."
       sleep 30
     done
@@ -47,7 +42,6 @@
 
   unmountOne = name: ''
     ${umount} /mnt/backup-${name} 2>/dev/null || true
-    rm -f /run/backup-creds/${name}
   '';
 
   # Custom paths per sub-account (default: entire mount)
@@ -73,7 +67,6 @@
 
     readWritePaths = [
       "/tmp"
-      "/run/backup-creds"
       "/mnt/backup-${name}"
       borgRepoBase
     ];
@@ -84,11 +77,7 @@
       monthly = 6;
     };
 
-    preHook = ''
-      mkdir -p /run/backup-creds
-      ${mountOne name sub}
-    '';
-
+    preHook = mountOne name sub;
     postHook = unmountOne name;
 
     extraCreateArgs = ["--stats" "--checkpoint-interval" "600"];
@@ -110,49 +99,101 @@
       names;
   in
     lib.concatStringsSep "\n" backupCommands;
+
+  storageCredSecrets = lib.listToAttrs (lib.concatMap (name: [
+      {
+        name = "${name}-storage-username";
+        value = {
+          sopsFile = config.secrets.host.ironforge."${name}-storage";
+          mode = "0400";
+          key = "username";
+        };
+      }
+      {
+        name = "${name}-storage-password";
+        value = {
+          sopsFile = config.secrets.host.ironforge."${name}-storage";
+          mode = "0400";
+          key = "password";
+        };
+      }
+    ])
+    allNames);
+
+  storageCredTemplates = lib.listToAttrs (map (name: {
+      name = "${name}-storage-credentials";
+      value = {
+        content = ''
+          username=${config.sops.placeholder."${name}-storage-username"}
+          password=${config.sops.placeholder."${name}-storage-password"}
+        '';
+        mode = "0400";
+      };
+    })
+    allNames);
 in {
   environment.systemPackages = [pkgs.cifs-utils];
 
-  systemd = {
-    tmpfiles.rules =
-      ["d /run/backup-creds 0700 root root -"]
-      ++ map (name: "d /mnt/backup-${name} 0755 root root -") allNames
-      ++ ["d ${borgRepoBase} 0700 root root -"];
-
-    services = {
-      borg-backup-daily = {
-        description = "Sequential borg backups (daily: gitea, paperless)";
-        after = ["network-online.target"];
-        wants = ["network-online.target"];
-        serviceConfig = {
-          Type = "oneshot";
-          TimeoutStartSec = "24h";
-        };
-        script = mkWrapperScript "daily" dailyNames;
-      };
-
-      borg-backup-weekly = {
-        description = "Sequential borg backups (weekly: calibre)";
-        after = ["network-online.target"];
-        wants = ["network-online.target"];
-        serviceConfig = {
-          Type = "oneshot";
-          TimeoutStartSec = "24h";
-        };
-        script = mkWrapperScript "weekly" weeklyNames;
-      };
-
-      borg-backup-monthly = {
-        description = "Sequential borg backups (monthly: videos, nintendopower, wowclient)";
-        after = ["network-online.target"];
-        wants = ["network-online.target"];
-        serviceConfig = {
-          Type = "oneshot";
-          TimeoutStartSec = "24h";
-        };
-        script = mkWrapperScript "monthly" monthlyNames;
+  sops.secrets =
+    storageCredSecrets
+    // {
+      hetzner-borg-passphrase = {
+        sopsFile = config.secrets.host.gnomeregan.borg-backup;
+        mode = "0400";
+        key = "passphrase";
       };
     };
+
+  sops.templates = storageCredTemplates;
+
+  systemd = {
+    tmpfiles.rules =
+      map (name: "d /mnt/backup-${name} 0755 root root -") allNames
+      ++ ["d ${borgRepoBase} 0700 root root -"];
+
+    services =
+      {
+        borg-backup-daily = {
+          description = "Sequential borg backups (daily: gitea, paperless)";
+          after = ["network-online.target"];
+          wants = ["network-online.target"];
+          unitConfig.RequiresMountsFor = ["/mnt/hetzner-backup"];
+          serviceConfig = {
+            Type = "oneshot";
+            TimeoutStartSec = "24h";
+          };
+          script = mkWrapperScript "daily" dailyNames;
+        };
+
+        borg-backup-weekly = {
+          description = "Sequential borg backups (weekly: calibre)";
+          after = ["network-online.target"];
+          wants = ["network-online.target"];
+          unitConfig.RequiresMountsFor = ["/mnt/hetzner-backup"];
+          serviceConfig = {
+            Type = "oneshot";
+            TimeoutStartSec = "24h";
+          };
+          script = mkWrapperScript "weekly" weeklyNames;
+        };
+
+        borg-backup-monthly = {
+          description = "Sequential borg backups (monthly: videos, nintendopower, wowclient)";
+          after = ["network-online.target"];
+          wants = ["network-online.target"];
+          unitConfig.RequiresMountsFor = ["/mnt/hetzner-backup"];
+          serviceConfig = {
+            Type = "oneshot";
+            TimeoutStartSec = "24h";
+          };
+          script = mkWrapperScript "monthly" monthlyNames;
+        };
+      }
+      // lib.listToAttrs (map (name: {
+          name = "borgbackup-job-hetzner-${name}";
+          value.unitConfig.RequiresMountsFor = ["/mnt/hetzner-backup"];
+        })
+        allNames);
 
     timers = {
       borg-backup-daily = {

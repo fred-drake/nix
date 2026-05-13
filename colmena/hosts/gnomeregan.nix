@@ -49,6 +49,7 @@ in {
     imports = [
       self.colmena._gnomeregan
       ../../modules/services/glance-dashboard.nix
+      ../../modules/services/borg-backup.nix
     ];
   };
 }

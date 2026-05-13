@@ -27,6 +27,12 @@
     settings.PasswordAuthentication = false;
   };
 
+  fileSystems."/mnt/hetzner-backup" = {
+    device = "/dev/disk/by-uuid/d5fb9fae-5cbc-4e37-baa1-ad3603b3dbc0";
+    fsType = "ext4";
+    options = ["nofail" "x-systemd.device-timeout=10s"];
+  };
+
   services.logind = {
     lidSwitch = "ignore";
     lidSwitchExternalPower = "ignore";
