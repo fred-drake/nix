@@ -23,6 +23,7 @@ in {
     # resolves the internal gitea hostname.
     networking.extraHosts = ''
       10.1.1.4 gitea.${soft-secrets.networking.domain}
+      10.1.1.5 traceway.${soft-secrets.networking.domain}
     '';
     services.dnsmasq = {
       enable = true;
@@ -78,6 +79,7 @@ in {
       ../../modules/services/gitea.nix
       ../../modules/services/paperless.nix
       ../../modules/services/calibre.nix
+      ../../modules/services/otel-collector.nix
     ];
 
     _module.args = {
