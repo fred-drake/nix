@@ -135,4 +135,14 @@ repository = "docker.io"
 name = "postgres"
 tag = "18"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "clickhouse/clickhouse-server"
+tag = "24.8-alpine"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "gitea.internal.freddrake.com"
+name = "fdrake/traceway"
+tag = "latest"
+architectures = ["linux/amd64"]
 
