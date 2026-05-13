@@ -17,6 +17,7 @@ devenv.local.nix
 # Node.js dependencies
 node_modules/
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
 
 # Python cache
 __pycache__/
