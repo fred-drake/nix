@@ -3,8 +3,8 @@
 ####################################
 {pkgs, ...}: {
   claude-plugins-official-src = builtins.fetchTarball {
-    url = "https://github.com/anthropics/claude-plugins-official/archive/1a2f18b05cf5652fd25403e8d229fc884fb84103.tar.gz";
-    sha256 = "0i6xfap8hsk1p4b94ym5fyw0xm2b26c0rgb3nwz7zy7gwyr2wcrf";
+    url = "https://github.com/anthropics/claude-plugins-official/archive/5dbfa0fade3058791bf8134b2bd441cb9d5f9a10.tar.gz";
+    sha256 = "1xizhccmap0k3hgr70a7vmb5x8dnqia3svzkb1sw1l6gwnr6dsyn";
   };
   cc-marketplace-src = pkgs.fetchFromGitHub {
     owner = "samber";
