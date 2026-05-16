@@ -274,7 +274,7 @@ in {
         mcpServers = {
           google-workspace = {
             command = "uvx";
-            args = ["workspace-mcp" "--tools" "gmail"];
+            args = ["--with" "aiofile<3.10" "workspace-mcp" "--tools" "gmail"];
             env = {
               GOOGLE_OAUTH_CLIENT_ID = config.sops.placeholder.google-workspace-client-id;
               GOOGLE_OAUTH_CLIENT_SECRET = config.sops.placeholder.google-workspace-client-secret;
