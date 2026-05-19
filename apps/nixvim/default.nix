@@ -1,6 +1,7 @@
 _: {
   programs.nixvim = {
     enable = true;
+    nixpkgs.config.allowUnfree = true;
     imports = [
       ./dashboard.nix
       ./debugging.nix
