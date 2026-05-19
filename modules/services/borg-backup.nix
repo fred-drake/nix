@@ -28,12 +28,38 @@
 
   allNames = dailyNames ++ weeklyNames ++ monthlyNames;
 
+  # CIFS options for backup mounts. Read-only, hardened against transient
+  # session loss during long borg walks across the storage box:
+  #   ro                 — backups only read
+  #   vers=3.1.1         — required for resilienthandles
+  #   resilienthandles   — kernel transparently reconnects open handles on
+  #                        SMB session drop instead of failing reads with
+  #                        EHOSTDOWN / EAGAIN partway through
+  #   echo_interval=10   — faster keepalive so dead sessions are noticed
+  #                        before borg has issued thousands of reads
+  #   actimeo=300        — longer attr cache; backup tree doesn't change
+  #                        under us so re-stat-ing is wasted round-trips
+  cifsMountOpts = name:
+    lib.concatStringsSep "," [
+      "credentials=${config.sops.templates."${name}-storage-credentials".path}"
+      "ro"
+      "uid=0"
+      "gid=0"
+      "dir_mode=0755"
+      "file_mode=0644"
+      "iocharset=utf8"
+      "vers=3.1.1"
+      "resilienthandles"
+      "echo_interval=10"
+      "actimeo=300"
+    ];
+
   # Mount a single CIFS share using a sops-rendered credentials file (with retry)
   mountOne = name: sub: ''
     for attempt in 1 2 3 4 5; do
       echo "Mount attempt $attempt for ${name}..."
       ${mount} -t cifs //${storageBox}/u543742-${sub} /mnt/backup-${name} \
-        -o credentials=${config.sops.templates."${name}-storage-credentials".path},uid=0,gid=0,dir_mode=0755,file_mode=0644,iocharset=utf8 && break
+        -o ${cifsMountOpts name} && break
       echo "Mount failed, waiting 30s before retry..."
       sleep 30
     done
@@ -49,10 +75,21 @@
     videos = ["/mnt/backup-videos/library/home-videos"];
   };
 
+  # Per-sub-account excludes. Borg uses fnmatch-style patterns.
+  # gitea: the bleve issues indexer is a derived index whose backing bbolt
+  # file (root.bolt) is held with an exclusive SMB open by the live gitea
+  # container on orgrimmar, so a second CIFS client cannot read it
+  # (STATUS_SHARING_VIOLATION → EACCES). It's rebuildable from the primary
+  # DB via `gitea admin reindex`, so excluding it is safe.
+  storageExcludes = {
+    gitea = ["sh:**/indexers/**"];
+  };
+
   # Generate a borg backup job for a single sub-account
   mkBorgJob = name: sub: {
     repo = "${borgRepoBase}/${name}";
     paths = storagePaths.${name} or ["/mnt/backup-${name}"];
+    exclude = storageExcludes.${name} or [];
 
     encryption = {
       mode = "repokey-blake2";
