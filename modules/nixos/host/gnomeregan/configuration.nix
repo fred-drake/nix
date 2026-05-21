@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./hardware-configuration.nix
   ];
@@ -12,27 +8,33 @@
     efi.canTouchEfiVariables = true;
   };
 
+  # Disable systemd-in-initrd so the NixOS setupSecrets activation script
+  # runs in stage 2 (after /home mounts) rather than stage 1. sops-nix
+  # needs the age key at /home/fdrake/.ssh/id_infrastructure, which isn't
+  # accessible during stage 1; running there causes setupSecrets to abort
+  # on the first undecryptable workstation secret (e.g. calibre-storage)
+  # and leaves /run/secrets/* unwritten, which then breaks any service
+  # bind-mounting from /run/secrets/.
+  boot.initrd.systemd.enable = false;
+
   networking = {
     hostName = "gnomeregan";
 
-    # PSK comes from a sops-nix secret deployed with wpa_supplicant ownership.
-    # Unstable's wpa_supplicant unit drops privileges and runs in a tight
-    # namespace, so the file must be readable by the wpa_supplicant user.
+    # PSK stored out-of-band in /etc/wireless.env (provisioned manually).
+    # Unstable's wpa_supplicant unit drops to the wpa_supplicant user and
+    # runs in a tight namespace, so the file must be readable by that user;
+    # the tmpfiles rule below enforces ownership on every boot.
     wireless = {
       enable = true;
-      secretsFile = config.sops.secrets.wireless-env.path;
+      secretsFile = "/etc/wireless.env";
       networks."Frecklepie".pskRaw = "ext:HOME_PSK";
     };
     networkmanager.enable = false;
   };
 
-  sops.secrets.wireless-env = {
-    sopsFile = config.secrets.host.gnomeregan.wireless-env;
-    key = "data";
-    owner = "wpa_supplicant";
-    group = "wpa_supplicant";
-    mode = "0400";
-  };
+  systemd.tmpfiles.rules = [
+    "z /etc/wireless.env 0640 wpa_supplicant wpa_supplicant -"
+  ];
 
   services.openssh = {
     enable = true;
@@ -71,9 +73,9 @@
 
   security.sudo.wheelNeedsPassword = false;
 
-  # Where sops-nix will look for the host's age identity. The key is copied
-  # over out-of-band before the first deploy that consumes a secret; until
-  # then no sops.secrets are declared so this path is unused.
+  # sops-nix uses this age identity to decrypt NixOS-level secrets at
+  # activation time. Lives on /home, which is why boot.initrd.systemd
+  # is disabled above (so activation waits for stage 2).
   sops.age.sshKeyPaths = ["/home/fdrake/.ssh/id_infrastructure"];
 
   environment.systemPackages = with pkgs; [
