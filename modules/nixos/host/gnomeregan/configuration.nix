@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
   ];
@@ -11,15 +15,23 @@
   networking = {
     hostName = "gnomeregan";
 
-    # The PSK is stored outside the Nix store in /etc/wireless.env, which was
-    # provisioned out-of-band. Later, this can be templated by sops-nix once
-    # secrets are wired up.
+    # PSK comes from a sops-nix secret deployed with wpa_supplicant ownership.
+    # Unstable's wpa_supplicant unit drops privileges and runs in a tight
+    # namespace, so the file must be readable by the wpa_supplicant user.
     wireless = {
       enable = true;
-      secretsFile = "/etc/wireless.env";
+      secretsFile = config.sops.secrets.wireless-env.path;
       networks."Frecklepie".pskRaw = "ext:HOME_PSK";
     };
     networkmanager.enable = false;
+  };
+
+  sops.secrets.wireless-env = {
+    sopsFile = config.secrets.host.gnomeregan.wireless-env;
+    key = "data";
+    owner = "wpa_supplicant";
+    group = "wpa_supplicant";
+    mode = "0400";
   };
 
   services.openssh = {
@@ -44,10 +56,18 @@
   users.users.fdrake = {
     isNormalUser = true;
     extraGroups = ["wheel"];
+    linger = true; # Start systemd user services before fdrake logs in (process-daily, archive-email)
+    # Fish as login shell — home-manager handles the actual fish config.
+    # ignoreShellProgramCheck avoids the fish 4.5.0 completion generator
+    # issue triggered by programs.fish.enable.
+    shell = pkgs.fish;
+    ignoreShellProgramCheck = true;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
     ];
   };
+
+  environment.shells = [pkgs.fish];
 
   security.sudo.wheelNeedsPassword = false;
 
@@ -63,6 +83,12 @@
     wget
     rsync
   ];
+
+  # uvx (used by archive-email's workspace-mcp) downloads pre-built CPython
+  # tarballs that are dynamically linked against a generic glibc. NixOS has
+  # no /lib64/ld-linux-x86-64.so.2, so those binaries fail with exit 127.
+  # nix-ld provides a stub dynamic linker that resolves the path at runtime.
+  programs.nix-ld.enable = true;
 
   system.stateVersion = "25.11";
 }

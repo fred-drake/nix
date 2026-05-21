@@ -19,11 +19,16 @@
   ironforge = import ./hosts/ironforge.nix {inherit self nixpkgs-stable secrets sops-nix nixarr nixosOptionsModule deferredNixosModules;};
   orgrimmar = import ./hosts/orgrimmar.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
   anton = import ./hosts/anton.nix {inherit self nixpkgs-stable nixpkgs-unstable nixos-wsl secrets sops-nix home-manager nixvim nix-index-database nixosOptionsModule deferredNixosModules deferredHmModules;};
-  gnomeregan = import ./hosts/gnomeregan.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
+  gnomeregan = import ./hosts/gnomeregan.nix {inherit self nixpkgs-stable nixpkgs-unstable secrets sops-nix home-manager nixvim nix-index-database nixosOptionsModule deferredNixosModules deferredHmModules;};
   stormwind = import ./hosts/stormwind.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
+    # gnomeregan tracks unstable end-to-end (modules + packages) because the
+    # workstation home-manager features it loads reference unstable-only attrs
+    # (prettier, lndir, …). Stable modules + unstable pkgs hits real
+    # boot/initrd mismatches that only WSL hosts (anton) sidestep.
+    nodeNixpkgs.gnomeregan = import nixpkgs-unstable {system = "x86_64-linux";};
   };
 
   # Merge all host configurations

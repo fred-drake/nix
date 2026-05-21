@@ -1,21 +1,32 @@
 {
   self,
   nixpkgs-stable,
+  nixpkgs-unstable,
   secrets,
   sops-nix,
+  home-manager,
+  nixvim,
+  nix-index-database,
   nixosOptionsModule,
   deferredNixosModules,
+  deferredHmModules,
   ...
 }: let
-  nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
+  # Module set + packages come from nixpkgs-unstable via
+  # colmena meta.nodeNixpkgs.gnomeregan (see colmena/default.nix).
+  # Pin the etc/nixos/version.json source to match.
+  nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {nixpkgs-stable = nixpkgs-unstable;};
+  mkHomeManager = import ../../lib/mk-home-manager.nix {
+    inputs = {inherit sops-nix secrets nixvim nix-index-database;};
+  };
+  pkgsStable = import nixpkgs-stable {
+    system = "x86_64-linux";
+    config.allowUnfree = true;
+  };
 in {
   # Base configuration for Gnomeregan (local LAN NixOS host).
   _gnomeregan = {
-    nixpkgs = {
-      system = "x86_64-linux";
-      overlays = [];
-      config = {};
-    };
+    nixpkgs.config.allowUnfree = true;
     imports =
       [
         nixosOptionsModule
@@ -24,6 +35,17 @@ in {
         sops-nix.nixosModules.sops
         ../../modules/nixos/host/gnomeregan/configuration.nix
         nixpkgsVersion
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = mkHomeManager {
+            hostName = "gnomeregan";
+            inherit pkgsStable;
+            deferredHomeManagerModules = deferredHmModules;
+            imports = [
+              ../../modules/home-manager/host/gnomeregan.nix
+            ];
+          };
+        }
       ]
       ++ deferredNixosModules;
     my = {
