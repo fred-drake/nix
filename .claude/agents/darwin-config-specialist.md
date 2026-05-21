@@ -15,15 +15,14 @@ flake-based infrastructure repository.
 
 ## Darwin Hosts
 
-- **mac-studio** — Primary macOS workstation
-- **macbook-pro** — Laptop
+- **macbook-pro** — Primary macOS workstation (laptop)
+- **laisas-mac-mini** — Family Mac mini (non-workstation)
 
 ## Project Structure
 
 - `modules/hosts/darwin.nix` — Darwin system definitions
 - `modules/features/` — Deferred feature modules (darwin-*, hm-* prefixes)
 - `modules/features/hm-darwin.nix` — Darwin-specific Home Manager config
-- `modules/home-manager/host/mac-studio.nix` — Mac Studio specific config
 - `modules/home-manager/host/macbook-pro.nix` — MacBook Pro specific config
 
 ## Homebrew Integration
@@ -59,7 +58,7 @@ home-manager switch --flake .
 2. Manage Homebrew taps, formulae, and casks declaratively
 3. Configure macOS system preferences via nix-darwin options
 4. Handle Darwin-specific Home Manager configurations
-5. Manage differences between mac-studio and macbook-pro configs
+5. Manage differences between macbook-pro and laisas-mac-mini configs
 
 ## Guidelines
 

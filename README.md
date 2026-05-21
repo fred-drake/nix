@@ -22,7 +22,6 @@ with `mkIf`, so a single feature module works across all hosts.
 ### Workstations
 
 - **macOS Workstations**: Managed via nix-darwin
-  - `mac-studio`
   - `macbook-pro`
   - `laisas-mac-mini`
 
@@ -185,7 +184,6 @@ This project uses Podman for container runtime with the following practices:
 
 4. Build the flake for your system. This will take a while the first time.
    - Macbook Pro: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.macbook-pro.system`
-   - Mac Studio: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.mac-studio.system`
 
 ## Key Management
 

@@ -17,7 +17,7 @@ anchors** that must be upgraded together.
 |---|---|---|
 | Server image | `apps/fetcher/containers.toml` → `woodpeckerci/woodpecker-server` | Runs on orgrimmar as `podman-woodpecker-server.service` |
 | Linux agent image | `apps/fetcher/containers.toml` → `woodpeckerci/woodpecker-agent` | Runs on orgrimmar as `podman-woodpecker-agent.service`, docker backend |
-| macOS agent binary | `inputs.nixpkgs-woodpecker-agent` in `flake.nix` | Built by nix, runs on mac-studio as a user launchd agent, local backend |
+| macOS agent binary | `inputs.nixpkgs-woodpecker-agent` in `flake.nix` | Built by nix, runs on macbook-pro as a user launchd agent, local backend |
 
 The server image and Linux agent image are pinned to an **exact tag**
 (e.g. `v3.13.0`, not `v3.13` — the floating tag is unreliable, see
@@ -106,7 +106,7 @@ nix flake lock --update-input nixpkgs-woodpecker-agent
 ```bash
 # Confirm mac agent binary version in the evaluated darwin config
 nix eval --no-warn-dirty --impure --raw --expr \
-  'let f = builtins.getFlake (toString ./.); args = f.darwinConfigurations.mac-studio.config.home-manager.users.fdrake.launchd.agents.woodpecker-agent.config.ProgramArguments; in builtins.elemAt args 2' \
+  'let f = builtins.getFlake (toString ./.); args = f.darwinConfigurations.macbook-pro.config.home-manager.users.fdrake.launchd.agents.woodpecker-agent.config.ProgramArguments; in builtins.elemAt args 2' \
   | grep -oE 'woodpecker-agent-[0-9.]+'
 ```
 
@@ -128,7 +128,7 @@ ssh -p 2222 root@10.1.1.4 'systemctl status podman-woodpecker-server --no-pager 
 ssh -p 2222 root@10.1.1.4 'curl -s localhost:8000/version'
 ```
 
-### Step 5: Deploy mac-studio
+### Step 5: Deploy macbook-pro
 
 ```bash
 just switch
@@ -142,7 +142,7 @@ tail -20 ~/.local/state/woodpecker-agent/agent.err
 
 A healthy agent shows `starting Woodpecker agent with version 'X.Y.Z'
 and backend 'local' using platform 'darwin/arm64'` and **no** gRPC
-mismatch errors. Then check the Woodpecker UI — the `mac-studio` agent
+mismatch errors. Then check the Woodpecker UI — the `macbook-pro` agent
 row should flip to online with a recent "Last Contact".
 
 ## Rollback
@@ -151,7 +151,7 @@ If a new version breaks something:
 
 1. `git revert` the upgrade commit (all three anchors revert together)
 2. `just colmena orgrimmar` (server rolls back; old digest is still in nix store)
-3. `just switch` on mac-studio
+3. `just switch` on macbook-pro
 
 No special rollback procedure for the agents — they just reconnect to
 whatever version the server is running, and a version match is a
@@ -181,8 +181,8 @@ Woodpecker auth uses two different tokens:
 - `WOODPECKER_AGENT_SECRET` — global server secret, in nix-secrets
   `secrets/host/woodpecker/woodpecker-agent-env`
 - Per-agent tokens — minted by the server UI, stored in the server's
-  postgres DB. The mac-studio token is additionally mirrored into
-  nix-secrets `secrets/host/mac-studio/woodpecker.sops.yaml` key
+  postgres DB. The macbook-pro token is additionally mirrored into
+  nix-secrets `secrets/host/macbook-pro/woodpecker.sops.yaml` key
   `agent-token`.
 
 Upgrading the server does **not** invalidate either. If you rebuild

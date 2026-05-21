@@ -17,7 +17,6 @@ This repository serves as the single source of truth for infrastructure as code 
 1. **Directly Configured Hosts** (local configuration):
 
    - `laisas-mac-mini` (macOS with nix-darwin)
-   - `mac-studio` (macOS with nix-darwin)
    - `macbook-pro` (macOS with nix-darwin)
 
 2. **Remotely Configured Hosts** (via Colmena):

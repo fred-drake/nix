@@ -33,8 +33,8 @@ In the dendritic architecture:
 - Are there Darwin features bypassing the deferred container system?
 
 ### 2. Per-Host Config Hygiene
-- Check `modules/darwin/mac-studio/`, `modules/darwin/macbook-pro/`,
-  `modules/darwin/laisas-mac-mini/` — are they thin?
+- Check `modules/darwin/macbook-pro/` and `modules/darwin/laisas-mac-mini/`
+  — are they thin?
 - Do per-host configs contain logic that should be extracted to a feature?
 - Is there duplication across per-host directories?
 

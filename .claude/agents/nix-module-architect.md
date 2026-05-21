@@ -26,7 +26,7 @@ infrastructure repository.
 ## Known Hosts
 
 NixOS: headscale (VPN), ironforge (media), orgrimmar (services), anton (WSL2/CUDA)
-Darwin: mac-studio, macbook-pro, laisas-mac-mini
+Darwin: macbook-pro, laisas-mac-mini
 
 ## Your Responsibilities
 
