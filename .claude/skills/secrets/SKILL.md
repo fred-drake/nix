@@ -24,6 +24,28 @@ You do NOT have access to the nix-secrets repo. When the user says "secrets
 are in place" or "I've updated the secrets repo", trust that the
 `config.secrets.*` path they specify exists.
 
+## Recipient Model
+
+Every encrypted secret in `nix-secrets` is encrypted to one or more **age recipients**, selected by path-regex rules in `nix-secrets/.sops.yaml`. There are three classes of recipients currently in use:
+
+| Recipient | Derived from | Used by |
+|-----------|--------------|---------|
+| `workstation` | The user's personal `id_ed25519` SSH key (same key on every workstation) | All workstation secrets, plus everything in the catch-all default rule |
+| `infrastructure` | A shared age key (`id_infrastructure`) deployed to Hetzner servers as `/root/id_infrastructure` | Hetzner host secrets that hetzner-common boxes need at activation |
+| **per-host** (e.g. `gnomeregan`) | The host's own `/etc/ssh/ssh_host_ed25519_key.pub`, converted with `ssh-to-age` | Secrets read by hosts that can't rely on the workstation or infrastructure keys at stage 1 |
+
+The catch-all rule (`secrets/.*`) encrypts to **workstation only**. Specific path-regex rules above it can add `infrastructure` and/or per-host recipients.
+
+### When to add a per-host recipient
+
+Default to two recipients (workstation + infrastructure) for any server secret. Add a per-host recipient when:
+
+- The server runs the workstation home-manager stack (so `~/.ssh/id_infrastructure` becomes a HM-managed symlink, dangling until HM activates — too late for stage-1 setupSecrets).
+- The server can't reach `/home/<user>/.ssh/` from stage 1 (e.g., the user's home is on a separate mount, or the user doesn't exist yet at that point in boot).
+- You want a host that can rotate its own identity without affecting any other host.
+
+`gnomeregan` is the only host in this setup that needs this today. See `references/per-host-recipients.md` for the full procedure (deriving the recipient, updating `.sops.yaml`, re-encrypting existing files, and the sops 3.12 SSH→age conversion quirk).
+
 ## Two Contexts for Secrets
 
 ### Workstation secrets (home-manager)
@@ -142,6 +164,19 @@ The placeholder name must match a secret declared in `sops.secrets`.
 | MCP server configs (sops templates) | `modules/home-manager/features/claude-code.nix` |
 | Server service secrets | `modules/services/<service>.nix` |
 | Secrets flake input | `flake.nix` (input named `secrets`) |
+
+## Decrypting / Re-keying nix-secrets Locally
+
+If you need to read or `sops updatekeys` an encrypted file (e.g. to add a recipient), you'll need sops to be able to decrypt it locally. sops 3.12+ removed direct SSH-key support — you have to convert your SSH key to an age identity first:
+
+```bash
+ssh-to-age -i ~/.ssh/id_ed25519 -private-key > /tmp/workstation-age.key
+export SOPS_AGE_KEY_FILE=/tmp/workstation-age.key
+```
+
+Then `sops --decrypt`, `sops updatekeys`, etc. work as expected. Some files use a `.sops` extension but are YAML internally — pass `--input-type yaml --output-type yaml` explicitly if sops can't infer the format.
+
+See `references/per-host-recipients.md` for the full re-keying flow when adding or rotating a host recipient.
 
 ## Important Notes
 
