@@ -22,6 +22,7 @@
         NSAutomaticCapitalizationEnabled = false;
         NSAutomaticSpellingCorrectionEnabled = false;
         "com.apple.mouse.tapBehavior" = 1;
+        "com.apple.trackpad.scaling" = 1.375;
       };
       SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;
       WindowManager.StandardHideDesktopIcons = true;
