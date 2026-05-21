@@ -89,7 +89,7 @@ in {
         ports = [
           "127.0.0.1:${proxyPort}:8000"
           # Expose gRPC on the tailnet interface only so remote agents
-          # (e.g. mac-studio for iOS builds) can dial in without publishing
+          # (e.g. macbook-pro for iOS builds) can dial in without publishing
           # the port on the public Hetzner IP. Host port is 9010 because
           # 9000 on 10.1.1.4 is already bound by prometheus node_exporter.
           "10.1.1.4:9010:9000"

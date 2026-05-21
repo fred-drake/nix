@@ -43,8 +43,6 @@
     if [ "$(uname -s)" = "Darwin" ]; then
         if [ "$HOST" = "freds-macbook-pro" ] || [ "$HOST" = "fred-macbook-pro-wireless" ]; then
             darwin-rebuild --show-trace --flake .#macbook-pro $CMD
-        elif [ "$HOST" = "Freds-Mac-Studio" ] || [ "$HOST" = "freds-mac-studio" ]; then
-            darwin-rebuild --show-trace --flake .#mac-studio $CMD
         elif [ "$HOST" = "Laisas-Mac-mini" ] || [ "$HOST" = "laisas-mac-mini" ]; then
             darwin-rebuild --show-trace --flake .#laisas-mac-mini $CMD
         else

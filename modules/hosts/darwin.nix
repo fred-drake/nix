@@ -15,22 +15,6 @@
   inherit (infra) mkDarwinSystem deferredHmModules;
 in {
   flake.darwinConfigurations = {
-    mac-studio = mkDarwinSystem {
-      hostname = "mac-studio";
-      extraModules = [
-        {
-          home-manager = mkHomeManager {
-            hostName = "mac-studio";
-            inherit (darwinPkgs) pkgsStable;
-            deferredHomeManagerModules = deferredHmModules;
-            imports = [
-              (root + "/modules/home-manager/host/mac-studio.nix")
-            ];
-          };
-        }
-      ];
-    };
-
     macbook-pro = mkDarwinSystem {
       hostname = "macbook-pro";
       extraModules = [
