@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
   ];
@@ -20,21 +24,27 @@
   networking = {
     hostName = "gnomeregan";
 
-    # PSK stored out-of-band in /etc/wireless.env (provisioned manually).
-    # Unstable's wpa_supplicant unit drops to the wpa_supplicant user and
-    # runs in a tight namespace, so the file must be readable by that user;
-    # the tmpfiles rule below enforces ownership on every boot.
+    # PSK comes from a sops-nix secret deployed with wpa_supplicant
+    # ownership. Now that NixOS-level sops decryption works reliably at
+    # stage 2 activation (see sops.age.sshKeyPaths below), the secret is
+    # written to /run/secrets/wireless-env before systemd starts
+    # wpa_supplicant.service.
     wireless = {
       enable = true;
-      secretsFile = "/etc/wireless.env";
+      secretsFile = config.sops.secrets.wireless-env.path;
       networks."Frecklepie".pskRaw = "ext:HOME_PSK";
     };
     networkmanager.enable = false;
   };
 
-  systemd.tmpfiles.rules = [
-    "z /etc/wireless.env 0640 wpa_supplicant wpa_supplicant -"
-  ];
+  sops.secrets.wireless-env = {
+    sopsFile = config.secrets.host.gnomeregan.wireless-env;
+    format = "yaml";
+    key = "data";
+    owner = "wpa_supplicant";
+    group = "wpa_supplicant";
+    mode = "0400";
+  };
 
   services.openssh = {
     enable = true;
@@ -73,15 +83,16 @@
 
   security.sudo.wheelNeedsPassword = false;
 
-  # sops-nix uses this age identity to decrypt NixOS-level secrets at
-  # activation time. Lives at /root/ (on /) so it's available before
-  # home-manager's sops runs; the HM secrets feature owns
-  # /home/fdrake/.ssh/id_infrastructure (as a symlink to a HM-sops-
-  # decrypted target that doesn't exist until HM activates), so that
-  # path can't be used for NixOS-level decryption. Placed manually with
-  #   sudo cp /home/fdrake/.config/sops-nix/secrets/ssh-id-infrastructure /root/id_infrastructure
-  #   sudo chmod 600 /root/id_infrastructure
-  sops.age.sshKeyPaths = ["/root/id_infrastructure"];
+  # sops-nix prefers /etc/ssh/ssh_host_ed25519_key — gnomeregan's host
+  # SSH key, registered as an age recipient in nix-secrets/.sops.yaml.
+  # Lives on /, so it's accessible in stage 1; required for the upcoming
+  # NixOS 26.11 removal of scripted initrd. /root/id_infrastructure is
+  # kept temporarily as a fallback during this migration; drop it once
+  # we've confirmed the host-key path decrypts every required secret.
+  sops.age.sshKeyPaths = [
+    "/etc/ssh/ssh_host_ed25519_key"
+    "/root/id_infrastructure"
+  ];
 
   environment.systemPackages = with pkgs; [
     vim
