@@ -8,6 +8,7 @@ description: |
   IMPORTANT architecture notes:
   - Hetzner servers are remote VPS/dedicated hosts, deployed as root.
   - anton is a WSL NixOS host on a Windows laptop, deployed as the nixos user via sudo.
+  - gnomeregan is a home LAN NixOS box (Wi-Fi). Unusual: tracks nixpkgs-unstable, runs the full workstation home-manager stack, uses its own SSH host key as sops identity. See references/gnomeregan.md before changing its config or rebuilding it.
 ---
 
 # Infrastructure Management
@@ -36,6 +37,12 @@ colmena build --on <hostname> --impure
 | headscale | Hetzner VPS | Headscale VPN, Tailscale client |
 | ironforge | Hetzner dedicated | nixarr (jellyfin, jellyseerr, sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr) |
 | orgrimmar | Hetzner dedicated | gitea, woodpecker, paperless, calibre, resume |
+
+### LAN NixOS Hosts (Colmena-managed, fdrake user with sudo)
+
+| Host | Type | Services |
+|------|------|----------|
+| gnomeregan | Home LAN x86_64 box (Wi-Fi) | Borg backups, glance dashboard, personal automation jobs (process-daily, archive-email) under fdrake's systemd-user timers. Runs full workstation home-manager stack. See `references/gnomeregan.md`. |
 
 ### WSL Hosts (Colmena-managed, nixos user with sudo)
 
@@ -115,3 +122,8 @@ colmena apply --on <hostname> --impure
 ## Related Skills
 
 - **provision-nixos-server**: Create new Hetzner servers from scratch
+
+## References
+
+- `references/host-mapping.md` — Inventory of every managed host (SSH user, port, role).
+- `references/gnomeregan.md` — Gnomeregan-specific setup, sops identity model, and disaster-recovery procedure. Read first before changing its config or rebuilding it.
