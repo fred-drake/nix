@@ -12,14 +12,9 @@
     efi.canTouchEfiVariables = true;
   };
 
-  # Disable systemd-in-initrd so the NixOS setupSecrets activation script
-  # runs in stage 2 (after /home mounts) rather than stage 1. sops-nix
-  # needs the age key at /home/fdrake/.ssh/id_infrastructure, which isn't
-  # accessible during stage 1; running there causes setupSecrets to abort
-  # on the first undecryptable workstation secret (e.g. calibre-storage)
-  # and leaves /run/secrets/* unwritten, which then breaks any service
-  # bind-mounting from /run/secrets/.
-  boot.initrd.systemd.enable = false;
+  # systemd-in-initrd (the default, soon to be the only option in 26.11).
+  # Safe to enable now that sops.age.sshKeyPaths points at the host
+  # ed25519 key, which lives on / and is accessible from stage 1.
 
   networking = {
     hostName = "gnomeregan";
@@ -83,16 +78,11 @@
 
   security.sudo.wheelNeedsPassword = false;
 
-  # sops-nix prefers /etc/ssh/ssh_host_ed25519_key — gnomeregan's host
-  # SSH key, registered as an age recipient in nix-secrets/.sops.yaml.
-  # Lives on /, so it's accessible in stage 1; required for the upcoming
-  # NixOS 26.11 removal of scripted initrd. /root/id_infrastructure is
-  # kept temporarily as a fallback during this migration; drop it once
-  # we've confirmed the host-key path decrypts every required secret.
-  sops.age.sshKeyPaths = [
-    "/etc/ssh/ssh_host_ed25519_key"
-    "/root/id_infrastructure"
-  ];
+  # sops-nix uses gnomeregan's host SSH key as the age identity. The
+  # key is registered as an age recipient on every secret gnomeregan
+  # reads (see nix-secrets/.sops.yaml). Lives on /, accessible in
+  # stage 1, so it works with boot.initrd.systemd enabled.
+  sops.age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
 
   environment.systemPackages = with pkgs; [
     vim
