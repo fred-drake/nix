@@ -19,7 +19,15 @@ in {
       };
   };
 
-  systemd.services.glance.serviceConfig.EnvironmentFile = [
-    config.sops.secrets.glance-env.path
-  ];
+  systemd.services.glance = {
+    # Default `After=network.target` doesn't actually wait for the link to
+    # come up, so on a fresh boot glance retries and trips the systemd
+    # start-limit before wpa_supplicant associates. network-online.target
+    # blocks until wpa_supplicant + dhcpcd actually have a route.
+    after = ["network-online.target"];
+    wants = ["network-online.target"];
+    serviceConfig.EnvironmentFile = [
+      config.sops.secrets.glance-env.path
+    ];
+  };
 }

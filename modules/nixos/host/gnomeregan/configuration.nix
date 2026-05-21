@@ -74,9 +74,14 @@
   security.sudo.wheelNeedsPassword = false;
 
   # sops-nix uses this age identity to decrypt NixOS-level secrets at
-  # activation time. Lives on /home, which is why boot.initrd.systemd
-  # is disabled above (so activation waits for stage 2).
-  sops.age.sshKeyPaths = ["/home/fdrake/.ssh/id_infrastructure"];
+  # activation time. Lives at /root/ (on /) so it's available before
+  # home-manager's sops runs; the HM secrets feature owns
+  # /home/fdrake/.ssh/id_infrastructure (as a symlink to a HM-sops-
+  # decrypted target that doesn't exist until HM activates), so that
+  # path can't be used for NixOS-level decryption. Placed manually with
+  #   sudo cp /home/fdrake/.config/sops-nix/secrets/ssh-id-infrastructure /root/id_infrastructure
+  #   sudo chmod 600 /root/id_infrastructure
+  sops.age.sshKeyPaths = ["/root/id_infrastructure"];
 
   environment.systemPackages = with pkgs; [
     vim
