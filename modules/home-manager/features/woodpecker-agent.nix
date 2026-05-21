@@ -12,7 +12,7 @@
 in
   lib.mkIf hasWoodpeckerAgent {
     sops.secrets.woodpecker-agent-token = {
-      sopsFile = config.secrets.workstation.host.mac-studio.woodpecker;
+      sopsFile = config.secrets.workstation.host.macbookpro.woodpecker;
       mode = "0400";
       key = "agent-token";
     };
@@ -38,7 +38,7 @@ in
           WOODPECKER_GRPC_VERIFY = "false";
           WOODPECKER_BACKEND = "local";
           WOODPECKER_FILTER_LABELS = "platform=darwin/*,arch=arm64,org-id=*";
-          WOODPECKER_HOSTNAME = "mac-studio-1";
+          WOODPECKER_HOSTNAME = "macbook-pro-1";
           WOODPECKER_MAX_WORKFLOWS = "1";
           WOODPECKER_BACKEND_LOCAL_TEMP_DIR = workdir;
           PATH = "/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:${home}/.nix-profile/bin:/etc/profiles/per-user/fdrake/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";

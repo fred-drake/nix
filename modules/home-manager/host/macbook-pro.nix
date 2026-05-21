@@ -20,14 +20,23 @@
       mode = "0400";
       key = "data";
     };
+    wireguard-brainrush-stage = {
+      sopsFile = config.secrets.workstation.host.macbookpro.wireguard-brainrush-stage;
+      mode = "0400";
+      key = "data";
+    };
   };
 
   home.file = {
     ".config/wireguard/office-admin.conf".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.wireguard-office-admin.path;
     ".config/wireguard/office-full.conf".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.wireguard-office-full.path;
     ".config/wireguard/office-public-dns.conf".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.wireguard-office-public-dns.path;
+    ".config/wireguard/brainrush-stage.conf".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets.wireguard-brainrush-stage.path;
     ".config/wireguard/public-key.txt".text = ''
       GK82AkQED91xMMqZ7RXpAu8LwFC2BiTsAsnwzR47B2w=
+    '';
+    ".config/wireguard/brainrush-stage-public-key.txt".text = ''
+      W4M1gUYVu4PPgqFfrE5bd5AVwyvxT1NokGApUrQy8DU=
     '';
   };
   home.packages = with pkgs; [
