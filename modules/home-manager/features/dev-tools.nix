@@ -2,6 +2,7 @@
   programs = {
     atuin.enable = true;
     direnv.enable = true;
+    gh.enable = true;
     nix-index.enable = true;
     nix-index-database.comma.enable = true;
 
