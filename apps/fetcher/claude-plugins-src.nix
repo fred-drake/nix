@@ -3,8 +3,8 @@
 ####################################
 {pkgs, ...}: {
   claude-plugins-official-src = builtins.fetchTarball {
-    url = "https://github.com/anthropics/claude-plugins-official/archive/9f0275ae445cc605c3f5d83615fa0abf189cd90f.tar.gz";
-    sha256 = "02nc8p199s5qa0kdngn77hcx60vksbdpjiigdm7hrhwiramk0lwj";
+    url = "https://github.com/anthropics/claude-plugins-official/archive/9e150cfd48b87280cc76e035de04a11aa604e9c5.tar.gz";
+    sha256 = "0xpv78x50vrw6y3240mhzvd2mvi0kp9ca42idkk34j57n4z2kn1z";
   };
   cc-marketplace-src = pkgs.fetchFromGitHub {
     owner = "samber";
@@ -15,8 +15,8 @@
   cc-skills-golang-src = pkgs.fetchFromGitHub {
     owner = "samber";
     repo = "cc-skills-golang";
-    rev = "61451c6b2ac9a85cd68c1e8fb178c81d01fb6499";
-    hash = "sha256-nd0T2duTdX2CUfmqD5OiHgl7SNqjR6k5+0TvE6eig5A=";
+    rev = "123defac7bf3b6ca355652d1d8b8928f63df2f25";
+    hash = "sha256-b3i3nrJL6OrxMQR3hFwYhF31BQU5REUw2vvl6UEQdZM=";
   };
   superpowers-src = pkgs.fetchFromGitHub {
     owner = "obra";

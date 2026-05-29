@@ -5,24 +5,24 @@ _: {
   "docker.gitea.com" = {
     "act_runner" = {
       "latest" = {
-        "linux/amd64" = "docker.gitea.com/act_runner@sha256:e9ca8369a67b9c8fd73acef166e54f2f302c264fe636f42fd6367f27ecb6a3c0";
+        "linux/amd64" = "docker.gitea.com/act_runner@sha256:c2aa711176060fe1fdac01638aead7355d2c590e57df1130397f80dcd42558a4";
       };
     };
     "gitea" = {
       "1-rootless" = {
-        "linux/amd64" = "docker.gitea.com/gitea@sha256:d671880e8fd3e337ea7ce3870bfe8fd37709060cd48224e4df2501c141b85443";
+        "linux/amd64" = "docker.gitea.com/gitea@sha256:592a005e54327ed4969101ba60cf89dca569001ee71492ea0a6c43ce8de29379";
       };
     };
   };
   "docker.io" = {
     "amruthpillai/reactive-resume" = {
       "latest" = {
-        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:dd2d1c6e0651249ba16a7f4ad5852e9fd9a85a73d2043903f06db53b75c8a069";
+        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:eee6f0bb79bae68dcaaf335e304f9f39fde0078952fd1857cbacca74f70e17c6";
       };
     };
     "apache/tika" = {
       "latest" = {
-        "linux/amd64" = "docker.io/apache/tika@sha256:eb02f1c06168de85505a238ca1ad6937e2d0c3805795dc1abb0d1235bbb6e6cd";
+        "linux/amd64" = "docker.io/apache/tika@sha256:c9e60f15c1ff3f826e3102e18352ef21cf398a3f2505871913c3dc643dcc50ea";
       };
     };
     "clickhouse/clickhouse-server" = {
@@ -35,24 +35,14 @@ _: {
         "linux/amd64" = "docker.io/clusterzx/paperless-ai@sha256:19baad5ab2607d65087712fcb3ff74b6c5f7e840ea31061dace4d8ab1ef40a17";
       };
     };
-    "glanceapp/glance" = {
-      "latest" = {
-        "linux/amd64" = "docker.io/glanceapp/glance@sha256:92989752b372b58d49a98b9f7c70004bda9b8fb661f84cdb05abaae5ba450763";
-      };
-    };
     "gotenberg/gotenberg" = {
       "latest" = {
-        "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:dd194920cf51c547854f719be8cd986e531c445419ad63d42654c5b906f22bbe";
-      };
-    };
-    "jellyfin/jellyfin" = {
-      "latest" = {
-        "linux/amd64" = "docker.io/jellyfin/jellyfin@sha256:1ebca12ee68116ddc6bd38ea01af2db50d6e4cee64a5076981ef75c35709d5e8";
+        "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:548fcf3e00ded485d0b85d2009154e9ef5ba81fcfe64a5fce9cab8a532e8e1bd";
       };
     };
     "library/redis" = {
       "latest" = {
-        "linux/amd64" = "docker.io/library/redis@sha256:94ea4f5ccdaa6b154df99a792986ecb3ffbb3fe7722a197220477f1f3e65f9fe";
+        "linux/amd64" = "docker.io/library/redis@sha256:e74c9b933d78e2829583d88f92793f4524752a15ac59c8baff2dd5ed000b7432";
       };
     };
     "postgres" = {
@@ -60,15 +50,10 @@ _: {
         "linux/amd64" = "docker.io/postgres@sha256:79950da386bda7fcc9d57aa9aa9be6c6d7407596a9b8f68014b09a778a9ab316";
       };
       "17" = {
-        "linux/amd64" = "docker.io/postgres@sha256:192f81bbac9020895f0a17244e13f301717ff8d68f5d846856c7d13caacc04cc";
+        "linux/amd64" = "docker.io/postgres@sha256:c45202f004c3a3188d1735ccb0967a0c6b1169a9d08e732c854d08f8fe456343";
       };
       "18" = {
-        "linux/amd64" = "docker.io/postgres@sha256:bfae840554bdbd4e9f8d097d8e23ffda8aac82866e04ea0d6bc09647234dd359";
-      };
-    };
-    "solarkennedy/ipmi-kvm-docker" = {
-      "latest" = {
-        "linux/amd64" = "docker.io/solarkennedy/ipmi-kvm-docker@sha256:63d758c437d333e4d3cf7abfc62dea85c68fa3f3ed72bf92917107540fb8c14d";
+        "linux/amd64" = "docker.io/postgres@sha256:41da01536bc3ae26308cefb0c57235e7488001360bdb15191eb0b7955b570299";
       };
     };
     "woodpeckerci/woodpecker-agent" = {
@@ -79,13 +64,6 @@ _: {
     "woodpeckerci/woodpecker-server" = {
       "v3.13.0" = {
         "linux/amd64" = "docker.io/woodpeckerci/woodpecker-server@sha256:268f891dd63f2e86f912fc3fbdff0b26552a79c4290b4be66b7c04acbe81fbb9";
-      };
-    };
-  };
-  "docker.n8n.io" = {
-    "n8nio/n8n" = {
-      "latest" = {
-        "linux/amd64" = "docker.n8n.io/n8nio/n8n@sha256:bb50bbcd1a0cb32670f9a2c8b10baf3e9d43b6ab22639f87edb063400b8a68ed";
       };
     };
   };
@@ -102,32 +80,12 @@ _: {
     };
     "linuxserver/calibre" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/calibre@sha256:b7cebf45f29a60b3459f676a3d7ff1f6216136587385ba58f3af340e8824d528";
+        "linux/amd64" = "ghcr.io/linuxserver/calibre@sha256:aac956f62543dbd090b2e5936c2b28ecb74055cf98fc53e8d77abbee4855b83b";
       };
     };
     "linuxserver/calibre-web" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:db8a3e681ea06d30dba094c6565b09382f1f828cc85f650c1b0f45dcbda77bb9";
-      };
-    };
-    "linuxserver/radarr" = {
-      "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:3d851f850263ac1cbb5b2c78b20123a224547d819c2f4ba5a0a8cacadbf97038";
-      };
-    };
-    "linuxserver/sabnzbd" = {
-      "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:f1042b6e9b640ba7a31d445854bc3c4238c8d1bc555bdf8104a4ff7237a7d689";
-      };
-    };
-    "linuxserver/sonarr" = {
-      "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:ff1da993331947fbac8ba81c55fd72cb7d50bf47886d8e967bf14ab867e3193e";
-      };
-    };
-    "monstermuffin/mergerfs-cache-mover" = {
-      "latest" = {
-        "linux/amd64" = "ghcr.io/monstermuffin/mergerfs-cache-mover@sha256:1fe57d65d0ab7a990ba7b2ef62d2356f31bb2216032801d5dae741cd38dd9062";
+        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:7ed478bcc15c55479db4ab522be90995d5dc6394a3cd2b1ffb415cc7fd9003f7";
       };
     };
     "paperless-ngx/paperless-ngx" = {
@@ -140,13 +98,6 @@ _: {
     "fdrake/traceway" = {
       "latest" = {
         "linux/amd64" = "gitea.internal.freddrake.com/fdrake/traceway@sha256:aaa5ecc261deeffc6f2256517e1641e3c89f181829021a0517012b8d8ea7f679";
-      };
-    };
-  };
-  "lscr.io" = {
-    "linuxserver/lazylibrarian" = {
-      "latest" = {
-        "linux/amd64" = "lscr.io/linuxserver/lazylibrarian@sha256:f04308f13ec3eee6c849fcd24d2ba7ffae9005eb125be5151548f2955ec5d67e";
       };
     };
   };

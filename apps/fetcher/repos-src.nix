@@ -5,8 +5,8 @@
   outline-nvim-src = pkgs.fetchFromGitHub {
     owner = "hedyhli";
     repo = "outline.nvim";
-    rev = "c293eb56db880a0539bf9d85b4a27816960b863e";
-    hash = "sha256-xKu05IgOpgtt2W+WqXuTUjX66ffDrU8BDi8z7M6M1q4=";
+    rev = "2a132953b944561d45b52e4541ebfff71934a742";
+    hash = "sha256-4kvDnzLYFDDqcnpPWuNv3uXKDOHZjFLFTYtRGmP7rsc=";
   };
   container-digest-src = pkgs.fetchFromGitHub {
     owner = "fred-drake";
@@ -54,8 +54,8 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "d39897c129ac7a461a5b39c353e32fb8dbe91b82";
-    hash = "sha256-tsIImqrB9YL8Uz04Ev6TV4izIwSNuOuDQ9pd9IgNiGY=";
+    rev = "e28222ea182e67b0ff4fe017ff89700cd19a5d36";
+    hash = "sha256-VxzKHDv7y9oYsILmrGh4zn3Uibs0zuNzAIlkszMrqOw=";
   };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
