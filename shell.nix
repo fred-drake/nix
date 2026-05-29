@@ -41,7 +41,7 @@
     fi
 
     if [ "$(uname -s)" = "Darwin" ]; then
-        if [ "$HOST" = "freds-macbook-pro" ] || [ "$HOST" = "fred-macbook-pro-wireless" ]; then
+        if [ "$HOST" = "freds-macbook-pro" ] || [ "$HOST" = "fred-macbook-pro-wireless" ] || [ "$HOST" = "Mac" ] || [ "$HOST" = "mac" ]; then
             darwin-rebuild --show-trace --flake .#macbook-pro $CMD
         elif [ "$HOST" = "Laisas-Mac-mini" ] || [ "$HOST" = "laisas-mac-mini" ]; then
             darwin-rebuild --show-trace --flake .#laisas-mac-mini $CMD
@@ -54,14 +54,18 @@
   '';
 
   update-container-digests = pkgs.writeShellScriptBin "update-container-digests" ''
+    set -euo pipefail
     SHA_FILE=''${PROJECT_ROOT:-$(pwd)}/apps/fetcher/containers-sha.nix
+    TMP_FILE=$(${pkgs.coreutils}/bin/mktemp "''${SHA_FILE}.XXXXXX")
+    trap 'rm -f "$TMP_FILE"' EXIT
     echo "Updating container digests..."
-    echo "####################################" > $SHA_FILE
-    echo "# Auto-generated -- do not modify! #" >> $SHA_FILE
-    echo "####################################" >> $SHA_FILE
-    ${container-digest}/bin/container-digest --containers ''${PROJECT_ROOT:-$(pwd)}/apps/fetcher/containers.toml --output-format nix >> $SHA_FILE
-    ${pkgs.gnused}/bin/sed -i 's/^{\.\.\.}: {$/_: {/' $SHA_FILE
-    ${pkgs.alejandra}/bin/alejandra --quiet $SHA_FILE
+    echo "####################################" > "$TMP_FILE"
+    echo "# Auto-generated -- do not modify! #" >> "$TMP_FILE"
+    echo "####################################" >> "$TMP_FILE"
+    ${container-digest}/bin/container-digest --containers ''${PROJECT_ROOT:-$(pwd)}/apps/fetcher/containers.toml --output-format nix >> "$TMP_FILE"
+    ${pkgs.gnused}/bin/sed -i 's/^{\.\.\.}: {$/_: {/' "$TMP_FILE"
+    ${pkgs.alejandra}/bin/alejandra --quiet "$TMP_FILE"
+    mv "$TMP_FILE" "$SHA_FILE"
   '';
 
   update-claude-plugins = pkgs.writeShellScriptBin "update-claude-plugins" ''
