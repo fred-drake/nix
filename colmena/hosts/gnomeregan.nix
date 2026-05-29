@@ -12,6 +12,7 @@
   deferredHmModules,
   ...
 }: let
+  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
   # Module set + packages come from nixpkgs-unstable via
   # colmena meta.nodeNixpkgs.gnomeregan (see colmena/default.nix).
   # Pin the etc/nixos/version.json source to match.
@@ -54,7 +55,7 @@ in {
     };
     deployment = {
       buildOnTarget = true;
-      targetHost = "192.168.30.7";
+      targetHost = "gnomeregan.${soft-secrets.networking.domain}";
       targetUser = "fdrake";
     };
   };

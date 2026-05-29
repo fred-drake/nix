@@ -27,7 +27,7 @@
     wireless = {
       enable = true;
       secretsFile = config.sops.secrets.wireless-env.path;
-      networks."Frecklepie".pskRaw = "ext:HOME_PSK";
+      networks."Hearthstone".pskRaw = "ext:HOME_PSK";
     };
     networkmanager.enable = false;
   };
