@@ -15,4 +15,11 @@ _: {
     enableKeyMapping = true;
     remapCapsLockToControl = true; # Remap Caps Lock to Control
   };
+
+  # Route *.internal.freddrake.com to hearthstone over Tailscale.
+  # macOS reads /etc/resolver/<domain> automatically; only queries for this
+  # zone are sent, and only when 100.64.0.13 is reachable.
+  environment.etc."resolver/internal.freddrake.com".text = ''
+    nameserver 100.64.0.13
+  '';
 }
