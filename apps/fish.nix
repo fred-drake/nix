@@ -117,6 +117,48 @@ in {
         end
       end
 
+      # Create (and focus) a cmux workspace for a project.
+      #   cws <name> [dir] [color]
+      # Looks up dir + color from the windev registry (~/.config/windev/config.json)
+      # by <name>; explicit [dir]/[color] args override. Unknown names just open
+      # in the current directory with no color.
+      function cws
+        if not command -v cmux >/dev/null 2>&1
+          echo "cws: cmux not found" >&2
+          return 1
+        end
+        set -l name $argv[1]
+        if test -z "$name"
+          echo "usage: cws <name> [dir] [color]" >&2
+          return 1
+        end
+        set -l config_file "$HOME/.config/windev/config.json"
+
+        # Resolve directory: explicit arg > registry > pwd
+        set -l devdir
+        if test -n "$argv[2]"
+          set devdir "$argv[2]"
+        else if test -f "$config_file"
+          set devdir (jq -r --arg name "$name" '.[] | select(.name == $name) | .dir' "$config_file" 2>/dev/null)
+        end
+        if test -z "$devdir"; or test "$devdir" = "."
+          set devdir (pwd)
+        end
+
+        # Resolve color: explicit arg > registry > none
+        set -l color
+        if test -n "$argv[3]"
+          set color "$argv[3]"
+        else if test -f "$config_file"
+          set color (jq -r --arg name "$name" '.[] | select(.name == $name) | .color // empty' "$config_file" 2>/dev/null)
+        end
+
+        set -l ws (cmux new-workspace --name "$name" --cwd "$devdir" --focus true --id-format uuids | string replace 'OK ' "")
+        if test -n "$color"
+          cmux workspace-action --action set-color --color "$color" --workspace "$ws"
+        end
+      end
+
       # Add LLM API keys to environment
       # source ~/.llm_api_keys.fish
 
