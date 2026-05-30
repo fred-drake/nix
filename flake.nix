@@ -76,10 +76,6 @@
       url = "github:homebrew/homebrew-bundle";
       flake = false;
     };
-    homebrew-fdrake = {
-      url = "github:fred-drake/homebrew-tap";
-      flake = false;
-    };
     homebrew-nikitabobko = {
       url = "github:nikitabobko/homebrew-tap";
       flake = false;

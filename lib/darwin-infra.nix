@@ -18,7 +18,6 @@
         "homebrew/homebrew-cask" = inputs.homebrew-cask;
         "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
         "nikitabobko/homebrew-tap" = inputs.homebrew-nikitabobko;
-        "fred-drake/homebrew-tap" = inputs.homebrew-fdrake;
         "sst/homebrew-tap" = inputs.homebrew-sst;
         "steipete/homebrew-tap" = inputs.homebrew-steipete;
         "facebook/homebrew-fb" = inputs.homebrew-facebook-fb;

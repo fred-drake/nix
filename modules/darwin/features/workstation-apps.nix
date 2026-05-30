@@ -25,6 +25,20 @@ lib.mkMerge [
       enable = true;
       user = config.my.username;
       global.brewfile = true;
+      # Mirror the taps managed by nix-homebrew (lib/darwin-infra.nix) so they
+      # appear as `tap` lines in the generated Brewfile. Without this, `brew
+      # bundle` with cleanup = "zap" tries to untap every tapped repo (the
+      # Brewfile lists none), erroring on core taps it can't remove and on
+      # nix-homebrew's read-only tap dirs.
+      taps = [
+        "homebrew/core"
+        "homebrew/cask"
+        "homebrew/bundle"
+        "nikitabobko/tap"
+        "sst/tap"
+        "steipete/tap"
+        "facebook/fb"
+      ];
     };
   }
 
@@ -51,6 +65,7 @@ lib.mkMerge [
         "godot"
         "google-chrome"
         "google-drive"
+        "gstreamer-runtime"
         "inkscape"
         "krita"
         "macdown"
