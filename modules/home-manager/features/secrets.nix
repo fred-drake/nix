@@ -176,13 +176,6 @@ in {
         path = "${home}/.ssh/oracle_cloud_key.pem";
       };
 
-      claude-env = {
-        sopsFile = config.secrets.workstation.mcp.claude-notification-hook;
-        mode = "0400";
-        key = "data";
-        path = "${home}/.config/fish/conf.d/claude-env.fish";
-      };
-
       ref-mcp-api-key = {
         sopsFile = config.secrets.workstation.mcp.ref-mcp;
         mode = "0400";
