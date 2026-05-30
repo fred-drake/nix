@@ -24,4 +24,10 @@
     rev = "f2cbfbefebbfef77321e4c9abc9e949826bea9d7";
     hash = "sha256-3E3rO6hR87JUfS3XV1Eaoz6SDWOftleWvN9UPNFEMjw=";
   };
+  cmux-src = pkgs.fetchFromGitHub {
+    owner = "manaflow-ai";
+    repo = "cmux";
+    rev = "4afeef69dea51621b86288944b6728a0227d7ee7";
+    hash = "sha256-X+YbHcu69Ju+uvuf3HIe1CCO5Jdl9w6cZje9Mr/k9ys=";
+  };
 }

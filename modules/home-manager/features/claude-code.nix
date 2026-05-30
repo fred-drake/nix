@@ -422,6 +422,20 @@ in {
       recursive = true;
     };
 
+    # cmux skills (manaflow-ai/cmux) - opt-in, load via:
+    #   claude --plugin-dir ~/plugins/cmux
+    # Upstream is not itself a Claude plugin (no .claude-plugin/plugin.json),
+    # so we point the plugin dir at its skills/ and synthesize the manifest.
+    "plugins/cmux/skills" = {
+      source = "${claude-plugins-src.cmux-src}/skills";
+      recursive = true;
+    };
+    "plugins/cmux/.claude-plugin/plugin.json".text = builtins.toJSON {
+      name = "cmux";
+      description = "cmux end-user skills: topology/routing, workspace, settings, customization, diagnostics, browser automation, markdown viewer, and keyboard shortcuts.";
+      repository = "https://github.com/manaflow-ai/cmux";
+    };
+
     # LSP plugin (generated from claude-plugins-official + custom nil config)
     ".claude/lsp-plugin" = {
       source = lsp-plugin;

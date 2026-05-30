@@ -18,3 +18,10 @@ url = "https://github.com/samber/cc-skills-golang"
 [[repos]]
 name = "superpowers-src"
 url = "https://github.com/obra/superpowers"
+
+# cmux skills (manaflow-ai/cmux). The repo is not itself a Claude plugin
+# (no .claude-plugin/plugin.json), so claude-code.nix synthesizes the
+# plugin manifest and points --plugin-dir at the wrapped result.
+[[repos]]
+name = "cmux-src"
+url = "https://github.com/manaflow-ai/cmux"
