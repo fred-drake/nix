@@ -1,10 +1,16 @@
 {
   pkgs,
   config,
-  lib,
   ...
 }: let
   home = config.home.homeDirectory;
+  # cmux ships a `claude` wrapper that injects --session-id + --settings (a hook
+  # bundle) so Claude Code drives cmux's Feed approvals, "Needs input" status
+  # ring, notifications, and session restore. cmux normally puts this wrapper on
+  # PATH via its zsh/bash shell integration, which our Nix-managed fish/zsh setup
+  # never sources — so on Darwin we route ~/.local/bin/claude (first on PATH)
+  # through it instead. See the ~/.local/bin/claude home.file entry below.
+  cmuxClaudeWrapper = pkgs.stdenv.hostPlatform.isDarwin;
   claude-plugins-src = import ../../../apps/fetcher/claude-plugins-src.nix {inherit pkgs;};
   lsp-plugin = import ../../../apps/claude-code/lsp-plugin.nix {
     inherit pkgs;
@@ -358,146 +364,125 @@ in {
   };
 
   # Claude Code configuration files
-  home.file =
-    {
-      # Symlink so the native installer check finds claude at ~/.local/bin/claude
-      ".local/bin/claude".source = config.lib.file.mkOutOfStoreSymlink "/etc/profiles/per-user/${config.home.username}/bin/claude";
+  home.file = {
+    # ~/.local/bin is first on PATH, so this slot decides which `claude` runs.
+    # On Darwin, point it at cmux's claude wrapper: it injects --session-id +
+    # the hook bundle (Feed approvals, status ring, notifications, session
+    # restore) and then execs the real nix claude, which it finds as the next
+    # `claude` on PATH (/etc/profiles/per-user/<user>/bin/claude). The wrapper
+    # passes through transparently outside a live cmux session, and if cmux is
+    # absent this symlink dangles and shells skip it, falling back to the same
+    # real claude — so it is safe on any Darwin host. Elsewhere, point straight
+    # at the real claude (also satisfies Claude's native installer check).
+    ".local/bin/claude".source = config.lib.file.mkOutOfStoreSymlink (
+      if cmuxClaudeWrapper
+      then "/Applications/cmux.app/Contents/Resources/bin/claude"
+      else "/etc/profiles/per-user/${config.home.username}/bin/claude"
+    );
 
-      # Claude command files
-      ".claude/commands" = {
-        source = ../../../apps/claude-code/commands;
-        recursive = true;
+    # Claude command files
+    ".claude/commands" = {
+      source = ../../../apps/claude-code/commands;
+      recursive = true;
+    };
+
+    ".claude/agents" = {
+      source = ../../../apps/claude-code/agents;
+      recursive = true;
+    };
+
+    ".claude/skills" = {
+      source = ../../../apps/claude-code/skills;
+      recursive = true;
+    };
+
+    # Ralph Wiggum assets (scripts and hooks for the ralph-loop command)
+    ".claude/assets/ralph-wiggum" = {
+      source = ../../../apps/claude-code/assets/ralph-wiggum;
+      recursive = true;
+    };
+
+    # Samber marketplace registry
+    ".claude/plugins/marketplaces/cc" = {
+      source = "${claude-plugins-src.cc-marketplace-src}";
+      recursive = true;
+    };
+
+    # Samber Go skills plugin - opt-in, load via:
+    #   claude --plugin-dir ~/plugins/cc-skills-golang
+    "plugins/cc-skills-golang" = {
+      source = "${claude-plugins-src.cc-skills-golang-src}";
+      recursive = true;
+    };
+
+    # Superpowers plugin (obra/superpowers) - opt-in, load via:
+    #   claude --plugin-dir ~/plugins/superpowers
+    "plugins/superpowers" = {
+      source = "${claude-plugins-src.superpowers-src}";
+      recursive = true;
+    };
+
+    # LSP plugin (generated from claude-plugins-official + custom nil config)
+    ".claude/lsp-plugin" = {
+      source = lsp-plugin;
+      recursive = true;
+    };
+
+    ".claude/CLAUDE.md".text = builtins.readFile ../../../apps/claude-code/CLAUDE.md;
+
+    ".claude/settings.json".text = builtins.toJSON {
+      env = {
+        DISABLE_AUTOUPDATER = "1";
+        CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+        ENABLE_LSP_TOOL = "1";
       };
 
-      ".claude/agents" = {
-        source = ../../../apps/claude-code/agents;
-        recursive = true;
+      statusLine = {
+        type = "command";
+        command = "${ccstatusline}/bin/ccstatusline";
+        padding = 0;
       };
 
-      ".claude/skills" = {
-        source = ../../../apps/claude-code/skills;
-        recursive = true;
+      skipDangerousModePermissionPrompt = true;
+
+      # Push notifications (shown in /config):
+      #   inputNeededNotifEnabled -> "Push when actions required"
+      #   agentPushNotifEnabled   -> "Push when Claude decides"
+      inputNeededNotifEnabled = true;
+      agentPushNotifEnabled = true;
+
+      permissions = {
+        defaultMode = "bypassPermissions";
+        allow = [];
+
+        deny = [];
       };
 
-      # Ralph Wiggum assets (scripts and hooks for the ralph-loop command)
-      ".claude/assets/ralph-wiggum" = {
-        source = ../../../apps/claude-code/assets/ralph-wiggum;
-        recursive = true;
-      };
-
-      # Samber marketplace registry
-      ".claude/plugins/marketplaces/cc" = {
-        source = "${claude-plugins-src.cc-marketplace-src}";
-        recursive = true;
-      };
-
-      # Samber Go skills plugin - opt-in, load via:
-      #   claude --plugin-dir ~/plugins/cc-skills-golang
-      "plugins/cc-skills-golang" = {
-        source = "${claude-plugins-src.cc-skills-golang-src}";
-        recursive = true;
-      };
-
-      # Superpowers plugin (obra/superpowers) - opt-in, load via:
-      #   claude --plugin-dir ~/plugins/superpowers
-      "plugins/superpowers" = {
-        source = "${claude-plugins-src.superpowers-src}";
-        recursive = true;
-      };
-
-      # LSP plugin (generated from claude-plugins-official + custom nil config)
-      ".claude/lsp-plugin" = {
-        source = lsp-plugin;
-        recursive = true;
-      };
-
-      ".claude/CLAUDE.md".text = builtins.readFile ../../../apps/claude-code/CLAUDE.md;
-
-      ".claude/settings.json".text = builtins.toJSON {
-        env = {
-          DISABLE_AUTOUPDATER = "1";
-          CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
-          ENABLE_LSP_TOOL = "1";
-        };
-
-        statusLine = {
-          type = "command";
-          command = "${ccstatusline}/bin/ccstatusline";
-          padding = 0;
-        };
-
-        skipDangerousModePermissionPrompt = true;
-
-        permissions = {
-          defaultMode = "bypassPermissions";
-          allow = [];
-
-          deny = [];
-        };
-
-        hooks =
+      hooks = {
+        Stop = [
           {
-            Stop =
-              [
-                {
-                  # Ralph Wiggum stop hook - intercepts exit when loop is active
-                  hooks = [
-                    {
-                      type = "command";
-                      command = "$HOME/.claude/assets/ralph-wiggum/hooks/stop-hook.sh";
-                    }
-                  ];
-                }
-                {
-                  matcher = "";
-                  hooks = [
-                    {
-                      command = "PROJECT_NAME=\${PROJECT_ROOT##*/}; PROJECT_NAME=\${PROJECT_NAME:-'project'}; [ -n \"$CLAUDE_NOTIFICATION_SLACK_URL\" ] && curl -X POST -H 'Content-type: application/json' --data \"{\\\"text\\\":\\\"Task completed in $PROJECT_NAME\\\"}\" \"$CLAUDE_NOTIFICATION_SLACK_URL\" || true";
-                      type = "command";
-                    }
-                  ];
-                }
-              ]
-              ++ lib.optionals pkgs.stdenv.isDarwin [
-                {
-                  matcher = "";
-                  hooks = [
-                    {
-                      type = "command";
-                      command = ''/opt/homebrew/bin/terminal-notifier -title "Claude Code $(basename "$PWD")" -message "Finished" -contentImage "$HOME/Pictures/claude_logo.jpg"'';
-                    }
-                  ];
-                }
-              ];
-            PostToolUse = [
+            # Ralph Wiggum stop hook - intercepts exit when loop is active
+            hooks = [
               {
-                matcher = "Write|Edit|MultiEdit";
-                hooks = [
-                  {
-                    command = "just format || npm run format || true";
-                    type = "command";
-                  }
-                ];
+                type = "command";
+                command = "$HOME/.claude/assets/ralph-wiggum/hooks/stop-hook.sh";
               }
             ];
           }
-          // lib.optionalAttrs pkgs.stdenv.isDarwin {
-            Notification = [
+        ];
+        PostToolUse = [
+          {
+            matcher = "Write|Edit|MultiEdit";
+            hooks = [
               {
-                matcher = "";
-                hooks = [
-                  {
-                    type = "command";
-                    command = ''/opt/homebrew/bin/terminal-notifier -title "Claude Code $(basename "$PWD")" -message "Needs attention" -contentImage "$HOME/Pictures/claude_logo.jpg"'';
-                  }
-                ];
+                command = "just format || npm run format || true";
+                type = "command";
               }
             ];
-          };
-        includeCoAuthoredBy = false;
+          }
+        ];
       };
-    }
-    // lib.optionalAttrs pkgs.stdenv.isDarwin {
-      "Pictures/claude_logo.jpg".source = ../../../apps/claude-code/assets/claude_logo.jpg;
+      includeCoAuthoredBy = false;
     };
+  };
 }
