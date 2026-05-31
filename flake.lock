@@ -339,6 +339,22 @@
         "type": "github"
       }
     },
+    "glance-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780173316,
+        "narHash": "sha256-2WFX1Gca7ign9i1zOQ9lRdtOSGq9QG33vIA5QTnq9E8=",
+        "owner": "glanceapp",
+        "repo": "glance",
+        "rev": "91324e8de762702e97b0ac5c8e36271d644d8642",
+        "type": "github"
+      },
+      "original": {
+        "owner": "glanceapp",
+        "repo": "glance",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -1210,6 +1226,7 @@
         "disko": "disko",
         "firefox-addons": "firefox-addons",
         "flake-parts": "flake-parts_2",
+        "glance-src": "glance-src",
         "home-manager": "home-manager",
         "homebrew-bundle": "homebrew-bundle",
         "homebrew-cask": "homebrew-cask",

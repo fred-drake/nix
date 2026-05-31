@@ -1,4 +1,6 @@
-{inputs, ...}: _final: prev: {
+{inputs, ...}: final: prev:
+(import ./glance.nix {inherit inputs;} final prev)
+// {
   # Disable flaky python tests:
   # - uvloop: timing-sensitive tests fail intermittently
   # - openai-whisper: tests/test_audio.py spawns ffmpeg, which gets killed in

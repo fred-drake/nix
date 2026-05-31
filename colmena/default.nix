@@ -1,4 +1,5 @@
 {
+  inputs,
   self,
   nixpkgs-stable,
   nixpkgs-unstable,
@@ -28,7 +29,12 @@ in {
     # workstation home-manager features it loads reference unstable-only attrs
     # (prettier, lndir, …). Stable modules + unstable pkgs hits real
     # boot/initrd mismatches that only WSL hosts (anton) sidestep.
-    nodeNixpkgs.gnomeregan = import nixpkgs-unstable {system = "x86_64-linux";};
+    # gnomeregan uses a bare nixpkgs (no mkPkgs overlays), so apply the
+    # glance-from-main overlay here directly. See overlays/glance.nix.
+    nodeNixpkgs.gnomeregan = import nixpkgs-unstable {
+      system = "x86_64-linux";
+      overlays = [(import ../overlays/glance.nix {inherit inputs;})];
+    };
   };
 
   # Merge all host configurations

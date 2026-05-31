@@ -20,6 +20,7 @@
   deferredHmModules = builtins.attrValues config.my.modules.home-manager;
 in {
   flake.colmena = import ../../colmena {
+    inherit inputs;
     inherit (inputs) self;
     inherit
       (inputs)

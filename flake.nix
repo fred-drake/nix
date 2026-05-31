@@ -22,6 +22,16 @@
     # .claude/skills/woodpecker-upgrade/SKILL.md.
     nixpkgs-woodpecker-agent.url = "github:nixos/nixpkgs/68d8aa3d661f0e6bd5862291b5bb263b2a6595c9";
 
+    # Build glance from its main branch instead of the tagged nixpkgs
+    # release. Pinned in flake.lock for reproducibility; bump with
+    # `nix flake update glance-src` (or `just update`) to pick up the
+    # latest main commit. The overlay in overlays/default.nix swaps this
+    # source into pkgs.glance.
+    glance-src = {
+      url = "github:glanceapp/glance";
+      flake = false;
+    };
+
     # Secrets inputs
     secrets = {
       url = "git+ssh://git@github.com/fred-drake/nix-secrets.git";
