@@ -556,4 +556,54 @@ in
           };
         };
       }
+
+      # Single-NIC saturation guard. ironforge has one uplink and its media
+      # library lives on a remote Hetzner Storage Box reached over that same NIC
+      # via CIFS. When a client can't Direct Play a file (e.g. the Jellyfin web
+      # UI with an MKV/EAC3 source), jellyfin's ffmpeg buffers ahead by reading
+      # the source at line rate (~400 Mbit/s observed), saturating the uplink so
+      # SSH, ping, and the web UI all stall until the read finishes. Police
+      # inbound traffic from the Storage Box down to 150 Mbit/s so a transcode
+      # read always leaves headroom for management + the ~10 Mbit/s client
+      # stream. Pairs with jellyfin's EnableThrottling (set in its own /config).
+      # The Storage Box address and uplink are resolved at runtime so the rule
+      # survives an IP or interface rename.
+      {
+        systemd.services.storage-read-shaper = {
+          description = "Rate-limit CIFS reads from the Hetzner Storage Box (single-NIC saturation guard)";
+          after = ["network-online.target"];
+          wants = ["network-online.target"];
+          wantedBy = ["multi-user.target"];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = pkgs.writeShellScript "storage-read-shaper-start" ''
+              set -u
+              host="u543742.your-storagebox.de" # mirrors lib/mk-cifs-mount.nix
+              rate="150mbit"
+              ips=$(${pkgs.dnsutils}/bin/dig +short A "$host" | ${pkgs.gnugrep}/bin/grep -E '^[0-9.]+$')
+              if [ -z "$ips" ]; then echo "storage-read-shaper: could not resolve $host"; exit 0; fi
+              first=$(echo "$ips" | ${pkgs.coreutils}/bin/head -1)
+              ifc=$(${pkgs.iproute2}/bin/ip -o route get "$first" | ${pkgs.gawk}/bin/awk '{for (i=1; i<=NF; i++) if ($i == "dev") print $(i+1)}')
+              if [ -z "$ifc" ]; then echo "storage-read-shaper: could not determine uplink"; exit 0; fi
+              ${pkgs.iproute2}/bin/tc qdisc del dev "$ifc" ingress 2>/dev/null || true
+              ${pkgs.iproute2}/bin/tc qdisc add dev "$ifc" handle ffff: ingress
+              for ip in $ips; do
+                ${pkgs.iproute2}/bin/tc filter add dev "$ifc" parent ffff: protocol ip prio 1 u32 \
+                  match ip src "$ip"/32 \
+                  police rate "$rate" burst 800k mtu 64k drop flowid :1
+                echo "storage-read-shaper: capping reads from $ip on $ifc at $rate"
+              done
+            '';
+            ExecStop = pkgs.writeShellScript "storage-read-shaper-stop" ''
+              set -u
+              host="u543742.your-storagebox.de"
+              first=$(${pkgs.dnsutils}/bin/dig +short A "$host" | ${pkgs.gnugrep}/bin/grep -E '^[0-9.]+$' | ${pkgs.coreutils}/bin/head -1)
+              [ -n "$first" ] || exit 0
+              ifc=$(${pkgs.iproute2}/bin/ip -o route get "$first" | ${pkgs.gawk}/bin/awk '{for (i=1; i<=NF; i++) if ($i == "dev") print $(i+1)}')
+              [ -n "$ifc" ] && ${pkgs.iproute2}/bin/tc qdisc del dev "$ifc" ingress 2>/dev/null || true
+            '';
+          };
+        };
+      }
     ])
