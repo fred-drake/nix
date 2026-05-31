@@ -99,8 +99,8 @@ _: {
       };
     };
     "linuxserver/jellyfin" = {
-      "10.10.7" = {
-        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:82912aa6a4f2076562a82fc6d58cc8a50ecf62f3afb0b9f5939d80f7deb2c581";
+      "10.11.10" = {
+        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:b46e291fb2a532eef9e2e1b7d3b927ab39558f0c58964a63f21013071f1ae278";
       };
     };
     "linuxserver/lidarr" = {
