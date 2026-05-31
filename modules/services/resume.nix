@@ -114,19 +114,15 @@ in {
         extraOptions =
           ["--network=resume-net"]
           ++ map (dns: "--dns=${dns}") config.soft-secrets.networking.nameservers.internal;
-        # Reactive Resume v5 tries to inline the profile picture during SSR by
-        # fetching `APP_URL/storage/...` rewritten to `http://localhost:3000`,
-        # but the app itself doesn't serve /storage/ — nginx does. The fetch
-        # returns the SPA's 404 HTML, which gets base64'd into a bogus data URI
-        # and breaks the image in the PDF. Redirect the hardcoded localhost:3000
-        # to a closed port so the fetch fails and the catch block leaves
-        # picture.url as the public URL; chrome then fetches it directly via
-        # the host-gateway mapping.
-        entrypoint = "/bin/sh";
-        cmd = [
-          "-c"
-          "sed -i 's|\"http://localhost:3000\"|\"http://127.0.0.1:1\"|g' /app/apps/web/.output/server/_ssr/client-*.mjs && exec node /app/apps/web/.output/server/index.mjs"
-        ];
+        # v5.1.7 consolidated the separate Nuxt web SSR bundle into the server
+        # bundle, so the old `/app/apps/web/.output/server/_ssr/client-*.mjs`
+        # path (and its hardcoded `http://localhost:3000` profile-picture fetch)
+        # no longer exists — the only `localhost:3000` left in the server bundle
+        # is the CORS `trustedOrigins` set, which must NOT be rewritten. Use the
+        # image's default entrypoint (`docker-entrypoint.sh` → `node
+        # apps/server/dist/index.mjs`); no migration step is skipped by doing so.
+        # If the profile-picture-in-PDF SSR bug resurfaces, re-investigate the
+        # new code path rather than reviving the old sed hack.
         ports = [
           "127.0.0.1:${proxyPort}:3000"
         ];
