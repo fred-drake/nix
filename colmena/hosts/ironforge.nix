@@ -26,6 +26,7 @@ in {
     networking.extraHosts = ''
       127.0.0.1 jellyfin.${soft-secrets.networking.domain}
       127.0.0.1 jellyseerr.${soft-secrets.networking.domain}
+      127.0.0.1 seerr.${soft-secrets.networking.domain}
       127.0.0.1 sonarr.${soft-secrets.networking.domain}
       127.0.0.1 radarr.${soft-secrets.networking.domain}
       127.0.0.1 lidarr.${soft-secrets.networking.domain}

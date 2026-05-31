@@ -51,7 +51,10 @@
       port = 8096;
     }
     {
-      host = "jellyseerr";
+      # seerr's web UI is served under its canonical `seerr` name. The legacy
+      # `jellyseerr` name still resolves but 301-redirects here (see
+      # jellyseerrRedirect below) so old bookmarks/clients keep working.
+      host = "seerr";
       port = 5055;
     }
     {
@@ -81,6 +84,20 @@
   ];
 
   mediaProxies = map (s: mkNginxProxy (s // {extraConfig = mediaProxyExtraConfig;})) mediaServices;
+
+  # Legacy jellyseerr -> seerr permanent redirect. seerr is the canonical name;
+  # this vhost keeps the old jellyseerr URL alive but 301s every request (path
+  # preserved) to the seerr name so bookmarks/clients update themselves.
+  jellyseerrRedirect = let
+    fqdn = "jellyseerr.${domain}";
+  in {
+    security.acme.certs.${fqdn} = {};
+    services.nginx.virtualHosts.${fqdn} = {
+      useACMEHost = fqdn;
+      forceSSL = true;
+      globalRedirect = "seerr.${domain}";
+    };
+  };
 
   # ---------------------------------------------------------------------------
   # LinuxServer.io container factory.
@@ -149,13 +166,19 @@
     })
     (mkLs {
       name = "seerr";
-      image = containers-sha."docker.io"."fallenbagel/jellyseerr"."latest"."linux/amd64";
+      image = containers-sha."ghcr.io"."seerr-team/seerr"."latest"."linux/amd64";
       port = 5055;
-      # jellyseerr is not a LinuxServer image: it ignores PUID/PGID and expects
-      # its data at /app/config, not /config. Run it directly as the shared media
-      # identity so the adopted settings.json + db are read/written as 169:169.
+      # seerr (the merged overseerr+jellyseerr successor) is not a LinuxServer
+      # image: it ignores PUID/PGID and expects its data at /app/config, not
+      # /config. Run it directly as the shared media identity so the adopted
+      # settings.json + db are read/written as 169:169. The config layout is
+      # unchanged from jellyseerr, so seerr auto-migrates the existing db in
+      # place on first start (one-way — see seerr.jellyseerr-bak on the host).
       configMount = "/app/config";
       user = "169:169";
+      # seerr no longer bundles an init process (the container runs rootless and
+      # expects the runtime to reap), so supply one with --init.
+      #
       # seerr connects to jellyfin (login/auth) and sonarr/radarr (request
       # routing) by their public FQDNs over nginx:443. podman copies the host's
       # /etc/hosts into the container, where those names map to 127.0.0.1 (the
@@ -165,11 +188,13 @@
       # 127.0.0.1, so the container reaches the host's nginx (TLS terminator).
       # Drop an entry once its target is on media-net and seerr points at the
       # container name instead.
-      extraOptions = map (h: "--add-host=${h}.${domain}:host-gateway") [
-        "jellyfin"
-        "sonarr"
-        "radarr"
-      ];
+      extraOptions =
+        ["--init"]
+        ++ map (h: "--add-host=${h}.${domain}:host-gateway") [
+          "jellyfin"
+          "sonarr"
+          "radarr"
+        ];
     })
     (mkLs {
       name = "lidarr";
@@ -327,6 +352,7 @@ in
   lib.mkMerge ([
       videosStorage
       downloadsStorage
+      jellyseerrRedirect
     ]
     ++ mediaProxies
     ++ [

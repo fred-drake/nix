@@ -150,8 +150,8 @@ name = "linuxserver/sabnzbd"
 tag = "latest"
 architectures = ["linux/amd64"]
 [[containers]]
-repository = "docker.io"
-name = "fallenbagel/jellyseerr"
+repository = "ghcr.io"
+name = "seerr-team/seerr"
 tag = "latest"
 architectures = ["linux/amd64"]
 [[containers]]

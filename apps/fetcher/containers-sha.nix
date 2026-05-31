@@ -35,11 +35,6 @@ _: {
         "linux/amd64" = "docker.io/clusterzx/paperless-ai@sha256:19baad5ab2607d65087712fcb3ff74b6c5f7e840ea31061dace4d8ab1ef40a17";
       };
     };
-    "fallenbagel/jellyseerr" = {
-      "latest" = {
-        "linux/amd64" = "docker.io/fallenbagel/jellyseerr@sha256:499fbe958fa4a0c93172a231c14898986556bb28bd5cd569a0f41dbf887b04d7";
-      };
-    };
     "gotenberg/gotenberg" = {
       "latest" = {
         "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:548fcf3e00ded485d0b85d2009154e9ef5ba81fcfe64a5fce9cab8a532e8e1bd";
@@ -95,7 +90,7 @@ _: {
     };
     "linuxserver/calibre-web" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:7ed478bcc15c55479db4ab522be90995d5dc6394a3cd2b1ffb415cc7fd9003f7";
+        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:2eac9e0e2d67a38b61b4d35a0dc59697edce412237d21e70ce71085c32c321bd";
       };
     };
     "linuxserver/jellyfin" = {
@@ -136,6 +131,11 @@ _: {
     "recyclarr/recyclarr" = {
       "latest" = {
         "linux/amd64" = "ghcr.io/recyclarr/recyclarr@sha256:bd0254f1bcc7c08947c5297b012c832bda58ebd39a366a6078ede7ef1969e3da";
+      };
+    };
+    "seerr-team/seerr" = {
+      "latest" = {
+        "linux/amd64" = "ghcr.io/seerr-team/seerr@sha256:ff88bff83ef0ae51c57eb8eb8a5da8f015ec4de2ba6f6ef810d966eaae1d6f01";
       };
     };
   };
