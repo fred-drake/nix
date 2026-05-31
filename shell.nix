@@ -122,6 +122,7 @@ in
       colmena
       git
       gh
+      hcloud
       just
       alejandra
       nixos-anywhere
@@ -154,6 +155,12 @@ in
     shellHook = ''
       # Add user's local bin to PATH
       export PATH="$PATH:$HOME/.local/bin"
+
+      # Load the Hetzner Cloud API token at runtime (never via readFile, which
+      # would bake the secret into the world-readable nix store).
+      if [ -r "$HOME/.config/sops-nix/secrets/hetzner-home-api-token" ]; then
+        export HCLOUD_TOKEN="$(cat "$HOME/.config/sops-nix/secrets/hetzner-home-api-token")"
+      fi
 
       # Set PROJECT_ROOT to the actual working directory, not the nix store copy
       export PROJECT_ROOT="$PWD"
