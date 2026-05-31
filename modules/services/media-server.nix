@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   ...
@@ -88,6 +89,16 @@ in
           enable = true;
           mediaDir = "/data/media";
           stateDir = "/data/.state/nixarr";
+
+          # nixarr's bundled `nixarr_py` wheel declares a runtime dependency on
+          # a distribution named `jellyfin`, but its generated client installs
+          # as `jellyfin-py`, so nixpkgs' (now default-on) pythonRuntimeDepsCheckHook
+          # fails the build with "jellyfin not installed". Upstream is unfixed as
+          # of 2026-05; disable the check for this package only. Remove if/when
+          # nixarr corrects the dependency metadata.
+          nixarr-py.package =
+            options.nixarr.nixarr-py.package.default.overridePythonAttrs
+            (_: {dontCheckRuntimeDeps = true;});
 
           jellyfin.enable = true;
           jellyseerr.enable = true;
