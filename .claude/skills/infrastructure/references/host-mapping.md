@@ -9,6 +9,7 @@ This reference maps hostnames to their types, locations, and services.
 | headscale | Hetzner VPS | root | 22 | Headscale VPN, Tailscale client |
 | ironforge | Hetzner dedicated | root | 2222 | nixarr (jellyfin, jellyseerr, sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr) |
 | orgrimmar | Hetzner dedicated | root | 2222 | gitea, woodpecker, paperless, calibre, resume |
+| stormwind | Hetzner dedicated | root | 2222 | traceway (observability stack); pulls its container from gitea's registry on orgrimmar |
 
 ## LAN NixOS Hosts (Colmena-managed)
 

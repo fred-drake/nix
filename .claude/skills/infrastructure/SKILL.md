@@ -37,6 +37,7 @@ colmena build --on <hostname> --impure
 | headscale | Hetzner VPS | Headscale VPN, Tailscale client |
 | ironforge | Hetzner dedicated | nixarr (jellyfin, jellyseerr, sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr) |
 | orgrimmar | Hetzner dedicated | gitea, woodpecker, paperless, calibre, resume |
+| stormwind | Hetzner dedicated | traceway (observability stack) |
 
 ### LAN NixOS Hosts (Colmena-managed, fdrake user with sudo)
 
@@ -92,12 +93,12 @@ If colmena fails with SSH errors:
 
 ### Deploy All Hetzner Hosts
 ```bash
-colmena apply --on headscale,ironforge,orgrimmar --impure
+colmena apply --on headscale,ironforge,orgrimmar,stormwind --impure
 ```
 
 ### Deploy All Hosts
 ```bash
-colmena apply --on headscale,ironforge,orgrimmar,anton --impure
+colmena apply --on headscale,ironforge,orgrimmar,stormwind,gnomeregan,anton --impure
 ```
 
 ### Update Secrets Before Deploy
