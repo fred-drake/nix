@@ -100,3 +100,52 @@ repository = "gitea.internal.freddrake.com"
 name = "fdrake/traceway"
 tag = "latest"
 architectures = ["linux/amd64"]
+
+# Media stack (migrated from the nixarr module to podman containers on
+# ironforge). Digests are pinned; tags only move on an explicit
+# `just update-containers`. LinuxServer.io images unless noted.
+[[containers]]
+repository = "ghcr.io"
+name = "linuxserver/jellyfin"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "linuxserver/sonarr"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "linuxserver/radarr"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "linuxserver/lidarr"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "linuxserver/prowlarr"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "linuxserver/bazarr"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "linuxserver/sabnzbd"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "fallenbagel/jellyseerr"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "recyclarr/recyclarr"
+tag = "latest"
+architectures = ["linux/amd64"]
