@@ -107,15 +107,17 @@ architectures = ["linux/amd64"]
 [[containers]]
 repository = "ghcr.io"
 name = "linuxserver/jellyfin"
-# Pinned to 10.11.10. The 10.10.7 -> 10.11 upgrade runs a one-way EF Core
-# migration consolidating library.db into jellyfin.db. NOTE: on first boot the
-# linuxserver image crash-loops ~4x with `ObjectDisposedException: LoggerFactory`
-# at the network-config PreInitialisation migrations — this is a transient,
-# data-independent upstream bug; the s6 supervisor restarts and the migration
-# self-heals to "Startup complete" within ~60s. It MUST NOT be interrupted. The
-# cutover here was done by migrating /config offline first, so the deployed
-# container starts clean. Rollback snapshot: /data/.state/nixarr/jellyfin.rollback-10.10.7.
-tag = "10.11.10"
+# Tracks `latest` (currently 10.11.x) so `just update-containers` picks up new
+# releases. Digests are still pinned in containers-sha.nix — nothing moves until
+# you explicitly refresh, so upgrades stay deliberate.
+# WARNING for future MAJOR upgrades: the 10.10 -> 10.11 EF Core migration
+# (library.db -> jellyfin.db) crash-looped ~4x with
+# `ObjectDisposedException: LoggerFactory` at the network-config PreInitialisation
+# migrations before self-healing to "Startup complete" via the s6 supervisor.
+# That crash loop is transient and MUST NOT be interrupted. For a big migration,
+# snapshot /config and consider migrating it offline first so the deployed
+# container starts clean (see the 10.11.10 cutover in git history).
+tag = "latest"
 architectures = ["linux/amd64"]
 [[containers]]
 repository = "ghcr.io"

@@ -99,7 +99,7 @@ _: {
       };
     };
     "linuxserver/jellyfin" = {
-      "10.11.10" = {
+      "latest" = {
         "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:b46e291fb2a532eef9e2e1b7d3b927ab39558f0c58964a63f21013071f1ae278";
       };
     };
