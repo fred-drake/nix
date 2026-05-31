@@ -209,7 +209,7 @@
     })
     (mkLs {
       name = "jellyfin";
-      image = containers-sha."ghcr.io"."linuxserver/jellyfin"."latest"."linux/amd64";
+      image = containers-sha."ghcr.io"."linuxserver/jellyfin"."10.10.7"."linux/amd64";
       port = 8096;
       # Largest config dir (config/ data/ cache/ log/) adopted as /config; media
       # library bound read-only — jellyfin only reads it. NO /dev/dri: this host

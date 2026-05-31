@@ -503,6 +503,19 @@ All 9 images are pinned by digest in `apps/fetcher/containers.toml` +
       logs clean; NO `/dev/dri` (software transcoding, unchanged). seerr→jellyfin
       login path still works (resolves via host-gateway to nginx). Snapshot
       `/data/.state/nixarr/jellyfin.pre-podman` (~648 MiB — checked disk first).
+      **PINNED TO 10.10.7, NOT latest — this matters.** First cutover used `latest`
+      (10.11.10), a major bump whose one-way migration consolidated `library.db`
+      into a single `jellyfin.db` and the UI showed "no libraries". Data was never
+      lost (snapshot had `data/data/library.db` 12 MB). Fix: pin
+      `linuxserver/jellyfin` to `10.10.7` (the version nixarr ran), move the
+      10.11-migrated dir to `jellyfin.broken-1011`, restore the pristine
+      `jellyfin.pre-podman` → live, chown 169, redeploy. Verified back on 10.10.7:
+      all 4 VirtualFolders (Music/Home Videos/Movies/Shows) returned by the API,
+      same server Id, `library.db`+small `jellyfin.db` layout, clean logs.
+      **Lesson: pin a stateful app to its CURRENT major at migration time** — a
+      `latest` that crosses a major can run an irreversible schema migration on
+      first boot. Upgrade 10.10→10.11 later as a deliberate step with a fresh
+      snapshot. `jellyfin.broken-1011` can be deleted after a confidence window.
 
 **ALL 9 SERVICES MIGRATED.** No nixarr media service units remain active. Running
 containers: jellyfin, sonarr, radarr, lidarr, prowlarr, bazarr, sabnzbd, seerr;
