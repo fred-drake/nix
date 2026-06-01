@@ -49,12 +49,6 @@ in {
       ".config/discordo/config.toml" = {
         text = discordo-config;
       };
-      "Library/Application Support/Code/User/settings.json" = {
-        text = builtins.toJSON vscode-config.globalSettings;
-      };
-      "Library/Application Support/Code/User/keybindings.json" = {
-        text = builtins.toJSON vscode-config.globalKeyBindings;
-      };
       "Library/Application Support/Cursor/User/settings.json" = {
         text = builtins.toJSON vscode-config.globalSettings;
       };
@@ -71,12 +65,6 @@ in {
     else {
       ".config/discordo/config.toml" = {
         text = discordo-config;
-      };
-      ".config/Code/User/settings.json" = {
-        text = builtins.toJSON vscode-config.globalSettings;
-      };
-      ".config/Code/User/keybindings.json" = {
-        text = builtins.toJSON vscode-config.globalKeyBindings;
       };
       ".config/Cursor/User/settings.json" = {
         text = builtins.toJSON vscode-config.globalSettings;
