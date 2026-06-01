@@ -25,3 +25,41 @@ url = "https://github.com/obra/superpowers"
 [[repos]]
 name = "cmux-src"
 url = "https://github.com/manaflow-ai/cmux"
+
+# Andrej Karpathy behavioral skills (forrestchang/andrej-karpathy-skills).
+# Self-contained plugin: .claude-plugin/plugin.json at repo root, source "./".
+[[repos]]
+name = "karpathy-skills-src"
+url = "https://github.com/forrestchang/andrej-karpathy-skills"
+
+# Anthropic example skills (anthropics/skills). Marketplace of many skills;
+# claude-code.nix curates a subset (frontend-design, pdf) into a synthesized
+# plugin.
+[[repos]]
+name = "anthropic-skills-src"
+url = "https://github.com/anthropics/skills"
+
+# Vercel agent skills (vercel-labs/agent-skills). No root plugin manifest;
+# claude-code.nix curates a subset (web-design-guidelines,
+# vercel-react-best-practices, composition-patterns) into a synthesized plugin.
+[[repos]]
+name = "vercel-agent-skills-src"
+url = "https://github.com/vercel-labs/agent-skills"
+
+# Trail of Bits security skills (trailofbits/skills). Marketplace of 39
+# self-contained plugins under plugins/<name>, each with its own plugin.json.
+[[repos]]
+name = "trailofbits-skills-src"
+url = "https://github.com/trailofbits/skills"
+
+# Remotion best-practices skill (remotion-dev/skills). No plugin manifest;
+# claude-code.nix synthesizes one around skills/remotion.
+[[repos]]
+name = "remotion-skills-src"
+url = "https://github.com/remotion-dev/skills"
+
+# Marketing skills (coreyhaines31/marketingskills). Self-contained plugin:
+# .claude-plugin/plugin.json at repo root bundling 43 skills under skills/.
+[[repos]]
+name = "marketing-skills-src"
+url = "https://github.com/coreyhaines31/marketingskills"

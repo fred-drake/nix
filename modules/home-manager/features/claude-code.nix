@@ -437,6 +437,86 @@ in {
       repository = "https://github.com/manaflow-ai/cmux";
     };
 
+    # --- Opt-in skill/plugin bundles (load via claude --plugin-dir ~/plugins/<name>) ---
+
+    # Andrej Karpathy behavioral skills (forrestchang/andrej-karpathy-skills).
+    # Self-contained plugin (.claude-plugin/plugin.json at root). Load via:
+    #   claude --plugin-dir ~/plugins/andrej-karpathy-skills
+    "plugins/andrej-karpathy-skills" = {
+      source = "${claude-plugins-src.karpathy-skills-src}";
+      recursive = true;
+    };
+
+    # Marketing skills (coreyhaines31/marketingskills) - one plugin bundling 43
+    # skills. Load via:
+    #   claude --plugin-dir ~/plugins/marketing-skills
+    "plugins/marketing-skills" = {
+      source = "${claude-plugins-src.marketing-skills-src}";
+      recursive = true;
+    };
+
+    # Trail of Bits security skills (trailofbits/skills) - a marketplace of 39
+    # self-contained plugins under plugins/<name>. Load an individual plugin
+    # via its subdir, e.g.:
+    #   claude --plugin-dir ~/plugins/trailofbits/plugins/modern-python
+    "plugins/trailofbits" = {
+      source = "${claude-plugins-src.trailofbits-skills-src}";
+      recursive = true;
+    };
+
+    # Anthropic example skills (anthropics/skills) - curated subset. Upstream is
+    # a marketplace with no root plugin.json, so synthesize one exposing just
+    # the skills we want. Load via:
+    #   claude --plugin-dir ~/plugins/anthropic-skills
+    "plugins/anthropic-skills/skills/frontend-design" = {
+      source = "${claude-plugins-src.anthropic-skills-src}/skills/frontend-design";
+      recursive = true;
+    };
+    "plugins/anthropic-skills/skills/pdf" = {
+      source = "${claude-plugins-src.anthropic-skills-src}/skills/pdf";
+      recursive = true;
+    };
+    "plugins/anthropic-skills/.claude-plugin/plugin.json".text = builtins.toJSON {
+      name = "anthropic-skills";
+      description = "Curated Anthropic example skills: frontend-design, pdf.";
+      repository = "https://github.com/anthropics/skills";
+    };
+
+    # Vercel agent skills (vercel-labs/agent-skills) - curated subset. No root
+    # plugin manifest upstream, so synthesize one. The vercel-react-best-practices
+    # skill lives in the react-best-practices/ directory. Load via:
+    #   claude --plugin-dir ~/plugins/vercel-agent-skills
+    "plugins/vercel-agent-skills/skills/web-design-guidelines" = {
+      source = "${claude-plugins-src.vercel-agent-skills-src}/skills/web-design-guidelines";
+      recursive = true;
+    };
+    "plugins/vercel-agent-skills/skills/react-best-practices" = {
+      source = "${claude-plugins-src.vercel-agent-skills-src}/skills/react-best-practices";
+      recursive = true;
+    };
+    "plugins/vercel-agent-skills/skills/composition-patterns" = {
+      source = "${claude-plugins-src.vercel-agent-skills-src}/skills/composition-patterns";
+      recursive = true;
+    };
+    "plugins/vercel-agent-skills/.claude-plugin/plugin.json".text = builtins.toJSON {
+      name = "vercel-agent-skills";
+      description = "Curated Vercel agent skills: web-design-guidelines, vercel-react-best-practices, composition-patterns.";
+      repository = "https://github.com/vercel-labs/agent-skills";
+    };
+
+    # Remotion best-practices skill (remotion-dev/skills) - no plugin manifest
+    # upstream, so synthesize one around skills/remotion. Load via:
+    #   claude --plugin-dir ~/plugins/remotion-skills
+    "plugins/remotion-skills/skills/remotion" = {
+      source = "${claude-plugins-src.remotion-skills-src}/skills/remotion";
+      recursive = true;
+    };
+    "plugins/remotion-skills/.claude-plugin/plugin.json".text = builtins.toJSON {
+      name = "remotion-skills";
+      description = "Remotion best-practices skill for React video creation.";
+      repository = "https://github.com/remotion-dev/skills";
+    };
+
     # LSP plugin (generated from claude-plugins-official + custom nil config)
     ".claude/lsp-plugin" = {
       source = lsp-plugin;

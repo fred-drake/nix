@@ -30,4 +30,40 @@
     rev = "4afeef69dea51621b86288944b6728a0227d7ee7";
     hash = "sha256-X+YbHcu69Ju+uvuf3HIe1CCO5Jdl9w6cZje9Mr/k9ys=";
   };
+  karpathy-skills-src = pkgs.fetchFromGitHub {
+    owner = "forrestchang";
+    repo = "andrej-karpathy-skills";
+    rev = "2c606141936f1eeef17fa3043a72095b4765b9c2";
+    hash = "sha256-4z/wRdYH7UXRzF8RJU0sw8xbpx0BW/7CBv5sVEC2knY=";
+  };
+  anthropic-skills-src = pkgs.fetchFromGitHub {
+    owner = "anthropics";
+    repo = "skills";
+    rev = "da20c92503b2e8ff1cf28ca81a0df4673debdbf7";
+    hash = "sha256-BiZvEV7VK1AwhiGg+pNMgTUQmt4exevLWwL0Brx4YyE=";
+  };
+  vercel-agent-skills-src = pkgs.fetchFromGitHub {
+    owner = "vercel-labs";
+    repo = "agent-skills";
+    rev = "180115660cfb8a86b808f117475a01f54caf3bc5";
+    hash = "sha256-j4mfYQ13f8/R9hU5z3nUb/fdXTqrk2qxIEeVK7e386U=";
+  };
+  trailofbits-skills-src = pkgs.fetchFromGitHub {
+    owner = "trailofbits";
+    repo = "skills";
+    rev = "c94841be3deae8a880fa1a9078979adac7ca3dbc";
+    hash = "sha256-WpgldxCQdFBPrUA6RzTSUrL12m9VV1X0+gLzK6uberU=";
+  };
+  remotion-skills-src = pkgs.fetchFromGitHub {
+    owner = "remotion-dev";
+    repo = "skills";
+    rev = "277510e78245ac0fa275d7cb6520d52e0ac2e212";
+    hash = "sha256-XklSJY8xZMExl+BFtbYo+nQ8qLnmwWipkSZh9ykwt1s=";
+  };
+  marketing-skills-src = pkgs.fetchFromGitHub {
+    owner = "coreyhaines31";
+    repo = "marketingskills";
+    rev = "7f4af1ea8e7809e0142c55bf19243a706f539c25";
+    hash = "sha256-R2X+QYVOUvXowHhsWTOj5LN+jvkFYGCdrqPXh0bCeM8=";
+  };
 }
