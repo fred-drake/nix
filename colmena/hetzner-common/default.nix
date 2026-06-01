@@ -17,6 +17,16 @@ with lib; {
   boot.tmp.cleanOnBoot = true;
   zramSwap.enable = true;
 
+  # Defense-in-depth: bound coredump storage so a crash-looping process
+  # (e.g. a container respawning every ~2s) can't fill the disk and take
+  # down unrelated services. See incident: linuxserver/calibre selkies
+  # SIGABRT storm that wedged paperless via transient out-of-space.
+  systemd.coredump.extraConfig = ''
+    Storage=external
+    MaxUse=1G
+    KeepFree=5G
+  '';
+
   networking.domain = "";
   services.openssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = [

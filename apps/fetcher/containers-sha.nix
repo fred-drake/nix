@@ -83,11 +83,6 @@ _: {
         "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:4b00f5886f3307563cf06c1068037eccfc529f04070d42e2aa47f53128eed17e";
       };
     };
-    "linuxserver/calibre" = {
-      "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/calibre@sha256:aac956f62543dbd090b2e5936c2b28ecb74055cf98fc53e8d77abbee4855b83b";
-      };
-    };
     "linuxserver/calibre-web" = {
       "latest" = {
         "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:2eac9e0e2d67a38b61b4d35a0dc59697edce412237d21e70ce71085c32c321bd";
