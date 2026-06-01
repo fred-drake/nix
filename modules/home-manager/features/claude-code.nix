@@ -26,6 +26,7 @@
     npm-packages = import ../../../apps/fetcher/npm-packages.nix;
   };
   claude-usage = pkgs.callPackage ../../../apps/claude-usage.nix {};
+  ccusage-bar = import ../../../apps/ccusage-bar.nix {inherit pkgs;};
 in {
   # Add Claude Code and Gitea MCP packages
   home.packages = [
@@ -440,6 +441,76 @@ in {
     ".claude/lsp-plugin" = {
       source = lsp-plugin;
       recursive = true;
+    };
+
+    # ccstatusline config (managed here so the quota widget replicates across
+    # machines). The quota widget reuses ccusage-bar — the same non-blocking
+    # script that feeds the tmux bar — so both bars share one cached fetch.
+    ".config/ccstatusline/settings.json".text = builtins.toJSON {
+      version = 3;
+      lines = [
+        [
+          {
+            id = "1";
+            type = "model";
+            color = "cyan";
+          }
+          {
+            id = "2";
+            type = "separator";
+          }
+          {
+            id = "3";
+            type = "context-length";
+            color = "brightBlack";
+          }
+          {
+            id = "4";
+            type = "separator";
+          }
+          {
+            id = "5";
+            type = "git-branch";
+            color = "magenta";
+          }
+          {
+            id = "6";
+            type = "separator";
+          }
+          {
+            id = "7";
+            type = "git-changes";
+            color = "yellow";
+          }
+          {
+            id = "8";
+            type = "separator";
+          }
+          {
+            id = "9";
+            type = "custom-command";
+            color = "magenta";
+            commandPath = "${ccusage-bar}";
+            timeout = 3000;
+            preserveColors = false;
+          }
+        ]
+        []
+        []
+      ];
+      flexMode = "full-minus-40";
+      compactThreshold = 60;
+      colorLevel = 2;
+      inheritSeparatorColors = false;
+      globalBold = false;
+      powerline = {
+        enabled = false;
+        separators = [""];
+        separatorInvertBackground = [false];
+        startCaps = [];
+        endCaps = [];
+        autoAlign = false;
+      };
     };
 
     ".claude/CLAUDE.md".text = builtins.readFile ../../../apps/claude-code/CLAUDE.md;
