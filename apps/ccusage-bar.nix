@@ -66,22 +66,54 @@ in
         end
       end;
 
+    # Nudge an epoch that lands at :59 up to the next whole hour, so a reset a few
+    # seconds shy of the hour reads "6am" instead of "5:59am". Done in epoch space
+    # so hour/day/month rollover is handled by strflocaltime.
+    def roundup:
+      . as $e |
+      ($e | strflocaltime("%M") | tonumber) as $M |
+      ($e | strflocaltime("%S") | tonumber) as $S |
+      if $M >= 59 then $e + (3600 - $M * 60 - $S) else $e end;
+
+    # Local wall-clock time of an epoch -> "8pm" or "8:15pm" (no GNU strftime extensions)
+    def clock:
+      (strflocaltime("%H") | tonumber) as $H |
+      (strflocaltime("%M") | tonumber) as $M |
+      (if $H == 0 then 12 elif $H > 12 then $H - 12 else $H end) as $h12 |
+      (if $H < 12 then "am" else "pm" end) as $ap |
+      if $M == 0 then "\($h12)\($ap)"
+      else "\($h12):\(if $M < 10 then "0\($M)" else "\($M)" end)\($ap)" end;
+
+    # Local date + time of an epoch -> "6/4 3pm"
+    def daytime:
+      (strflocaltime("%m") | tonumber) as $mon |
+      (strflocaltime("%d") | tonumber) as $day |
+      "\($mon)/\($day) \(clock)";
+
     (.five_hour.utilization // 0) as $u5 |
     (.seven_day.utilization // 0) as $u7 |
 
-    # Calculate seconds until reset
+    # Absolute reset epochs (0 when missing)
     (if .five_hour.resets_at then
-        (.five_hour.resets_at | sub("\\.[0-9]+"; "") | sub("\\+00:00$"; "Z") | fromdateiso8601) - $now
-    else 0 end) as $t5 |
+        (.five_hour.resets_at | sub("\\.[0-9]+"; "") | sub("\\+00:00$"; "Z") | fromdateiso8601)
+    else 0 end) as $r5 |
 
     (if .seven_day.resets_at then
-        (.seven_day.resets_at | sub("\\.[0-9]+"; "") | sub("\\+00:00$"; "Z") | fromdateiso8601) - $now
-    else 0 end) as $t7 |
+        (.seven_day.resets_at | sub("\\.[0-9]+"; "") | sub("\\+00:00$"; "Z") | fromdateiso8601)
+    else 0 end) as $r7 |
+
+    # Seconds until reset
+    ($r5 - $now) as $t5 |
+    ($r7 - $now) as $t7 |
 
     # Format percentages as integers
     ($u5 | floor | tostring) as $p5 |
     ($u7 | floor | tostring) as $p7 |
 
-    "5h:\($p5)% T-\($t5 | tminus) 7d:\($p7)% T-\($t7 | tminus)"
+    # Local reset times: 5h is same-day so time only; 7d shows date too
+    (if $r5 > 0 then " (until \($r5 | roundup | clock))" else "" end) as $c5 |
+    (if $r7 > 0 then " (until \($r7 | roundup | daytime))" else "" end) as $c7 |
+
+    "5h:\($p5)% T-\($t5 | tminus)\($c5) 7d:\($p7)% T-\($t7 | tminus)\($c7)"
     ' "$CACHE_FILE"
   ''
