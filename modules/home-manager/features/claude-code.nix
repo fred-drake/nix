@@ -610,7 +610,18 @@ in {
             type = "separator";
           }
           {
+            # Count of untracked files (respects .gitignore) — renders "?:N",
+            # the equivalent of the "?N" hint in the fish prompt.
             id = "9";
+            type = "git-untracked-files";
+            color = "brightBlue";
+          }
+          {
+            id = "10";
+            type = "separator";
+          }
+          {
+            id = "11";
             type = "custom-command";
             color = "magenta";
             commandPath = "${ccusage-bar}";
