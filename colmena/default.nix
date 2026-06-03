@@ -27,13 +27,22 @@ in {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
     # gnomeregan tracks unstable end-to-end (modules + packages) because the
     # workstation home-manager features it loads reference unstable-only attrs
-    # (prettier, lndir, …). Stable modules + unstable pkgs hits real
-    # boot/initrd mismatches that only WSL hosts (anton) sidestep.
+    # (prettier, lndir, …). Stable modules + unstable pkgs hits real mismatches
+    # (e.g. systemd unit skew), so unstable hosts must align the module set
+    # with the package set here rather than only overriding nixpkgs.pkgs.
     # gnomeregan uses a bare nixpkgs (no mkPkgs overlays), so apply the
     # glance-from-main overlay here directly. See overlays/glance.nix.
     nodeNixpkgs.gnomeregan = import nixpkgs-unstable {
       system = "x86_64-linux";
       overlays = [(import ../overlays/glance.nix {inherit inputs;})];
+    };
+    # anton (WSL) also tracks unstable end-to-end. It previously used only
+    # nixpkgs.pkgs = unstable on top of the stable module set, but unstable
+    # systemd 260.1 dropped example/systemd/system/autovt@.service while the
+    # stable getty.nix module still references it, breaking system-units.
+    nodeNixpkgs.anton = import nixpkgs-unstable {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
     };
   };
 

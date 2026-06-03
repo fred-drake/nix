@@ -13,7 +13,6 @@
   deferredHmModules,
   ...
 }: let
-  inherit (import nixpkgs-unstable {system = "x86_64-linux";}) lib;
   nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {nixpkgs-stable = nixpkgs-unstable;};
   mkHomeManager = import ../../lib/mk-home-manager.nix {
     inputs = {inherit sops-nix secrets nixvim nix-index-database;};
@@ -25,15 +24,13 @@
 in {
   # Base configuration for Anton (WSL)
   _anton = {
-    # Use nixpkgs-unstable directly (not meta.nixpkgs which is nixpkgs-stable)
-    # so that home-manager and CUDA packages resolve correctly.
-    nixpkgs.pkgs = import nixpkgs-unstable {
-      system = "x86_64-linux";
-      config = {
-        allowUnfree = true;
-      };
-    };
-    nixpkgs.config = lib.mkForce {};
+    # Module set + packages come from nixpkgs-unstable via colmena
+    # meta.nodeNixpkgs.anton (see colmena/default.nix), so home-manager and
+    # CUDA packages resolve correctly. Using only nixpkgs.pkgs = unstable
+    # with the stable module set caused a systemd unit skew: stable getty.nix
+    # expects example/systemd/system/autovt@.service, which unstable systemd
+    # 260.1 dropped (it moved to a getty@ alias).
+    nixpkgs.config.allowUnfree = true;
     documentation.nixos.enable = false;
     imports =
       [
