@@ -4,6 +4,10 @@
   ...
 }:
 lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+  programs.fish.interactiveShellInit = ''
+    source /opt/homebrew/Caskroom/miniconda/base/etc/fish/conf.d/conda.fish
+  '';
+
   home = {
     file = {
       ".finicky.js" = {source = ../../../homefiles/finicky.js;};

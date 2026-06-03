@@ -70,6 +70,7 @@ lib.mkMerge [
         "krita"
         "macdown"
         "maestral"
+        "miniconda"
         "mouseless"
         "obs"
         "obsidian"
