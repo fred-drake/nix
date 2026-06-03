@@ -84,11 +84,12 @@ in
       if $M == 0 then "\($h12)\($ap)"
       else "\($h12):\(if $M < 10 then "0\($M)" else "\($M)" end)\($ap)" end;
 
-    # Local date + time of an epoch -> "6/4 3pm"
+    # Local date + time of an epoch -> "Jun 4 3pm"
     def daytime:
+      (["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]) as $months |
       (strflocaltime("%m") | tonumber) as $mon |
       (strflocaltime("%d") | tonumber) as $day |
-      "\($mon)/\($day) \(clock)";
+      "\($months[$mon - 1]) \($day) \(clock)";
 
     (.five_hour.utilization // 0) as $u5 |
     (.seven_day.utilization // 0) as $u7 |
@@ -111,8 +112,8 @@ in
     ($u7 | floor | tostring) as $p7 |
 
     # Local reset times: 5h is same-day so time only; 7d shows date too
-    (if $r5 > 0 then " (until \($r5 | roundup | clock))" else "" end) as $c5 |
-    (if $r7 > 0 then " (until \($r7 | roundup | daytime))" else "" end) as $c7 |
+    (if $r5 > 0 then " (\($r5 | roundup | clock))" else "" end) as $c5 |
+    (if $r7 > 0 then " (\($r7 | roundup | daytime))" else "" end) as $c7 |
 
     "5h:\($p5)% T-\($t5 | tminus)\($c5) 7d:\($p7)% T-\($t7 | tminus)\($c7)"
     ' "$CACHE_FILE"
