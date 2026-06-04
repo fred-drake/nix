@@ -16,10 +16,7 @@ _: {
     remapCapsLockToControl = true; # Remap Caps Lock to Control
   };
 
-  # Route *.internal.freddrake.com to hearthstone over Tailscale.
-  # macOS reads /etc/resolver/<domain> automatically; only queries for this
-  # zone are sent, and only when 100.64.0.13 is reachable.
-  environment.etc."resolver/internal.freddrake.com".text = ''
-    nameserver 100.64.0.13
-  '';
+  # internal.freddrake.com DNS is no longer pinned here. It is now served
+  # tailnet-wide via headscale split DNS (internal.freddrake.com -> hearthstone),
+  # so there is a single source of truth in the brainrush headscale config.
 }
