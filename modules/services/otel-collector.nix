@@ -4,7 +4,7 @@
   ...
 }: {
   sops.secrets.otel-collector-env = {
-    sopsFile = config.secrets.host.orgrimmar.otel-collector-env;
+    sopsFile = config.secrets.host.${config.my.hostName}.otel-collector-env;
     mode = "0400";
     key = "data";
   };
