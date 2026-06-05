@@ -17,15 +17,30 @@ description: |
 
 ### Deploy with Colmena
 
+**Run every `colmena apply`/`colmena build` through the `colmena-deployer`
+subagent — one subagent per colmena call.** A deploy emits thousands of lines
+of flake-lock diff and per-host build output; running it in the main context
+buries everything else. The subagent runs the command, watches it to
+completion, and returns just a per-host pass/fail summary (plus the root-cause
+lines on failure). Do not call `colmena` directly from the main context.
+
+Spawn it with the Task tool, for example:
+
+> Use the **colmena-deployer** subagent: "Run `colmena apply --on
+> gnomeregan,anton --impure` from `/Users/fdrake/nix`. Return each host's
+> activation result. Note: anton can exit 4 on a spurious user dbus-broker
+> reload timeout even when the switch succeeded — verify its current generation
+> against the built path rather than trusting the exit code."
+
+For multiple independent hosts you can spawn several colmena-deployer subagents
+in parallel (one per host or host-group) so their output stays isolated.
+
+The underlying commands the subagent runs:
+
 ```bash
-# Single host
-colmena apply --on <hostname> --impure
-
-# Multiple hosts
-colmena apply --on host1,host2,host3 --impure
-
-# Build only (no deploy)
-colmena build --on <hostname> --impure
+colmena apply --on <hostname> --impure        # single host
+colmena apply --on host1,host2,host3 --impure # multiple hosts
+colmena build --on <hostname> --impure        # build only, no deploy
 ```
 
 ## Server Inventory
@@ -90,6 +105,9 @@ If colmena fails with SSH errors:
 3. For Hetzner servers, check via Hetzner console if needed
 
 ## Common Colmena Patterns
+
+These are the commands to hand to a `colmena-deployer` subagent (see "Deploy
+with Colmena" above) — not to run inline in the main context.
 
 ### Deploy All Hetzner Hosts
 ```bash
