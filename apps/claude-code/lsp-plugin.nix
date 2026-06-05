@@ -22,10 +22,17 @@
     ) {}
     marketplace.plugins;
 
-  # Custom LSP servers not available in the official marketplace
+  # Custom LSP servers not available in the official marketplace.
+  #
+  # We use nixd rather than nil: nil 2025-06-13 added a hard guard that
+  # panics (exit 101, "stdin/stdout is not pipe-like") unless both stdin
+  # and stdout are a FIFO or socket. Claude Code's LSP harness (a Bun
+  # standalone binary, here further wrapped by cmux) spawns the server
+  # with non-pipe stdio on at least one fd, which trips that guard. nixd
+  # has no such check (and is already this repo's Nix LSP for VSCode).
   customLspServers = {
     nix = {
-      command = "nil";
+      command = "nixd";
       extensionToLanguage = {
         ".nix" = "nix";
       };

@@ -3,8 +3,8 @@
 ####################################
 {pkgs, ...}: {
   claude-plugins-official-src = builtins.fetchTarball {
-    url = "https://github.com/anthropics/claude-plugins-official/archive/9e150cfd48b87280cc76e035de04a11aa604e9c5.tar.gz";
-    sha256 = "0xpv78x50vrw6y3240mhzvd2mvi0kp9ca42idkk34j57n4z2kn1z";
+    url = "https://github.com/anthropics/claude-plugins-official/archive/bd7cf41fc8a468b136a9266633303ff4a011c7b4.tar.gz";
+    sha256 = "1q5g2yjhzihliqjfa2glgg0xyk3x4ibblkzl972vmssilg9b884s";
   };
   cc-marketplace-src = pkgs.fetchFromGitHub {
     owner = "samber";
@@ -15,20 +15,20 @@
   cc-skills-golang-src = pkgs.fetchFromGitHub {
     owner = "samber";
     repo = "cc-skills-golang";
-    rev = "123defac7bf3b6ca355652d1d8b8928f63df2f25";
-    hash = "sha256-b3i3nrJL6OrxMQR3hFwYhF31BQU5REUw2vvl6UEQdZM=";
+    rev = "168ec1416e54a9f5732343031094fc6fe2e36955";
+    hash = "sha256-ia0C6cJQ0kQLyDm5IxFNTwhMW0Ytg6sYDtMCayRubM0=";
   };
   superpowers-src = pkgs.fetchFromGitHub {
     owner = "obra";
     repo = "superpowers";
-    rev = "f2cbfbefebbfef77321e4c9abc9e949826bea9d7";
-    hash = "sha256-3E3rO6hR87JUfS3XV1Eaoz6SDWOftleWvN9UPNFEMjw=";
+    rev = "6fd4507659784c351abbd2bc264c7162cfd386dc";
+    hash = "sha256-P/FD8HTQO+QzvMe3A/B2v2vjs8T6ZmIYH3MPp79dSzo=";
   };
   cmux-src = pkgs.fetchFromGitHub {
     owner = "manaflow-ai";
     repo = "cmux";
-    rev = "4afeef69dea51621b86288944b6728a0227d7ee7";
-    hash = "sha256-X+YbHcu69Ju+uvuf3HIe1CCO5Jdl9w6cZje9Mr/k9ys=";
+    rev = "087309a1b73f186f152c55081eac71213d3005b5";
+    hash = "sha256-H/YyzhEzqkEYT8Gi+IxJg9IAi3+c9NazH4Q6QY9lSeM=";
   };
   karpathy-skills-src = pkgs.fetchFromGitHub {
     owner = "forrestchang";
@@ -45,8 +45,8 @@
   vercel-agent-skills-src = pkgs.fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-skills";
-    rev = "180115660cfb8a86b808f117475a01f54caf3bc5";
-    hash = "sha256-j4mfYQ13f8/R9hU5z3nUb/fdXTqrk2qxIEeVK7e386U=";
+    rev = "4ec6f84b61cd3c931046c3e6e398f3ae7de372f7";
+    hash = "sha256-E/NG+zuNYaZYM0FTV6ZFYQovcVEWCQEbe8PKuEu7rT8=";
   };
   trailofbits-skills-src = pkgs.fetchFromGitHub {
     owner = "trailofbits";

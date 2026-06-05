@@ -80,7 +80,7 @@ in {
     pkgs.uv # uvx, used to run workspace-mcp and other Python MCP servers
 
     # LSP servers (used by the nix-managed-lsp plugin)
-    pkgs.nil # Nix
+    pkgs.nixd # Nix
     pkgs.pyright # Python
     pkgs.typescript-language-server # TypeScript/JavaScript
     pkgs.gopls # Go
