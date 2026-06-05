@@ -25,6 +25,24 @@ This is a Nix flake-based configuration repository managing:
 - `homefiles/` - Dotfiles and home directory configurations
 - `overlays/` - Package overlays
 
+## Package Workarounds (overlays/)
+
+When you add a **temporary** package override to work around an upstream
+breakage in `nixpkgs` (a redundant patch, a flaky or timeout-prone test, a
+build failure) anywhere under `overlays/`, tag it with a greppable marker
+comment the moment you write it:
+
+```nix
+# WORKAROUND(<pkg>): <reason>; remove when <condition>.
+```
+
+This applies whenever you create such an override — not only during a deploy or
+while the `infrastructure` skill is active. **Intentional** pins (a version
+locked on purpose, e.g. lockstep with another component) are NOT workarounds and
+must NOT carry the marker. The infrastructure skill's "Workaround Hygiene" audit
+greps these markers to test whether each override is still needed; an untagged
+workaround is invisible to that audit and silently rots.
+
 ## Claude Code Configuration
 
 Claude Code is configured declaratively via Nix in
