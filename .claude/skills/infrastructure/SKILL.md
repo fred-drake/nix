@@ -127,15 +127,37 @@ Each temporary override carries a greppable marker comment:
 grep -rn 'WORKAROUND(' overlays/
 ```
 
-For each marker:
+For each marker, test whether the workaround is still needed by building the
+**stock** package (override absent) from the pinned unstable rev on an
+x86_64-linux unstable host. Do *not* just rebuild the whole host: the
+`overlays/default.nix` overrides aren't even in the gnomeregan/anton **system**
+closures (those use bare `nodeNixpkgs`), so a host build won't exercise them.
+Building the stock package directly is the accurate check.
 
-1. Comment out (or remove) that override in the overlay.
-2. Rebuild the affected unstable host: `colmena build --on gnomeregan --impure`
-   (or `anton`). Build both if unsure which consumes the package.
-3. **Builds clean** → upstream fixed it → delete the override and its marker.
-4. **Still fails** → keep it; leave the marker in place.
+```bash
+REV=$(nix eval --raw .#inputs.nixpkgs-unstable.rev)   # the pinned rev
+# on an unstable x86_64-linux host (anton or gnomeregan):
+ssh anton "NIXPKGS_ALLOW_UNFREE=1 nix build --no-link -L --impure \
+  github:nixos/nixpkgs/$REV#<pkg>"   # e.g. tailscale, python313Packages.uvloop
+```
 
-Then restore any overrides you only commented out for testing.
+- **Builds or substitutes clean** → upstream is green at this rev → delete the
+  override and its marker. A substitute from `cache.nixos.org` is itself a
+  strong signal: Hydra built that stock derivation with its tests enabled.
+- **Fails** → keep it; leave the marker. (e.g. `highlight`'s patch still
+  double-applies → not fixed, never cached.)
+
+For **flaky-test / timeout** workarounds (a test that flakes or times out
+rather than failing deterministically), one green is necessary but not
+sufficient — yet removal is still low-risk: with the override gone, normal
+builds just substitute Hydra's green binary and only re-run the test on a cache
+miss, like any other package. Re-adding the one-line override later is trivial.
+
+After deciding to remove one, confirm the consuming config still resolves with
+it gone — e.g. `nix build --dry-run \
+.#darwinConfigurations.macbook-pro.config.system.build.toplevel`: the package
+should appear under **"will be fetched"** (substituted), not **"will be
+built"** (which would run its tests locally).
 
 Notes:
 - Only override packages tagged `WORKAROUND(` are candidates for removal.
