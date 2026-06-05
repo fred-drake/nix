@@ -76,6 +76,7 @@ lib.mkMerge [
         "raycast"
         "sourcetree"
         "steam"
+        "tailscale-app"
         "vlc"
         "vmware-fusion"
         "whatsapp"
