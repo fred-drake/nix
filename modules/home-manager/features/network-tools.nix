@@ -16,7 +16,6 @@
     syncthing
     unzip
     wget
-    wireguard-tools
     woodpecker-cli
   ];
 }

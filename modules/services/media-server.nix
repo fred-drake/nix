@@ -328,8 +328,7 @@
   # Halve CIFS write buffer from the default 4 MiB to 1 MiB so each in-flight
   # SMB3-encrypted write asks the page allocator for an order-2 region (16
   # KiB) instead of order-4 (64 KiB). Reduces ENOMEM risk on this 7.6 GiB
-  # host under sabnzbd write pressure; small throughput cost is acceptable
-  # over the ~150 ms WG path where wsize isn't the bottleneck anyway.
+  # host under sabnzbd write pressure.
   cifsWriteTune = ["wsize=1048576"];
   videosStorage = mkCifsMount {
     name = "videos";

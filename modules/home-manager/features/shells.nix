@@ -45,8 +45,6 @@
       man = "batman";
       lg = "lazygit";
       ranger = "yy";
-      vpn-brainrush-stage-up = "sudo wg-quick up $HOME/.config/wireguard/brainrush-stage.conf";
-      vpn-brainrush-stage-down = "sudo wg-quick down $HOME/.config/wireguard/brainrush-stage.conf";
     };
   };
 }

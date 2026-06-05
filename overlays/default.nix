@@ -21,10 +21,6 @@
   # WORKAROUND(tailscale): tsconsensus test times out; remove doCheck override
   #   when the upstream test is fixed.
   tailscale = prev.tailscale.overrideAttrs (_: {doCheck = false;});
-  # WORKAROUND(wireguard-tools): pinned from stable. Reason undocumented — most
-  #   likely a past unstable breakage; re-test unstable and drop the pin if it
-  #   builds/works there.
-  inherit (inputs.nixpkgs-stable.legacyPackages.${prev.stdenv.hostPlatform.system}) wireguard-tools;
 
   # Pin woodpecker-agent to the rev frozen in flake input
   # nixpkgs-woodpecker-agent so it stays in lockstep with the server

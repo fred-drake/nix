@@ -34,10 +34,11 @@ _: {
       # without meaningfully eating into usable RAM on this host.
       "vm.min_free_kbytes" = 262144;
 
-      # Clients reach this host only via a high-RTT, lossy WireGuard tunnel
-      # (~150 ms RTT, occasional drops from userspace WG on the home-side
-      # MikroTik). BBR maintains throughput on lossy paths far better than
-      # the default cubic, which collapses cwnd on every loss event.
+      # Clients reach this host only via a high-RTT, lossy Tailscale tunnel
+      # (~150 ms RTT, occasional drops from userspace Tailscale — WireGuard
+      # under the hood — on the home-side MikroTik, karazhan). BBR maintains
+      # throughput on lossy paths far better than the default cubic, which
+      # collapses cwnd on every loss event.
       "net.core.default_qdisc" = "fq";
       "net.ipv4.tcp_congestion_control" = "bbr";
     };

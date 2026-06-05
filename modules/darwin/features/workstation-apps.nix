@@ -48,7 +48,6 @@ lib.mkMerge [
       masApps = {
         "RunCat" = 1429033973;
         "The Unarchiver" = 425424353;
-        "WireGuard" = 1451685025;
         "Xcode" = 497799835;
       };
       casks = [
