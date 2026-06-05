@@ -1,0 +1,1 @@
+- [otel-collector export logging](otel-collector-export-logging.md) — otlphttp exporter logs successful exports at debug level; absence of export lines in journald is normal, not a sign of failure
