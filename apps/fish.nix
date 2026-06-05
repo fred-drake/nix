@@ -153,7 +153,7 @@ in {
           set color (jq -r --arg name "$name" '.[] | select(.name == $name) | .color // empty' "$config_file" 2>/dev/null)
         end
 
-        set -l ws (cmux new-workspace --name "$name" --cwd "$devdir" --focus true --id-format uuids | string replace 'OK ' "")
+        set -l ws (cmux workspace create --name "$name" --cwd "$devdir" --focus true --id-format uuids | string replace 'OK ' "")
         if test -n "$color"
           cmux workspace-action --action set-color --color "$color" --workspace "$ws"
         end
