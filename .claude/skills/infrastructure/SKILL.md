@@ -107,6 +107,50 @@ just update-secrets
 colmena apply --on <hostname> --impure
 ```
 
+## Workaround Hygiene (unstable hosts)
+
+The unstable hosts (anton, gnomeregan, and the macbook) periodically hit a
+package that is broken in `nixpkgs-unstable` — a redundant patch, a flaky test,
+a build failure. The fix is a per-package override in `overlays/`. These are
+**temporary**: once upstream fixes the package, the override becomes dead
+weight and can subtly mask later regressions.
+
+Each temporary override carries a greppable marker comment:
+
+```
+# WORKAROUND(<pkg>): <reason>; remove when <condition>.
+```
+
+**Before an unstable deploy (or when bumping `nixpkgs-unstable`), audit them:**
+
+```bash
+grep -rn 'WORKAROUND(' overlays/
+```
+
+For each marker:
+
+1. Comment out (or remove) that override in the overlay.
+2. Rebuild the affected unstable host: `colmena build --on gnomeregan --impure`
+   (or `anton`). Build both if unsure which consumes the package.
+3. **Builds clean** → upstream fixed it → delete the override and its marker.
+4. **Still fails** → keep it; leave the marker in place.
+
+Then restore any overrides you only commented out for testing.
+
+Notes:
+- Only override packages tagged `WORKAROUND(` are candidates for removal.
+  Other entries in `overlays/default.nix` are **intentional pins**, not
+  staleness-driven — leave them alone:
+  - `glance` (built from main on purpose),
+  - `woodpecker-agent` (locked to the server image; governed by the
+    woodpecker-upgrade skill),
+  - `spotify` darwin src override.
+- When you add a new workaround, give it a `WORKAROUND(<pkg>)` marker with a
+  concrete removal condition so the next audit can retire it.
+- A new overlay file must be `git add`-ed before `colmena ... --impure` — a
+  `git+file` flake only sees tracked files, so an untracked overlay fails with
+  `path '.../overlays/<name>.nix' does not exist`.
+
 ## File Locations
 
 | Purpose | Path |
