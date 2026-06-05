@@ -529,9 +529,28 @@ in
               # MemoryHigh on the oci-container's systemd unit (oci-containers are
               # systemd services, so the cap still applies). cache_limit and the
               # blanked `permissions` now live in the preserved sabnzbd.ini under
-              # /config, and PGID 169 + UMASK 002 replace the old chmod fixup —
-              # no ExecStartPre needed.
-              "podman-sabnzbd".serviceConfig.MemoryHigh = "2G";
+              # /config, and PGID 169 + UMASK 002 replace the old chmod fixup.
+              #
+              # The ExecStartPre silences SABnzbd's "not writable with special
+              # character filenames" warnings: the usenet download dirs live on the
+              # CIFS/SMB media mount, which can't store certain characters, so
+              # SABnzbd's startup probe fails harmlessly. Force helpful_warnings = 0
+              # in the bind-mounted ini before the container starts.
+              "podman-sabnzbd".serviceConfig = {
+                MemoryHigh = "2G";
+                ExecStartPre = lib.mkAfter [
+                  (pkgs.writeShellScript "sabnzbd-disable-helpful-warnings" ''
+                    ini="/data/.state/nixarr/sabnzbd/sabnzbd.ini"
+                    [ -f "$ini" ] || exit 0
+                    if ${pkgs.gnugrep}/bin/grep -q '^helpful_warnings = ' "$ini"; then
+                      ${pkgs.gnused}/bin/sed -i 's/^helpful_warnings = .*/helpful_warnings = 0/' "$ini"
+                    else
+                      # Key absent: insert it directly under the [misc] section header.
+                      ${pkgs.gnused}/bin/sed -i '/^\[misc\]/a helpful_warnings = 0' "$ini"
+                    fi
+                  '')
+                ];
+              };
 
               sabnzbd-healthcheck = {
                 description = "SABnzbd health check";
