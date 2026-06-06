@@ -23,3 +23,7 @@ node_modules/
 __pycache__/
 *.pyc
 *.pyo
+
+# Graphify: tool kept installed for other repos, but this declarative Nix repo
+# isn't graphed (no tree-sitter-nix support). Ignore any ad-hoc run's output.
+graphify-out/
