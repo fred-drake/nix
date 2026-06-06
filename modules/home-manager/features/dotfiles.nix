@@ -35,6 +35,10 @@ in {
         recursive = true;
       };
 
+      ".gnupg-import/signing-key.pub.asc" = {
+        source = ../../../homefiles/gpg/signing-key.pub.asc;
+      };
+
       ".config" = {
         source = ../../../homefiles/config;
         recursive = true;

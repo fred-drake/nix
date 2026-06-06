@@ -29,6 +29,13 @@ in {
         key = "data";
       };
 
+      gpg-signing-key = {
+        sopsFile = config.secrets.workstation.identity.gpg;
+        path = "${home}/.gnupg-import/signing-key.asc";
+        mode = "0400";
+        key = "data";
+      };
+
       ssh-id-ansible = {
         sopsFile = config.secrets.workstation.identity.ssh.id_ansible;
         path = "${home}/.ssh/id_ansible";
@@ -551,4 +558,14 @@ in {
   home.file = {
     ".config/containers/auth.json".source = config.lib.file.mkOutOfStoreSymlink "${home}/.docker/config.json";
   };
+
+  # Import the sops-decrypted GPG signing key into the keyring (idempotent).
+  # Runs every activation; once sops-nix has rendered the key file, the import
+  # takes effect (gpg --import is a no-op if the key is already present).
+  home.activation.importGpgSigningKey = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    keyFile="${home}/.gnupg-import/signing-key.asc"
+    if [ -f "$keyFile" ]; then
+      run ${pkgs.gnupg}/bin/gpg --batch --import "$keyFile" 2>/dev/null || true
+    fi
+  '';
 }

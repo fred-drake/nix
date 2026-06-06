@@ -8,7 +8,11 @@
 
     git = {
       enable = true;
-      signing.format = null;
+      signing = {
+        format = "openpgp";
+        key = "88D20443CB00F7D4";
+        signByDefault = true;
+      };
       settings = {
         core.pager = "delta";
         credential.helper = "store";
