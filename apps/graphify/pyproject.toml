@@ -9,8 +9,11 @@
 name = "graphify-env"
 version = "0.1.0"
 requires-python = ">=3.12"
+# The `openai` extra provides the OpenAI-compatible client (openai + tiktoken)
+# used by the deepseek/openai/gemini/kimi/ollama backends. Add `anthropic`,
+# `gemini`, or `kimi` here too if you want those backends.
 dependencies = [
-    "graphifyy[mcp]",
+    "graphifyy[mcp,openai]",
 ]
 
 [tool.uv]
