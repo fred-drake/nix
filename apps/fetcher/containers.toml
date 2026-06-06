@@ -27,6 +27,11 @@ tag = "latest"
 architectures = ["linux/amd64"]
 [[containers]]
 repository = "docker.io"
+name = "filebrowser/filebrowser"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
 name = "library/redis"
 tag = "latest"
 architectures = ["linux/amd64"]

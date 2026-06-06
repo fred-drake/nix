@@ -79,6 +79,7 @@ in {
       ../../modules/services/gitea.nix
       ../../modules/services/paperless.nix
       ../../modules/services/calibre.nix
+      ../../modules/services/filebrowser.nix
       ../../modules/services/otel-collector.nix
     ];
 

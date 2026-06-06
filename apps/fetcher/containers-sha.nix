@@ -35,6 +35,11 @@ _: {
         "linux/amd64" = "docker.io/clusterzx/paperless-ai@sha256:19baad5ab2607d65087712fcb3ff74b6c5f7e840ea31061dace4d8ab1ef40a17";
       };
     };
+    "filebrowser/filebrowser" = {
+      "latest" = {
+        "linux/amd64" = "docker.io/filebrowser/filebrowser@sha256:d31cb01b7bd4d8f88ecb25953e9bd3f948e009d77f212aeb239aff097b6e60bd";
+      };
+    };
     "gotenberg/gotenberg" = {
       "latest" = {
         "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:548fcf3e00ded485d0b85d2009154e9ef5ba81fcfe64a5fce9cab8a532e8e1bd";
