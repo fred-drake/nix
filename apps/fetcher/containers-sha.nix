@@ -73,6 +73,11 @@ _: {
     };
   };
   "ghcr.io" = {
+    "twin/gatus" = {
+      "latest" = {
+        "linux/amd64" = "ghcr.io/twin/gatus@sha256:cfca875198381bbff6ea05fea711660145aa36216249280717cf94fc20eb632f";
+      };
+    };
     "browserless/chromium" = {
       "v2.18.0" = {
         "linux/amd64" = "ghcr.io/browserless/chromium@sha256:bc7b9b4ce328e07226fdedb1e1166b7d0420c1ae6e009f8d2946837c100bee0f";

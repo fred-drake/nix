@@ -100,6 +100,11 @@ repository = "gitea.internal.freddrake.com"
 name = "fdrake/traceway"
 tag = "latest"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "twin/gatus"
+tag = "latest"
+architectures = ["linux/amd64"]
 
 # Media stack (migrated from the nixarr module to podman containers on
 # ironforge). Digests are pinned; tags only move on an explicit

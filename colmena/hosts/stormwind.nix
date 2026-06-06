@@ -9,6 +9,7 @@
 }: let
   soft-secrets = import "${secrets}/soft-secrets" {home = null;};
   nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
+  domain = soft-secrets.networking.domain;
 in {
   # Base configuration for Stormwind
   _stormwind = {
@@ -58,7 +59,17 @@ in {
     imports = [
       self.colmena._stormwind
       ../../modules/services/traceway.nix
+      ../../modules/services/otel-collector.nix
+      ../../modules/services/gatus.nix
     ];
+
+    # The otel-collector exporter ships stormwind's host metrics to the local
+    # Traceway nginx vhost; resolve it via /etc/hosts since the box's nameserver
+    # is public 8.8.8.8 and can't see *.internal names. (Gatus probes its own
+    # targets via per-container --add-host entries, defined in gatus.nix.)
+    networking.extraHosts = ''
+      127.0.0.1 traceway.${domain}
+    '';
 
     _module.args = {
       inherit secrets;
