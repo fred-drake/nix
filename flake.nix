@@ -61,6 +61,30 @@
     import-tree.url = "github:vic/import-tree";
     import-tree.flake = false;
 
+    # uv2nix toolchain — builds a pinned Python virtualenv from a uv.lock.
+    # Used for Graphify (apps/graphify), whose dependency tree (graspologic +
+    # tree-sitter grammars) nixpkgs' Python set handles poorly. Consuming
+    # upstream wheels via the lock sidesteps that churn. See overlays/graphify.nix.
+    pyproject-nix = {
+      url = "github:pyproject-nix/pyproject.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    uv2nix = {
+      url = "github:pyproject-nix/uv2nix";
+      inputs = {
+        pyproject-nix.follows = "pyproject-nix";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+    pyproject-build-systems = {
+      url = "github:pyproject-nix/build-system-pkgs";
+      inputs = {
+        pyproject-nix.follows = "pyproject-nix";
+        uv2nix.follows = "uv2nix";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
     # Manage a user environment using Nix
     home-manager = {
       url = "github:nix-community/home-manager";

@@ -14,7 +14,7 @@ build: _rebuild-pre update-secrets
     sudo system-flake-rebuild build
 
 # Update everything
-update-all: update update-npm-packages update-repos update-container-digests update-secrets update-claude
+update-all: update update-npm-packages update-repos update-container-digests update-secrets update-claude update-graphify
 
 # Pull the latest hashes and shas from the repos in apps/fetcher/repos.toml
 update-repos:
@@ -32,6 +32,10 @@ update-npm-packages:
 update-claude:
     update-claude-plugins
     ./apps/fetcher/update-claude-code.sh
+
+# Upgrade Graphify (graphifyy) to its latest release by re-resolving its uv.lock
+update-graphify:
+    cd apps/graphify && uv lock --upgrade
 
 # Format all .nix files with alejandra
 format:

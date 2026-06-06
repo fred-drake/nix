@@ -17,6 +17,7 @@
   baseOverlays =
     [
       (import ../overlays/default.nix {inherit inputs;})
+      (import ../overlays/graphify.nix {inherit inputs;})
     ]
     ++ inputPackageOverlays;
   vscodeOverlays =

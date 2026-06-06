@@ -1,0 +1,18 @@
+# uv2nix workspace whose only purpose is to pin Graphify (PyPI: graphifyy)
+# and its full dependency tree into uv.lock. The lock drives a Nix-built
+# virtualenv (see overlays/graphify.nix) so the CLI is reproducible across
+# machines and immune to the nixpkgs Python-set churn that breaks a native
+# buildPythonApplication of graspologic.
+#
+# To bump Graphify: run `uv lock --upgrade` in this directory, then rebuild.
+[project]
+name = "graphify-env"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "graphifyy[mcp]",
+]
+
+[tool.uv]
+# Virtual workspace root: we install the dependency, we don't build this dir.
+package = false
