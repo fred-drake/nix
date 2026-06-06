@@ -466,6 +466,18 @@ in {
         key = "password";
       };
 
+      fredbox-storage-username = {
+        sopsFile = config.secrets.host.ironforge.fredbox-storage;
+        mode = "0400";
+        key = "username";
+      };
+
+      fredbox-storage-password = {
+        sopsFile = config.secrets.host.ironforge.fredbox-storage;
+        mode = "0400";
+        key = "password";
+      };
+
       silvermoon-password = {
         sopsFile = config.secrets.switch.silvermoon.credentials;
         mode = "0400";
