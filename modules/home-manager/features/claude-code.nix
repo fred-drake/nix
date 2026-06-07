@@ -406,6 +406,18 @@ in {
         };
       };
     };
+    mcp-genki = {
+      mode = "0400";
+      path = "${home}/mcp/genki.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          genki = {
+            type = "http";
+            url = "https://api.genki.world/mcp";
+          };
+        };
+      };
+    };
   };
 
   # Claude Code configuration files
