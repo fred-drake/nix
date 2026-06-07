@@ -91,7 +91,6 @@ lib.mkMerge [
         "openssh"
         "ruby-install"
         "watch"
-        "poppler"
         "facebook/fb/idb-companion"
         "ios-deploy"
         "libimobiledevice"
