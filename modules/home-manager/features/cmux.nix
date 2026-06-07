@@ -1,9 +1,9 @@
 # cmux keyboard shortcuts — tmux-style bindings mirroring apps/tmux.nix.
 #
 # Fully declarative: home-manager owns ~/.config/cmux/cmux.json, so the cmux
-# in-app Settings UI can no longer persist shortcut edits while this is active.
-# Only shortcut bindings are set here; every other cmux setting still falls back
-# to the value saved in the app.
+# in-app Settings UI can no longer persist edits to managed keys while this is
+# active. Only the keys set below are managed; every other cmux setting still
+# falls back to the value saved in the app.
 #
 # Leader key is C-a (matches the tmux prefix in apps/tmux.nix). Change the single
 # `leader` line below to re-leader every chord at once.
@@ -20,6 +20,10 @@ lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     builtins.toJSON {
       "$schema" = "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json";
       schemaVersion = 1;
+
+      # Hide the macOS menu bar extra (top bar icon).
+      notifications.showInMenuBar = false;
+
       shortcuts.bindings = {
         # Pane focus — prefix-LESS Ctrl+h/j/k/l, mirroring the root-table
         # vim-tmux-navigator bindings in apps/tmux.nix. Note: cmux has no is_vim
