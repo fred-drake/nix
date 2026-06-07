@@ -162,6 +162,17 @@ in
         export HCLOUD_TOKEN="$(cat "$HOME/.config/sops-nix/secrets/hetzner-home-api-token")"
       fi
 
+      # Authenticate GitHub API calls (nurl in update-claude-plugins, etc.) so
+      # they don't hit the unauthenticated 60 req/hr limit and 403. Fall back to
+      # the gh CLI's token if GITHUB_TOKEN isn't already set in the environment.
+      if [ -z "''${GITHUB_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
+        _gh_token="$(gh auth token 2>/dev/null)"
+        if [ -n "$_gh_token" ]; then
+          export GITHUB_TOKEN="$_gh_token"
+        fi
+        unset _gh_token
+      fi
+
       # Set PROJECT_ROOT to the actual working directory, not the nix store copy
       export PROJECT_ROOT="$PWD"
 
