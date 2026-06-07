@@ -26,11 +26,12 @@ url = "https://github.com/obra/superpowers"
 name = "cmux-src"
 url = "https://github.com/manaflow-ai/cmux"
 
-# Andrej Karpathy behavioral skills (forrestchang/andrej-karpathy-skills).
+# Andrej Karpathy behavioral skills (multica-ai/andrej-karpathy-skills,
+# formerly forrestchang/andrej-karpathy-skills — repo was transferred).
 # Self-contained plugin: .claude-plugin/plugin.json at repo root, source "./".
 [[repos]]
 name = "karpathy-skills-src"
-url = "https://github.com/forrestchang/andrej-karpathy-skills"
+url = "https://github.com/multica-ai/andrej-karpathy-skills"
 
 # Anthropic example skills (anthropics/skills). Marketplace of many skills;
 # claude-code.nix curates a subset (frontend-design, pdf) into a synthesized

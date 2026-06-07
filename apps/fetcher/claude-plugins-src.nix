@@ -3,8 +3,8 @@
 ####################################
 {pkgs, ...}: {
   claude-plugins-official-src = builtins.fetchTarball {
-    url = "https://github.com/anthropics/claude-plugins-official/archive/bd7cf41fc8a468b136a9266633303ff4a011c7b4.tar.gz";
-    sha256 = "1q5g2yjhzihliqjfa2glgg0xyk3x4ibblkzl972vmssilg9b884s";
+    url = "https://github.com/anthropics/claude-plugins-official/archive/093e91b2597fa5f352dfc217ed6d38ff4fa0ebcf.tar.gz";
+    sha256 = "028x10irrl4xdg60m9p556yaprrg41b0kdid5n9aq17gj30yyc29";
   };
   cc-marketplace-src = pkgs.fetchFromGitHub {
     owner = "samber";
@@ -15,8 +15,8 @@
   cc-skills-golang-src = pkgs.fetchFromGitHub {
     owner = "samber";
     repo = "cc-skills-golang";
-    rev = "168ec1416e54a9f5732343031094fc6fe2e36955";
-    hash = "sha256-ia0C6cJQ0kQLyDm5IxFNTwhMW0Ytg6sYDtMCayRubM0=";
+    rev = "2e24bfb3279751a4fae0194e184d99139b240619";
+    hash = "sha256-+B2q1Oz5W5n/aBOJVUYG+D5+S//nSffJN2wHwi7I6UU=";
   };
   superpowers-src = pkgs.fetchFromGitHub {
     owner = "obra";
@@ -27,11 +27,11 @@
   cmux-src = pkgs.fetchFromGitHub {
     owner = "manaflow-ai";
     repo = "cmux";
-    rev = "087309a1b73f186f152c55081eac71213d3005b5";
-    hash = "sha256-H/YyzhEzqkEYT8Gi+IxJg9IAi3+c9NazH4Q6QY9lSeM=";
+    rev = "dd2e0e31f269ef6e936cfad94d06e74124b5dcd6";
+    hash = "sha256-ojC3nHkpSlRJ4TSJFDrK93rJ1QVUUPjKm4W7ezjbVu8=";
   };
   karpathy-skills-src = pkgs.fetchFromGitHub {
-    owner = "forrestchang";
+    owner = "multica-ai";
     repo = "andrej-karpathy-skills";
     rev = "2c606141936f1eeef17fa3043a72095b4765b9c2";
     hash = "sha256-4z/wRdYH7UXRzF8RJU0sw8xbpx0BW/7CBv5sVEC2knY=";
@@ -51,8 +51,8 @@
   trailofbits-skills-src = pkgs.fetchFromGitHub {
     owner = "trailofbits";
     repo = "skills";
-    rev = "c94841be3deae8a880fa1a9078979adac7ca3dbc";
-    hash = "sha256-WpgldxCQdFBPrUA6RzTSUrL12m9VV1X0+gLzK6uberU=";
+    rev = "d5fe2e6a7896236c3102fd5477e833623ad70298";
+    hash = "sha256-VCIy7AaKLHD4paZUDpuAKkchRbGyaw3KY/khS55ypw0=";
   };
   remotion-skills-src = pkgs.fetchFromGitHub {
     owner = "remotion-dev";
