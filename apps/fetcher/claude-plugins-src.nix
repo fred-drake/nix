@@ -3,8 +3,8 @@
 ####################################
 {pkgs, ...}: {
   claude-plugins-official-src = builtins.fetchTarball {
-    url = "https://github.com/anthropics/claude-plugins-official/archive/093e91b2597fa5f352dfc217ed6d38ff4fa0ebcf.tar.gz";
-    sha256 = "028x10irrl4xdg60m9p556yaprrg41b0kdid5n9aq17gj30yyc29";
+    url = "https://github.com/anthropics/claude-plugins-official/archive/de573bd84695c6657b28f05ffe32c37bb54d1f55.tar.gz";
+    sha256 = "1dpxlxhr6m1s290krss8lv7fxqzzab8yrgpnwc07agjcw2p3vm1g";
   };
   cc-marketplace-src = pkgs.fetchFromGitHub {
     owner = "samber";
@@ -15,8 +15,8 @@
   cc-skills-golang-src = pkgs.fetchFromGitHub {
     owner = "samber";
     repo = "cc-skills-golang";
-    rev = "2e24bfb3279751a4fae0194e184d99139b240619";
-    hash = "sha256-+B2q1Oz5W5n/aBOJVUYG+D5+S//nSffJN2wHwi7I6UU=";
+    rev = "a5e0e5997aac169b659e70cb826a20b489bc4c6c";
+    hash = "sha256-qwITzZZdihbhLiG7zgKtbHSiq36hMzn6hPmCQz9b11M=";
   };
   superpowers-src = pkgs.fetchFromGitHub {
     owner = "obra";
@@ -27,8 +27,8 @@
   cmux-src = pkgs.fetchFromGitHub {
     owner = "manaflow-ai";
     repo = "cmux";
-    rev = "dd2e0e31f269ef6e936cfad94d06e74124b5dcd6";
-    hash = "sha256-ojC3nHkpSlRJ4TSJFDrK93rJ1QVUUPjKm4W7ezjbVu8=";
+    rev = "919d2d44054b06c90c0fb0ac43bc8bf8143ce323";
+    hash = "sha256-XO6wG+Gg6g8CxUB1aueTzxQj+98SNWrTJdDalUih25k=";
   };
   karpathy-skills-src = pkgs.fetchFromGitHub {
     owner = "multica-ai";
@@ -39,8 +39,8 @@
   anthropic-skills-src = pkgs.fetchFromGitHub {
     owner = "anthropics";
     repo = "skills";
-    rev = "da20c92503b2e8ff1cf28ca81a0df4673debdbf7";
-    hash = "sha256-BiZvEV7VK1AwhiGg+pNMgTUQmt4exevLWwL0Brx4YyE=";
+    rev = "57546260929473d4e0d1c1bb75297be2fdfa1949";
+    hash = "sha256-1D9otXxDvmKASBu/vtAEWv6kE+U+jG4OxZpRLZbGEF0=";
   };
   vercel-agent-skills-src = pkgs.fetchFromGitHub {
     owner = "vercel-labs";
