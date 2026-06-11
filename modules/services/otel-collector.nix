@@ -51,7 +51,7 @@
       };
       exporters = {
         otlphttp = {
-          endpoint = "https://traceway.internal.freddrake.com/api/otel";
+          endpoint = "https://traceway.${config.soft-secrets.networking.domain}/api/otel";
           headers = {
             Authorization = "Bearer \${env:TRACEWAY_OTEL_TOKEN}";
           };
