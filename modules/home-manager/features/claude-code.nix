@@ -279,8 +279,10 @@ in {
             command = "npx";
             args = [
               "-y"
-              "paperless-mcp"
+              "@baruchiro/paperless-mcp"
+              "--baseUrl"
               "https://paperless.${config.soft-secrets.networking.domain}"
+              "--token"
               config.sops.placeholder.paperless-mcp-api-key
             ];
           };
