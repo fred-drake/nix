@@ -195,6 +195,12 @@ in {
         key = "api-key";
       };
 
+      paperless-mcp-api-key = {
+        sopsFile = config.secrets.workstation.mcp.paperless;
+        mode = "0400";
+        key = "api-key";
+      };
+
       stripe-sandbox-api-key = {
         sopsFile = config.secrets.workstation.mcp.stripe;
         mode = "0400";

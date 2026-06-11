@@ -270,6 +270,24 @@ in {
       };
     };
 
+    mcp-paperless = {
+      mode = "0400";
+      path = "${home}/mcp/paperless.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          paperless = {
+            command = "npx";
+            args = [
+              "-y"
+              "paperless-mcp"
+              "https://paperless.${config.soft-secrets.networking.domain}"
+              config.sops.placeholder.paperless-mcp-api-key
+            ];
+          };
+        };
+      };
+    };
+
     mcp-stripe-sandbox = {
       mode = "0400";
       path = "${home}/mcp/stripe-sandbox.json";
