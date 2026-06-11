@@ -17,6 +17,7 @@
       screencapture.location = "${config.users.users.fdrake.home}/Screenshots";
       NSGlobalDomain = {
         AppleShowAllExtensions = true;
+        ApplePressAndHoldEnabled = true;
         InitialKeyRepeat = 14;
         KeyRepeat = 1;
         NSAutomaticCapitalizationEnabled = false;
