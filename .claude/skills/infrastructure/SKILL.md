@@ -9,39 +9,84 @@ description: |
   - Hetzner servers are remote VPS/dedicated hosts, deployed as root.
   - anton is a WSL NixOS host on a Windows laptop, deployed as the nixos user via sudo.
   - gnomeregan is a home LAN NixOS box (Wi-Fi). Unusual: tracks nixpkgs-unstable, runs the full workstation home-manager stack, uses its own SSH host key as sops identity. See references/gnomeregan.md before changing its config or rebuilding it.
+  - Full-fleet deployments run through the `colmena-deploy` workflow (one host at a time, with web health verification after every switch) — not ad-hoc colmena calls.
 ---
 
 # Infrastructure Management
 
 ## Quick Reference
 
-### Deploy with Colmena
+### Full-fleet deployment: the `colmena-deploy` workflow
 
-**Run every `colmena apply`/`colmena build` through the `colmena-deployer`
-subagent — one subagent per colmena call.** A deploy emits thousands of lines
-of flake-lock diff and per-host build output; running it in the main context
-buries everything else. The subagent runs the command, watches it to
-completion, and returns just a per-host pass/fail summary (plus the root-cause
-lines on failure). Do not call `colmena` directly from the main context.
+**Any "deploy everything" request (including `/update-all-remote`) runs through
+the `colmena-deploy` workflow**, defined in
+`/Users/fdrake/nix/.claude/workflows/colmena-deploy.js`. It auto-registers as
+the `colmena-deploy` skill (slash command `/colmena-deploy`) — invoke it with
+the Skill tool, or with the Workflow tool in sessions that expose one:
+
+```
+Skill({ skill: "colmena-deploy" })
+# or, when the Workflow tool is available:
+Workflow({ name: "colmena-deploy" })
+Workflow({ scriptPath: "/Users/fdrake/nix/.claude/workflows/colmena-deploy.js" })
+```
+
+The workflow encodes the deployment contract; do not re-implement it inline:
+
+- Hosts are applied **one machine at a time**, in canonical order:
+  **stormwind → ironforge → orgrimmar → anton → gnomeregan → headscale
+  ("gateway")**.
+- After each successful switch, **every web endpoint in the fleet** (the
+  tables in `references/host-mapping.md`) is probed and must return its
+  expected status (default: 2xx after redirects).
+- If a host **fails to switch**, a fix agent diagnoses and repairs the root
+  cause, then the sequence **restarts from stormwind** (max 3 full restarts).
+- If the switch succeeds but **any site is unhealthy**, heal agents fix it
+  (max 3 rounds); the sequence does not advance until the whole fleet is
+  healthy.
+- After pre-flight, a **workaround audit** runs the "Workaround Hygiene"
+  procedure (below): every `WORKAROUND(`-tagged override under `overlays/` is
+  tested as a stock build at the pinned `nixpkgs-unstable` rev on a reachable
+  unstable host, and overrides upstream has fixed are retired before the
+  unstable hosts rebuild. Advisory — it never blocks the deploy. Markers
+  outside `overlays/` (e.g. container digest holds) are reported, not modified.
+- A pre-flight agent blocks the run on untracked `*.nix` files (invisible to
+  the git+file flake). **Unreachable machines never block**: whether detected
+  at pre-flight or at deploy time, a down host is skipped, its endpoints are
+  excluded from the health checks, and it is reported under `skipped` in the
+  result (status `partial`). A sleeping laptop must not hold up the fleet —
+  deploy it later with an ad-hoc single-host run once it's back.
+
+When the workflow aborts, it returns a timeline of what switched, what failed,
+and what was fixed — surface that to the user rather than silently retrying.
+
+### Ad-hoc single-host deploys: the `colmena-deployer` subagent
+
+For one-off work on a single host (build checks, a quick iteration loop on one
+machine), run the colmena call through the **colmena-deployer** subagent — one
+subagent per colmena call. A deploy emits thousands of lines of flake-lock diff
+and per-host build output; running it in the main context buries everything
+else. The subagent runs the command, watches it to completion, and returns just
+a pass/fail summary (plus the root-cause lines on failure). Do not call
+`colmena` directly from the main context.
 
 Spawn it with the Task tool, for example:
 
 > Use the **colmena-deployer** subagent: "Run `colmena apply --on
-> gnomeregan,anton --impure` from `/Users/fdrake/nix`. Return each host's
+> gnomeregan --impure` from `/Users/fdrake/nix`. Return the host's
 > activation result. Note: anton can exit 4 on a spurious user dbus-broker
 > reload timeout even when the switch succeeded — verify its current generation
 > against the built path rather than trusting the exit code."
-
-For multiple independent hosts you can spawn several colmena-deployer subagents
-in parallel (one per host or host-group) so their output stays isolated.
 
 The underlying commands the subagent runs:
 
 ```bash
 colmena apply --on <hostname> --impure        # single host
-colmena apply --on host1,host2,host3 --impure # multiple hosts
 colmena build --on <hostname> --impure        # build only, no deploy
 ```
+
+After an ad-hoc apply, verify the host's web endpoints from the tables in
+`references/host-mapping.md` before declaring success.
 
 ## Server Inventory
 
@@ -49,10 +94,10 @@ colmena build --on <hostname> --impure        # build only, no deploy
 
 | Host | Type | Services |
 |------|------|----------|
-| headscale | Hetzner VPS | Headscale VPN, Tailscale client |
-| ironforge | Hetzner dedicated | nixarr (jellyfin, jellyseerr, sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr) |
-| orgrimmar | Hetzner dedicated | gitea, woodpecker, paperless, calibre, resume |
-| stormwind | Hetzner dedicated | traceway (observability stack) |
+| headscale (aka "gateway") | Hetzner VPS | Headscale VPN, Tailscale client, subnet router for 10.1.0.0/16 (all tailnet access to the other Hetzner boxes rides through it) |
+| ironforge | Hetzner dedicated | media stack, all podman: jellyfin, seerr (+ jellyseerr redirect), sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr |
+| orgrimmar | Hetzner dedicated | gitea (+ gitea-status), woodpecker, paperless (+ paperless-ai), calibre-web, resume, filebrowser |
+| stormwind | Hetzner dedicated | traceway (observability stack), gatus (internal uptime dashboard) |
 
 ### LAN NixOS Hosts (Colmena-managed, fdrake user with sudo)
 
@@ -106,24 +151,17 @@ If colmena fails with SSH errors:
 
 ## Common Colmena Patterns
 
-These are the commands to hand to a `colmena-deployer` subagent (see "Deploy
-with Colmena" above) — not to run inline in the main context.
-
-### Deploy All Hetzner Hosts
-```bash
-colmena apply --on headscale,ironforge,orgrimmar,stormwind --impure
-```
-
 ### Deploy All Hosts
-```bash
-colmena apply --on headscale,ironforge,orgrimmar,stormwind,gnomeregan,anton --impure
-```
+
+Use the `colmena-deploy` workflow (see "Full-fleet deployment" above). Do NOT
+hand a comma-separated all-hosts `colmena apply` to a subagent — that deploys
+in parallel with no health gating between machines.
 
 ### Update Secrets Before Deploy
 ```bash
 just update-secrets
-colmena apply --on <hostname> --impure
 ```
+Run this first when secrets changed, then deploy (workflow or single-host).
 
 ## Workaround Hygiene (unstable hosts)
 
@@ -139,7 +177,10 @@ Each temporary override carries a greppable marker comment:
 # WORKAROUND(<pkg>): <reason>; remove when <condition>.
 ```
 
-**Before an unstable deploy (or when bumping `nixpkgs-unstable`), audit them:**
+The `colmena-deploy` workflow runs this audit automatically (its "Workaround
+Audit" phase, between pre-flight and the first apply). Run it manually before
+ad-hoc single-host unstable deploys, macbook rebuilds, or when bumping
+`nixpkgs-unstable` outside a fleet deploy:
 
 ```bash
 grep -rn 'WORKAROUND(' overlays/
@@ -147,13 +188,14 @@ grep -rn 'WORKAROUND(' overlays/
 
 For each marker, test whether the workaround is still needed by building the
 **stock** package (override absent) from the pinned unstable rev on an
-x86_64-linux unstable host. Do *not* just rebuild the whole host: the
-`overlays/default.nix` overrides aren't even in the gnomeregan/anton **system**
-closures (those use bare `nodeNixpkgs`), so a host build won't exercise them.
-Building the stock package directly is the accurate check.
+x86_64-linux unstable host. Do *not* just rebuild the whole host: a host build
+exercises the *overridden* package (standalone overlays like `highlight.nix`
+are applied via `nodeNixpkgs` in `colmena/default.nix`), so it cannot tell you
+whether the **stock** package is fixed upstream. Building the stock package
+directly is the accurate check.
 
 ```bash
-REV=$(nix eval --raw .#inputs.nixpkgs-unstable.rev)   # the pinned rev
+REV=$(jq -r '.nodes["nixpkgs-unstable"].locked.rev' flake.lock)   # the pinned rev
 # on an unstable x86_64-linux host (anton or gnomeregan):
 ssh anton "NIXPKGS_ALLOW_UNFREE=1 nix build --no-link -L --impure \
   github:nixos/nixpkgs/$REV#<pkg>"   # e.g. tailscale, python313Packages.uvloop

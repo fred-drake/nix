@@ -16,11 +16,19 @@
       name=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.name')
       url=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.url')
       rev=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.rev // empty')
+      # Optional per-repo fetcher override. gitea.com gates its archive
+      # tarball endpoint behind login, breaking fetchFromGitea; force
+      # fetchgit (anonymous git clone is ungated) via fetcher = "fetchgit".
+      fetcher=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.fetcher // empty')
+      fetcher_arg=""
+      if [ -n "$fetcher" ]; then
+        fetcher_arg="-f $fetcher"
+      fi
 
       if [ -n "$rev" ]; then
-        processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" "$rev" | tr -d '\n')
+        processed_url=pkgs.$(${pkgs.nurl}/bin/nurl $fetcher_arg "$url" "$rev" | tr -d '\n')
       else
-        processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" | tr -d '\n')
+        processed_url=pkgs.$(${pkgs.nurl}/bin/nurl $fetcher_arg "$url" | tr -d '\n')
       fi
       echo "  ''${name} = ''${processed_url};"
     done >> $SRCFILE
