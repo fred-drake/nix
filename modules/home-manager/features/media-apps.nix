@@ -11,6 +11,7 @@ in {
     (with pkgs; [
       ffmpeg
       imagemagick
+      poppler-utils
       openai-whisper
       yt-dlp
       localsend
