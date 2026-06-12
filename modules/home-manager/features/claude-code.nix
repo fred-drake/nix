@@ -467,6 +467,12 @@ in {
       recursive = true;
     };
 
+    # Saved Workflow scripts; each *.js becomes a /<name> workflow command
+    ".claude/workflows" = {
+      source = ../../../apps/claude-code/workflows;
+      recursive = true;
+    };
+
     ".claude/skills" = {
       source = ../../../apps/claude-code/skills;
       recursive = true;
