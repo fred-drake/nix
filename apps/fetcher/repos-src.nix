@@ -44,18 +44,16 @@
     rev = "83174b07de60078be79985ef6123d903329622b8";
     hash = "sha256-Dhx5+XRxJvlhdnFyimNxFyFiASrGU4ZwyefsDwtKnSg=";
   };
-  gitea-mcp-src = pkgs.fetchFromGitea {
-    domain = "gitea.com";
-    owner = "fdrake";
-    repo = "gitea-mcp";
+  gitea-mcp-src = pkgs.fetchgit {
+    url = "https://gitea.com/fdrake/gitea-mcp";
     tag = "v0.3.0";
     hash = "sha256-hJQ0ryEcPg/WOi54RLZswhWZOjkbllZWOsYyOhe+4AA=";
   };
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "91b60315ad48e8a4f1ee1a9fe61b86a6eae85195";
-    hash = "sha256-mqBbr4J86jOygQzhKTgKuWq8ECpU41Eds2asuZwjBIg=";
+    rev = "dc18d101a1d1da480f9d56bcbf4c19f9f657b89d";
+    hash = "sha256-0KLvaBv5yz4Bm/Nu/4S4btUOZB+oA2zWv39OjtySWUA=";
   };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";

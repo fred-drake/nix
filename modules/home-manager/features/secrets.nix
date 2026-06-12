@@ -558,6 +558,19 @@ in {
         key = "api-key";
       };
     };
+
+    # Authenticate Nix's own github: flake-input fetches so `nix flake update`
+    # / `nix flake check` don't hit GitHub's 60 req/hr unauthenticated limit and
+    # 403. Nix ignores GITHUB_TOKEN; it only reads `access-tokens` from nix.conf.
+    # fdrake is a trusted-user, so this user-level config is honored. The token
+    # is injected at activation — never baked into the world-readable store.
+    templates.nix-access-tokens = {
+      path = "${home}/.config/nix/nix.conf";
+      mode = "0400";
+      content = ''
+        access-tokens = github.com=${config.sops.placeholder.github-token}
+      '';
+    };
   };
 
   # Symlink for containers runtime location

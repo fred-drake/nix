@@ -23,6 +23,8 @@ url = "https://github.com/nickeb96/puffer-fish"
 name = "gitea-mcp-src"
 url = "https://gitea.com/fdrake/gitea-mcp"
 rev = "v0.3.0"
+# gitea.com gates archive tarballs behind login; use git clone instead.
+fetcher = "fetchgit"
 [[repos]]
 name = "vicinae-src"
 url = "https://github.com/vicinaehq/vicinae.git"
