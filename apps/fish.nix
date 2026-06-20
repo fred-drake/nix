@@ -62,59 +62,10 @@ in {
        rm -f -- "$tmp"
       end
 
-      # Build dev windows
+      # Build dev windows. Now backed by cmux — `windev` is an alias for `cws`
+      # so existing muscle-memory / completions keep working.
       function windev
-        set config_file "$HOME/.config/windev/config.json"
-        set domain "${config.soft-secrets.networking.domain}"
-
-        # If argv[2] is provided, use it as the directory
-        if test -n "$argv[2]"
-          set devdir "$argv[2]"
-        else if test -f "$config_file"
-          # Read configuration from JSON file
-          set devdir (jq -r --arg name "$argv[1]" '.[] | select(.name == $name) | .dir' "$config_file" 2>/dev/null)
-
-          # If no match found in config, check for special placeholders
-          if test -z "$devdir"
-            set devdir (pwd)
-          else
-            # Replace $HOME placeholder if present
-            set devdir (echo "$devdir" | sed "s|\$HOME|$HOME|g")
-            # Replace $domain placeholder if present
-            set devdir (echo "$devdir" | sed "s|\$domain|$domain|g")
-            # If devdir is ".", use current directory
-            if test "$devdir" = "."
-              set devdir (pwd)
-            end
-          end
-        else
-          # If config file doesn't exist, use current directory
-          set devdir (pwd)
-        end
-
-        # Debug output
-        # echo "windev: argv[1]='$argv[1]', devdir='$devdir'"
-
-        # Use wezterm if available, otherwise fall back to tmux
-        if command -v wezterm &> /dev/null
-          # Wezterm commands
-          set pane_id (wezterm cli spawn --cwd "$devdir")
-          wezterm cli set-tab-title --pane-id $pane_id "$argv[1]" > /dev/null
-          wezterm cli split-pane --right --pane-id $pane_id > /dev/null
-          wezterm cli split-pane --top --pane-id $pane_id > /dev/null
-          wezterm cli activate-pane --pane-id $pane_id > /dev/null
-        else
-          # tmux commands
-          tmux new-window -n "$argv[1]" -c "$devdir"
-          tmux split-window -h -c "$devdir"
-          tmux select-pane -t 1
-          tmux split-window -v -c "$devdir"
-          tmux select-pane -t 3
-          tmux kill-pane -t 1
-          tmux select-pane -t 1
-          tmux split-pane -v -c "$devdir"
-          tmux select-pane -t 3
-        end
+        cws $argv
       end
 
       # Create (and focus) a cmux workspace for a project.
