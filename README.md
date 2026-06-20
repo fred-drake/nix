@@ -88,10 +88,12 @@ The infrastructure uses multiple VLANs for security and organization:
 
 ## Prerequisites
 
-1. **Nix** installed on your system
+1. **Nix** installed on your system (on macOS, use Lix — see Initial Setup)
 2. **SSH Key** (`id_ed25519`) in your `~/.ssh` directory
-3. **Homebrew** installed for package management
-4. **Git** for version control
+3. **Git** for version control
+
+> **Note**: Homebrew does not need to be installed manually — this flake
+> manages it out of the box via `nix-homebrew`.
 
 > **Note**: The `id_ed25519` key is used for personal secrets and must be
 > properly secured with 600 permissions.
@@ -165,24 +167,26 @@ This project uses Podman for container runtime with the following practices:
 
 1. Install Nix (if not already installed):
 
-   ```bash
-   sh <(curl -L https://nixos.org/nix/install)
-   ```
+   - **macOS**: Use Lix.
 
-2. Install Homebrew (required):
+     ```bash
+     curl -sSf -L https://install.lix.systems/lix | sh -s -- install
+     ```
 
-   ```bash
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   ```
+   - **NixOS / Linux**:
 
-3. Clone this repository:
+     ```bash
+     sh <(curl -L https://nixos.org/nix/install)
+     ```
+
+2. Clone this repository:
 
    ```bash
    git clone https://github.com/fred-drake/nix ~/nix
    cd ~/nix
    ```
 
-4. Build the flake for your system. This will take a while the first time.
+3. Build the flake for your system. This will take a while the first time.
    - Macbook Pro: `nix --extra-experimental-features "nix-command flakes" build .#darwinConfigurations.macbook-pro.system`
 
 ## Key Management
@@ -231,7 +235,14 @@ For assistance with Nix configurations:
 
 ### For macOS systems:
 1. Run the initial switch into the flake. This will take a long while the
-   first time: `./result/sw/bin/darwin-rebuild switch --flake ~/nix`
+   first time. On a brand-new machine the `./result/...` path will not work
+   yet, so use the full `sudo` invocation:
+   `sudo ./result/sw/bin/darwin-rebuild switch --flake ~/nix#macbook-pro`
+
+   > **Note**: On first run, installing the Homebrew casks may fail on
+   > `facebook/fb/idb-companion` because Xcode is not installed yet. Xcode is
+   > installed later in the process, so simply run the switch again once it
+   > is present and the cask will install successfully.
 2. Reboot the machine to ensure all Mac settings were applied.
 
 ### For NixOS systems:
