@@ -78,7 +78,6 @@ lib.mkMerge [
         "steam"
         "tailscale-app"
         "vlc"
-        "vmware-fusion"
         "whatsapp"
         "winbox"
         "wine-stable"
