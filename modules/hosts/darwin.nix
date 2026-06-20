@@ -27,6 +27,7 @@ in {
               (root + "/modules/home-manager/host/macbook-pro.nix")
             ];
           };
+          ids.gids.nixbld = 350;
         }
       ];
     };
