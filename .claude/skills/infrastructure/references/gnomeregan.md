@@ -72,6 +72,74 @@ The fallback (if the backup blob in nix-secrets is also somehow gone):
 
 Equivalent to the original migration — works as long as you still have the workstation key.
 
+## Troubleshooting: process-daily / archive-email job failures
+
+Both jobs run `claude -p ...` as fdrake under systemd-user timers, logging
+stream-json to `~/.local/state/<job>.{log,err}`. The timers fire reliably; when
+a job "stops working" the failure is almost always inside the `claude`
+invocation, not the timer or the google-workspace MCP.
+
+Triage (SSH in as fdrake; login shell is **fish**, so wrap loops/`VAR=` in
+`bash -c`):
+
+```bash
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+systemctl --user list-timers archive-email.timer          # is it scheduled?
+systemctl --user status archive-email.service             # last run result
+# Per-run final outcome (is_error + the actual error text):
+grep '"type":"result"' ~/.local/state/archive-email.log \
+  | tail -3 | jq -r '[.subtype,(.is_error|tostring),(.result//"")]|@tsv'
+```
+
+A run that dies in **~3s with `is_error:true`** and num_turns 1 never reached
+the email work — `claude` itself failed on turn 1. A healthy run takes
+**3–4 min** and ends `Finished` (Result=success).
+
+### Most common cause: expired Claude Max OAuth token
+
+`API Error: 401 Invalid authentication credentials` means the claude.ai **Max
+OAuth token** in `~/.claude/.credentials.json` expired and auto-refresh failed.
+This happens when the same account re-authenticates Claude Code on another
+machine (or a session is revoked) — that invalidates gnomeregan's token. Check
+without printing secrets:
+
+```bash
+jq '{subscriptionType, expiresAt: (.claudeAiOauth.expiresAt/1000|todate)}' \
+  ~/.claude/.credentials.json
+```
+
+Note: simply launching `claude` interactively does **not** prompt for re-login
+when a stale credential is present — it looks logged in, and the 401 only
+surfaces on the first real API call. So "I opened claude and it didn't ask me
+to log in" does not mean auth is healthy.
+
+**Fix** (interactive — OAuth can't be scripted): in an SSH session as fdrake,
+run `claude`, then `/login`, pick the Max account, and complete the browser/code
+flow (headless box prints a URL + asks for the pasted code). Then verify:
+
+```bash
+claude --model sonnet -p "say OK"                 # expect "OK", exit 0
+systemctl --user start archive-email.service       # real run, expect "Finished"
+```
+
+The timer needs no changes; it picks up the new credential on the next tick.
+
+### SSH host-key gotcha while debugging
+
+If your workstation can't even SSH in (`Host key verification failed` after the
+known_hosts entry was cleared), the key gnomeregan presents is genuine iff it
+converts to the recorded age recipient
+(`age1kdu824t8sf07kf94zuakx38dk835fknftpdpsqjv9fjamzxwnvasryg2vm`):
+
+```bash
+ssh-keyscan -t ed25519 192.168.8.2 | grep -o 'ssh-ed25519 .*' \
+  | nix run nixpkgs#ssh-to-age      # must equal the recipient above
+```
+
+Match → safe to re-add to known_hosts (key did not rotate). Mismatch → the host
+key actually changed, which would also break its sops decryption (see SOPS
+identity model above).
+
 ## File touch-points
 
 | Concern | File |
