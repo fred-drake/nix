@@ -113,6 +113,22 @@ After an ad-hoc apply, verify the host's web endpoints from the tables in
 
 ## Troubleshooting Workflows
 
+### Many `*.internal.freddrake.com` names unreachable at once
+
+If "service X is down" but *other* internal sites are **also** unreachable, the
+problem is almost never that service — it's the internal DNS resolver
+(hearthstone, `100.64.0.13`) having dropped off the headscale tailnet. The
+servers stay fine; names just stop resolving (the whole `internal.freddrake.com`
+zone is split-DNS'd to `100.64.0.13`). This has happened (2026-06-23: an OpenWrt
+package upgrade wiped hearthstone's tailscaled state). See
+`references/hearthstone-dns.md` for the fast diagnosis and the re-register
+recovery procedure. Quick first checks:
+
+```bash
+tailscale status | grep -i hearthstone   # offline / last seen 15h ago?
+tailscale status                         # if LOCAL tailscale is down, the fleet only LOOKS dead
+```
+
 ### Service Not Working
 
 1. Check service status:
@@ -254,3 +270,4 @@ Notes:
 
 - `references/host-mapping.md` — Inventory of every managed host (SSH user, port, role).
 - `references/gnomeregan.md` — Gnomeregan-specific setup, sops identity model, and disaster-recovery procedure. Read first before changing its config or rebuilding it.
+- `references/hearthstone-dns.md` — The gateway/OpenWrt box (`ssh root@192.168.8.1`) that hosts the `internal.freddrake.com` DNS resolver on headscale (`100.64.0.13`). Read first when *many* internal names fail at once; covers diagnosis and the headscale re-register recovery.

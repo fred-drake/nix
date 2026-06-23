@@ -28,6 +28,15 @@ Gnomeregan is unusual: it tracks `nixpkgs-unstable` (via `meta.nodeNixpkgs.gnome
 |----------|------|-------------|----------|---------|
 | anton | WSL NixOS on Windows | nixos (sudo) | 22 | Gaming and AI processing |
 
+## Critical non-managed infrastructure
+
+| Hostname | Type | Access | Role |
+|----------|------|--------|------|
+| hearthstone | OpenWrt gateway router | `ssh root@192.168.8.1` (LAN default gateway; not in `~/.ssh/config`, **not** colmena-managed) | headscale node `100.64.0.13`; hosts the **`internal.freddrake.com` DNS resolver** the whole fleet's internal names depend on. If it drops off the tailnet, every `*.internal.freddrake.com` name fails to resolve while the servers stay up. See `hearthstone-dns.md`. |
+
+The headscale control plane (`headscale.brainrush.ai`) runs on `br-prod-gateway`
+(`headscale` CLI on PATH there) — used to re-register hearthstone if it falls off.
+
 ## Canonical Deploy Order
 
 Full-fleet deployments apply hosts **one at a time**, in this order:
