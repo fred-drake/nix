@@ -31,25 +31,20 @@ in {
     # (e.g. systemd unit skew), so unstable hosts must align the module set
     # with the package set here rather than only overriding nixpkgs.pkgs.
     # gnomeregan uses a bare nixpkgs (no mkPkgs overlays), so apply the
-    # glance-from-main and highlight-patch-fix overlays here directly.
-    # See overlays/glance.nix and overlays/highlight.nix.
+    # glance-from-main overlay here directly. See overlays/glance.nix.
     nodeNixpkgs.gnomeregan = import nixpkgs-unstable {
       system = "x86_64-linux";
       overlays = [
         (import ../overlays/glance.nix {inherit inputs;})
-        (import ../overlays/highlight.nix)
       ];
     };
     # anton (WSL) also tracks unstable end-to-end. It previously used only
     # nixpkgs.pkgs = unstable on top of the stable module set, but unstable
     # systemd 260.1 dropped example/systemd/system/autovt@.service while the
     # stable getty.nix module still references it, breaking system-units.
-    # anton also uses a bare unstable nixpkgs; apply the highlight-patch-fix
-    # overlay directly here too. See overlays/highlight.nix.
     nodeNixpkgs.anton = import nixpkgs-unstable {
       system = "x86_64-linux";
       config.allowUnfree = true;
-      overlays = [(import ../overlays/highlight.nix)];
     };
   };
 
