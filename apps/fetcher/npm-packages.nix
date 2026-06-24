@@ -3,14 +3,14 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "agent-browser" = {
-    "version" = "0.27.2";
-    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.27.2.tgz";
-    "url-hash" = "sha256-njfJMdg7CQQsiOgUsWsKD8xQ+3WZNFyr7QhGhTdNLYY=";
+    "version" = "0.29.1";
+    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.29.1.tgz";
+    "url-hash" = "sha256-2egOjyQVixIqqpMLyrsOsRx2T18+FMlGeKarDt9zdAs=";
   };
   "ccstatusline" = {
-    "version" = "2.2.19";
-    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.2.19.tgz";
-    "url-hash" = "sha256-ZECyfJStzolhs1EQrrbq6svXCtvcpj6YJRPjFIazLSw=";
+    "version" = "2.2.22";
+    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.2.22.tgz";
+    "url-hash" = "sha256-FKDBeocIjiP4xXxNycTAJFlr7s+I8zm+gNv9IchcsQA=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";

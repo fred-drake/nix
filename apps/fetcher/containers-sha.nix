@@ -10,14 +10,14 @@ _: {
     };
     "gitea" = {
       "1-rootless" = {
-        "linux/amd64" = "docker.gitea.com/gitea@sha256:592a005e54327ed4969101ba60cf89dca569001ee71492ea0a6c43ce8de29379";
+        "linux/amd64" = "docker.gitea.com/gitea@sha256:b9d89b3b13561f7ffcb9eac85ac85e38b3f430fba251cdb2d3a8b6be0745c72b";
       };
     };
   };
   "docker.io" = {
     "amruthpillai/reactive-resume" = {
       "latest" = {
-        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:f3860b1fe93e2d77e27687995cb0b6343a7352e64dbd3c946e0ec2dc151f80c9";
+        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:2a6194913378936e48a8566648102238066c00b9220fbd29dd8071043e4ace37";
       };
     };
     "apache/tika" = {
@@ -37,12 +37,12 @@ _: {
     };
     "filebrowser/filebrowser" = {
       "latest" = {
-        "linux/amd64" = "docker.io/filebrowser/filebrowser@sha256:a2e4869ffc6b2adddc5797ce277ac3bd237f34201d079fee6bff6420ed28f40e";
+        "linux/amd64" = "docker.io/filebrowser/filebrowser@sha256:c36514f0a88eff6476d6f3711cebbb1df3e56daed797150f8e1fc3307cb7cb95";
       };
     };
     "gotenberg/gotenberg" = {
       "latest" = {
-        "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:548fcf3e00ded485d0b85d2009154e9ef5ba81fcfe64a5fce9cab8a532e8e1bd";
+        "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:0ec4b0a125c55ff1dfaed071cab30e0f37cc4326f7d53d903ee5b24e4f27fd85";
       };
     };
     "library/redis" = {
@@ -52,7 +52,7 @@ _: {
     };
     "postgres" = {
       "16-alpine" = {
-        "linux/amd64" = "docker.io/postgres@sha256:79950da386bda7fcc9d57aa9aa9be6c6d7407596a9b8f68014b09a778a9ab316";
+        "linux/amd64" = "docker.io/postgres@sha256:0fc5c901ec0a3c55ce70b99b040daeb89d5b35b61febbced1b4b24dbc3153ec8";
       };
       "17" = {
         "linux/amd64" = "docker.io/postgres@sha256:0e91a106a4da991ecd9b2a511eb9a62cc106293a517deed33856ceda5ad429d7";
@@ -85,49 +85,42 @@ _: {
     };
     "linuxserver/bazarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:e7db4037cbf74782220c0b8f38357140267079348f636f88d075c7b622f8d80d";
+        "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:f4643474d538d0e24ff4ecfcc84aadb03bfd7ceb639bbfcd100d3b0d12a4182a";
       };
     };
     "linuxserver/calibre-web" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:4ee6d92a533d522619c43f1704e0303685e5d8eb0fe775c78db1625e1068e3ae";
+        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:c2b9bafa3aa1907af5b4a1a5780fc0d646cbaad959c39c316906874ea062b512";
       };
     };
     "linuxserver/jellyfin" = {
       "latest" = {
-        # WORKAROUND(jellyfin): held back from the newer digest (sha256:95133c6c...) during the
-        # 2026-06-12 deploy. NOTE: the crash was NOT the image — this digest is also 10.11.10.
-        # Root cause was a stale legacy /config/migrations.xml on ironforge whose entries were
-        # all already in __EFMigrationsHistory, so CheckFirstTimeRunOrMigration's .Last() threw
-        # "Sequence contains no elements". Fixed host-side by moving the file aside
-        # (migrations.xml.pre-10.11-legacy.bak). Remove on the next container-update run; new
-        # digests are safe to take now.
-        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:31e89a4ddb806fa0e17060f58cf5c64d324beb1755070f41ca65dc14613d83a1";
+        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:b10495832a5ea1dfb63175bbf35f3aa5188114e6f29812bc6c0b0c91d064598a";
       };
     };
     "linuxserver/lidarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/lidarr@sha256:f0565aa0f52e9e50d834011d01f2850fe380dbcc4aede77ee148d83addc93a84";
+        "linux/amd64" = "ghcr.io/linuxserver/lidarr@sha256:440ceb314d6e5e5a6e28beb37d32456425c03acee9d01f0fdb594c5cbca3236c";
       };
     };
     "linuxserver/prowlarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/prowlarr@sha256:9474bda8dd4176b2ef9a9b1278483e27c12a3ec600b393de99eede3e64dbbb3c";
+        "linux/amd64" = "ghcr.io/linuxserver/prowlarr@sha256:01f319aba96aaa3656e3908f799dafe97879e7636a7fa33cef76d4ed33d664e8";
       };
     };
     "linuxserver/radarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:d4d5308d104f036d439cec74e15b9b2c6c344d7c6914a986d67c048721ea6c51";
+        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:1262d65abee84e3f3dcda9b8c2f263387e70ff0bc5d1572f6cd6dd4b91cabea0";
       };
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:daf7ad867517062e5f8487d58121ce22ccdbfb2ea3ea2df2b2f4dbc8ecc58c8c";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:6bc02a36386b6fb2c0cae19d02552772d5d049b7431f62fdd3e2dbf3aa3ed7e0";
       };
     };
     "linuxserver/sonarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:1b7106a9fe8c2ac738260f09dfeec582bc17bcfe50632a1bfb5767b8d5f725a0";
+        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:f899c1a9d7409fd226fdaae7f94302b80a494744fe5c670930a0ccc942641dba";
       };
     };
     "paperless-ngx/paperless-ngx" = {

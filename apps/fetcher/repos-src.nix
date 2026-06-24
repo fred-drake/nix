@@ -29,8 +29,8 @@
   fzf-fish-src = pkgs.fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
-    rev = "0069dbbe06cc05482bfb13063b4b4eac26318992";
-    hash = "sha256-H7HgYT+okuVXo2SinrSs+hxAKCn4Q4su7oMbebKd/7s=";
+    rev = "6a6136998879dcc1f29a405dfdd6b92c5f229c39";
+    hash = "sha256-ql8UncXGwOIpyC49w1bCRfynRB02u7s1a1rOWTfKcTk=";
   };
   fish-abbreviation-tips-src = pkgs.fetchFromGitHub {
     owner = "gazorby";
@@ -52,8 +52,8 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "dc18d101a1d1da480f9d56bcbf4c19f9f657b89d";
-    hash = "sha256-0KLvaBv5yz4Bm/Nu/4S4btUOZB+oA2zWv39OjtySWUA=";
+    rev = "dc0266854816db2f7c5c5b57ad69f1b052600407";
+    hash = "sha256-agvSabL+FhK4RzwLsdnZCoBHNl/YuAnuEHsrO8gvCj4=";
   };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
