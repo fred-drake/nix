@@ -14,7 +14,7 @@ build: _rebuild-pre update-secrets
     sudo system-flake-rebuild build
 
 # Update everything
-update-all: update update-npm-packages update-repos update-container-digests update-secrets update-claude update-graphify
+update-all: update update-npm-packages update-repos update-container-digests update-secrets update-claude update-pi update-pi-packages update-graphify
 
 # Pull the latest hashes and shas from the repos in apps/fetcher/repos.toml
 update-repos:
@@ -32,6 +32,14 @@ update-npm-packages:
 update-claude:
     update-claude-plugins
     ./apps/fetcher/update-claude-code.sh
+
+# Update the pinned pi-coding-agent release (source + npm deps hashes)
+update-pi:
+    ./apps/fetcher/update-pi.sh
+
+# Update the pinned pi packages/extensions managed via nix
+update-pi-packages:
+    ./apps/fetcher/update-pi-dynamic-workflows.sh
 
 # Upgrade Graphify (graphifyy) to its latest release by re-resolving its uv.lock
 update-graphify:
