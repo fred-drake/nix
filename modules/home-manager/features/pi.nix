@@ -4,16 +4,12 @@
 # rather than the nixpkgs package, so we track upstream releases the day they land.
 # Bump with `just update-pi` (regenerates apps/fetcher/pi-coding-agent.nix).
 #
-# Packages/extensions are managed declaratively here instead of via `pi install`:
-# each pi package is built into the nix store (apps/pi-*.nix) and registered by
-# pointing a local-path entry in pi's `packages` array at the store path. We merge
-# that entry into ~/.pi/agent/settings.json with an activation script rather than
-# managing the whole file, because pi writes to settings.json at runtime
-# (lastChangelogVersion, interactive /settings, /model) — a read-only nix symlink
-# would break those writes.
-#
-# Runtime state (auth via `/login`, settings) otherwise lives under ~/.pi/agent/
-# and is intentionally left mutable.
+# Packages/extensions are managed declaratively here instead of via `pi install`.
+# settings.json is a read-only Nix symlink — runtime writes (e.g. /settings,
+# /model) are intentionally not supported; change settings here and run
+# `just switch`. lastChangelogVersion is pinned to pi-coding-agent.version so
+# pi never tries to rewrite it. Auth (`/login`) lives in ~/.pi/agent/auth.json
+# which is intentionally left mutable.
 {
   pkgs,
   lib,
@@ -25,18 +21,12 @@
   };
 
   # Pi packages registered via local-path `packages` entries. Each must be a
-  # built package directory in the store (apps/pi-*.nix). The activation script
-  # below reconciles ~/.pi/agent/settings.json to exactly this set of nix-managed
-  # entries (dropping any stale store paths from previous generations) while
-  # preserving every other key and any non-nix package the user added.
+  # built package directory in the store (apps/pi-*.nix).
   piPackages = [
     (pkgs.callPackage ../../../apps/pi-dynamic-workflows.nix {
       pin = import ../../../apps/fetcher/pi-dynamic-workflows.nix;
     })
   ];
-
-  settingsFile = "${config.home.homeDirectory}/.pi/agent/settings.json";
-  jq = lib.getExe pkgs.jq;
 
   # Directory of prompt templates pi should discover. We reuse the Claude Code
   # slash-command files (symlinked to ~/.claude/commands by the claude-code
@@ -53,20 +43,36 @@
   # Claude Code and pi.
   workflowsSrc = ../../../apps/claude-code/workflows;
   savedWorkflowsDir = "${config.home.homeDirectory}/.pi/workflows/saved";
-  # Marker identifying entries we own: every nix-managed pi package lives under
-  # the store and was built by an apps/pi-*.nix derivation.
-  managedPaths = lib.concatStringsSep "\n" (map toString piPackages);
+
+  # Local pi extensions (apps/pi-extensions/*.ts). Copied to the Nix store
+  # as a read-only directory and registered via the `extensions` settings key
+  # so pi auto-discovers them without needing a ~/.pi/agent/extensions symlink.
+  piExtensionsDir = ../../../apps/pi-extensions;
+
+  jq = lib.getExe pkgs.jq;
+
+  # Fully declarative settings.json — symlinked read-only from the Nix store.
+  # lastChangelogVersion is pinned to the current pi version so pi never
+  # attempts to write an updated value to the read-only file.
+  settingsJson = pkgs.writeText "pi-agent-settings.json" (builtins.toJSON {
+    lastChangelogVersion = pi-coding-agent.version;
+    theme = "dark";
+    defaultProvider = "anthropic";
+    defaultModel = "claude-sonnet-4-6";
+    defaultThinkingLevel = "high";
+    packages = map toString piPackages;
+    prompts = [promptsDir];
+    extensions = ["${piExtensionsDir}"];
+  });
 in {
   home = {
     packages = [pi-coding-agent];
 
-    # Merge our nix-built pi packages into the (mutable) settings.json packages
-    # array. Idempotent: strips any previously-managed store paths, then appends
-    # the current generation's set. Leaves the file untouched if it is not valid
-    # JSON (jq fails, the `&&` short-circuits, the original is preserved).
-    # Transcode each Claude dynamic-workflow .js into a pi saved-workflow .json at
-    # the user level so /commit-and-push (etc.) is available in every project.
-    # Idempotent: rewrites only the names we own each generation; pi may still
+    file.".pi/agent/settings.json".source = settingsJson;
+
+    # Transcode each Claude dynamic-workflow .js into a pi saved-workflow .json
+    # at the user level so /commit-and-push (etc.) is available in every project.
+    # Idempotent: rewrites the names we own each generation; pi may still
     # add/remove its own saved workflows alongside these.
     activation.piSavedWorkflows = lib.hm.dag.entryAfter ["writeBoundary"] ''
       saved="${savedWorkflowsDir}"
@@ -91,37 +97,6 @@ in {
           $DRY_RUN_CMD rm -f "$tmp"
         fi
       done
-    '';
-
-    activation.piManagedPackages = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      settings="${settingsFile}"
-      $DRY_RUN_CMD mkdir -p "$(dirname "$settings")"
-      [ -f "$settings" ] || echo '{}' > "$settings"
-
-      managed="${managedPaths}"
-      tmp="$(${pkgs.coreutils}/bin/mktemp)"
-      if ${jq} \
-          --arg managed "$managed" \
-          --arg prompts "${promptsDir}" '
-            ($managed | split("\n") | map(select(length > 0))) as $paths
-            | .packages = (
-                ((.packages // [])
-                  | map(select(
-                      (type != "string") or (test("^/nix/store/") | not)
-                    )))
-                + $paths
-              )
-            | .prompts = (
-                ((.prompts // [])
-                  | map(select(. != $prompts)))
-                + [$prompts]
-              )
-          ' "$settings" > "$tmp"; then
-        $DRY_RUN_CMD mv "$tmp" "$settings"
-      else
-        echo "pi: leaving $settings unchanged (not valid JSON?)" >&2
-        $DRY_RUN_CMD rm -f "$tmp"
-      fi
     '';
   };
 }
