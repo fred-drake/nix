@@ -76,6 +76,28 @@ in {
 
     file.".pi/agent/settings.json".source = settingsJson;
 
+    # cmux session-hook extension: bridges Pi lifecycle events (session_start,
+    # before_agent_start, agent_end) into cmux's restorable session store so
+    # cmux can show running/idle state, send notifications, and resume Pi
+    # sessions after an app relaunch.
+    #
+    # The extension lives in apps/pi-extensions/cmux-session.ts which is
+    # already discovered via the `extensions` key in settings.json above.
+    # We ALSO create a symlink at the canonical cmux location
+    # (~/.pi/agent/extensions/cmux-session.ts) pointing to the *same*
+    # Nix-store path.  Pi's discoverAndLoadExtensions() deduplicates by
+    # resolved path (Set<string>), so the extension is loaded exactly once
+    # even though two discovery paths both point to it.  The symlink also
+    # prevents `cmux hooks pi install` from silently replacing our managed
+    # version with a stale copy (it would overwrite the symlink with a
+    # different path, causing a duplicate; running `just switch` restores it).
+    #
+    # Darwin-only because cmux is a macOS app. The extension itself is safe
+    # elsewhere (it short-circuits when CMUX_SURFACE_ID is unset).
+    file.".pi/agent/extensions/cmux-session.ts" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+      source = "${piExtensionsDir}/cmux-session.ts";
+    };
+
     # Transcode each Claude dynamic-workflow .js into a pi saved-workflow .json
     # at the user level so /commit-and-push (etc.) is available in every project.
     # Idempotent: rewrites the names we own each generation; pi may still
