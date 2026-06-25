@@ -26,6 +26,12 @@
     (pkgs.callPackage ../../../apps/pi-dynamic-workflows.nix {
       pin = import ../../../apps/fetcher/pi-dynamic-workflows.nix;
     })
+    (pkgs.callPackage ../../../apps/pi-web-access.nix {
+      pin = import ../../../apps/fetcher/pi-web-access.nix;
+    })
+    (pkgs.callPackage ../../../apps/pi-mcp-adapter.nix {
+      pin = import ../../../apps/fetcher/pi-mcp-adapter.nix;
+    })
   ];
 
   # Directory of prompt templates pi should discover. We reuse the Claude Code

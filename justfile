@@ -40,6 +40,8 @@ update-pi:
 # Update the pinned pi packages/extensions managed via nix
 update-pi-packages:
     ./apps/fetcher/update-pi-dynamic-workflows.sh
+    ./apps/fetcher/update-pi-web-access.sh
+    ./apps/fetcher/update-pi-mcp-adapter.sh
 
 # Upgrade Graphify (graphifyy) to its latest release by re-resolving its uv.lock
 update-graphify:
