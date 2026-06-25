@@ -40,14 +40,14 @@
   # exposing each as a /name command. Discovery is non-recursive.
   promptsDir = "${config.home.homeDirectory}/.claude/commands";
 
-  # Claude Code "dynamic workflow" scripts (apps/claude-code/workflows/*.js) are
+  # Shared "dynamic workflow" scripts (apps/agent-common/workflows/*.js) are
   # already written against the pi-dynamic-workflows runtime API
   # (`export const meta`, `agent()`, `phase()`). pi does not scan ~/.claude;
   # it loads saved workflows as <name>.json files (shape {name, description,
   # script, ...}) from ~/.pi/workflows/saved. The activation below transcodes
   # each .js into that JSON so the same definition powers `/name` in both
   # Claude Code and pi.
-  workflowsSrc = ../../../apps/claude-code/workflows;
+  workflowsSrc = ../../../apps/agent-common/workflows;
   savedWorkflowsDir = "${config.home.homeDirectory}/.pi/workflows/saved";
 
   # Local pi extensions (apps/pi-extensions/*.ts). Copied to the Nix store
@@ -99,7 +99,7 @@ in {
       source = "${piExtensionsDir}/cmux-session.ts";
     };
 
-    # Transcode each Claude dynamic-workflow .js into a pi saved-workflow .json
+    # Transcode each shared dynamic-workflow .js into a pi saved-workflow .json
     # at the user level so /commit-and-push (etc.) is available in every project.
     # Idempotent: rewrites the names we own each generation; pi may still
     # add/remove its own saved workflows alongside these.

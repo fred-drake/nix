@@ -456,25 +456,25 @@ in {
       then cmuxClaudeFilterWrapper
       else config.lib.file.mkOutOfStoreSymlink realClaude;
 
-    # Claude command files
+    # Agent-agnostic command files (shared via apps/agent-common)
     ".claude/commands" = {
-      source = ../../../apps/claude-code/commands;
+      source = ../../../apps/agent-common/commands;
       recursive = true;
     };
 
     ".claude/agents" = {
-      source = ../../../apps/claude-code/agents;
+      source = ../../../apps/agent-common/agents;
       recursive = true;
     };
 
     # Saved Workflow scripts; each *.js becomes a /<name> workflow command
     ".claude/workflows" = {
-      source = ../../../apps/claude-code/workflows;
+      source = ../../../apps/agent-common/workflows;
       recursive = true;
     };
 
     ".claude/skills" = {
-      source = ../../../apps/claude-code/skills;
+      source = ../../../apps/agent-common/skills;
       recursive = true;
     };
 
@@ -685,7 +685,9 @@ in {
       };
     };
 
-    ".claude/CLAUDE.md".text = builtins.readFile ../../../apps/claude-code/CLAUDE.md;
+    # Generic agent instructions live in apps/agent-common/AGENTS.md; the same
+    # source is surfaced to Claude Code as ~/.claude/CLAUDE.md.
+    ".claude/CLAUDE.md".text = builtins.readFile ../../../apps/agent-common/AGENTS.md;
 
     ".claude/settings.json".text = builtins.toJSON {
       env = {
