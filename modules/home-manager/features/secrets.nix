@@ -50,6 +50,15 @@ in {
         key = "data";
       };
 
+      # Private key Hermes (on orgrimmar) uses to sync the PKM-Personal vault
+      # repo. Stored here so a copy lives on the workstation too.
+      hermes-vault-ssh-key = {
+        sopsFile = config.secrets.host.orgrimmar.hermes-vault-key;
+        path = "${home}/.ssh/hermes-vault";
+        mode = "0400";
+        key = "data";
+      };
+
       git-credentials = {
         sopsFile = config.secrets.workstation.identity.git-credentials;
         path = "${home}/.git-credentials";
@@ -576,6 +585,9 @@ in {
   # Symlink for containers runtime location
   home.file = {
     ".config/containers/auth.json".source = config.lib.file.mkOutOfStoreSymlink "${home}/.docker/config.json";
+
+    # Public half of the Hermes vault deploy key (not secret).
+    ".ssh/hermes-vault.pub".text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF1HCnk7zYX1gijPLQS1kEdsqKTkD7WoB+2rCm/7lTJA\n";
   };
 
   # Import the sops-decrypted GPG signing key into the keyring (idempotent).

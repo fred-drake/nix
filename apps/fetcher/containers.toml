@@ -164,3 +164,8 @@ repository = "ghcr.io"
 name = "recyclarr/recyclarr"
 tag = "latest"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "nousresearch/hermes-agent"
+tag = "v2026.6.19"
+architectures = ["linux/amd64"]

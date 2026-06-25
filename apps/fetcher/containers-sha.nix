@@ -50,6 +50,11 @@ _: {
         "linux/amd64" = "docker.io/library/redis@sha256:a505f8b9d8ac3ff7b0848055b4abf1901d6d77606774aa1e38bd37f1197ed2b5";
       };
     };
+    "nousresearch/hermes-agent" = {
+      "v2026.6.19" = {
+        "linux/amd64" = "docker.io/nousresearch/hermes-agent@sha256:c8fa0af0ba1fe0a87bb83d435774b3847c1a2ea40327ecc854d63c69ef47a252";
+      };
+    };
     "postgres" = {
       "16-alpine" = {
         "linux/amd64" = "docker.io/postgres@sha256:0fc5c901ec0a3c55ce70b99b040daeb89d5b35b61febbced1b4b24dbc3153ec8";
