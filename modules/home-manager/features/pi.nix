@@ -69,6 +69,7 @@
     packages = map toString piPackages;
     prompts = [promptsDir];
     extensions = ["${piExtensionsDir}"];
+    skills = ["${config.home.homeDirectory}/plugins/cmux/skills" "${config.home.homeDirectory}/plugins/superpowers/skills" "${config.home.homeDirectory}/plugins/andrej-karpathy-skills/skills"];
   });
 in {
   home = {
