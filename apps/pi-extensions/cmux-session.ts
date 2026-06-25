@@ -6,11 +6,345 @@
 // Differences from cmux's generated version:
 //   - Imports from @earendil-works/pi-coding-agent (current package name).
 //   - looksLikePiScript() recognises both old and new package path fragments.
+//   - Rich activity-based notification body (Updated N files, Ran N commands…).
+//   - Live sidebar status pills during each turn (tool name, thinking state).
 
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import type { AgentEndEvent, ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
+import { basename } from "node:path";
+import type {
+  AgentEndEvent,
+  ExtensionAPI,
+  ExtensionContext,
+  ToolResultEvent,
+} from "@earendil-works/pi-coding-agent";
+import {
+  isBashToolResult,
+  isEditToolResult,
+  isFindToolResult,
+  isGrepToolResult,
+  isReadToolResult,
+  isWriteToolResult,
+} from "@earendil-works/pi-coding-agent";
+
+// ─── Run-stats tracking (rich notification body) ──────────────────────────────
+
+interface RunStats {
+  readonly startedAt: number;
+  readonly changedFiles: ReadonlySet<string>;
+  readonly readFiles: ReadonlySet<string>;
+  readonly bashCount: number;
+  readonly searchCount: number;
+  readonly firstError: string | undefined;
+}
+
+function emptyStats(): RunStats {
+  return {
+    startedAt: Date.now(),
+    changedFiles: new Set(),
+    readFiles: new Set(),
+    bashCount: 0,
+    searchCount: 0,
+    firstError: undefined,
+  };
+}
+
+function addToSet<T>(set: ReadonlySet<T>, value: T): ReadonlySet<T> {
+  return new Set([...set, value]);
+}
+
+function eventFilePath(event: ToolResultEvent): string | undefined {
+  const p = event.input["path"];
+  return typeof p === "string" && p.length > 0 ? p : undefined;
+}
+
+function applyToolResult(stats: RunStats, event: ToolResultEvent): RunStats {
+  const p = eventFilePath(event);
+  const firstError =
+    stats.firstError ??
+    (event.isError
+      ? `${event.toolName} failed${p ? ` for ${basename(p)}` : ""}`
+      : undefined);
+  const base = { ...stats, firstError };
+
+  if (isReadToolResult(event)) {
+    return p ? { ...base, readFiles: addToSet(base.readFiles, p) } : base;
+  }
+  if ((isEditToolResult(event) || isWriteToolResult(event)) && !event.isError) {
+    return p ? { ...base, changedFiles: addToSet(base.changedFiles, p) } : base;
+  }
+  if ((isGrepToolResult(event) || isFindToolResult(event)) && !event.isError) {
+    return { ...base, searchCount: base.searchCount + 1 };
+  }
+  if (isBashToolResult(event) && !event.isError) {
+    return { ...base, bashCount: base.bashCount + 1 };
+  }
+  return base;
+}
+
+function plural(n: number, word: string, pluralForm = `${word}s`): string {
+  return `${n} ${n === 1 ? word : pluralForm}`;
+}
+
+function formatDuration(ms: number): string {
+  const s = Math.max(1, Math.round(ms / 1_000));
+  const m = Math.floor(s / 60);
+  const rem = s % 60;
+  if (m === 0) return `${s}s`;
+  return rem === 0 ? `${m}m` : `${m}m ${rem}s`;
+}
+
+const NOTIFY_THRESHOLD_MS = 15_000;
+
+function buildNotificationSummary(stats: RunStats): string {
+  const elapsed = Date.now() - stats.startedAt;
+
+  function withDuration(text: string): string {
+    return elapsed >= NOTIFY_THRESHOLD_MS
+      ? `${text} in ${formatDuration(elapsed)}`
+      : text;
+  }
+
+  if (stats.firstError) {
+    const msg = stats.firstError;
+    return msg.length > 120 ? `${msg.slice(0, 117)}…` : msg;
+  }
+  if (stats.changedFiles.size === 1) {
+    const [f] = stats.changedFiles;
+    return withDuration(`Updated ${basename(f!)}`);
+  }
+  if (stats.changedFiles.size > 1) {
+    return withDuration(`Updated ${plural(stats.changedFiles.size, "file")}`);
+  }
+  if (stats.readFiles.size === 1) {
+    const [f] = stats.readFiles;
+    return withDuration(`Reviewed ${basename(f!)}`);
+  }
+  if (stats.readFiles.size > 1) {
+    return withDuration(`Reviewed ${plural(stats.readFiles.size, "file")}`);
+  }
+  if (stats.searchCount > 0 && stats.bashCount > 0) {
+    return withDuration(
+      `Ran ${plural(stats.searchCount, "search", "searches")} and ${plural(stats.bashCount, "shell command")}`,
+    );
+  }
+  if (stats.searchCount > 0) {
+    return withDuration(
+      stats.searchCount === 1
+        ? "Searched the codebase"
+        : `Ran ${plural(stats.searchCount, "search", "searches")}`,
+    );
+  }
+  if (stats.bashCount > 0) {
+    return withDuration(`Ran ${plural(stats.bashCount, "shell command")}`);
+  }
+  return elapsed >= NOTIFY_THRESHOLD_MS
+    ? `Finished in ${formatDuration(elapsed)}`
+    : "Finished";
+}
+
+// ─── Live sidebar status ──────────────────────────────────────────────────────
+
+// Only show a status pill if the tool/thinking has been running this long.
+// Avoids flickering pills for fast operations.
+const SIDEBAR_THRESHOLD_MS = 1_500;
+const SIDEBAR_EXEC_TIMEOUT_MS = 3_000;
+
+// Random 4-char suffix so multiple pi instances in the same workspace don't
+// overwrite or clear each other's pills.
+const INSTANCE_ID = Math.random().toString(36).slice(2, 6);
+
+interface ActiveTask {
+  readonly key: string;
+  label: string;
+  readonly color: string;
+  readonly startedAt: number;
+  timer: ReturnType<typeof setTimeout> | undefined;
+  visible: boolean;
+}
+
+function formatToolLabel(toolName: string, args: Record<string, unknown>): string {
+  function trunc(s: string, max = 24): string {
+    return s.length > max ? `${s.slice(0, max - 1)}…` : s;
+  }
+  function getPath(): string | undefined {
+    const p = args["path"];
+    return typeof p === "string" && p.length > 0 ? p : undefined;
+  }
+  switch (toolName) {
+    case "bash": {
+      const cmd = typeof args["command"] === "string" ? args["command"].trimStart() : "";
+      return `⚡ ${trunc(cmd)}`;
+    }
+    case "read":  return getPath() ? `📄 ${basename(getPath()!)}` : "📄";
+    case "edit":  return getPath() ? `✏️  ${basename(getPath()!)}` : "✏️";
+    case "write": return getPath() ? `💾 ${basename(getPath()!)}` : "💾";
+    case "grep":
+    case "find": {
+      const pat = args["pattern"] ?? args["regex"] ?? args["glob"] ?? args["path"];
+      return `🔍 ${trunc(typeof pat === "string" ? pat : toolName)}`;
+    }
+    default: return `🔧 ${toolName}`;
+  }
+}
+
+function toolColor(toolName: string): string {
+  switch (toolName) {
+    case "bash":                return "#3b82f6"; // blue
+    case "edit": case "write":  return "#22c55e"; // green
+    case "grep": case "find":   return "#8b5cf6"; // purple
+    default:                    return "#6b7280"; // gray
+  }
+}
+
+function isCdOnly(cmd: string): boolean {
+  const t = cmd.trim();
+  if (/[;&|\n]/.test(t)) return false;
+  return t === "cd" || t.startsWith("cd ");
+}
+
+class CmuxSidebar {
+  private readonly piExec: ExtensionAPI["exec"];
+  private readonly tasks = new Map<string, ActiveTask>();
+  private readonly activeKeys = new Set<string>();
+  private cmuxMissing = false;
+  private thinkingStartedAt: number | undefined;
+
+  private readonly thinkingKey = `pi-think-${INSTANCE_ID}`;
+  private toolKey(id: string): string { return `pi-tool-${INSTANCE_ID}-${id}`; }
+
+  constructor(exec: ExtensionAPI["exec"]) {
+    this.piExec = exec;
+  }
+
+  /** Called on message_start — show a "Generating…" pill after the threshold. */
+  startMessage(): void {
+    this.thinkingStartedAt = Date.now();
+    this.scheduleTask(this.thinkingKey, "💭 Generating…", "#f59e0b");
+  }
+
+  /** Called on message_update thinking_start — upgrade pill label in place. */
+  upgradeToThinking(): void {
+    const task = this.tasks.get(this.thinkingKey);
+    if (!task) return;
+    task.label = "🧠 Thinking…";
+    if (task.visible) {
+      void this.setStatus(this.thinkingKey, "🧠 Thinking…", "#f59e0b");
+    }
+  }
+
+  /** Called on message_end — clear the generating/thinking pill. */
+  stopMessage(): void {
+    const startedAt = this.thinkingStartedAt;
+    this.thinkingStartedAt = undefined;
+    const task = this.tasks.get(this.thinkingKey);
+    if (!task) return;
+    const elapsed = startedAt !== undefined ? Date.now() - startedAt : undefined;
+    const wasVisible = task.visible;
+    this.cancelTask(this.thinkingKey);
+    if (wasVisible && elapsed !== undefined) {
+      void this.log("progress", "llm", `${task.label.replace("…", "")} ${formatDuration(elapsed)}`);
+    }
+  }
+
+  /** Called on tool_execution_start. */
+  startTool(toolCallId: string, toolName: string, args: Record<string, unknown>): void {
+    // Skip trivial cd-only bash invocations — not worth surfacing.
+    if (toolName === "bash") {
+      const cmd = typeof args["command"] === "string" ? args["command"] : "";
+      if (isCdOnly(cmd)) return;
+    }
+    this.scheduleTask(this.toolKey(toolCallId), formatToolLabel(toolName, args), toolColor(toolName));
+  }
+
+  /** Called on tool_execution_end. */
+  stopTool(toolCallId: string, toolName: string): void {
+    const key = this.toolKey(toolCallId);
+    const task = this.tasks.get(key);
+    if (!task) return;
+    const elapsed = Date.now() - task.startedAt;
+    const wasVisible = task.visible;
+    this.cancelTask(key);
+    if (wasVisible) {
+      void this.log("progress", toolName === "bash" ? "bash" : "tool", `${task.label}: ${formatDuration(elapsed)}`);
+    }
+  }
+
+  /** Clear all pills — call on turn_end and agent_end. */
+  clearAll(): void {
+    for (const key of Array.from(this.tasks.keys())) {
+      this.cancelTask(key);
+    }
+    this.thinkingStartedAt = undefined;
+    if (!this.cmuxMissing) {
+      for (const key of this.activeKeys) {
+        void this.clearStatus(key);
+      }
+    }
+    this.activeKeys.clear();
+  }
+
+  markMissing(): void {
+    this.cmuxMissing = true;
+    this.tasks.clear();
+  }
+
+  // ── internals ──
+
+  private scheduleTask(key: string, label: string, color: string): void {
+    this.cancelTask(key);
+    const task: ActiveTask = { key, label, color, startedAt: Date.now(), timer: undefined, visible: false };
+    if (SIDEBAR_THRESHOLD_MS <= 0) {
+      task.visible = true;
+      this.tasks.set(key, task);
+      void this.setStatus(key, label, color);
+    } else {
+      task.timer = setTimeout(() => {
+        task.timer = undefined;
+        task.visible = true;
+        void this.setStatus(key, task.label, color);
+      }, SIDEBAR_THRESHOLD_MS);
+      this.tasks.set(key, task);
+    }
+  }
+
+  private cancelTask(key: string): void {
+    const task = this.tasks.get(key);
+    if (!task) return;
+    if (task.timer !== undefined) clearTimeout(task.timer);
+    this.tasks.delete(key);
+    if (task.visible) void this.clearStatus(key);
+  }
+
+  private async setStatus(key: string, label: string, color: string): Promise<void> {
+    if (this.cmuxMissing || !process.env.CMUX_SURFACE_ID) return;
+    this.activeKeys.add(key);
+    const r = await this.piExec("cmux", ["set-status", key, label, "--color", color], { timeout: SIDEBAR_EXEC_TIMEOUT_MS });
+    this.handleExecResult(r);
+  }
+
+  private async clearStatus(key: string): Promise<void> {
+    if (this.cmuxMissing || !process.env.CMUX_SURFACE_ID) return;
+    const r = await this.piExec("cmux", ["clear-status", key], { timeout: SIDEBAR_EXEC_TIMEOUT_MS });
+    this.handleExecResult(r);
+  }
+
+  private async log(level: "info" | "progress" | "success" | "warning" | "error", source: string, message: string): Promise<void> {
+    if (this.cmuxMissing || !process.env.CMUX_SURFACE_ID) return;
+    const r = await this.piExec("cmux", ["log", "--level", level, "--source", source, "--", message], { timeout: SIDEBAR_EXEC_TIMEOUT_MS });
+    this.handleExecResult(r);
+  }
+
+  private handleExecResult(r: { code: number | null; killed: boolean; stderr: string }): void {
+    if (r.killed) return;
+    if (r.code !== 0 && (r.stderr.includes("not found") || r.stderr.includes("ENOENT"))) {
+      this.markMissing();
+    }
+  }
+}
+
+// ─── cmux session hook plumbing (unchanged from generated version) ─────────────
 
 function firstString(...values: unknown[]): string | null {
   for (const value of values) {
@@ -83,14 +417,10 @@ function hookEnvironment(cwd: string): NodeJS.ProcessEnv {
 
 function eventName(subcommand: string): string {
   switch (subcommand) {
-    case "session-start":
-      return "SessionStart";
-    case "prompt-submit":
-      return "UserPromptSubmit";
-    case "stop":
-      return "Stop";
-    default:
-      return subcommand;
+    case "session-start":  return "SessionStart";
+    case "prompt-submit":  return "UserPromptSubmit";
+    case "stop":           return "Stop";
+    default:               return subcommand;
   }
 }
 
@@ -118,7 +448,11 @@ function lastAssistantMessage(event: AgentEndEvent): string | undefined {
   return undefined;
 }
 
-function sendHook(subcommand: string, ctx: ExtensionContext, extra: Record<string, unknown> = {}): void {
+function sendHook(
+  subcommand: string,
+  ctx: ExtensionContext,
+  extra: Record<string, unknown> = {},
+): void {
   if (process.env.CMUX_PI_HOOKS_DISABLED === "1") return;
   if (!process.env.CMUX_SURFACE_ID) return;
 
@@ -151,7 +485,14 @@ function sendHook(subcommand: string, ctx: ExtensionContext, extra: Record<strin
   } catch (_) {}
 }
 
+// ─── Extension entry point ────────────────────────────────────────────────────
+
 export default function cmuxPiSessionExtension(pi: ExtensionAPI) {
+  let stats: RunStats = emptyStats();
+  const sidebar = new CmuxSidebar(pi.exec.bind(pi));
+
+  // ── Session / prompt lifecycle (cmux hook plumbing) ──
+
   pi.on("session_start", async (_event, ctx) => {
     sendHook("session-start", ctx);
   });
@@ -160,7 +501,66 @@ export default function cmuxPiSessionExtension(pi: ExtensionAPI) {
     sendHook("prompt-submit", ctx, { prompt: event.prompt });
   });
 
+  // ── Per-run state reset ──
+
+  pi.on("agent_start", async () => {
+    stats = emptyStats();
+    sidebar.clearAll();
+  });
+
+  // ── Live sidebar: thinking / generating ──
+
+  pi.on("message_start", async () => {
+    sidebar.startMessage();
+  });
+
+  pi.on("message_update", async (event) => {
+    if (event.assistantMessageEvent.type === "thinking_start") {
+      sidebar.upgradeToThinking();
+    }
+  });
+
+  pi.on("message_end", async () => {
+    sidebar.stopMessage();
+  });
+
+  // ── Live sidebar: tool execution ──
+
+  pi.on("tool_execution_start", async (event) => {
+    sidebar.startTool(
+      event.toolCallId,
+      event.toolName,
+      event.args as Record<string, unknown>,
+    );
+  });
+
+  pi.on("tool_execution_end", async (event) => {
+    sidebar.stopTool(event.toolCallId, event.toolName);
+  });
+
+  // ── Run-stats accumulation (for rich notification body) ──
+
+  pi.on("tool_result", async (event) => {
+    stats = applyToolResult(stats, event);
+  });
+
+  // ── Clear sidebar at turn boundary ──
+
+  pi.on("turn_end", async () => {
+    sidebar.clearAll();
+  });
+
+  // ── Completion: rich notification + session hook ──
+
   pi.on("agent_end", async (event, ctx) => {
-    sendHook("stop", ctx, { last_assistant_message: lastAssistantMessage(event) });
+    sidebar.clearAll();
+
+    // Build activity summary first; fall back to actual last message if we
+    // somehow have no stats (e.g. the run had zero tool calls).
+    const summary = buildNotificationSummary(stats);
+    const fallback = lastAssistantMessage(event);
+    const notificationBody = summary !== "Finished" ? summary : (fallback ?? summary);
+
+    sendHook("stop", ctx, { last_assistant_message: notificationBody });
   });
 }
