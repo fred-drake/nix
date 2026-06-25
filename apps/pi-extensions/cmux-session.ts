@@ -122,6 +122,12 @@ function sendHook(subcommand: string, ctx: ExtensionContext, extra: Record<strin
   if (process.env.CMUX_PI_HOOKS_DISABLED === "1") return;
   if (!process.env.CMUX_SURFACE_ID) return;
 
+  // Workflow subagents use SessionManager.inMemory() which has no session file.
+  // Skipping them here prevents a cmux notification for every agent() step;
+  // the final workflow-result delivery still triggers agent_end on the real
+  // interactive session, so you still get one notification at completion.
+  if (!ctx.sessionManager.getSessionFile()) return;
+
   const sessionId = firstString(ctx.sessionManager.getSessionId());
   if (!sessionId) return;
 
