@@ -704,6 +704,13 @@ in {
 
       skipDangerousModePermissionPrompt = true;
 
+      # Terminal UI renderer. "fullscreen" = flicker-free alt-screen renderer
+      # with virtualized scrollback + mouse support (equivalent to
+      # CLAUDE_CODE_NO_FLICKER=1). Setting this also suppresses the one-time
+      # "Try the new fullscreen renderer?" upsell prompt, which otherwise can't
+      # persist its answer because settings.json is a read-only nix symlink.
+      tui = "fullscreen";
+
       # Push notifications (shown in /config):
       #   inputNeededNotifEnabled -> "Push when actions required"
       #   agentPushNotifEnabled   -> "Push when Claude decides"
