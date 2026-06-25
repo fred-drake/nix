@@ -32,6 +32,9 @@
     (pkgs.callPackage ../../../apps/pi-mcp-adapter.nix {
       pin = import ../../../apps/fetcher/pi-mcp-adapter.nix;
     })
+    (pkgs.callPackage ../../../apps/pi-interactive-subagents.nix {
+      pin = import ../../../apps/fetcher/pi-interactive-subagents.nix;
+    })
   ];
 
   # Directory of prompt templates pi should discover. We reuse the Claude Code
