@@ -50,6 +50,11 @@ _: {
         "linux/amd64" = "docker.io/library/redis@sha256:a505f8b9d8ac3ff7b0848055b4abf1901d6d77606774aa1e38bd37f1197ed2b5";
       };
     };
+    "matrixconduit/matrix-conduit" = {
+      "v0.10.9" = {
+        "linux/amd64" = "docker.io/matrixconduit/matrix-conduit@sha256:849d5c49e4800bc9689dd4549005bf625cd2a9923f272af26a2cf33765be59d8";
+      };
+    };
     "nousresearch/hermes-agent" = {
       "v2026.6.19" = {
         "linux/amd64" = "docker.io/nousresearch/hermes-agent@sha256:c8fa0af0ba1fe0a87bb83d435774b3847c1a2ea40327ecc854d63c69ef47a252";

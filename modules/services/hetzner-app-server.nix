@@ -1,6 +1,10 @@
 # Shared configuration for Hetzner application servers with podman + nginx.
-# Used by ironforge and orgrimmar.
-{containerDiskUUID}: {
+# Used by ironforge, orgrimmar, and undercity.
+#
+# containerDiskUUID is optional: when set, /var/lib/containers is mounted from a
+# dedicated disk (ironforge/orgrimmar); when null, it lives on the root
+# filesystem (undercity, single-disk).
+{containerDiskUUID ? null}: {lib, ...}: {
   imports = [
     ./podman-server.nix
     ./nginx-acme-proxy.nix
@@ -11,9 +15,11 @@
     settings.ListenAddress = "0.0.0.0";
   };
 
-  fileSystems."/var/lib/containers" = {
-    device = "/dev/disk/by-uuid/${containerDiskUUID}";
-    fsType = "ext4";
+  fileSystems = lib.optionalAttrs (containerDiskUUID != null) {
+    "/var/lib/containers" = {
+      device = "/dev/disk/by-uuid/${containerDiskUUID}";
+      fsType = "ext4";
+    };
   };
 
   networking.firewall.allowedTCPPorts = [2222];
