@@ -271,6 +271,13 @@ class CmuxSidebar {
     }
   }
 
+  /** Emit a terminal activity line at agent_end so the sidebar headline shows
+   *  completion instead of the last "🧠 Thinking Xs" / tool progress log, which
+   *  otherwise lingers after the run is done. */
+  async logCompletion(summary: string): Promise<void> {
+    await this.log("success", "done", summary);
+  }
+
   /** Clear all pills — call on turn_end and agent_end. */
   clearAll(): void {
     for (const key of Array.from(this.tasks.keys())) {
@@ -560,6 +567,10 @@ export default function cmuxPiSessionExtension(pi: ExtensionAPI) {
     const summary = buildNotificationSummary(stats);
     const fallback = lastAssistantMessage(event);
     const notificationBody = summary !== "Finished" ? summary : (fallback ?? summary);
+
+    // Supersede the lingering "🧠 Thinking Xs" progress log so the sidebar
+    // headline reflects that the run is done.
+    await sidebar.logCompletion(summary);
 
     sendHook("stop", ctx, { last_assistant_message: notificationBody });
   });
