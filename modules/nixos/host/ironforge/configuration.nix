@@ -1,9 +1,14 @@
-_: {
+{lib, ...}: {
   imports = [
     (import ../../../services/hetzner-app-server.nix {
       containerDiskUUID = "69caea45-e319-47d5-b088-b8155a301e12";
     })
   ];
+
+  # Mount root by UUID rather than /dev/sda1 — this host has a second SCSI disk
+  # (the containers volume) and the boot enumeration order between the two isn't
+  # guaranteed. Device-path root races and can fail to mount; UUID is stable.
+  fileSystems."/".device = lib.mkForce "/dev/disk/by-uuid/ea9796da-dfad-4e71-a015-e7cdc30d62ec";
 
   networking = {
     hostName = "ironforge";
