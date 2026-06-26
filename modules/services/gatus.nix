@@ -10,6 +10,14 @@
   hostPort = 8090; # host-side port nginx proxies to; container listens on 8080
   domain = config.soft-secrets.networking.domain;
 
+  # Matrix alerting. The access token is a secret injected at container runtime
+  # via the gatus-env EnvironmentFile and substituted by gatus's ${VAR} support,
+  # so it never lands in the (world-readable) Nix store. server-url and room ID
+  # are non-secret. The room ID is a room-version-12 hash ID, which carries no
+  # ":server" suffix by spec — do not append the homeserver domain to it.
+  matrixServerUrl = "https://matrix.freddrake.com";
+  matrixRoomId = "!1FQgs4Z9I1m7lO-dDv_ULRYf_nTjvU0SN3v54SOeR7k";
+
   # Endpoints Gatus probes, keyed by the private IP of the host that serves them.
   # stormwind's nameserver is public 8.8.8.8 and can't resolve *.internal, so the
   # container gets static --add-host entries below. Probing by hostname keeps the
@@ -47,6 +55,19 @@
       type = "sqlite";
       path = "/data/data.db";
     };
+    alerting.matrix = {
+      server-url = matrixServerUrl;
+      access-token = "\${MATRIX_ACCESS_TOKEN}";
+      internal-room-id = matrixRoomId;
+      # Applied to every endpoint's `matrix` alert. Three consecutive failures
+      # before alerting (avoids flapping on a single 60s blip), two successes to
+      # resolve, and a recovery message when the endpoint comes back.
+      default-alert = {
+        failure-threshold = 3;
+        success-threshold = 2;
+        send-on-resolved = true;
+      };
+    };
     endpoints =
       lib.mapAttrsToList (name: ip: {
         inherit name;
@@ -57,6 +78,7 @@
           "[CONNECTED] == true"
           "[STATUS] < 500"
         ];
+        alerts = [{type = "matrix";}];
       })
       endpointHosts;
   };
@@ -70,6 +92,18 @@ in
       port = hostPort;
     })
     {
+      sops.secrets = {
+        gatus-env = {
+          sopsFile = config.secrets.host.stormwind.gatus-env;
+          mode = "0400";
+          key = "data";
+          # The container reads this env file only at start, so a token rotation
+          # (new secret content, same path) would otherwise leave the running
+          # container holding the stale token. Restart it when the secret changes.
+          restartUnits = ["podman-gatus.service"];
+        };
+      };
+
       systemd.tmpfiles.rules = [
         "d /var/gatus 0750 root root -"
       ];
@@ -88,6 +122,7 @@ in
             TZ = "America/New_York";
             GATUS_CONFIG_PATH = "/config/config.yaml";
           };
+          environmentFiles = [config.sops.secrets.gatus-env.path];
           extraOptions = addHostOptions;
         };
       };
