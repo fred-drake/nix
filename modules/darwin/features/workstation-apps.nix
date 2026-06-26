@@ -59,6 +59,7 @@ lib.mkMerge [
         "cmux"
         "cursor"
         "daisydisk"
+        "element"
         "finicky"
         "ghostty"
         "godot"
