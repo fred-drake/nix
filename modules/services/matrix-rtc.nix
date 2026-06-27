@@ -67,6 +67,10 @@ in {
     keyFile = config.sops.templates."livekit.keys".path;
     settings = {
       port = 7880;
+      # Egress control channel. Single SFU node; redis only enables egress
+      # dispatch (and is harmless for normal calls). Redis itself is native,
+      # declared in matrix-egress.nix (loopback, no auth).
+      redis.address = "127.0.0.1:6379";
       rtc = {
         port_range_start = 50000;
         port_range_end = 50100;
@@ -74,6 +78,12 @@ in {
         tcp_port = 7881;
       };
     };
+  };
+
+  # SFU must start after redis is up.
+  systemd.services.livekit = {
+    after = ["redis.service"];
+    wants = ["redis.service"];
   };
 
   # Matrix<->LiveKit auth bridge. package default = unstable override (0.4.4).

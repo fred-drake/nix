@@ -169,3 +169,8 @@ repository = "docker.io"
 name = "nousresearch/hermes-agent"
 tag = "v2026.6.19"
 architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "livekit/egress"
+tag = "v1.13.0"
+architectures = ["linux/amd64"]
