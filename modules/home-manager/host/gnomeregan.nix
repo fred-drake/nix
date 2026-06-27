@@ -41,40 +41,5 @@ in {
       };
       Install.WantedBy = ["timers.target"];
     };
-
-    services.archive-email = {
-      Unit = {
-        Description = "Archive obvious email via claude + google-workspace MCP";
-        After = ["network-online.target"];
-        Wants = ["network-online.target"];
-      };
-      Service = {
-        Type = "oneshot";
-        WorkingDirectory = pkmDir;
-        Environment = "PATH=${jobPath}";
-        ExecStart = pkgs.writeShellScript "archive-email" ''
-          set -euo pipefail
-          mkdir -p ${logDir}
-          cd ${pkmDir}
-          exec timeout 1200 claude \
-            --model sonnet \
-            --verbose \
-            --output-format stream-json \
-            --mcp-config "${home}/mcp/google-workspace.json" \
-            -p /archive-obvious
-        '';
-        StandardOutput = "append:${logDir}/archive-email.log";
-        StandardError = "append:${logDir}/archive-email.err";
-      };
-    };
-
-    timers.archive-email = {
-      Unit.Description = "Hourly timer for archive-email";
-      Timer = {
-        OnCalendar = "hourly";
-        Persistent = true;
-      };
-      Install.WantedBy = ["timers.target"];
-    };
   };
 }
