@@ -58,7 +58,7 @@
     HandleLidSwitchDocked = "ignore";
   };
 
-  networking.firewall.allowedTCPPorts = [8084];
+  networking.firewall.allowedTCPPorts = [80 443 8084];
 
   users.users.fdrake = {
     isNormalUser = true;

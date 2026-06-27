@@ -12,7 +12,6 @@
 
   security.acme = {
     acceptTerms = true;
-    preliminarySelfsigned = false;
     defaults = {
       inherit (config.soft-secrets.acme) email;
       dnsProvider = "cloudflare";

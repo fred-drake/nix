@@ -1,6 +1,14 @@
 {config, ...}: let
   glanceConfig = import ./glance-config.nix;
+  mkNginxProxy = import ../../lib/mk-nginx-proxy.nix {inherit config;};
 in {
+  imports = [
+    ./nginx-acme-proxy.nix
+    (mkNginxProxy {
+      host = "glance";
+      port = 8084;
+    })
+  ];
   sops.secrets.glance-env = {
     sopsFile = config.secrets.host.glance;
     mode = "0400";
