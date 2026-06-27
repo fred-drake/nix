@@ -101,6 +101,9 @@ in
           sopsFile = config.secrets.host.orgrimmar.hermes-env;
           mode = "0400";
           key = "data";
+          # The container only reads the env file at start, so a rotated
+          # MATRIX_PASSWORD (etc.) is stranded unless we restart it on change.
+          restartUnits = ["podman-hermes.service"];
         };
         # ed25519 private key for the gitea vault repo. Read only by the
         # (hermes-owned) sync service — never mounted into the agent container.

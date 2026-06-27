@@ -13,10 +13,11 @@
   # Matrix alerting. The access token is a secret injected at container runtime
   # via the gatus-env EnvironmentFile and substituted by gatus's ${VAR} support,
   # so it never lands in the (world-readable) Nix store. server-url and room ID
-  # are non-secret. The room ID is a room-version-12 hash ID, which carries no
-  # ":server" suffix by spec — do not append the homeserver domain to it.
+  # are non-secret. This room was created on the Synapse homeserver (Conduit ->
+  # Synapse migration, 2026-06-26) by @gatus with @fred invited; it is a standard
+  # room ID with the ":server" suffix.
   matrixServerUrl = "https://matrix.freddrake.com";
-  matrixRoomId = "!1FQgs4Z9I1m7lO-dDv_ULRYf_nTjvU0SN3v54SOeR7k";
+  matrixRoomId = "!KlxRPXzcJUVKJUQIGz:matrix.freddrake.com";
 
   # Endpoints Gatus probes, keyed by the private IP of the host that serves them.
   # stormwind's nameserver is public 8.8.8.8 and can't resolve *.internal, so the

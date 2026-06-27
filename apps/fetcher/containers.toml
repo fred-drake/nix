@@ -169,11 +169,3 @@ repository = "docker.io"
 name = "nousresearch/hermes-agent"
 tag = "v2026.6.19"
 architectures = ["linux/amd64"]
-# Matrix Conduit homeserver (orgrimmar). Pinned to a stable release tag, not
-# `next` (which is a 0.11 alpha). Digest moves only on an explicit
-# `just update-container-digests` after bumping the tag here.
-[[containers]]
-repository = "docker.io"
-name = "matrixconduit/matrix-conduit"
-tag = "v0.10.9"
-architectures = ["linux/amd64"]

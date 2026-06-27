@@ -58,7 +58,7 @@ in {
   "undercity" = {
     imports = [
       self.colmena._undercity
-      ../../modules/services/matrix-conduit.nix
+      ../../modules/services/matrix-synapse.nix
     ];
 
     _module.args = {
