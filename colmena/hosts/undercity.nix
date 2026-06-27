@@ -75,7 +75,7 @@ in {
       self.colmena._undercity
       ../../modules/services/matrix-synapse.nix
       ../../modules/services/matrix-rtc.nix
-      ../../modules/services/matrix-egress.nix   # Phase 3: LiveKit Egress
+      ../../modules/services/matrix-egress.nix # Phase 3: LiveKit Egress
     ];
 
     _module.args = {

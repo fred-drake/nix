@@ -58,24 +58,58 @@ in {
     };
   };
 
-  # LiveKit SFU. package default resolves to the unstable override (1.13.1).
-  services.livekit = {
-    enable = true;
-    # NOT openFirewall: it opens settings.port (7880, must stay private) and the
-    # UDP range, but never the TCP fallback. We open 7881 + UDP by hand above.
-    openFirewall = false;
-    keyFile = config.sops.templates."livekit.keys".path;
-    settings = {
-      port = 7880;
-      # Egress control channel. Single SFU node; redis only enables egress
-      # dispatch (and is harmless for normal calls). Redis itself is native,
-      # declared in matrix-egress.nix (loopback, no auth).
-      redis.address = "127.0.0.1:6379";
-      rtc = {
-        port_range_start = 50000;
-        port_range_end = 50100;
-        use_external_ip = true;
-        tcp_port = 7881;
+  services = {
+    # LiveKit SFU. package default resolves to the unstable override (1.13.1).
+    livekit = {
+      enable = true;
+      # NOT openFirewall: it opens settings.port (7880, must stay private) and the
+      # UDP range, but never the TCP fallback. We open 7881 + UDP by hand above.
+      openFirewall = false;
+      keyFile = config.sops.templates."livekit.keys".path;
+      settings = {
+        port = 7880;
+        # Egress control channel. Single SFU node; redis only enables egress
+        # dispatch (and is harmless for normal calls). Redis itself is native,
+        # declared in matrix-egress.nix (loopback, no auth).
+        redis.address = "127.0.0.1:6379";
+        rtc = {
+          port_range_start = 50000;
+          port_range_end = 50100;
+          use_external_ip = true;
+          tcp_port = 7881;
+        };
+      };
+    };
+
+    # Matrix<->LiveKit auth bridge. package default = unstable override (0.4.4).
+    lk-jwt-service = {
+      enable = true;
+      port = 8080;
+      livekitUrl = "wss://${rtcHost}/livekit/sfu";
+      keyFile = config.sops.templates."livekit.keys".path;
+    };
+
+    # Dedicated vhost. ACME DNS-01 (Cloudflare) is inherited from the
+    # security.acme defaults set in nginx-acme-proxy.nix — no per-cert plumbing.
+    nginx.virtualHosts.${rtcHost} = {
+      useACMEHost = rtcHost;
+      forceSSL = true;
+      locations = {
+        # LiveKit client connects to <livekitUrl>/rtc; trailing slashes strip the
+        # /livekit/sfu prefix so the SFU sees /rtc on its loopback port.
+        "/livekit/sfu/" = {
+          proxyPass = "http://127.0.0.1:7880/";
+          proxyWebsockets = true;
+        };
+        # Client POSTs to <livekit_service_url>/sfu/get; strip /livekit/jwt so
+        # lk-jwt sees /sfu/get. lk-jwt-service sets its OWN CORS headers (including
+        # the OPTIONS preflight), so nginx must NOT add them — a duplicated
+        # `Access-Control-Allow-Origin` makes browsers reject the response, which
+        # surfaces in Element Call as a misleading OPEN_ID_ERROR (the /sfu/get 200
+        # is logged server-side but the browser can't read the body). Just proxy.
+        "/livekit/jwt/" = {
+          proxyPass = "http://127.0.0.1:8080/";
+        };
       };
     };
   };
@@ -86,39 +120,9 @@ in {
     wants = ["redis.service"];
   };
 
-  # Matrix<->LiveKit auth bridge. package default = unstable override (0.4.4).
-  services.lk-jwt-service = {
-    enable = true;
-    port = 8080;
-    livekitUrl = "wss://${rtcHost}/livekit/sfu";
-    keyFile = config.sops.templates."livekit.keys".path;
-  };
   # The 25.05 module sets LIVEKIT_URL/JWT_PORT/KEY_FILE but not the homeserver
   # allowlist; append it so we restrict to our server rather than the default "*".
   systemd.services.lk-jwt-service.environment.LIVEKIT_FULL_ACCESS_HOMESERVERS = "matrix.freddrake.com";
 
-  # Dedicated vhost. ACME DNS-01 (Cloudflare) is inherited from the
-  # security.acme defaults set in nginx-acme-proxy.nix — no per-cert plumbing.
   security.acme.certs.${rtcHost} = {};
-  services.nginx.virtualHosts.${rtcHost} = {
-    useACMEHost = rtcHost;
-    forceSSL = true;
-    locations = {
-      # LiveKit client connects to <livekitUrl>/rtc; trailing slashes strip the
-      # /livekit/sfu prefix so the SFU sees /rtc on its loopback port.
-      "/livekit/sfu/" = {
-        proxyPass = "http://127.0.0.1:7880/";
-        proxyWebsockets = true;
-      };
-      # Client POSTs to <livekit_service_url>/sfu/get; strip /livekit/jwt so
-      # lk-jwt sees /sfu/get. lk-jwt-service sets its OWN CORS headers (including
-      # the OPTIONS preflight), so nginx must NOT add them — a duplicated
-      # `Access-Control-Allow-Origin` makes browsers reject the response, which
-      # surfaces in Element Call as a misleading OPEN_ID_ERROR (the /sfu/get 200
-      # is logged server-side but the browser can't read the body). Just proxy.
-      "/livekit/jwt/" = {
-        proxyPass = "http://127.0.0.1:8080/";
-      };
-    };
-  };
 }
