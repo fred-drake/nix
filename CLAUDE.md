@@ -163,6 +163,15 @@ example:
 
 MCP servers are configured via SOPS templates in `modules/home-manager/features/claude-code.nix`. Each server gets its own JSON file in `~/mcp/` with secrets injected at activation time.
 
+## Git and Nix File Visibility
+
+**IMPORTANT:** Nix flakes only see files that have been added to git. Any new file
+created in this repository must be staged with `git add <file>` before Nix can
+reference it in configuration. Until a file is staged, Nix will error with
+`path '...' does not exist` even if the file is present on disk.
+
+After creating any new file: `git add <file>`
+
 ## Build Commands
 
 **IMPORTANT:** Do NOT use `sudo` with `just` commands — they handle `sudo` internally.
