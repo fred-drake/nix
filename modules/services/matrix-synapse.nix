@@ -167,6 +167,25 @@ in {
         enabled = true;
         complexity = 0.5;
       };
+      # MatrixRTC / Element Call (Phase 2). msc3266 (room summary) and msc4222
+      # (sync state-after) are what the Element Call widget negotiates over;
+      # delayed events (call hangup/timeout) need a generous max duration; and
+      # group-call signaling fires many rapid state events, so the message and
+      # delayed-event-management rate limits are relaxed to avoid throttling.
+      # The LiveKit SFU itself lives in matrix-rtc.nix.
+      experimental_features = {
+        msc3266_enabled = true;
+        msc4222_enabled = true;
+      };
+      max_event_delay_duration = "24h";
+      rc_message = {
+        per_second = 0.5;
+        burst_count = 30;
+      };
+      rc_delayed_event_mgmt = {
+        per_second = 1.0;
+        burst_count = 20;
+      };
     };
   };
 
@@ -235,12 +254,14 @@ in {
         extraConfig = "client_max_body_size 50M;";
       };
       # Client autodiscovery — Element resolves the homeserver from the user's
-      # server name.
+      # server name. The rtc_foci array advertises the MatrixRTC focus
+      # (lk-jwt-service behind matrix-rtc.freddrake.com; see matrix-rtc.nix) so
+      # Element Call knows where to fetch LiveKit JWTs.
       "= /.well-known/matrix/client" = {
         extraConfig = ''
           default_type application/json;
           add_header Access-Control-Allow-Origin *;
-          return 200 '{"m.homeserver":{"base_url":"${baseUrl}"}}';
+          return 200 '{"m.homeserver":{"base_url":"${baseUrl}"},"org.matrix.msc4143.rtc_foci":[{"type":"livekit","livekit_service_url":"https://matrix-rtc.freddrake.com/livekit/jwt"}]}';
         '';
       };
       # Federation discovery — points remote servers at the 8448 endpoint.

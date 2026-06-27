@@ -1,6 +1,7 @@
 {
   self,
   nixpkgs-stable,
+  nixpkgs-unstable,
   secrets,
   sops-nix,
   nixosOptionsModule,
@@ -15,7 +16,21 @@ in {
   _undercity = {
     nixpkgs = {
       system = "x86_64-linux";
-      overlays = [];
+      # Phase 2 (MatrixRTC): stable 25.05 ships livekit 1.8.4 / lk-jwt-service
+      # 0.3.0 — too old for current Element clients (the
+      # MISSING_MATRIX_RTC_TRANSPORT skew). Pull just these two binaries from
+      # nixpkgs-unstable (1.13.1 / 0.4.4) so the native services.livekit /
+      # services.lk-jwt-service config stays on stable while the binaries stay
+      # contemporary. Same trick as woodpecker-agent in overlays/default.nix.
+      overlays = [
+        (_final: prev: {
+          inherit
+            (nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system})
+            livekit
+            lk-jwt-service
+            ;
+        })
+      ];
     };
     imports =
       [
@@ -59,6 +74,7 @@ in {
     imports = [
       self.colmena._undercity
       ../../modules/services/matrix-synapse.nix
+      ../../modules/services/matrix-rtc.nix
     ];
 
     _module.args = {
