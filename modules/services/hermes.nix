@@ -155,6 +155,7 @@ in
           # interactive `hermes` CLI, which exits immediately on a non-TTY stdin
           # ("Input is not a terminal. Goodbye!") and the container flaps.
           cmd = ["gateway" "run"];
+          user = "${toString hermesUid}:${toString hermesGid}";
           # All state (config.yaml, memory, skills, sessions) lives under
           # /opt/data; the vault is bind-mounted in for the Obsidian skill.
           volumes = [
