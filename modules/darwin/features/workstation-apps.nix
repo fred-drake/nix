@@ -57,6 +57,7 @@ lib.mkMerge [
         "bruno"
         "claude"
         "cmux"
+        "codex"
         "cursor"
         "daisydisk"
         "element"
