@@ -177,8 +177,8 @@ After creating any new file: `git add <file>`
 **IMPORTANT:** Do NOT use `sudo` with `just` commands — they handle `sudo` internally.
 
 ```bash
-# Rebuild NixOS system
-just switch
+# Rebuild NixOS system (always pipe through tail to avoid token waste)
+just switch 2>&1 | tail -20
 
 # Build NixOS system only
 just build
