@@ -41,6 +41,12 @@
     (pkgs.callPackage ../../../apps/pi-hypa.nix {
       pin = import ../../../apps/fetcher/pi-hypa.nix;
     })
+    (pkgs.callPackage ../../../apps/pi-context-mode.nix {
+      pin = import ../../../apps/fetcher/pi-context-mode.nix;
+    })
+    (pkgs.callPackage ../../../apps/pi-ask-user-question.nix {
+      pin = import ../../../apps/fetcher/pi-ask-user-question.nix;
+    })
   ];
 
   # Directory of prompt templates pi should discover. We reuse the Claude Code
