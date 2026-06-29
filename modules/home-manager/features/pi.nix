@@ -53,6 +53,9 @@
     (pkgs.callPackage ../../../apps/pi-simplify.nix {
       pin = import ../../../apps/fetcher/pi-simplify.nix;
     })
+    (pkgs.callPackage ../../../apps/pi-goal-x.nix {
+      pin = import ../../../apps/fetcher/pi-goal-x.nix;
+    })
   ];
 
   # Directory of prompt templates pi should discover. We reuse the Claude Code
