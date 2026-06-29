@@ -35,6 +35,9 @@
     (pkgs.callPackage ../../../apps/pi-interactive-subagents.nix {
       pin = import ../../../apps/fetcher/pi-interactive-subagents.nix;
     })
+    (pkgs.callPackage ../../../apps/pi-lsp.nix {
+      pin = import ../../../apps/fetcher/pi-lsp.nix;
+    })
   ];
 
   # Directory of prompt templates pi should discover. We reuse the Claude Code
@@ -78,28 +81,83 @@ in {
   home = {
     packages = [pi-coding-agent];
 
-    file.".pi/agent/settings.json".source = settingsJson;
+    file = {
+      ".pi/agent/settings.json".source = settingsJson;
 
-    # cmux session-hook extension: bridges Pi lifecycle events (session_start,
-    # before_agent_start, agent_end) into cmux's restorable session store so
-    # cmux can show running/idle state, send notifications, and resume Pi
-    # sessions after an app relaunch.
-    #
-    # The extension lives in apps/pi-extensions/cmux-session.ts which is
-    # already discovered via the `extensions` key in settings.json above.
-    # We ALSO create a symlink at the canonical cmux location
-    # (~/.pi/agent/extensions/cmux-session.ts) pointing to the *same*
-    # Nix-store path.  Pi's discoverAndLoadExtensions() deduplicates by
-    # resolved path (Set<string>), so the extension is loaded exactly once
-    # even though two discovery paths both point to it.  The symlink also
-    # prevents `cmux hooks pi install` from silently replacing our managed
-    # version with a stale copy (it would overwrite the symlink with a
-    # different path, causing a duplicate; running `just switch` restores it).
-    #
-    # Darwin-only because cmux is a macOS app. The extension itself is safe
-    # elsewhere (it short-circuits when CMUX_SURFACE_ID is unset).
-    file.".pi/agent/extensions/cmux-session.ts" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-      source = "${piExtensionsDir}/cmux-session.ts";
+      # LSP server configuration for pi-lsp. Global config is trusted automatically.
+      # Project-local .pi/lsp.json entries can override or disable these per-project.
+      ".pi/agent/lsp.json".text = builtins.toJSON {
+        version = 1;
+        servers = [
+          {
+            id = "gopls";
+            enabled = true;
+            include = ["**/*.go"];
+            rootMarkers = ["go.mod" ".git"];
+            bin = "gopls";
+            args = [];
+            cwd = "{root}";
+            languageIdByExtension = {".go" = "go";};
+            startupTimeoutMs = 45000;
+            diagnosticsWaitMs = 1500;
+            initializationOptions = {};
+            settings = {};
+          }
+          {
+            id = "rust-analyzer";
+            enabled = true;
+            include = ["**/*.rs"];
+            rootMarkers = ["Cargo.toml" ".git"];
+            bin = "rust-analyzer";
+            args = [];
+            cwd = "{root}";
+            languageIdByExtension = {".rs" = "rust";};
+            startupTimeoutMs = 45000;
+            diagnosticsWaitMs = 2000;
+            initializationOptions = {};
+            settings = {};
+          }
+          {
+            id = "sourcekit-lsp";
+            enabled = true;
+            include = ["**/*.swift"];
+            rootMarkers = ["Package.swift" ".git"];
+            # Use the macOS shim — delegates to the active Xcode toolchain
+            # (Swift 6.3+). Do NOT use a bare name; the nixpkgs 5.10.1 binary
+            # would shadow it via PATH and break Swift 6 diagnostics.
+            bin = "/usr/bin/sourcekit-lsp";
+            args = [];
+            cwd = "{root}";
+            languageIdByExtension = {".swift" = "swift";};
+            startupTimeoutMs = 60000;
+            diagnosticsWaitMs = 2000;
+            initializationOptions = {};
+            settings = {};
+          }
+        ];
+      };
+
+      # cmux session-hook extension: bridges Pi lifecycle events (session_start,
+      # before_agent_start, agent_end) into cmux's restorable session store so
+      # cmux can show running/idle state, send notifications, and resume Pi
+      # sessions after an app relaunch.
+      #
+      # The extension lives in apps/pi-extensions/cmux-session.ts which is
+      # already discovered via the `extensions` key in settings.json above.
+      # We ALSO create a symlink at the canonical cmux location
+      # (~/.pi/agent/extensions/cmux-session.ts) pointing to the *same*
+      # Nix-store path.  Pi's discoverAndLoadExtensions() deduplicates by
+      # resolved path (Set<string>), so the extension is loaded exactly once
+      # even though two discovery paths both point to it.  The symlink also
+      # prevents `cmux hooks pi install` from silently replacing our managed
+      # version with a stale copy (it would overwrite the symlink with a
+      # different path, causing a duplicate; running `just switch` restores it).
+      #
+      # Darwin-only because cmux is a macOS app. The extension itself is safe
+      # elsewhere (it short-circuits when CMUX_SURFACE_ID is unset).
+      ".pi/agent/extensions/cmux-session.ts" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+        source = "${piExtensionsDir}/cmux-session.ts";
+      };
     };
 
     # Transcode each shared dynamic-workflow .js into a pi saved-workflow .json

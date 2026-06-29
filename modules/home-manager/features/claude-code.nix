@@ -86,6 +86,11 @@ in {
     pkgs.gopls # Go
     pkgs.rust-analyzer # Rust
     pkgs.jdt-language-server # Java
+    # NOTE: sourcekit-lsp is intentionally NOT installed from nixpkgs.
+    # The nixpkgs version (5.10.1) is too old for Swift 6.x projects.
+    # /usr/bin/sourcekit-lsp is a macOS shim that delegates to the active
+    # Xcode toolchain (Swift 6.3+). Both pi-lsp and Claude Code reference
+    # it by absolute path so Nix PATH ordering cannot shadow it.
   ];
 
   # SOPS templates for MCP configuration
