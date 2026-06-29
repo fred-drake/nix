@@ -47,6 +47,12 @@
     (pkgs.callPackage ../../../apps/pi-ask-user-question.nix {
       pin = import ../../../apps/fetcher/pi-ask-user-question.nix;
     })
+    (pkgs.callPackage ../../../apps/pi-rpiv-todo.nix {
+      pin = import ../../../apps/fetcher/pi-rpiv-todo.nix;
+    })
+    (pkgs.callPackage ../../../apps/pi-simplify.nix {
+      pin = import ../../../apps/fetcher/pi-simplify.nix;
+    })
   ];
 
   # Directory of prompt templates pi should discover. We reuse the Claude Code
