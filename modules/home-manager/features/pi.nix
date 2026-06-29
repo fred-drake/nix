@@ -38,6 +38,9 @@
     (pkgs.callPackage ../../../apps/pi-lsp.nix {
       pin = import ../../../apps/fetcher/pi-lsp.nix;
     })
+    (pkgs.callPackage ../../../apps/pi-hypa.nix {
+      pin = import ../../../apps/fetcher/pi-hypa.nix;
+    })
   ];
 
   # Directory of prompt templates pi should discover. We reuse the Claude Code
@@ -79,7 +82,12 @@
   });
 in {
   home = {
-    packages = [pi-coding-agent];
+    packages = [
+      pi-coding-agent
+      (pkgs.callPackage ../../../apps/hypa.nix {
+        pin = import ../../../apps/fetcher/hypa.nix;
+      })
+    ];
 
     file = {
       ".pi/agent/settings.json".source = settingsJson;
