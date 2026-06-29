@@ -54,6 +54,7 @@ lib.mkMerge [
         "nikitabobko/tap/aerospace"
         "balenaetcher"
         "bitwarden"
+        "blackhole-2ch"
         "bruno"
         "claude"
         "cmux"
