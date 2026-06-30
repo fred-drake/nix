@@ -160,6 +160,7 @@ in {
       llart = "eza -lar --sort newest";
       known-hosts-clear = "ssh-keygen -R";
       fish-reload = "exec fish";
+      model-ornith-1-0-35b-8bit = "uvx --from mlx-vlm mlx_vlm.server --model mlx-community/Ornith-1.0-35B-8bit --port 8080";
     };
   };
 }
