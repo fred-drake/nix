@@ -4,9 +4,9 @@
 # ../pi-dynamic-workflows.nix. Do not edit by hand; run the updater.
 {
   workflows = {
-    version = "2.8.0";
-    url = "https://registry.npmjs.org/@quintinshaw/pi-dynamic-workflows/-/pi-dynamic-workflows-2.8.0.tgz";
-    hash = "sha256-uBSN48ZZ83c5O8wDbHUB1JQAiaDOD5yJaXih17IdCUg=";
+    version = "2.9.0";
+    url = "https://registry.npmjs.org/@quintinshaw/pi-dynamic-workflows/-/pi-dynamic-workflows-2.9.0.tgz";
+    hash = "sha256-MTcFTPq4dSLSs8WQrzfRAi1irnPiM9oIwBRG1dWuPx4=";
   };
   acorn = {
     version = "8.17.0";
