@@ -32,9 +32,6 @@
     (pkgs.callPackage ../../../apps/pi-mcp-adapter.nix {
       pin = import ../../../apps/fetcher/pi-mcp-adapter.nix;
     })
-    (pkgs.callPackage ../../../apps/pi-interactive-subagents.nix {
-      pin = import ../../../apps/fetcher/pi-interactive-subagents.nix;
-    })
     (pkgs.callPackage ../../../apps/pi-lsp.nix {
       pin = import ../../../apps/fetcher/pi-lsp.nix;
     })
@@ -185,6 +182,15 @@ in {
       #
       # Darwin-only because cmux is a macOS app. The extension itself is safe
       # elsewhere (it short-circuits when CMUX_SURFACE_ID is unset).
+      # cmux-pi-subagent skill: spawns a visible cmux pane, drives a pi RPC
+      # subagent inside it, collects the answer, and closes the pane. Placed
+      # in ~/.pi/agent/skills/ which pi auto-discovers at startup (no
+      # settings.json change needed). Darwin-only because it requires cmux.
+      ".pi/agent/skills/cmux-pi-subagent" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
+        source = ../../../apps/pi-skills/cmux-pi-subagent;
+        recursive = true;
+      };
+
       ".pi/agent/extensions/cmux-session.ts" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
         source = "${piExtensionsDir}/cmux-session.ts";
       };
