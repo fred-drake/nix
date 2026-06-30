@@ -11,8 +11,8 @@ NIX_FILE="$SCRIPT_DIR/pi-dynamic-workflows.nix"
 
 prefetch() { # name -> prints "version url hash"
   local pkg="$1" version url hash
-  version=$(npm view "$pkg" version)
-  url=$(npm view "$pkg" dist.tarball)
+  version=$(npm view "$pkg" version --json | jq -r 'if type=="array" then last else . end')
+  url=$(npm view "$pkg" dist.tarball --json | jq -r 'if type=="array" then last else . end')
   hash=$(nix store prefetch-file --json "$url" | jq -r '.hash')
   echo "$version" "$url" "$hash"
 }
