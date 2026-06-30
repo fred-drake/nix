@@ -97,6 +97,13 @@
   });
 in {
   home = {
+    sessionVariables = {
+      # Switch pi-hypa from additive mode (adds hypa_* tools alongside the
+      # built-ins) to replace mode (hypa_* tools replace bash/read/grep/find/ls
+      # so verbose output never reaches the context window).
+      HYPA_PI_MODE = "replace";
+    };
+
     packages = [
       pi-coding-agent
       (pkgs.callPackage ../../../apps/hypa.nix {
@@ -182,6 +189,15 @@ in {
         source = "${piExtensionsDir}/cmux-session.ts";
       };
     };
+
+    # On macOS, GUI apps (cmux → pi) inherit the launchd per-user environment,
+    # not the shell profile. Push HYPA_PI_MODE into launchd so pi-hypa's
+    # replace mode is active regardless of how pi is launched.
+    activation.hypaLaunchdEnv =
+      lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
+      (lib.hm.dag.entryAfter ["writeBoundary"] ''
+        $DRY_RUN_CMD /bin/launchctl setenv HYPA_PI_MODE replace
+      '');
 
     # Transcode each shared dynamic-workflow .js into a pi saved-workflow .json
     # at the user level so /commit-and-push (etc.) is available in every project.
