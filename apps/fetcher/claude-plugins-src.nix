@@ -3,8 +3,8 @@
 ####################################
 {pkgs, ...}: {
   claude-plugins-official-src = builtins.fetchTarball {
-    url = "https://github.com/anthropics/claude-plugins-official/archive/720ba8d2a36dd64ccff3ed2a1f98712587d97362.tar.gz";
-    sha256 = "0p2v1rg9r6vlcansiciik92b6rjyfgzby2rspkba5a4dlp6h3sc8";
+    url = "https://github.com/anthropics/claude-plugins-official/archive/e8a08808eb114c3972030c3090a468798fad13a8.tar.gz";
+    sha256 = "1ixz638nv0dlpyy70by0sslxraa89ka6hq59glw4mm2cqdr8yrkg";
   };
   cc-marketplace-src = pkgs.fetchFromGitHub {
     owner = "samber";
@@ -21,14 +21,14 @@
   superpowers-src = pkgs.fetchFromGitHub {
     owner = "obra";
     repo = "superpowers";
-    rev = "896224c4b1879920ab573417e68fd51d2ccc9072";
-    hash = "sha256-+lT2a/qq0SF4k0PgnEDKiuidVlZX2p0vEso4d/5T1os=";
+    rev = "f268f7c953744036f0fa7e9d4b73535c04e57cb8";
+    hash = "sha256-gvFbbT6uTPSvpFZdPvOiddZxs6amBdL/vm2qp97Dej4=";
   };
   cmux-src = pkgs.fetchFromGitHub {
     owner = "manaflow-ai";
     repo = "cmux";
-    rev = "96221935ca6fe8cf852d764203073b6ce15002b7";
-    hash = "sha256-RWQIfAmwQZwH7BHYXQxy8/D6K6amUFrX0ThVAGFItfo=";
+    rev = "bfa371d4cc38c4230c6f8774170659b3a1689081";
+    hash = "sha256-h1tBXL7ble7eN8lMYuKJXkEg9HiZY/j70banpYVQ+aE=";
   };
   karpathy-skills-src = pkgs.fetchFromGitHub {
     owner = "multica-ai";
@@ -39,8 +39,8 @@
   anthropic-skills-src = pkgs.fetchFromGitHub {
     owner = "anthropics";
     repo = "skills";
-    rev = "57546260929473d4e0d1c1bb75297be2fdfa1949";
-    hash = "sha256-1D9otXxDvmKASBu/vtAEWv6kE+U+jG4OxZpRLZbGEF0=";
+    rev = "35414756ca55738e050562e272a6bbc6273aa926";
+    hash = "sha256-7JB/zj2rBFdvbbFuGIFDXnm1TN26E67fRO1deQvzs34=";
   };
   vercel-agent-skills-src = pkgs.fetchFromGitHub {
     owner = "vercel-labs";
@@ -51,8 +51,8 @@
   trailofbits-skills-src = pkgs.fetchFromGitHub {
     owner = "trailofbits";
     repo = "skills";
-    rev = "ff4162dcb9cec5b7abe5ab039c868544b325275d";
-    hash = "sha256-zzMfJ6+xtoXNi54Z1ef7CqlauKdptaenjrnIe8vAB+Q=";
+    rev = "cfe5d7b1619e47fb5b38b7e2561dad7e5f1e89af";
+    hash = "sha256-hOA3v+QFGJLkw7OVPSzjtCZXS7zU792AfqGNdSNgsgA=";
   };
   remotion-skills-src = pkgs.fetchFromGitHub {
     owner = "remotion-dev";
