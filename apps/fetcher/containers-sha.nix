@@ -5,7 +5,7 @@ _: {
   "docker.gitea.com" = {
     "act_runner" = {
       "latest" = {
-        "linux/amd64" = "docker.gitea.com/act_runner@sha256:3ec487309b4a97a31cd127a67689eb05eceb6ec1fa70aa902f7e9997f8c67e3a";
+        "linux/amd64" = "docker.gitea.com/act_runner@sha256:a94b10f0fd46901acefde0bfe2fbc155379c9083e3e8548062480ac6055f4918";
       };
     };
     "gitea" = {
@@ -17,7 +17,7 @@ _: {
   "docker.io" = {
     "amruthpillai/reactive-resume" = {
       "latest" = {
-        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:2a6194913378936e48a8566648102238066c00b9220fbd29dd8071043e4ace37";
+        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:15f15310f5bffe668d5763a7c7d7c9fbe806c7c12da0a4e32e7ce49508b1275c";
       };
     };
     "apache/tika" = {
@@ -37,7 +37,7 @@ _: {
     };
     "filebrowser/filebrowser" = {
       "latest" = {
-        "linux/amd64" = "docker.io/filebrowser/filebrowser@sha256:c36514f0a88eff6476d6f3711cebbb1df3e56daed797150f8e1fc3307cb7cb95";
+        "linux/amd64" = "docker.io/filebrowser/filebrowser@sha256:b9c98ccbba907a721929d6ffc9bbad99dd5b0ce135c13236db267a03b1e3eb9a";
       };
     };
     "gotenberg/gotenberg" = {
@@ -100,12 +100,12 @@ _: {
     };
     "linuxserver/calibre-web" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:c2b9bafa3aa1907af5b4a1a5780fc0d646cbaad959c39c316906874ea062b512";
+        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:44c9db53149f0eb02ccd56ce1417ea0a40bc3c9391b291f179265112e21acff0";
       };
     };
     "linuxserver/jellyfin" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:b10495832a5ea1dfb63175bbf35f3aa5188114e6f29812bc6c0b0c91d064598a";
+        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:7932a243b656501214323642d1a5bf9603c78ca973dfbfc73c52288a83535864";
       };
     };
     "linuxserver/lidarr" = {
@@ -120,7 +120,7 @@ _: {
     };
     "linuxserver/radarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:1262d65abee84e3f3dcda9b8c2f263387e70ff0bc5d1572f6cd6dd4b91cabea0";
+        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:4b31df0a031b00cc8c4b55cc500beb41b1eed3d29cb4eb15f54c75695a6b41d3";
       };
     };
     "linuxserver/sabnzbd" = {
