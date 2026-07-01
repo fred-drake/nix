@@ -85,8 +85,8 @@
     lastChangelogVersion = pi-coding-agent.version;
     theme = "dark";
     defaultProvider = "anthropic";
-    defaultModel = "claude-sonnet-5";
-    defaultThinkingLevel = "high";
+    defaultModel = "claude-opus-4-8";
+    defaultThinkingLevel = "low";
     packages = map toString piPackages;
     prompts = [promptsDir];
     extensions = ["${piExtensionsDir}"];
