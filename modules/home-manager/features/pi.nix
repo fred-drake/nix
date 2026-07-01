@@ -78,6 +78,30 @@
 
   jq = lib.getExe pkgs.jq;
 
+  # Custom OpenRouter models, authored as a native Nix attrset and converted to
+  # ~/.pi/agent/models.json via builtins.toJSON. `apiKey` is intentionally
+  # omitted — the OpenRouter key already lives in the mutable ~/.pi/agent/auth.json
+  # (via `/login`), and pi resolves auth from there. Each model pins OpenRouter
+  # provider routing to cost-sorted, high-precision quantizations only.
+  openRouterRouting = {
+    sort = "price";
+    quantizations = ["bf16" "fp16" "fp8"];
+  };
+  mkOpenRouterModel = id: name: {
+    inherit id name;
+    overrides = {inherit openRouterRouting;};
+  };
+  modelsJson = pkgs.writeText "pi-agent-models.json" (builtins.toJSON {
+    providers.openrouter = {
+      baseUrl = "https://openrouter.ai/api/v1";
+      models = [
+        (mkOpenRouterModel "openrouter/deepseek/deepseek-chat" "DeepSeek (cheap, high precision)")
+        (mkOpenRouterModel "openrouter/minimax/minimax-m3" "MiniMax M3 (cheap, high precision)")
+        (mkOpenRouterModel "openrouter/z-ai/glm-5.2" "GLM-5.2 (cheap, high precision)")
+      ];
+    };
+  });
+
   # Fully declarative settings.json — symlinked read-only from the Nix store.
   # lastChangelogVersion is pinned to the current pi version so pi never
   # attempts to write an updated value to the read-only file.
@@ -110,6 +134,10 @@ in {
 
     file = {
       ".pi/agent/settings.json".source = settingsJson;
+
+      # Custom models (OpenRouter) — read-only Nix symlink. Auth is supplied
+      # separately by the mutable ~/.pi/agent/auth.json, so no apiKey here.
+      ".pi/agent/models.json".source = modelsJson;
 
       # LSP server configuration for pi-lsp. Global config is trusted automatically.
       # Project-local .pi/lsp.json entries can override or disable these per-project.
