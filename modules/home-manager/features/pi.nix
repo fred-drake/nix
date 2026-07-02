@@ -251,6 +251,15 @@ in {
         ];
       };
 
+      # Shared infrastructure skill: pi-native copy of the repo infrastructure
+      # operating guide, installed from apps/agent-common so Claude/pi workflow
+      # assets can converge on one source over time. Pi auto-discovers skills
+      # under ~/.pi/agent/skills at startup.
+      ".pi/agent/skills/infrastructure" = {
+        source = ../../../apps/agent-common/skills/infrastructure;
+        recursive = true;
+      };
+
       # cmux session-hook extension: bridges Pi lifecycle events (session_start,
       # before_agent_start, agent_end) into cmux's restorable session store so
       # cmux can show running/idle state, send notifications, and resume Pi
