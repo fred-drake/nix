@@ -263,11 +263,11 @@ name = "graphify-env"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "graphifyy", extra = ["mcp", "openai"] },
+    { name = "graphifyy", extra = ["mcp", "ollama", "openai"] },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "graphifyy", extras = ["mcp", "openai"] }]
+requires-dist = [{ name = "graphifyy", extras = ["mcp", "openai", "ollama"] }]
 
 [[package]]
 name = "graphifyy"
@@ -312,6 +312,9 @@ wheels = [
 [package.optional-dependencies]
 mcp = [
     { name = "mcp" },
+]
+ollama = [
+    { name = "openai" },
 ]
 openai = [
     { name = "openai" },
