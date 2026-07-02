@@ -64,6 +64,7 @@
     # Dev tools
     delta
     devenv
+    nodejs
     docker-compose
     ghq
     jaq
