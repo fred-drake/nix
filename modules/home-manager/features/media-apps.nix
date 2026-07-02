@@ -18,8 +18,6 @@ in {
       wiki-tui
     ])
     ++ lib.optionals isWorkstation (with pkgs; [
-      discord
-      slack
       spotify
       inkscape
       podman
