@@ -109,7 +109,7 @@
     lastChangelogVersion = pi-coding-agent.version;
     theme = "dark";
     defaultProvider = "anthropic";
-    defaultModel = "claude-opus-4-8";
+    defaultModel = "minimax/minimax/MiniMax-M3";
     defaultThinkingLevel = "low";
     packages = map toString piPackages;
     prompts = [promptsDir];
