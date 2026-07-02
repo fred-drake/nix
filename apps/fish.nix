@@ -160,6 +160,7 @@ in {
       llart = "eza -lar --sort newest";
       known-hosts-clear = "ssh-keygen -R";
       fish-reload = "exec fish";
+      graphify-extract = ''OLLAMA_MODEL="qwen3.6:35b" OLLAMA_API_KEY="ollama" graphify extract . --backend ollama'';
       model-ornith-1-0-35b-8bit = "uvx --from mlx-vlm mlx_vlm.server --model mlx-community/Ornith-1.0-35B-8bit --port 8080";
     };
   };

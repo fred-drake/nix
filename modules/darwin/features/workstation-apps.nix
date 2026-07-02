@@ -90,6 +90,7 @@ lib.mkMerge [
       brews = [
         "sst/tap/opencode"
         "cmake"
+        "ollama"
         "openssh"
         "ruby-install"
         "watch"
