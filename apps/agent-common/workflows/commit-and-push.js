@@ -3,12 +3,15 @@ export const meta = {
   description: 'Validate, commit, and push changes only after all quality checks pass',
   whenToUse: 'Run the full quality-check loop (detect project type, check, fix, re-check), then stage, create semantic commits, and push to origin',
   phases: [
-    { title: 'Validate', detail: 'detect project type and run all quality checks', model: 'MiniMax-M3' },
-    { title: 'Fix', detail: 'fix failed checks, then re-validate (max 10 iterations)', model: 'MiniMax-M3' },
-    { title: 'Commit', detail: 'stage safe files and create semantic commits', model: 'MiniMax-M3' },
-    { title: 'Push', detail: 'push to origin and verify', model: 'MiniMax-M3' },
+    { title: 'Validate', detail: 'detect project type and run all quality checks' },
+    { title: 'Fix', detail: 'fix failed checks, then re-validate (max 10 iterations)' },
+    { title: 'Commit', detail: 'stage safe files and create semantic commits' },
+    { title: 'Push', detail: 'push to origin and verify' },
   ],
 }
+
+const SMALL_MODEL = 'ollama/qwen3.6:35b'
+const DEEP_MODEL = 'openrouter/openai/gpt-5.5'
 
 const CHECK_MATRIX = `
 Identify the project type by checking for these marker files, then run that
@@ -99,7 +102,7 @@ commit (hasChanges). Run ALL checks for the project type even if an early one
 fails, and capture the specific error output for each failure. If a check's
 underlying script/recipe does not exist (e.g. no such just recipe or npm
 script), treat it as passed and note that in errors.`,
-    { label: `validate#${i}`, phase: 'Validate', schema: VALIDATION_SCHEMA, model: 'Minimax-M3' }
+    { label: `validate#${i}`, phase: 'Validate', schema: VALIDATION_SCHEMA, model: SMALL_MODEL }
   )
   if (!validation) throw new Error(`validation agent #${i} returned no result`)
   if (!validation.hasChanges) break
@@ -119,7 +122,7 @@ ${failed.map(c => `### ${c.command}\n${c.errors || '(no error detail captured)'}
 
 You may re-run individual commands to confirm your fixes, but the full check
 suite will be re-run separately afterward. Report each fix you applied.`,
-    { label: `fix#${i}`, phase: 'Fix', schema: FIX_SCHEMA, model: 'Minimax-M3' }
+    { label: `fix#${i}`, phase: 'Fix', schema: FIX_SCHEMA, model: DEEP_MODEL }
   )
 }
 
@@ -156,7 +159,7 @@ Commit rules:
 
 After committing, run "git log --oneline -n 5" to verify. Report the commit
 messages created, the files staged, and the files skipped with reasons.`,
-  { label: 'stage-and-commit', phase: 'Commit', schema: COMMIT_SCHEMA, model: 'MiniMax-M3' }
+  { label: 'stage-and-commit', phase: 'Commit', schema: COMMIT_SCHEMA, model: SMALL_MODEL }
 )
 if (!commit) throw new Error('commit agent returned no result')
 if (commit.commits.length === 0) {
@@ -176,7 +179,7 @@ const push = await agent(
 3. Otherwise run "git push origin <current-branch>" and verify it succeeded.
 4. Report the branch, remote URL, and a PR-creation link if the push output
    provides one.`,
-  { label: 'push', phase: 'Push', schema: PUSH_SCHEMA, model: 'MiniMax-M3' }
+  { label: 'push', phase: 'Push', schema: PUSH_SCHEMA, model: SMALL_MODEL }
 )
 if (!push) throw new Error('push agent returned no result')
 
