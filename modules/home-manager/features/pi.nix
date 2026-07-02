@@ -95,13 +95,47 @@
     overrides = {inherit openRouterRouting;};
   };
   modelsJson = pkgs.writeText "pi-agent-models.json" (builtins.toJSON {
-    providers.openrouter = {
-      baseUrl = "https://openrouter.ai/api/v1";
-      models = [
-        (mkOpenRouterModel "openrouter/deepseek/deepseek-chat" "DeepSeek (cheap, high precision)")
-        (mkOpenRouterModel "openrouter/minimax/minimax-m3" "MiniMax M3 (cheap, high precision)")
-        (mkOpenRouterModel "openrouter/z-ai/glm-5.2" "GLM-5.2 (cheap, high precision)")
-      ];
+    providers = {
+      openrouter = {
+        baseUrl = "https://openrouter.ai/api/v1";
+        models = [
+          (mkOpenRouterModel "openrouter/deepseek/deepseek-chat" "DeepSeek (cheap, high precision)")
+          (mkOpenRouterModel "openrouter/minimax/minimax-m3" "MiniMax M3 (cheap, high precision)")
+          (mkOpenRouterModel "openrouter/z-ai/glm-5.2" "GLM-5.2 (cheap, high precision)")
+        ];
+      };
+      # Local Ollama server (brew install ollama; ollama serve). Ollama exposes
+      # an OpenAI-compatible API at /v1, so pi uses openai-completions. The
+      # model below is a Qwen 3.x reasoning model that emits <think>…</think>
+      # blocks — thinkingFormat: "qwen" maps pi's /thinking levels onto the
+      # enable_thinking toggle Ollama understands. No apiKey: Ollama accepts
+      # any non-empty string. Switch with: /model ollama/qwen3.6:35b
+      ollama = {
+        baseUrl = "http://localhost:11434/v1";
+        apiKey = "not-needed";
+        api = "openai-completions";
+        models = [
+          {
+            id = "qwen3.6:35b";
+            name = "Qwen 3.6 35B (local)";
+            reasoning = true;
+            input = ["text"];
+            cost = {
+              input = 0;
+              output = 0;
+              cacheRead = 0;
+              cacheWrite = 0;
+            };
+            contextWindow = 262144;
+            maxTokens = 16384;
+            compat = {
+              supportsDeveloperRole = false;
+              maxTokensField = "max_tokens";
+              thinkingFormat = "qwen";
+            };
+          }
+        ];
+      };
     };
   });
 
@@ -117,6 +151,28 @@
     packages = map toString piPackages;
     prompts = [promptsDir];
     extensions = ["${piExtensionsDir}"];
+    hooks = {
+      PreToolUse = [
+        {
+          matcher = "Bash";
+          hooks = [
+            {
+              type = "command";
+              command = "CMD=$(python3 -c \"import json,sys; d=json.load(sys.stdin); print(d.get('tool_input',d).get('command',''))\" 2>/dev/null || true); case \"$CMD\" in *grep*|*rg\\ *|*ripgrep*|*find\\ *|*fd\\ *|*ack\\ *|*ag\\ *)   [ -f graphify-out/graph.json ] &&   echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"MANDATORY: graphify-out/graph.json exists. You MUST run `graphify query \\\"<question>\\\"` before grepping raw files. Only grep after graphify has oriented you, or to modify/debug specific lines.\"}}'   || true ;; esac";
+            }
+          ];
+        }
+        {
+          matcher = "Read|Glob";
+          hooks = [
+            {
+              type = "command";
+              command = "HIT=$(python3 -c \"import json,sys;d=json.load(sys.stdin);t=d.get('tool_input',d);s=(str(t.get('file_path') or '')+' '+str(t.get('pattern') or '')+' '+str(t.get('path') or '')).lower().replace(chr(92),'/');exts=('.py','.js','.ts','.tsx','.jsx','.go','.rs','.java','.rb','.c','.h','.cpp','.hpp','.cc','.cs','.kt','.swift','.php','.scala','.lua','.sh','.md','.rst','.txt','.mdx');sys.stdout.write('1' if 'graphify-out/' not in s and any(e in s for e in exts) else '')\" 2>/dev/null || true); if [ \"$HIT\" = 1 ] && [ -f graphify-out/graph.json ]; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"MANDATORY: graphify-out/graph.json exists. You MUST run graphify before reading source files. Use: `graphify query \\\"<question>\\\"` (scoped subgraph), `graphify explain \\\"<concept>\\\"`, or `graphify path \\\"<A>\\\" \\\"<B>\\\"`. Only read raw files after graphify has oriented you, or to modify/debug specific lines. This rule applies to subagents too — include it in every subagent prompt involving code exploration.\"}}'; fi || true";
+            }
+          ];
+        }
+      ];
+    };
     skills = ["${config.home.homeDirectory}/plugins/cmux/skills" "${config.home.homeDirectory}/plugins/superpowers/skills" "${config.home.homeDirectory}/plugins/andrej-karpathy-skills/skills"];
   });
 in {
