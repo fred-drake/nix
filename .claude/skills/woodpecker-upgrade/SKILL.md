@@ -20,8 +20,8 @@ anchors** that must be upgraded together.
 | macOS agent binary | `inputs.nixpkgs-woodpecker-agent` in `flake.nix` | Built by nix, runs on macbook-pro as a user launchd agent, local backend |
 
 The server image and Linux agent image are pinned to an **exact tag**
-(e.g. `v3.13.0`, not `v3.13` — the floating tag is unreliable, see
-Gotchas). The macOS agent is pinned via a **dedicated nixpkgs input**
+(e.g. `v3.16.0`, not `v3` or another floating tag — floating tags are
+unreliable, see Gotchas). The macOS agent is pinned via a **dedicated nixpkgs input**
 separate from the main `nixpkgs` input, so `nix flake update` cannot
 bump it accidentally.
 
@@ -67,12 +67,12 @@ behind will kill one of the agents.
 [[containers]]
 repository = "docker.io"
 name = "woodpeckerci/woodpecker-server"
-tag = "v3.13.0"         # ← bump this
+tag = "v3.16.0"         # ← bump this
 architectures = ["linux/amd64"]
 [[containers]]
 repository = "docker.io"
 name = "woodpeckerci/woodpecker-agent"
-tag = "v3.13.0"         # ← bump this to same version
+tag = "v3.16.0"         # ← bump this to same version
 architectures = ["linux/amd64"]
 ```
 
@@ -84,8 +84,8 @@ just update-container-digests
 **2b. Key references in `modules/services/woodpecker-ci.nix`:**
 
 ```nix
-image = containers-sha."docker.io"."woodpeckerci/woodpecker-server"."v3.13.0"."linux/amd64";
-image = containers-sha."docker.io"."woodpeckerci/woodpecker-agent"."v3.13.0"."linux/amd64";
+image = containers-sha."docker.io"."woodpeckerci/woodpecker-server"."v3.16.0"."linux/amd64";
+image = containers-sha."docker.io"."woodpeckerci/woodpecker-agent"."v3.16.0"."linux/amd64";
 ```
 
 The attr key must match the tag from `containers.toml` exactly.
@@ -166,7 +166,7 @@ pins:
 - `v3` has drifted onto RC builds (`3.14.0-rc.0`) while we expected stable
 - `v3.13` has a stable server image but a dev-build agent image (`next-*`)
 
-Always use the exact patch tag (`v3.13.0`, not `v3.13`).
+Always use the exact patch tag (`v3.16.0`, not `v3` or `v3.16`).
 
 ### Port 9000 on orgrimmar is taken
 
