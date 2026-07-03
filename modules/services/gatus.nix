@@ -10,13 +10,9 @@
   hostPort = 8090; # host-side port nginx proxies to; container listens on 8080
   domain = config.soft-secrets.networking.domain;
 
-  # Matrix alerting. The access token is a secret injected at container runtime
-  # via the gatus-env EnvironmentFile and substituted by gatus's ${VAR} support,
-  # so it never lands in the (world-readable) Nix store. server-url and room ID
-  # are non-secret. "Server Alerts" (#server-alerts:matrix.freddrake.com) is owned
-  # by @fred with @gatus invited + joined; standard room ID with ":server" suffix.
-  matrixServerUrl = "https://matrix.freddrake.com";
-  matrixRoomId = "!qHqtvUzHgXemyFGDNq:matrix.freddrake.com";
+  # Discord alerting. The webhook URL is injected at container runtime via the
+  # gatus-env EnvironmentFile and substituted by gatus's ${VAR} support, so it
+  # never lands in the (world-readable) Nix store.
 
   # Endpoints Gatus probes, keyed by the private IP of the host that serves them.
   # stormwind's nameserver is public 8.8.8.8 and can't resolve *.internal, so the
@@ -55,11 +51,9 @@
       type = "sqlite";
       path = "/data/data.db";
     };
-    alerting.matrix = {
-      server-url = matrixServerUrl;
-      access-token = "\${MATRIX_ACCESS_TOKEN}";
-      internal-room-id = matrixRoomId;
-      # Applied to every endpoint's `matrix` alert. Three consecutive failures
+    alerting.discord = {
+      webhook-url = "\${DISCORD_WEBHOOK_URL}";
+      # Applied to every endpoint's `discord` alert. Three consecutive failures
       # before alerting (avoids flapping on a single 60s blip), two successes to
       # resolve, and a recovery message when the endpoint comes back.
       default-alert = {
@@ -78,7 +72,7 @@
           "[CONNECTED] == true"
           "[STATUS] < 500"
         ];
-        alerts = [{type = "matrix";}];
+        alerts = [{type = "discord";}];
       })
       endpointHosts;
   };
