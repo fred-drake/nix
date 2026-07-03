@@ -19,6 +19,7 @@ import subprocess
 import sys
 import threading
 import time
+import traceback
 
 
 def log(msg):
@@ -40,15 +41,25 @@ def extract_assistant_text(message):
     return ""
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--task-file", required=True)
-    ap.add_argument("--result-file", required=True)
-    ap.add_argument("--done-file", required=True)
-    ap.add_argument("--model", default=None)
-    ap.add_argument("--cwd", default=None)
-    ap.add_argument("--timeout", type=float, default=600.0)
-    args = ap.parse_args()
+def write_text_atomic(path, text):
+    tmp = path + ".tmp"
+    with open(tmp, "w") as f:
+        f.write(text)
+    os.replace(tmp, path)
+
+
+def main_impl(args):
+    if args.config_file:
+        with open(args.config_file, "r") as f:
+            config = json.load(f)
+        args.task_file = config["task_file"]
+        args.result_file = config["result_file"]
+        args.done_file = config["done_file"]
+        args.heartbeat_file = config.get("heartbeat_file")
+        args.error_file = config.get("error_file")
+        args.model = config.get("model")
+        args.cwd = config.get("cwd")
+        args.timeout = float(config.get("timeout", args.timeout))
 
     with open(args.task_file, "r") as f:
         task = f.read().strip()
@@ -77,7 +88,17 @@ def main():
     final_text = {"value": None}
     error_text = {"value": None}
     done = threading.Event()
+    stop_heartbeat = threading.Event()
     streaming_any = {"value": False}
+
+    def heartbeat():
+        while not stop_heartbeat.is_set():
+            if getattr(args, "heartbeat_file", None):
+                write_text_atomic(args.heartbeat_file, str(time.time()) + "\n")
+            stop_heartbeat.wait(2.0)
+
+    hb = threading.Thread(target=heartbeat, daemon=True)
+    hb.start()
 
     def reader():
         for line in proc.stdout:
@@ -135,12 +156,8 @@ def main():
             result = "[subagent produced no assistant text]"
 
     # Atomic write of the result, then the done marker.
-    tmp = args.result_file + ".tmp"
-    with open(tmp, "w") as f:
-        f.write(result)
-    os.replace(tmp, args.result_file)
-    with open(args.done_file, "w") as f:
-        f.write("ok\n" if ok else "timeout\n")
+    write_text_atomic(args.result_file, result)
+    write_text_atomic(args.done_file, "ok\n" if ok else "timeout\n")
 
     log("")
     log("\033[1;32m✅ SUBAGENT COMPLETE\033[0m  (result captured, %d chars)" % len(result))
@@ -154,6 +171,27 @@ def main():
         proc.wait(timeout=5)
     except Exception:
         proc.kill()
+    stop_heartbeat.set()
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--config-file", default=None)
+    ap.add_argument("--task-file")
+    ap.add_argument("--result-file")
+    ap.add_argument("--done-file")
+    ap.add_argument("--heartbeat-file", default=None)
+    ap.add_argument("--error-file", default=None)
+    ap.add_argument("--model", default=None)
+    ap.add_argument("--cwd", default=None)
+    ap.add_argument("--timeout", type=float, default=600.0)
+    args = ap.parse_args()
+    try:
+        main_impl(args)
+    except Exception:
+        if args.error_file:
+            write_text_atomic(args.error_file, traceback.format_exc())
+        raise
 
 
 if __name__ == "__main__":

@@ -15,8 +15,10 @@ Requires: run from inside a cmux surface (CMUX_SOCKET_PATH + CMUX_SURFACE_ID set
 Prints the final answer to stdout (after a clear delimiter).
 """
 import argparse
+import json
 import os
 import re
+import shlex
 import subprocess
 import sys
 import time
@@ -24,6 +26,7 @@ import uuid
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RUNNER = os.path.join(HERE, "runner.py")
+LAUNCHER = os.path.join(HERE, "launch.sh")
 
 
 def log(msg):
@@ -46,9 +49,58 @@ def parse_surface(output):
     return m.group(1)
 
 
-def pane_send(surface, text):
-    cmux("send", "--surface", surface, text)
-    cmux("send-key", "--surface", surface, "Enter")
+def build_launch_command(config_file):
+    return "bash %s %s" % (shlex.quote(LAUNCHER), shlex.quote(config_file))
+
+
+def write_run_config(workdir, task_file, result_file, done_file, heartbeat_file, error_file, cwd, timeout, model):
+    config_file = os.path.join(workdir, "config.json")
+    data = {
+        "runner": RUNNER,
+        "task_file": task_file,
+        "result_file": result_file,
+        "done_file": done_file,
+        "heartbeat_file": heartbeat_file,
+        "error_file": error_file,
+        "cwd": cwd,
+        "timeout": timeout,
+        "model": model,
+        "env": {
+            "PATH": os.environ.get("PATH", ""),
+        },
+    }
+    tmp = config_file + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(data, f, indent=2)
+    os.replace(tmp, config_file)
+    return config_file
+
+
+def launch_runner(workspace, surface, config_file, cmux_fn=cmux):
+    cmux_fn(
+        "respawn-pane",
+        "--workspace", workspace,
+        "--surface", surface,
+        "--command", build_launch_command(config_file),
+    )
+
+
+def surface_exists(workspace, surface):
+    r = subprocess.run(
+        ["cmux", "list-pane-surfaces", "--workspace", workspace, "--json"],
+        capture_output=True,
+        text=True,
+    )
+    return r.returncode == 0 and ('"ref" : "' + surface + '"') in r.stdout
+
+
+def close_surface_if_present(workspace, surface):
+    for _ in range(5):
+        if not surface_exists(workspace, surface):
+            return True
+        cmux("close-surface", "--workspace", workspace, "--surface", surface, check=False)
+        time.sleep(0.2)
+    return not surface_exists(workspace, surface)
 
 
 def main():
@@ -65,8 +117,9 @@ def main():
     args = ap.parse_args()
 
     parent = os.environ.get("CMUX_SURFACE_ID")
-    if not os.environ.get("CMUX_SOCKET_PATH") or not parent:
-        log("ERROR: not inside a cmux surface (CMUX_SOCKET_PATH / CMUX_SURFACE_ID unset).")
+    workspace = os.environ.get("CMUX_WORKSPACE_ID")
+    if not os.environ.get("CMUX_SOCKET_PATH") or not parent or not workspace:
+        log("ERROR: not inside a cmux surface (CMUX_SOCKET_PATH / CMUX_SURFACE_ID / CMUX_WORKSPACE_ID unset).")
         sys.exit(2)
 
     if args.task_file:
@@ -84,9 +137,23 @@ def main():
     task_file = os.path.join(workdir, "task.txt")
     result_file = os.path.join(workdir, "result.txt")
     done_file = os.path.join(workdir, "done")
-    ready_file = os.path.join(workdir, "ready")
+    heartbeat_file = os.path.join(workdir, "heartbeat")
+    error_file = os.path.join(workdir, "error.txt")
+    started_file = os.path.join(workdir, "runner-started")
     with open(task_file, "w") as f:
         f.write(task)
+    config_file = write_run_config(
+        workdir=workdir,
+        task_file=task_file,
+        result_file=result_file,
+        done_file=done_file,
+        heartbeat_file=heartbeat_file,
+        error_file=error_file,
+        cwd=args.cwd,
+        timeout=args.timeout,
+        model=args.model,
+    )
+    answer = ""
 
     # 1. DEPLOY
     out = cmux("new-split", args.direction, "--surface", parent, "--focus", "false")
@@ -95,40 +162,29 @@ def main():
     try:
         cmux("rename-tab", "--surface", surface, args.name, check=False)
 
-        # 2. READY -- keep poking until the shell runs a command (creates ready_file).
-        log("● READY   waiting for pane shell to accept commands…")
+        # 2. READY/EXECUTE -- respawn the pane with the checked-in launcher.
+        log("● EXECUTE launching runner via cmux respawn-pane…")
+        launch_runner(workspace, surface, config_file)
         deadline = time.time() + args.ready_timeout
-        ready = False
         while time.time() < deadline:
-            pane_send(surface, "touch %s" % ready_file)
-            time.sleep(1.0)
-            if os.path.exists(ready_file):
-                ready = True
+            if os.path.exists(started_file):
                 break
-        if not ready:
-            raise RuntimeError("pane shell never became ready within %ss" % args.ready_timeout)
-        log("● READY   pane shell is live")
+            time.sleep(0.2)
+        if not os.path.exists(started_file):
+            raise RuntimeError("runner never started within %ss" % args.ready_timeout)
+        log("● READY   runner started in pane; streaming live there…")
 
-        # 3. EXECUTE -- launch the in-pane RPC runner.
-        cmd_parts = [
-            "python3", RUNNER,
-            "--task-file", task_file,
-            "--result-file", result_file,
-            "--done-file", done_file,
-            "--cwd", args.cwd,
-            "--timeout", str(args.timeout),
-        ]
-        if args.model:
-            cmd_parts += ["--model", args.model]
-        pane_send(surface, " ".join(cmd_parts))
-        log("● EXECUTE runner launched in pane; streaming live there…")
-
-        # 4. COLLECT
+        # 3. COLLECT
         deadline = time.time() + args.timeout + 30.0
         while time.time() < deadline:
             if os.path.exists(done_file):
                 break
+            if os.path.exists(error_file):
+                break
             time.sleep(1.0)
+        if os.path.exists(error_file) and not os.path.exists(done_file):
+            with open(error_file) as f:
+                raise RuntimeError(f.read().strip() or "subagent failed")
         if not os.path.exists(done_file):
             raise RuntimeError("subagent did not finish within timeout")
 
@@ -137,12 +193,14 @@ def main():
         log("● COLLECT answer captured (%d chars)" % len(answer))
 
     finally:
-        # 5. REMOVE
+        # 4. REMOVE
         if args.keep_open:
             log("● REMOVE  skipped (--keep-open); pane %s left open" % surface)
         else:
-            cmux("close-surface", "--surface", surface, check=False)
-            log("● REMOVE  pane %s closed" % surface)
+            if close_surface_if_present(workspace, surface):
+                log("● REMOVE  pane %s closed" % surface)
+            else:
+                log("● REMOVE  WARNING pane %s still appears to be open" % surface)
 
     print("\n===== SUBAGENT ANSWER =====")
     print(answer)

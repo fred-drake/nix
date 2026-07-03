@@ -1,8 +1,4 @@
-{
-  pkgs,
-  config,
-  ...
-}: let
+{pkgs, ...}: let
   repos-src = import ./fetcher/repos-src.nix {inherit pkgs;};
 in {
   programs.fish = {
