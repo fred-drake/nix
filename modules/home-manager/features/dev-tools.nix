@@ -67,6 +67,8 @@
     nodejs
     docker-compose
     ghq
+    jujutsu
+    lazyjj
     jaq
     kind
     kubectl
