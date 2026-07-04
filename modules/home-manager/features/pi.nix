@@ -99,8 +99,8 @@
       openrouter = {
         baseUrl = "https://openrouter.ai/api/v1";
         models = [
-          (mkOpenRouterModel "openrouter/deepseek/deepseek-chat" "DeepSeek (cheap, high precision)")
-          (mkOpenRouterModel "openrouter/minimax/minimax-m3" "MiniMax M3 (cheap, high precision)")
+          (mkOpenRouterModel "deepseek/deepseek-v4-pro" "DeepSeek (cheap, high precision)")
+          (mkOpenRouterModel "minimax/MiniMax-M3" "MiniMax M3 (cheap, high precision)")
           (mkOpenRouterModel "openrouter/z-ai/glm-5.2" "GLM-5.2 (cheap, high precision)")
         ];
       };
@@ -145,9 +145,9 @@
   settingsJson = pkgs.writeText "pi-agent-settings.json" (builtins.toJSON {
     lastChangelogVersion = pi-coding-agent.version;
     theme = "dark";
-    defaultProvider = "anthropic";
-    defaultModel = "minimax/minimax/MiniMax-M3";
-    defaultThinkingLevel = "low";
+    defaultProvider = "openai-codex";
+    defaultModel = "gpt-5.5";
+    defaultThinkingLevel = "high";
     packages = map toString piPackages;
     prompts = [promptsDir];
     extensions = ["${piExtensionsDir}"];
@@ -173,7 +173,12 @@
         }
       ];
     };
-    skills = ["${config.home.homeDirectory}/plugins/cmux/skills" "${config.home.homeDirectory}/plugins/superpowers/skills" "${config.home.homeDirectory}/plugins/andrej-karpathy-skills/skills"];
+    skills = [
+      "${config.home.homeDirectory}/plugins/cmux/skills"
+      "${config.home.homeDirectory}/plugins/superpowers/skills"
+      "${config.home.homeDirectory}/plugins/andrej-karpathy-skills/skills"
+      "${config.home.homeDirectory}/plugins/agent-rules-skill/skills"
+    ];
   });
 in {
   home = {
