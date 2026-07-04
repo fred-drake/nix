@@ -161,30 +161,63 @@ in
     AIDER_AUTO_TEST = "true";
 
     shellHook = ''
-      # Add user's local bin to PATH
-      export PATH="$PATH:$HOME/.local/bin"
+            # Add user's local bin to PATH
+            export PATH="$PATH:$HOME/.local/bin"
 
-      # Load the Hetzner Cloud API token at runtime (never via readFile, which
-      # would bake the secret into the world-readable nix store).
-      if [ -r "$HOME/.config/sops-nix/secrets/hetzner-home-api-token" ]; then
-        export HCLOUD_TOKEN="$(cat "$HOME/.config/sops-nix/secrets/hetzner-home-api-token")"
+            # Load the Hetzner Cloud API token at runtime (never via readFile, which
+            # would bake the secret into the world-readable nix store).
+            if [ -r "$HOME/.config/sops-nix/secrets/hetzner-home-api-token" ]; then
+              export HCLOUD_TOKEN="$(cat "$HOME/.config/sops-nix/secrets/hetzner-home-api-token")"
+            fi
+
+            # Authenticate GitHub API calls (nurl in update-claude-plugins, etc.) so
+            # they don't hit the unauthenticated 60 req/hr limit and 403. Fall back to
+            # the gh CLI's token if GITHUB_TOKEN isn't already set in the environment.
+            if [ -z "''${GITHUB_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
+              _gh_token="$(gh auth token 2>/dev/null)"
+              if [ -n "$_gh_token" ]; then
+                export GITHUB_TOKEN="$_gh_token"
+              fi
+              unset _gh_token
+            fi
+
+            # Set PROJECT_ROOT to the actual working directory, not the nix store copy
+            export PROJECT_ROOT="$PWD"
+
+            # Keep local Git pre-commit checks aligned with /commit-and-push for Nix repos:
+            # just format; just lint; deadnix.
+            if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+              _git_hook_path="$(git rev-parse --git-path hooks/pre-commit)"
+              mkdir -p "$(dirname "$_git_hook_path")"
+              cat > "$_git_hook_path" <<'EOF'
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      repo_root="$(git rev-parse --show-toplevel)"
+      cd "$repo_root"
+
+      echo "Running Nix pre-commit checks..."
+      _before_format="$(mktemp)"
+      _after_format="$(mktemp)"
+      trap 'rm -f "$_before_format" "$_after_format"' EXIT
+
+      git diff --binary > "$_before_format"
+      just format
+      git diff --binary > "$_after_format"
+
+      if ! cmp -s "$_before_format" "$_after_format"; then
+        echo "just format changed files. Review and stage the formatted changes, then commit again." >&2
+        exit 1
       fi
 
-      # Authenticate GitHub API calls (nurl in update-claude-plugins, etc.) so
-      # they don't hit the unauthenticated 60 req/hr limit and 403. Fall back to
-      # the gh CLI's token if GITHUB_TOKEN isn't already set in the environment.
-      if [ -z "''${GITHUB_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
-        _gh_token="$(gh auth token 2>/dev/null)"
-        if [ -n "$_gh_token" ]; then
-          export GITHUB_TOKEN="$_gh_token"
-        fi
-        unset _gh_token
-      fi
+      just lint
+      deadnix
+      EOF
+              chmod +x "$_git_hook_path"
+              unset _git_hook_path
+            fi
 
-      # Set PROJECT_ROOT to the actual working directory, not the nix store copy
-      export PROJECT_ROOT="$PWD"
-
-      echo "Nix development shell activated"
-      echo "Project root: $PROJECT_ROOT"
+            echo "Nix development shell activated"
+            echo "Project root: $PROJECT_ROOT"
     '';
   }
