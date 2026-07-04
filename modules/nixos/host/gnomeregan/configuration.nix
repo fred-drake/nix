@@ -2,7 +2,15 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  srtToTranscript = pkgs.writeShellApplication {
+    name = "srt-to-transcript";
+    runtimeInputs = [pkgs.python3];
+    text = ''
+      exec python3 ${../../../../apps/scripts/srt_to_transcript.py} "$@"
+    '';
+  };
+in {
   imports = [
     ./hardware-configuration.nix
   ];
@@ -91,6 +99,8 @@
     wget
     rsync
     yt-dlp
+    python3
+    srtToTranscript
   ];
 
   # uvx (used by archive-email's workspace-mcp) downloads pre-built CPython
