@@ -172,6 +172,12 @@ reference it in configuration. Until a file is staged, Nix will error with
 
 After creating any new file: `git add <file>`
 
+## Nix Formatting
+
+Use `alejandra` for formatting Nix files in this repository. Do not use
+`nix fmt` unless explicitly requested; the flake may not expose a formatter for
+all systems. The git commit pre-hook is expected to run the configured formatter.
+
 ## Build Commands
 
 **IMPORTANT:** Do NOT use `sudo` with `just` commands — they handle `sudo` internally.

@@ -197,6 +197,9 @@ in {
     ];
 
     file = {
+      # Generic user-level agent instructions shared with Claude Code.
+      ".pi/agent/AGENTS.md".text = builtins.readFile ../../../apps/agent-common/AGENTS.md;
+
       ".pi/agent/settings.json".source = settingsJson;
 
       # Custom models (OpenRouter) — read-only Nix symlink. Auth is supplied
