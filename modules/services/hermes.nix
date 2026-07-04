@@ -179,7 +179,7 @@ in
             API_SERVER_ENABLED = "true";
             API_SERVER_HOST = "127.0.0.1";
             # Bundled Obsidian skill reads/writes markdown here.
-            OBSIDIAN_VAULT_PATH = "/opt/data/vault";
+            OBSIDIAN_VAULT_PATH = "/opt/data/PKM-OKF";
 
             # Matrix connector — Hermes logs into a bot account on our own
             # homeserver (undercity, reached over its public 443) and answers
