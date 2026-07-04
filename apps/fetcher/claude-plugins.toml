@@ -33,6 +33,12 @@ url = "https://github.com/manaflow-ai/cmux"
 name = "karpathy-skills-src"
 url = "https://github.com/multica-ai/andrej-karpathy-skills"
 
+# Netresearch AGENTS.md generator skill. Self-contained plugin:
+# .claude-plugin/plugin.json at repo root, skill under skills/agent-rules.
+[[repos]]
+name = "agent-rules-skill-src"
+url = "https://github.com/netresearch/agent-rules-skill"
+
 # Anthropic example skills (anthropics/skills). Marketplace of many skills;
 # claude-code.nix curates a subset (frontend-design, pdf) into a synthesized
 # plugin.

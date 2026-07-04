@@ -36,6 +36,12 @@
     rev = "2c606141936f1eeef17fa3043a72095b4765b9c2";
     hash = "sha256-4z/wRdYH7UXRzF8RJU0sw8xbpx0BW/7CBv5sVEC2knY=";
   };
+  agent-rules-skill-src = pkgs.fetchFromGitHub {
+    owner = "netresearch";
+    repo = "agent-rules-skill";
+    rev = "76decb504e698ca884702c2388f9792892b17e6f";
+    hash = "sha256-gvMGegCYqcg6fGtVQQORVY4FVdnnGJpPB1fsMlNlg2c=";
+  };
   anthropic-skills-src = pkgs.fetchFromGitHub {
     owner = "anthropics";
     repo = "skills";

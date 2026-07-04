@@ -533,6 +533,13 @@ in {
       recursive = true;
     };
 
+    # Netresearch AGENTS.md generator skill. Self-contained plugin; pi also
+    # loads this through modules/home-manager/features/pi.nix skills.
+    "plugins/agent-rules-skill" = {
+      source = "${claude-plugins-src.agent-rules-skill-src}";
+      recursive = true;
+    };
+
     # Marketing skills (coreyhaines31/marketingskills) - one plugin bundling 43
     # skills. Load via:
     #   claude --plugin-dir ~/plugins/marketing-skills
