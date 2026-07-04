@@ -25,6 +25,10 @@ in
         {
           my.hostName = hostName;
           home.stateVersion = "24.05";
+
+          # Avoid slow/flaky Home Manager mandb cache generation while still
+          # keeping manpages available from the linked profiles.
+          programs.man.generateCaches = false;
         }
       ]
       ++ imports

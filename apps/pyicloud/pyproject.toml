@@ -1,0 +1,19 @@
+# uv2nix workspace for the PyiCloud CLI from upstream GitHub.
+#
+# This tracks the same install intent as:
+#   pip install "pyicloud[cli]"
+# but pins the selected git revision and full dependency tree in uv.lock.
+#
+# To bump PyiCloud: run `uv lock --upgrade` in this directory, or
+# `just update-pyicloud` from the repository root.
+[project]
+name = "pyicloud-env"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+  "pyicloud[cli] @ git+https://github.com/timlaing/pyicloud",
+]
+
+[tool.uv]
+# Virtual workspace root: we install the dependency, we don't build this dir.
+package = false

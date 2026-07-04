@@ -65,6 +65,7 @@
     delta
     devenv
     nodejs
+    pyicloud-cli
     docker-compose
     ghq
     jujutsu

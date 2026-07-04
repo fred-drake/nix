@@ -18,6 +18,7 @@
     [
       (import ../overlays/default.nix {inherit inputs;})
       (import ../overlays/graphify.nix {inherit inputs;})
+      (import ../overlays/pyicloud.nix {inherit inputs;})
     ]
     ++ inputPackageOverlays;
   vscodeOverlays =
