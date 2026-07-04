@@ -53,8 +53,8 @@ Combine both lists. Ignore untracked files (e.g. `.pi/`).
 
 ### Step 3 — Map changed files → affected colmena hosts
 
-The 7 colmena-managed hosts are:
-`headscale`, `ironforge`, `orgrimmar`, `undercity`, `anton`, `gnomeregan`, `stormwind`
+The 6 colmena-managed hosts are:
+`headscale`, `ironforge`, `orgrimmar`, `anton`, `gnomeregan`, `stormwind`
 
 **Key structural facts (re-verify if the repo changes):**
 
@@ -63,7 +63,7 @@ The 7 colmena-managed hosts are:
 | `modules/home-manager/features/*.nix` | Only hosts with home-manager: **anton** (user=`nixos`), **gnomeregan** (user=`fdrake`) |
 | `modules/features/hm-*.nix` | Same — registered via `my.modules.home-manager.*`, collected by `mk-home-manager.nix` |
 | `modules/features/nixos-*.nix` / `modules/services/*.nix` | All NixOS hosts (varies by mkIf guards — check each feature's capability flags) |
-| `colmena/hetzner-common/` | headscale, ironforge, orgrimmar, stormwind, undercity |
+| `colmena/hetzner-common/` | headscale, ironforge, orgrimmar, stormwind |
 | `colmena/wsl-common/` | anton |
 | `colmena/hosts/<name>.nix` | Only that specific host |
 | `lib/mk-home-manager.nix` | anton, gnomeregan |

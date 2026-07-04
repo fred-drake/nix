@@ -3,8 +3,7 @@
 #
 # Design notes (see also the deploy decisions captured in the PR/commit):
 #   - Runs as the published Docker Hub image, digest-pinned via containers-sha.
-#   - `gateway run` long-running daemon. Channels: dashboard + Telegram + Matrix
-#     (a bot account on our own homeserver, undercity/matrix.freddrake.com).
+#   - `gateway run` long-running daemon. Channels: dashboard + Telegram.
 #   - LLM provider: DeepSeek (DEEPSEEK_API_KEY, from the sops env file).
 #   - NO docker socket and NO docker terminal backend: this box's podman socket
 #     is effectively host-root (it controls gitea/CI/paperless). Hermes uses its
@@ -101,8 +100,8 @@ in
           sopsFile = config.secrets.host.orgrimmar.hermes-env;
           mode = "0400";
           key = "data";
-          # The container only reads the env file at start, so a rotated
-          # MATRIX_PASSWORD (etc.) is stranded unless we restart it on change.
+          # The container only reads the env file at start, so rotated
+          # credentials are stranded unless we restart it on change.
           restartUnits = ["podman-hermes.service"];
         };
         # ed25519 private key for the gitea vault repo. Read only by the
@@ -180,25 +179,6 @@ in
             API_SERVER_HOST = "127.0.0.1";
             # Bundled Obsidian skill reads/writes markdown here.
             OBSIDIAN_VAULT_PATH = "/opt/data/PKM-OKF";
-
-            # Matrix connector — Hermes logs into a bot account on our own
-            # homeserver (undercity, reached over its public 443) and answers
-            # DMs/room mentions there, alongside Telegram. Password login:
-            # MATRIX_PASSWORD comes from the sops hermes-env file below.
-            # Hermes is default-deny, so MATRIX_ALLOWED_USERS must list every
-            # MXID allowed to drive the agent (without it the connector won't
-            # open). E2EE off to start — chat in an encryption-disabled room.
-            MATRIX_HOMESERVER = "https://matrix.freddrake.com";
-            MATRIX_USER_ID = "@hermes:matrix.freddrake.com";
-            MATRIX_ALLOWED_USERS = "@fred:matrix.freddrake.com";
-            MATRIX_E2EE_MODE = "off";
-            # One window, many parallel conversations: each top-level message
-            # auto-spawns a thread, and SESSION_SCOPE=thread keys an isolated
-            # session per thread (own context/memory). REQUIRE_MENTION stays at
-            # its default (true), so a new thread is started by @-mentioning the
-            # bot; replies *within* a bot thread need no mention.
-            MATRIX_AUTO_THREAD = "true";
-            MATRIX_SESSION_SCOPE = "thread";
           };
           environmentFiles = [config.sops.secrets.hermes-env.path];
           extraOptions = [

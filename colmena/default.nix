@@ -19,7 +19,6 @@
   headscale = import ./hosts/headscale.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
   ironforge = import ./hosts/ironforge.nix {inherit self nixpkgs-stable secrets sops-nix nixarr nixosOptionsModule deferredNixosModules;};
   orgrimmar = import ./hosts/orgrimmar.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
-  undercity = import ./hosts/undercity.nix {inherit self nixpkgs-stable nixpkgs-unstable secrets sops-nix nixosOptionsModule deferredNixosModules;};
   anton = import ./hosts/anton.nix {inherit self nixpkgs-stable nixpkgs-unstable nixos-wsl secrets sops-nix home-manager nixvim nix-index-database nixosOptionsModule deferredNixosModules deferredHmModules;};
   gnomeregan = import ./hosts/gnomeregan.nix {inherit self nixpkgs-stable nixpkgs-unstable secrets sops-nix home-manager nixvim nix-index-database nixosOptionsModule deferredNixosModules deferredHmModules;};
   stormwind = import ./hosts/stormwind.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
@@ -55,7 +54,6 @@ in {
   inherit (headscale) _headscale;
   inherit (ironforge) _ironforge;
   inherit (orgrimmar) _orgrimmar;
-  inherit (undercity) _undercity;
   inherit (anton) _anton;
   inherit (gnomeregan) _gnomeregan;
   inherit (stormwind) _stormwind;
@@ -64,7 +62,6 @@ in {
   "headscale-init" = headscale."headscale-init";
   "ironforge-init" = ironforge."ironforge-init";
   "orgrimmar-init" = orgrimmar."orgrimmar-init";
-  "undercity-init" = undercity."undercity-init";
   "anton-init" = anton."anton-init";
   "gnomeregan-init" = gnomeregan."gnomeregan-init";
   "stormwind-init" = stormwind."stormwind-init";
@@ -73,7 +70,6 @@ in {
   "headscale" = headscale."headscale";
   "ironforge" = ironforge."ironforge";
   "orgrimmar" = orgrimmar."orgrimmar";
-  "undercity" = undercity."undercity";
   "anton" = anton."anton";
   "gnomeregan" = gnomeregan."gnomeregan";
   "stormwind" = stormwind."stormwind";

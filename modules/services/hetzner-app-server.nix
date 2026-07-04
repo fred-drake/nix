@@ -1,9 +1,8 @@
 # Shared configuration for Hetzner application servers with podman + nginx.
-# Used by ironforge, orgrimmar, and undercity.
+# Used by ironforge, orgrimmar, and stormwind.
 #
 # containerDiskUUID is optional: when set, /var/lib/containers is mounted from a
-# dedicated disk (ironforge/orgrimmar); when null, it lives on the root
-# filesystem (undercity, single-disk).
+# dedicated disk.
 {containerDiskUUID ? null}: {lib, ...}: {
   imports = [
     ./podman-server.nix
