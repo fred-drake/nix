@@ -37,6 +37,7 @@ in {
       system = "x86_64-linux";
       overlays = [
         (import ../overlays/glance.nix {inherit inputs;})
+        (import ../overlays/pyicloud.nix {inherit inputs;})
       ];
     };
     # anton (WSL) also tracks unstable end-to-end. It previously used only

@@ -201,6 +201,11 @@ in
             MATRIX_SESSION_SCOPE = "thread";
           };
           environmentFiles = [config.sops.secrets.hermes-env.path];
+          extraOptions = [
+            # Let the agent reach the LAN host by its short name from inside
+            # the container; host /etc/hosts entries are not inherited there.
+            "--add-host=gnomeregan:192.168.8.2"
+          ];
           # Dashboard only; gateway makes outbound connections, no inbound ports.
           ports = ["127.0.0.1:${dashboardPort}:${dashboardPort}"];
         };

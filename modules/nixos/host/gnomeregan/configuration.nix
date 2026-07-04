@@ -90,6 +90,7 @@
     curl
     wget
     rsync
+    yt-dlp
   ];
 
   # uvx (used by archive-email's workspace-mcp) downloads pre-built CPython
