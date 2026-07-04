@@ -39,7 +39,6 @@ update-pi:
 
 # Update the pinned pi packages/extensions managed via nix
 update-pi-packages:
-    ./apps/fetcher/update-pi-dynamic-workflows.sh
     ./apps/fetcher/update-pi-web-access.sh
     ./apps/fetcher/update-pi-mcp-adapter.sh
 

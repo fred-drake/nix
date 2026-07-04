@@ -23,9 +23,6 @@
   # Pi packages registered via local-path `packages` entries. Each must be a
   # built package directory in the store (apps/pi-*.nix).
   piPackages = [
-    (pkgs.callPackage ../../../apps/pi-dynamic-workflows.nix {
-      pin = import ../../../apps/fetcher/pi-dynamic-workflows.nix;
-    })
     (pkgs.callPackage ../../../apps/pi-web-access.nix {
       pin = import ../../../apps/fetcher/pi-web-access.nix;
     })
@@ -50,9 +47,6 @@
     (pkgs.callPackage ../../../apps/pi-simplify.nix {
       pin = import ../../../apps/fetcher/pi-simplify.nix;
     })
-    (pkgs.callPackage ../../../apps/pi-goal-x.nix {
-      pin = import ../../../apps/fetcher/pi-goal-x.nix;
-    })
     (pkgs.callPackage ../../../apps/pi-hooks.nix {
       pin = import ../../../apps/fetcher/pi-hooks.nix;
     })
@@ -64,22 +58,10 @@
   # exposing each as a /name command. Discovery is non-recursive.
   promptsDir = "${config.home.homeDirectory}/.claude/commands";
 
-  # Shared "dynamic workflow" scripts (apps/agent-common/workflows/*.js) are
-  # already written against the pi-dynamic-workflows runtime API
-  # (`export const meta`, `agent()`, `phase()`). pi does not scan ~/.claude;
-  # it loads saved workflows as <name>.json files (shape {name, description,
-  # script, ...}) from ~/.pi/workflows/saved. The activation below transcodes
-  # each .js into that JSON so the same definition powers `/name` in both
-  # Claude Code and pi.
-  workflowsSrc = ../../../apps/agent-common/workflows;
-  savedWorkflowsDir = "${config.home.homeDirectory}/.pi/workflows/saved";
-
   # Local pi extensions (apps/pi-extensions/*.ts). Copied to the Nix store
   # as a read-only directory and registered via the `extensions` settings key
   # so pi auto-discovers them without needing a ~/.pi/agent/extensions symlink.
   piExtensionsDir = ../../../apps/pi-extensions;
-
-  jq = lib.getExe pkgs.jq;
 
   # Custom OpenRouter models, authored as a native Nix attrset and converted to
   # ~/.pi/agent/models.json via builtins.toJSON. `apiKey` is intentionally
@@ -260,7 +242,7 @@ in {
       };
 
       # Shared infrastructure skill: pi-native copy of the repo infrastructure
-      # operating guide, installed from apps/agent-common so Claude/pi workflow
+      # operating guide, installed from apps/agent-common so Claude/pi skill
       # assets can converge on one source over time. Pi auto-discovers skills
       # under ~/.pi/agent/skills at startup.
       ".pi/agent/skills/infrastructure" = {
@@ -308,34 +290,5 @@ in {
       (lib.hm.dag.entryAfter ["writeBoundary"] ''
         $DRY_RUN_CMD /bin/launchctl setenv HYPA_PI_MODE replace
       '');
-
-    # Transcode each shared dynamic-workflow .js into a pi saved-workflow .json
-    # at the user level so /commit-and-push (etc.) is available in every project.
-    # Idempotent: rewrites the names we own each generation; pi may still
-    # add/remove its own saved workflows alongside these.
-    activation.piSavedWorkflows = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      saved="${savedWorkflowsDir}"
-      $DRY_RUN_CMD mkdir -p "$saved"
-      for src in ${workflowsSrc}/*.js; do
-        [ -e "$src" ] || continue
-        name="$(${pkgs.coreutils}/bin/basename "$src" .js)"
-        desc="$(${pkgs.gnugrep}/bin/grep -m1 'description:' "$src" \
-          | ${pkgs.gnused}/bin/sed -E "s/.*description: *'([^']*)'.*/\1/")"
-        [ -n "$desc" ] || desc="$name"
-        out="$saved/$name.json"
-        tmp="$(${pkgs.coreutils}/bin/mktemp)"
-        if ${jq} -n \
-            --arg name "$name" \
-            --arg description "$desc" \
-            --rawfile script "$src" \
-            '{name: $name, description: $description, script: $script, location: "user"}' \
-            > "$tmp"; then
-          $DRY_RUN_CMD mv "$tmp" "$out"
-        else
-          echo "pi: failed to generate saved workflow for $name" >&2
-          $DRY_RUN_CMD rm -f "$tmp"
-        fi
-      done
-    '';
   };
 }

@@ -19,21 +19,13 @@ description: |
 ### Full-fleet deployment: the `colmena-deploy` workflow
 
 **Any "deploy everything" request (including `/update-all-remote`) runs through
-the `colmena-deploy` workflow**, defined in
-`/Users/fdrake/nix/apps/agent-common/workflows/colmena-deploy.js`. In pi, the
-Home Manager activation transcodes this shared workflow into
-`~/.pi/workflows/saved/colmena-deploy.json` for the pi workflows plugin. Invoke
-it as the `/colmena-deploy` saved workflow command when available, or with the
-pi workflow tool by name/path in sessions that expose it:
+the `colmena-deploy` workflow** when the current agent environment provides a
+workflow runner. Its source is
+`/Users/fdrake/nix/apps/agent-common/workflows/colmena-deploy.js`.
 
-```
-/colmena-deploy
-# or, when a pi workflow tool is available:
-workflow({ name: "colmena-deploy" })
-workflow({ scriptPath: "/Users/fdrake/nix/apps/agent-common/workflows/colmena-deploy.js" })
-```
-
-The workflow encodes the deployment contract; do not re-implement it inline:
+If no workflow runner is available, stop and ask which runner/plugin should
+handle the deployment instead of re-implementing the sequence inline. The
+workflow encodes the deployment contract:
 
 - Hosts are applied **one machine at a time**, in canonical order:
   **stormwind → ironforge → orgrimmar → anton → gnomeregan → headscale
