@@ -100,6 +100,7 @@ in {
     rsync
     yt-dlp
     python3
+    pyicloud-cli
     srtToTranscript
   ];
 
