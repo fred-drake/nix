@@ -56,7 +56,6 @@ apps/claude-code/
 ├── agents/             # Custom agents
 ├── skills/             # Skill definitions
 ├── assets/             # Plugin assets (scripts, hooks)
-│   └── ralph-wiggum/   # Example: converted plugin
 └── marketplace/        # Original plugin sources (reference only)
 ```
 
@@ -140,24 +139,6 @@ To add a custom LSP server, add it to `customLspServers` in
 `just update-claude` updates both the Claude Code binary and all
 plugin repos in `claude-plugins.toml`. Repos are only updated when
 you run this — pinned hashes guarantee idempotency.
-
-### Converting Plugins to Direct Installation (Legacy)
-
-For plugins that need decomposition (e.g. extracting commands/hooks
-into the local `apps/claude-code/` structure), see the ralph-wiggum
-example:
-
-1. Copy commands to `apps/claude-code/commands/`
-2. Copy scripts/hooks to `apps/claude-code/assets/<plugin-name>/`
-3. Fix shebangs: `#!/bin/bash` → `#!/usr/bin/env bash`
-4. Replace `${CLAUDE_PLUGIN_ROOT}` with
-   `$HOME/.claude/assets/<plugin-name>`
-5. Add `home.file` entry for the assets directory
-6. Add hooks to `settings.json` if needed
-
-**Example:** ralph-wiggum plugin lives at
-`apps/claude-code/assets/ralph-wiggum/` with commands at
-`/ralph-loop`, `/cancel-ralph`, `/ralph-help`.
 
 ## MCP Server Configuration
 

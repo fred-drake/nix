@@ -483,12 +483,6 @@ in {
       recursive = true;
     };
 
-    # Ralph Wiggum assets (scripts and hooks for the ralph-loop command)
-    ".claude/assets/ralph-wiggum" = {
-      source = ../../../apps/claude-code/assets/ralph-wiggum;
-      recursive = true;
-    };
-
     # Samber marketplace registry
     ".claude/plugins/marketplaces/cc" = {
       source = "${claude-plugins-src.cc-marketplace-src}";
@@ -737,17 +731,6 @@ in {
       };
 
       hooks = {
-        Stop = [
-          {
-            # Ralph Wiggum stop hook - intercepts exit when loop is active
-            hooks = [
-              {
-                type = "command";
-                command = "$HOME/.claude/assets/ralph-wiggum/hooks/stop-hook.sh";
-              }
-            ];
-          }
-        ];
         PostToolUse = [
           {
             matcher = "Write|Edit|MultiEdit";
