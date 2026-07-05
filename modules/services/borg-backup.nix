@@ -21,12 +21,35 @@
     wowclient = "sub7";
   };
 
-  # Backup groups by frequency
-  dailyNames = ["gitea" "paperless"];
+  # Backup groups by frequency. Most jobs pull from Hetzner Storage Box
+  # sub-accounts; remote jobs are first rsynced from the source host into a
+  # local staging tree, then borg snapshots that staging tree.
+  dailyStorageNames = ["gitea" "paperless"];
+  dailyRemoteNames = ["hermes"];
   weeklyNames = ["calibre"];
   monthlyNames = ["videos" "nintendopower" "wowclient"];
 
+  dailyNames = dailyStorageNames ++ dailyRemoteNames;
+  storageNames = dailyStorageNames ++ weeklyNames ++ monthlyNames;
+  remoteNames = dailyRemoteNames;
   allNames = dailyNames ++ weeklyNames ++ monthlyNames;
+
+  remoteStagingBase = "/var/lib/backup-staging";
+  remoteStagingDir = name: "${remoteStagingBase}/${name}";
+
+  remoteBackups = {
+    hermes = {
+      host = "10.1.1.4";
+      port = 2222;
+      user = "root";
+      # Verified in modules/services/hermes.nix: all persistent Hermes state is
+      # under /var/hermes, including config/memory/session data and the synced
+      # Obsidian vault at /var/hermes/vault. The env file and vault deploy key
+      # are sops-managed secrets, not filesystem state to back up here.
+      paths = ["/var/hermes"];
+      identityFile = "/home/fdrake/.ssh/id_ansible";
+    };
+  };
 
   # CIFS options for backup mounts. Read-only, hardened against transient
   # session loss during long borg walks across the storage box:
@@ -85,11 +108,8 @@
     gitea = ["sh:**/indexers/**"];
   };
 
-  # Generate a borg backup job for a single sub-account
-  mkBorgJob = name: sub: {
+  commonBorgJob = name: {
     repo = "${borgRepoBase}/${name}";
-    paths = storagePaths.${name} or ["/mnt/backup-${name}"];
-    exclude = storageExcludes.${name} or [];
 
     encryption = {
       mode = "repokey-blake2";
@@ -100,13 +120,6 @@
     startAt = []; # Driven by wrapper services
     doInit = true;
     privateTmp = false;
-    failOnWarnings = false; # CIFS xattr warnings are benign
-
-    readWritePaths = [
-      "/tmp"
-      "/mnt/backup-${name}"
-      borgRepoBase
-    ];
 
     prune.keep = {
       daily = 7;
@@ -114,11 +127,71 @@
       monthly = 6;
     };
 
-    preHook = mountOne name sub;
-    postHook = unmountOne name;
-
     extraCreateArgs = ["--stats" "--checkpoint-interval" "600"];
   };
+
+  # Generate a borg backup job for a single Storage Box sub-account.
+  mkStorageBorgJob = name: sub:
+    commonBorgJob name
+    // {
+      paths = storagePaths.${name} or ["/mnt/backup-${name}"];
+      exclude = storageExcludes.${name} or [];
+      failOnWarnings = false; # CIFS xattr warnings are benign
+
+      readWritePaths = [
+        "/tmp"
+        "/mnt/backup-${name}"
+        borgRepoBase
+      ];
+
+      preHook = mountOne name sub;
+      postHook = unmountOne name;
+    };
+
+  mkRemoteSyncScript = name: cfg: let
+    knownHosts = "${remoteStagingBase}/known_hosts";
+    sshArgs = lib.concatStringsSep " " [
+      "-i ${cfg.identityFile}"
+      "-p ${toString cfg.port}"
+      "-o IdentitiesOnly=yes"
+      "-o StrictHostKeyChecking=accept-new"
+      "-o UserKnownHostsFile=${knownHosts}"
+    ];
+    syncCommands =
+      lib.concatMapStringsSep "\n" (path: let
+        cleanPath = lib.removeSuffix "/" path;
+        baseName = builtins.baseNameOf cleanPath;
+      in ''
+        echo "Syncing ${cfg.user}@${cfg.host}:${cleanPath}/ -> ${remoteStagingDir name}/${baseName}/"
+        ${pkgs.coreutils}/bin/install -d -m 0750 ${remoteStagingDir name}/${baseName}
+        ${pkgs.rsync}/bin/rsync -aHAX --numeric-ids --delete \
+          -e '${pkgs.openssh}/bin/ssh ${sshArgs}' \
+          ${cfg.user}@${cfg.host}:${cleanPath}/ ${remoteStagingDir name}/${baseName}/
+      '')
+      cfg.paths;
+  in ''
+    set -euo pipefail
+    ${pkgs.coreutils}/bin/install -d -m 0750 ${remoteStagingBase} ${remoteStagingDir name}
+    ${syncCommands}
+  '';
+
+  # Generate a borg backup job for a remote host directory staged locally first.
+  mkRemoteBorgJob = name: cfg:
+    commonBorgJob name
+    // {
+      paths = [(remoteStagingDir name)];
+      exclude = cfg.exclude or [];
+      failOnWarnings = true;
+
+      readWritePaths = [
+        "/tmp"
+        remoteStagingBase
+        (remoteStagingDir name)
+        borgRepoBase
+      ];
+
+      preHook = mkRemoteSyncScript name cfg;
+    };
 
   # Generate a sequential wrapper script for a group of backups
   mkWrapperScript = groupName: names: let
@@ -160,7 +233,7 @@
         };
       }
     ])
-    allNames);
+    storageNames);
 
   storageCredTemplates = lib.listToAttrs (map (name: {
       name = "${name}-storage-credentials";
@@ -172,7 +245,7 @@
         mode = "0400";
       };
     })
-    allNames);
+    storageNames);
 
   # --- Backup freshness status (for the hermes agent) -----------------
   #
@@ -331,13 +404,15 @@ in {
 
   systemd = {
     tmpfiles.rules =
-      map (name: "d /mnt/backup-${name} 0755 root root -") allNames
+      map (name: "d /mnt/backup-${name} 0755 root root -") storageNames
+      ++ ["d ${remoteStagingBase} 0750 root root -"]
+      ++ map (name: "d ${remoteStagingDir name} 0750 root root -") remoteNames
       ++ ["d ${borgRepoBase} 0700 root root -"];
 
     services =
       {
         borg-backup-daily = {
-          description = "Sequential borg backups (daily: gitea, paperless)";
+          description = "Sequential borg backups (daily: gitea, paperless, hermes)";
           after = ["network-online.target"];
           wants = ["network-online.target"];
           unitConfig.RequiresMountsFor = ["/mnt/hetzner-backup"];
@@ -428,9 +503,15 @@ in {
     };
   };
 
-  services.borgbackup.jobs = lib.listToAttrs (map (name: {
-      name = "hetzner-${name}";
-      value = mkBorgJob name storages.${name};
-    })
-    allNames);
+  services.borgbackup.jobs =
+    lib.listToAttrs (map (name: {
+        name = "hetzner-${name}";
+        value = mkStorageBorgJob name storages.${name};
+      })
+      storageNames)
+    // lib.listToAttrs (map (name: {
+        name = "hetzner-${name}";
+        value = mkRemoteBorgJob name remoteBackups.${name};
+      })
+      remoteNames);
 }
