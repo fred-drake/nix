@@ -26,7 +26,7 @@ const MAX_HEAL_ROUNDS = 3 // heal attempts per host visit before aborting
 const ENDPOINT_COUNTS = { stormwind: 2, ironforge: 9, orgrimmar: 8, anton: 0, gnomeregan: 1, headscale: 1 }
 
 const REPO = '/Users/fdrake/nix'
-const INFRA_SKILL_DIR = `${REPO}/apps/agent-common/skills/infrastructure`
+const INFRA_SKILL_DIR = `${REPO}/.pi/skills/infrastructure`
 const ENDPOINTS_DOC = `${INFRA_SKILL_DIR}/references/host-mapping.md`
 
 const HOST_NOTES = {
