@@ -12,12 +12,13 @@
     npm-packages = import ../../../apps/fetcher/npm-packages.nix;
     inherit (pkgs) playwright-driver;
   };
+  herdr = pkgs.callPackage ../../../apps/herder.nix {};
   # isWorkstation lives on the OS-level config (darwin/nixos), not in the
   # home-manager scope, so read it via osConfig like media-apps.nix does.
   isWorkstation = (osConfig.my or {}).isWorkstation or config.my.isWorkstation;
 in {
   home.packages =
-    [agent-browser ccstatusline]
+    [agent-browser ccstatusline herdr]
     ++ (with pkgs; [
       llama-cpp
     ])

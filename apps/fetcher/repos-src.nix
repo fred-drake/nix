@@ -67,4 +67,10 @@
     rev = "030c6a985cb22eca47a5fed7f0c67f9786afb284";
     hash = "sha256-JuGiHHvjz5EC+BUnthjIA9Sgef39fo7QtWjf4kB5U9g=";
   };
+  herdr-src = pkgs.fetchFromGitHub {
+    owner = "ogulcancelik";
+    repo = "herdr";
+    rev = "5b4450c969a4118298dbe8cf495391eb1e8d47db";
+    hash = "sha256-MG7mJRs6pFfeN9YkaSuLSMGCUvDHAyGgAvTLhDGAt4o=";
+  };
 }

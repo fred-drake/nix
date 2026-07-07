@@ -14,11 +14,15 @@ build: _rebuild-pre update-secrets
     sudo system-flake-rebuild build
 
 # Update everything
-update-all: update update-npm-packages update-repos update-container-digests update-secrets update-claude update-pi update-pi-packages update-graphify update-pyicloud
+update-all: update update-npm-packages update-herdr update-container-digests update-secrets update-claude update-pi update-pi-packages update-graphify update-pyicloud
 
 # Pull the latest hashes and shas from the repos in apps/fetcher/repos.toml
 update-repos:
     update-fetcher-repos
+
+# Update herdr source and hashes
+update-herdr: update-repos
+    ./apps/fetcher/update-herdr.sh
 
 # Update the SHA digests of container images
 update-container-digests:
