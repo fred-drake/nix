@@ -58,22 +58,19 @@ in {
        rm -f -- "$tmp"
       end
 
-      # Build dev windows. Now backed by cmux — `windev` is an alias for `cws`
-      # so existing muscle-memory / completions keep working.
+      # Build dev workspaces. `windev` is an alias for `cws` so existing
+      # muscle-memory / completions keep working.
       function windev
         cws $argv
       end
 
-      # Create (and focus) a cmux workspace for a project.
+      # Create (and focus) a workspace for a project.
+      # Uses herdr inside herdr (HERDR_ENV=1), otherwise cmux.
       #   cws <name> [dir] [color]
       # Looks up dir + color from the windev registry (~/.config/windev/config.json)
       # by <name>; explicit [dir]/[color] args override. Unknown names just open
-      # in the current directory with no color.
+      # in the current directory with no color. The color is only applied for cmux.
       function cws
-        if not command -v cmux >/dev/null 2>&1
-          echo "cws: cmux not found" >&2
-          return 1
-        end
         set -l name $argv[1]
         if test -z "$name"
           echo "usage: cws <name> [dir] [color]" >&2
@@ -98,6 +95,21 @@ in {
           set color "$argv[3]"
         else if test -f "$config_file"
           set color (jq -r --arg name "$name" '.[] | select(.name == $name) | .color // empty' "$config_file" 2>/dev/null)
+        end
+
+        if test "$HERDR_ENV" = 1
+          if not command -v herdr >/dev/null 2>&1
+            echo "cws: herdr not found" >&2
+            return 1
+          end
+
+          herdr workspace create --cwd "$devdir" --label "$name" --focus
+          return $status
+        end
+
+        if not command -v cmux >/dev/null 2>&1
+          echo "cws: cmux not found" >&2
+          return 1
         end
 
         set -l ws (cmux workspace create --name "$name" --cwd "$devdir" --focus true --id-format uuids | string replace 'OK ' "")

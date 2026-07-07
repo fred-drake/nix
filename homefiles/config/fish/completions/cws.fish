@@ -1,4 +1,4 @@
-# Completions for cws (cmux workspace for a project)
+# Completions for cws (dev workspace for a project)
 
 function __cws_complete_names
     set config_file "$HOME/.config/windev/config.json"
