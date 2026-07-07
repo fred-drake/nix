@@ -534,6 +534,18 @@ in {
       recursive = true;
     };
 
+    # herdr agent skill (ogulcancelik/herdr). Upstream keeps the reusable skill
+    # at repo-root SKILL.md; wrap just that file under skills/herdr so pi loads
+    # only the user-facing herdr control skill, not the repo's maintenance skills.
+    "plugins/herdr/skills/herdr/SKILL.md" = {
+      source = "${claude-plugins-src.herdr-src}/SKILL.md";
+    };
+    "plugins/herdr/.claude-plugin/plugin.json".text = builtins.toJSON {
+      name = "herdr";
+      description = "Control herdr from inside herdr: manage workspaces, tabs, panes, agents, output reads, and state waits.";
+      repository = "https://github.com/ogulcancelik/herdr";
+    };
+
     # Marketing skills (coreyhaines31/marketingskills) - one plugin bundling 43
     # skills. Load via:
     #   claude --plugin-dir ~/plugins/marketing-skills

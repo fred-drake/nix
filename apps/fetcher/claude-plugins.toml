@@ -70,3 +70,9 @@ url = "https://github.com/remotion-dev/skills"
 [[repos]]
 name = "marketing-skills-src"
 url = "https://github.com/coreyhaines31/marketingskills"
+
+# herdr agent skill (ogulcancelik/herdr). Upstream keeps the reusable skill at
+# repo-root SKILL.md, so claude-code.nix wraps just that file into a skills/ tree.
+[[repos]]
+name = "herdr-src"
+url = "https://github.com/ogulcancelik/herdr"

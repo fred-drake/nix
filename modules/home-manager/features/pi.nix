@@ -160,6 +160,7 @@
       "${config.home.homeDirectory}/plugins/superpowers/skills"
       "${config.home.homeDirectory}/plugins/andrej-karpathy-skills/skills"
       "${config.home.homeDirectory}/plugins/agent-rules-skill/skills"
+      "${config.home.homeDirectory}/plugins/herdr/skills"
     ];
   });
 in {
