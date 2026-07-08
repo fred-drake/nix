@@ -52,8 +52,8 @@
   vicinae-src = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "9ad113fa364b564a4efdb3b070838884dc9313c1";
-    hash = "sha256-2jFWxNMbKI90Dsxx8Q6ZVuwqdicf/lxDcvfIopRh908=";
+    rev = "b96d953b74c1e1a250d3282f3857c9935aeca3f2";
+    hash = "sha256-SJP1CkpkGxsuJZQKxaDPLZMUT1HZmyxqR42nCIHfPLM=";
   };
   spotifatius-src = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
@@ -70,7 +70,7 @@
   herdr-src = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
-    rev = "5b4450c969a4118298dbe8cf495391eb1e8d47db";
-    hash = "sha256-MG7mJRs6pFfeN9YkaSuLSMGCUvDHAyGgAvTLhDGAt4o=";
+    rev = "77f0339c3cd387c4ca3f4f240ff8b88065d66a22";
+    hash = "sha256-no8aODMs+tYEnEShJPHKap2imToiA++joPFL+o/ZAmg=";
   };
 }

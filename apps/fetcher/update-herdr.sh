@@ -85,24 +85,41 @@ for _ in 1 2 3 4; do
     exit 0
   fi
 
-  got_hash=$(printf '%s\n' "$build_output" | awk '/got:[[:space:]]+sha256-/ { print $2; exit }')
-  if [ -z "${got_hash:-}" ]; then
+  mismatch=$(printf '%s\n' "$build_output" | awk '
+    /hash mismatch in fixed-output derivation/ {
+      drv = $0
+      sub(/^.*fixed-output derivation '\''/, "", drv)
+      sub(/'\'':.*$/, "", drv)
+      next
+    }
+    drv != "" && /got:[[:space:]]+sha256-/ {
+      print drv " " $2
+      exit
+    }
+  ')
+  if [ -z "${mismatch:-}" ]; then
     printf '%s\n' "$build_output" >&2
     echo "Could not find a Nix hash mismatch in build output." >&2
     exit 1
   fi
 
-  if printf '%s\n' "$build_output" | grep -q -- '-zig-deps\.drv'; then
-    zig_deps_hash="$got_hash"
-    echo "  zigDepsHash: $zig_deps_hash"
-  elif printf '%s\n' "$build_output" | grep -q -- '-vendor'; then
-    cargo_hash="$got_hash"
-    echo "  cargoHash: $cargo_hash"
-  else
-    printf '%s\n' "$build_output" >&2
-    echo "Could not identify which herdr hash changed." >&2
-    exit 1
-  fi
+  mismatch_drv=${mismatch% *}
+  got_hash=${mismatch##* }
+  case "$mismatch_drv" in
+    *-zig-deps.drv)
+      zig_deps_hash="$got_hash"
+      echo "  zigDepsHash: $zig_deps_hash"
+      ;;
+    *-vendor.drv | *-vendor-staging.drv)
+      cargo_hash="$got_hash"
+      echo "  cargoHash: $cargo_hash"
+      ;;
+    *)
+      printf '%s\n' "$build_output" >&2
+      echo "Could not identify which herdr hash changed from $mismatch_drv." >&2
+      exit 1
+      ;;
+  esac
 
   write_pin "$cargo_hash" "$zig_deps_hash"
 done

@@ -7,16 +7,6 @@
   # .claude/skills/woodpecker-upgrade/SKILL.md before bumping.
   inherit (inputs.nixpkgs-woodpecker-agent.legacyPackages.${prev.stdenv.hostPlatform.system}) woodpecker-agent;
 
-  # WORKAROUND(podman): nixpkgs b5aa0fbd restricted podman to linux-only in meta.platforms
-  # despite having Darwin build code; remove when nixpkgs restores aarch64-darwin to podman.meta.platforms.
-  podman = prev.podman.overrideAttrs (old: {
-    meta =
-      old.meta
-      // {
-        platforms = old.meta.platforms ++ ["aarch64-darwin" "x86_64-darwin"];
-      };
-  });
-
   spotify =
     if prev.stdenv.isDarwin
     then

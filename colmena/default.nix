@@ -46,6 +46,9 @@ in {
     nodeNixpkgs.anton = import nixpkgs-unstable {
       system = "x86_64-linux";
       config.allowUnfree = true;
+      overlays = [
+        (import ../overlays/pyicloud.nix {inherit inputs;})
+      ];
     };
   };
 
