@@ -41,10 +41,10 @@ State file: ${STATE_FILE}
 - For all fleet health checks, exclude endpoints owned by hosts listed in skippedHosts.
 
 Deploy rules for this host:
-1. First check SSH reachability with `ssh -o BatchMode=yes -o ConnectTimeout=10 ${host} 'true'`. If unreachable, update ${STATE_FILE}, report SKIPPED_UNREACHABLE, and stop this step successfully.
+1. First check SSH reachability with \`ssh -o BatchMode=yes -o ConnectTimeout=10 ${host} 'true'\`. If unreachable, update ${STATE_FILE}, report SKIPPED_UNREACHABLE, and stop this step successfully.
 2. Run from ${REPO}: colmena apply --on ${host} --impure.
 3. Do not run a parallel, comma-separated, or all-host colmena apply.
-4. Independently verify activation with `ssh ${host} 'readlink /run/current-system'` and compare it to the built/pushed system path. For anton, remember that exit code 4 can be a spurious user dbus-broker reload timeout; verify the active generation before deciding it failed.
+4. Independently verify activation with \`ssh ${host} 'readlink /run/current-system'\` and compare it to the built/pushed system path. For anton, remember that exit code 4 can be a spurious user dbus-broker reload timeout; verify the active generation before deciding it failed.
 5. If eval/build/push/activation fails for a real reason, diagnose and fix the root cause. Fix Nix repository problems in ${REPO}; git add any new files. Fix remote-state problems over SSH. Do not mask failures.
 6. If you fixed any failure, still finish the step only after verifying the fix. Then end with status FIXED_AFTER_FAILURE so the gate loops back to deploy-stormwind and repeats the fleet from the top.
 7. If the switch is clean, verify the whole non-skipped fleet's web health before advancing:
@@ -73,7 +73,7 @@ End your final line with exactly one status token and a concise summary:
 			},
 			{
 				type: "agent",
-				id: "clean-host-deploy",
+				id: `${host}-clean-deploy`,
 				name: "Host deployed cleanly or was skipped unreachable",
 				prompt:
 					"Pass only if this host step ended as CLEAN_DEPLOYED with all non-skipped fleet endpoints healthy, or SKIPPED_UNREACHABLE with the host recorded as skipped. Fail if the step ended as FIXED_AFTER_FAILURE, changed Nix repository files, fixed remote state, healed an unhealthy endpoint, or otherwise encountered any failure that was repaired. A failure here intentionally loops the workflow back to deploy-stormwind so the whole fleet is redeployed from the top.",
@@ -114,7 +114,7 @@ Initialize ${STATE_FILE} as JSON with at least:
 Perform these pre-flight checks and summarize the result:
 1. Run git -C ${REPO} status --porcelain and identify any untracked *.nix files. These are blockers because git+file flakes cannot see them.
 2. Confirm colmena is available with colmena --version.
-3. SSH reachability check each host in canonical order: ${ORDER_LABEL}. ${SSH_ALIAS_GUIDANCE} Use a short timeout and BatchMode, for example `ssh -o BatchMode=yes -o ConnectTimeout=10 <host-alias> 'true'`.
+3. SSH reachability check each host in canonical order: ${ORDER_LABEL}. ${SSH_ALIAS_GUIDANCE} Use a short timeout and BatchMode, for example \`ssh -o BatchMode=yes -o ConnectTimeout=10 <host-alias> 'true'\`.
 4. Treat unreachable machines as skipped, not blockers. Add them to ${STATE_FILE}. Note that anton may simply be asleep/off.
 5. If every host is unreachable, stop and report that there is nothing to deploy.
 
@@ -158,7 +158,7 @@ End with a concise pre-flight summary containing: blockers, skipped/unreachable 
 
 Use the procedure in ${INFRA_SKILL}. In short:
 1. grep -rn 'WORKAROUND(' ${REPO} --exclude-dir=.git.
-2. For markers under overlays/, test the stock package at the pinned nixpkgs-unstable rev on a reachable unstable x86_64-linux host, preferring gnomeregan then anton. Use the ~/.ssh/config aliases (`ssh gnomeregan`, then `ssh anton`) for reachability/build commands. If a host is listed in ${STATE_FILE}'s skippedHosts, do not use it as the builder.
+2. For markers under overlays/, test the stock package at the pinned nixpkgs-unstable rev on a reachable unstable x86_64-linux host, preferring gnomeregan then anton. Use the ~/.ssh/config aliases (\`ssh gnomeregan\`, then \`ssh anton\`) for reachability/build commands. If a host is listed in ${STATE_FILE}'s skippedHosts, do not use it as the builder.
 3. If the stock package builds or substitutes cleanly, remove the stale workaround and its marker, update overlays/default.nix if needed, git rm deleted overlay files, and verify the consuming config still evaluates/builds.
 4. If the stock build still fails, keep the workaround.
 5. For markers outside overlays/, report them as manual and do not modify them.
