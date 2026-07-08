@@ -9,12 +9,19 @@
 
     fzf = {
       enable = true;
-      changeDirWidgetCommand = "fd --type d";
-      changeDirWidgetOptions = ["--preview 'tree -C {} | head -200'"];
+      changeDirWidget = {
+        command = "fd --type d";
+        options = ["--preview 'tree -C {} | head -200'"];
+      };
       defaultCommand = "fd --type f";
-      fileWidgetCommand = "fd --type f";
-      fileWidgetOptions = ["--preview 'head {}'"];
-      historyWidgetOptions = ["--sort" "--exact"];
+      fileWidget = {
+        command = "fd --type f";
+        options = ["--preview 'head {}'"];
+      };
+      historyWidget = {
+        command = "";
+        options = ["--sort" "--exact"];
+      };
     };
 
     zoxide.enable = true;

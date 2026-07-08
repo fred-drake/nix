@@ -39,7 +39,7 @@ in {
     focus_agent = "ctrl+1..9"
     split_vertical = "prefix+|"
     split_horizontal = "prefix+minus"
-    goto = "prefix+w"
+    goto = "prefix+s"
 
     [[keys.command]]
     key = "prefix+g"
