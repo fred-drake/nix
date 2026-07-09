@@ -135,6 +135,12 @@ in {
         key = "brave";
       };
 
+      llm-xai = {
+        sopsFile = config.secrets.workstation.llm.api-keys;
+        mode = "0400";
+        key = "x-ai";
+      };
+
       docker-auth = {
         sopsFile = config.secrets.workstation.tools.docker-auth;
         mode = "0400";

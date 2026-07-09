@@ -63,11 +63,12 @@
   # so pi auto-discovers them without needing a ~/.pi/agent/extensions symlink.
   piExtensionsDir = ../../../apps/pi-extensions;
 
-  # Custom OpenRouter models, authored as a native Nix attrset and converted to
-  # ~/.pi/agent/models.json via builtins.toJSON. `apiKey` is intentionally
-  # omitted — the OpenRouter key already lives in the mutable ~/.pi/agent/auth.json
-  # (via `/login`), and pi resolves auth from there. Each model pins OpenRouter
-  # provider routing to cost-sorted, high-precision quantizations only.
+  # Custom providers, authored as native Nix attrsets. The full models.json
+  # (including the opencode/Xai provider with its apiKey from the llm-xai
+  # sops secret) is rendered at activation by sops-nix via
+  # sops.templates.pi-models below — the apiKey placeholder survives
+  # builtins.toJSON and is substituted at activation, never baked into the
+  # world-readable Nix store.
   openRouterRouting = {
     sort = "price";
     quantizations = ["bf16" "fp16" "fp8"];
@@ -76,50 +77,122 @@
     inherit id name;
     overrides = {inherit openRouterRouting;};
   };
-  modelsJson = pkgs.writeText "pi-agent-models.json" (builtins.toJSON {
-    providers = {
-      openrouter = {
-        baseUrl = "https://openrouter.ai/api/v1";
-        models = [
-          (mkOpenRouterModel "deepseek/deepseek-v4-pro" "DeepSeek (cheap, high precision)")
-          (mkOpenRouterModel "minimax/MiniMax-M3" "MiniMax M3 (cheap, high precision)")
-          (mkOpenRouterModel "openrouter/z-ai/glm-5.2" "GLM-5.2 (cheap, high precision)")
-        ];
-      };
-      # Local Ollama server (brew install ollama; ollama serve). Ollama exposes
-      # an OpenAI-compatible API at /v1, so pi uses openai-completions. The
-      # model below is a Qwen 3.x reasoning model that emits <think>…</think>
-      # blocks — thinkingFormat: "qwen" maps pi's /thinking levels onto the
-      # enable_thinking toggle Ollama understands. No apiKey: Ollama accepts
-      # any non-empty string. Switch with: /model ollama/qwen3.6:35b
-      ollama = {
-        baseUrl = "http://localhost:11434/v1";
-        apiKey = "not-needed";
-        api = "openai-completions";
-        models = [
-          {
-            id = "qwen3.6:35b";
-            name = "Qwen 3.6 35B (local)";
-            reasoning = true;
-            input = ["text"];
-            cost = {
-              input = 0;
-              output = 0;
-              cacheRead = 0;
-              cacheWrite = 0;
-            };
-            contextWindow = 262144;
-            maxTokens = 16384;
-            compat = {
-              supportsDeveloperRole = false;
-              maxTokensField = "max_tokens";
-              thinkingFormat = "qwen";
-            };
-          }
-        ];
-      };
+  staticProviders = {
+    openrouter = {
+      baseUrl = "https://openrouter.ai/api/v1";
+      models = [
+        (mkOpenRouterModel "deepseek/deepseek-v4-pro" "DeepSeek (cheap, high precision)")
+        (mkOpenRouterModel "minimax/MiniMax-M3" "MiniMax M3 (cheap, high precision)")
+        (mkOpenRouterModel "openrouter/z-ai/glm-5.2" "GLM-5.2 (cheap, high precision)")
+      ];
     };
-  });
+    # Local Ollama server (brew install ollama; ollama serve). Ollama exposes
+    # an OpenAI-compatible API at /v1, so pi uses openai-completions. The
+    # model below is a Qwen 3.x reasoning model that emits <think>…</think>
+    # blocks — thinkingFormat: "qwen" maps pi's /thinking levels onto the
+    # enable_thinking toggle Ollama understands. No apiKey: Ollama accepts
+    # any non-empty string. Switch with: /model ollama/qwen3.6:35b
+    ollama = {
+      baseUrl = "http://localhost:11434/v1";
+      apiKey = "not-needed";
+      api = "openai-completions";
+      models = [
+        {
+          id = "qwen3.6:35b";
+          name = "Qwen 3.6 35B (local)";
+          reasoning = true;
+          input = ["text"];
+          cost = {
+            input = 0;
+            output = 0;
+            cacheRead = 0;
+            cacheWrite = 0;
+          };
+          contextWindow = 262144;
+          maxTokens = 16384;
+          compat = {
+            supportsDeveloperRole = false;
+            maxTokensField = "max_tokens";
+            thinkingFormat = "qwen";
+          };
+        }
+        {
+          id = "qwen3.6:27b";
+          name = "Qwen 3.6 27B";
+          reasoning = true;
+          input = ["text"];
+          cost = {
+            input = 0;
+            output = 0;
+            cacheRead = 0;
+            cacheWrite = 0;
+          };
+          contextWindow = 262144;
+          maxTokens = 16384;
+          compat = {
+            supportsDeveloperRole = false;
+            maxTokensField = "max_tokens";
+            thinkingFormat = "qwen";
+          };
+        }
+        {
+          id = "qwen3.6-27b-temp06";
+          name = "Qwen 3.6 27B temp 0.6 (local)";
+          reasoning = true;
+          input = ["text"];
+          cost = {
+            input = 0;
+            output = 0;
+            cacheRead = 0;
+            cacheWrite = 0;
+          };
+          contextWindow = 262144;
+          maxTokens = 16384;
+          compat = {
+            supportsDeveloperRole = false;
+            maxTokensField = "max_tokens";
+            thinkingFormat = "qwen";
+          };
+        }
+      ];
+    };
+  };
+  # Xai provider (grok-4.5). The apiKey is a sops-nix placeholder —
+  # builtins.toJSON encodes it as a quoted JSON string and sops-nix substitutes
+  # the real value at activation.
+  xaiProvider = {
+    apiKey = config.sops.placeholder.llm-xai;
+    models = [
+      {
+        id = "grok-4.5";
+        name = "Grok 4.5";
+        reasoning = true;
+        input = ["text" "image"];
+        contextWindow = 500000;
+        maxTokens = 500000;
+        cost = {
+          input = 2;
+          output = 6;
+          cacheRead = 0.5;
+          cacheWrite = 0;
+        };
+        compat = {
+          supportsStore = false;
+          supportsDeveloperRole = false;
+          supportsReasoningEffort = false;
+        };
+      }
+    ];
+    api = "openai-completions";
+    baseUrl = "https://api.x.ai/v1";
+  };
+
+  # Full models.json content, serialized with builtins.toJSON. The apiKey
+  # placeholder inside xaiProvider survives JSON encoding as a quoted string
+  # and is substituted at activation by sops-nix.
+  modelsJson = builtins.toJSON {
+    providers = staticProviders // {xai = xaiProvider;};
+  };
 
   # Fully declarative settings.json — symlinked read-only from the Nix store.
   # lastChangelogVersion is pinned to the current pi version so pi never
@@ -129,7 +202,7 @@
     theme = "dark";
     defaultProvider = "openai-codex";
     defaultModel = "gpt-5.5";
-    defaultThinkingLevel = "high";
+    defaultThinkingLevel = "low";
     packages = map toString piPackages;
     prompts = [promptsDir];
     extensions = ["${piExtensionsDir}"];
@@ -185,9 +258,9 @@ in {
 
       ".pi/agent/settings.json".source = settingsJson;
 
-      # Custom models (OpenRouter) — read-only Nix symlink. Auth is supplied
-      # separately by the mutable ~/.pi/agent/auth.json, so no apiKey here.
-      ".pi/agent/models.json".source = modelsJson;
+      # Custom models.json is rendered by sops-nix at activation via
+      # sops.templates.pi-models (below) — it includes the xai provider
+      # with the Xai apiKey from the llm-xai secret.
 
       # LSP server configuration for pi-lsp. Global config is trusted automatically.
       # Project-local .pi/lsp.json entries can override or disable these per-project.
@@ -273,7 +346,6 @@ in {
         source = "${piExtensionsDir}/cmux-session.ts";
       };
     };
-
     # On macOS, GUI apps (cmux → pi) inherit the launchd per-user environment,
     # not the shell profile. Push HYPA_PI_MODE into launchd so pi-hypa's
     # replace mode is active regardless of how pi is launched.
@@ -282,5 +354,16 @@ in {
       (lib.hm.dag.entryAfter ["writeBoundary"] ''
         $DRY_RUN_CMD /bin/launchctl setenv HYPA_PI_MODE replace
       '');
+  };
+
+  # Render ~/.pi/agent/models.json at activation with the Xai apiKey
+  # substituted from the llm-xai sops secret. The static providers
+  # (openrouter + ollama) and the xai provider are built as a Nix attrset,
+  # serialized with builtins.toJSON, and the apiKey placeholder is substituted
+  # at activation by sops-nix — never baked into the store.
+  sops.templates.pi-models = {
+    path = "${config.home.homeDirectory}/.pi/agent/models.json";
+    mode = "0400";
+    content = modelsJson;
   };
 }

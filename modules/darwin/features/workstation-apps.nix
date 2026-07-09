@@ -83,6 +83,7 @@ lib.mkMerge [
         "steam"
         "tailscale-app"
         "vlc"
+        "wealthfolio"
         "whatsapp"
         "winbox"
         "wine-stable"
