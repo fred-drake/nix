@@ -547,8 +547,8 @@ in
                       # Key absent: insert it directly under the [misc] section header.
                       ${pkgs.gnused}/bin/sed -i '/^\[misc\]/a helpful_warnings = 0' "$ini"
                     fi
-                    # Keep the NewsDemon server on its EU endpoint.
-                    ${pkgs.gnused}/bin/sed -i 's/news\.newsdemon\.com/eu.newsdemon.com/g' "$ini"
+                    # Keep the NewsDemon server on its original endpoint.
+                    ${pkgs.gnused}/bin/sed -i 's/eu\.newsdemon\.com/news.newsdemon.com/g' "$ini"
                   '')
                 ];
               };
