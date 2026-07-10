@@ -356,6 +356,36 @@ in
     ++ mediaProxies
     ++ [
       {
+        # SABnzbd's adopted /config directory is mutable application state, so
+        # inject its credentials at service start rather than putting them in the
+        # Nix store. Each value is sourced from the host SOPS document.
+        sops.secrets = {
+          sabnzbd-api-key = {
+            sopsFile = config.secrets.host.sabnzbd;
+            key = "api-key";
+            mode = "0400";
+            restartUnits = ["podman-sabnzbd.service"];
+          };
+          sabnzbd-nzb-key = {
+            sopsFile = config.secrets.host.sabnzbd;
+            key = "nzb-key";
+            mode = "0400";
+            restartUnits = ["podman-sabnzbd.service"];
+          };
+          sabnzbd-newsdemon-username = {
+            sopsFile = config.secrets.host.sabnzbd;
+            key = "newsdemon-username";
+            mode = "0400";
+            restartUnits = ["podman-sabnzbd.service"];
+          };
+          sabnzbd-newsdemon-password = {
+            sopsFile = config.secrets.host.sabnzbd;
+            key = "newsdemon-password";
+            mode = "0400";
+            restartUnits = ["podman-sabnzbd.service"];
+          };
+        };
+
         # nixarr service configuration. Each service is enabled only while it has
         # not been migrated to a podman container (see `migrated` above).
         nixarr = {
@@ -549,6 +579,46 @@ in
                     fi
                     # Keep the NewsDemon server on its original endpoint.
                     ${pkgs.gnused}/bin/sed -i 's/eu\.newsdemon\.com/news.newsdemon.com/g' "$ini"
+
+                    # Apply secret values directly to the adopted configuration.
+                    # Pass secret paths, never their contents, to the interpreter.
+                    ${pkgs.python3}/bin/python3 - "$ini" \
+                      "${config.sops.secrets.sabnzbd-api-key.path}" \
+                      "${config.sops.secrets.sabnzbd-nzb-key.path}" \
+                      "${config.sops.secrets.sabnzbd-newsdemon-username.path}" \
+                      "${config.sops.secrets.sabnzbd-newsdemon-password.path}" <<'PY'
+                    import pathlib
+                    import sys
+
+                    ini_path, *secret_paths = map(pathlib.Path, sys.argv[1:])
+                    api_key, nzb_key, username, password = [
+                        path.read_text().rstrip("\n") for path in secret_paths
+                    ]
+                    lines = ini_path.read_text().splitlines(keepends=True)
+
+                    def section_bounds(header):
+                        start = next(i for i, line in enumerate(lines) if line.rstrip("\n") == header)
+                        end = next(
+                            (i for i in range(start + 1, len(lines)) if lines[i].startswith("[")),
+                            len(lines),
+                        )
+                        return start, end
+
+                    def set_value(header, key, value):
+                        start, end = section_bounds(header)
+                        prefix = f"{key} = "
+                        for index in range(start + 1, end):
+                            if lines[index].startswith(prefix):
+                                lines[index] = f"{prefix}{value}\n"
+                                return
+                        lines.insert(end, f"{prefix}{value}\n")
+
+                    set_value("[misc]", "api_key", api_key)
+                    set_value("[misc]", "nzb_key", nzb_key)
+                    set_value("[[news.newsdemon.com]]", "username", username)
+                    set_value("[[news.newsdemon.com]]", "password", password)
+                    ini_path.write_text("".join(lines))
+                    PY
                   '')
                 ];
               };
