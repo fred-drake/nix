@@ -402,10 +402,7 @@ in
               config.sops.placeholder.sabnzbd-newsdemon-password
             ]
             (builtins.readFile ./sabnzbd.ini.in);
-          path = "/data/.state/nixarr/sabnzbd/sabnzbd.ini";
-          owner = "media";
-          group = "media";
-          mode = "0640";
+          mode = "0400";
           restartUnits = ["podman-sabnzbd.service"];
         };
 
@@ -579,10 +576,20 @@ in
 
             (lib.mkIf (isPodman "sabnzbd") {
               # MemoryHigh on the oci-container's systemd unit (oci-containers are
-              # systemd services, so the cap still applies). SABnzbd's complete
-              # configuration, including its credentials, is rendered by the
-              # SOPS template above before this unit starts.
-              "podman-sabnzbd".serviceConfig.MemoryHigh = "2G";
+              # systemd services, so the cap still applies). Copy the complete,
+              # SOPS-rendered configuration to the mutable bind mount before
+              # startup. SABnzbd requires a real (not /run-backed symlink) INI.
+              "podman-sabnzbd".serviceConfig = {
+                MemoryHigh = "2G";
+                ExecStartPre = lib.mkAfter [
+                  (pkgs.writeShellScript "sabnzbd-install-config" ''
+                    ini="/data/.state/nixarr/sabnzbd/sabnzbd.ini"
+                    ${pkgs.coreutils}/bin/rm -f "$ini"
+                    ${pkgs.coreutils}/bin/install -m 0640 -o media -g media \
+                      "${config.sops.templates.sabnzbd-ini.path}" "$ini"
+                  '')
+                ];
+              };
 
               sabnzbd-healthcheck = {
                 description = "SABnzbd health check";
