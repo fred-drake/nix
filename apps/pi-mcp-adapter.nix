@@ -3,10 +3,10 @@
 # This replaces `pi install npm:pi-mcp-adapter`.
 #
 # The upstream repo ships no package-lock.json; we keep a generated one at
-# apps/fetcher/pi-mcp-adapter-lock.json alongside the pin (generated with
-# --omit=dev --omit=peer to exclude @earendil-works/pi-coding-agent devDep,
-# which ships nested pi-* packages at a different version without integrity
-# hashes, breaking prefetch-npm-deps).
+# apps/fetcher/pi-mcp-adapter-lock.json alongside the pin. npm can leave
+# omitted dev dependency metadata in the generated lockfile, so the updater
+# repairs registry entries that are missing integrity before computing
+# npmDepsHash.
 #
 # Pi loads index.ts via jiti — no TypeScript compilation step needed.
 # @earendil-works/pi-ai, pi-tui, and typebox are listed in the package's own

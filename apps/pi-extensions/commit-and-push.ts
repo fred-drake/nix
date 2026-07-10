@@ -1,7 +1,7 @@
 /**
  * commit-and-push — pi command extension
  *
- * Registers /commit-and-push. Switches to ollama/qwen3.6:27b, sends a short
+ * Registers /commit-and-push. Switches to openai-codex/gpt-5.6-luna, sends a short
  * "commit everything and push" prompt, then restores the previous model when
  * the agent turn ends.
  *
@@ -12,8 +12,8 @@
 import type { Api, Model } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 
-const PROVIDER = "ollama";
-const MODEL_ID = "qwen3.6:27b";
+const PROVIDER = "openai-codex";
+const MODEL_ID = "gpt-5.6-luna";
 const PROMPT = "commit everything and push";
 
 export default function (pi: ExtensionAPI) {
@@ -41,7 +41,7 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.registerCommand("commit-and-push", {
-    description: "Commit everything and push (via ollama/qwen3.6:27b)",
+    description: "Commit everything and push (via openai-codex/gpt-5.6-luna)",
     handler: async (_args, ctx) => {
       if (!ctx.isIdle()) {
         ctx.ui.notify("Agent is busy; try again when idle.", "warning");

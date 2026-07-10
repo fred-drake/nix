@@ -63,12 +63,8 @@
   # so pi auto-discovers them without needing a ~/.pi/agent/extensions symlink.
   piExtensionsDir = ../../../apps/pi-extensions;
 
-  # Custom providers, authored as native Nix attrsets. The full models.json
-  # (including the opencode/Xai provider with its apiKey from the llm-xai
-  # sops secret) is rendered at activation by sops-nix via
-  # sops.templates.pi-models below — the apiKey placeholder survives
-  # builtins.toJSON and is substituted at activation, never baked into the
-  # world-readable Nix store.
+  # Custom providers, authored as native Nix attrsets and rendered to
+  # ~/.pi/agent/models.json.
   openRouterRouting = {
     sort = "price";
     quantizations = ["bf16" "fp16" "fp8"];
@@ -157,41 +153,9 @@
       ];
     };
   };
-  # Xai provider (grok-4.5). The apiKey is a sops-nix placeholder —
-  # builtins.toJSON encodes it as a quoted JSON string and sops-nix substitutes
-  # the real value at activation.
-  xaiProvider = {
-    apiKey = config.sops.placeholder.llm-xai;
-    models = [
-      {
-        id = "grok-4.5";
-        name = "Grok 4.5";
-        reasoning = true;
-        input = ["text" "image"];
-        contextWindow = 500000;
-        maxTokens = 500000;
-        cost = {
-          input = 2;
-          output = 6;
-          cacheRead = 0.5;
-          cacheWrite = 0;
-        };
-        compat = {
-          supportsStore = false;
-          supportsDeveloperRole = false;
-          supportsReasoningEffort = false;
-        };
-      }
-    ];
-    api = "openai-completions";
-    baseUrl = "https://api.x.ai/v1";
-  };
-
-  # Full models.json content, serialized with builtins.toJSON. The apiKey
-  # placeholder inside xaiProvider survives JSON encoding as a quoted string
-  # and is substituted at activation by sops-nix.
+  # Full models.json content, serialized with builtins.toJSON.
   modelsJson = builtins.toJSON {
-    providers = staticProviders // {xai = xaiProvider;};
+    providers = staticProviders;
   };
 
   # Fully declarative settings.json — symlinked read-only from the Nix store.
@@ -201,8 +165,8 @@
     lastChangelogVersion = pi-coding-agent.version;
     theme = "dark";
     defaultProvider = "openai-codex";
-    defaultModel = "gpt-5.5";
-    defaultThinkingLevel = "low";
+    defaultModel = "gpt-5.6-terra";
+    defaultThinkingLevel = "medium";
     packages = map toString piPackages;
     prompts = [promptsDir];
     extensions = ["${piExtensionsDir}"];
@@ -258,9 +222,10 @@ in {
 
       ".pi/agent/settings.json".source = settingsJson;
 
-      # Custom models.json is rendered by sops-nix at activation via
-      # sops.templates.pi-models (below) — it includes the xai provider
-      # with the Xai apiKey from the llm-xai secret.
+      ".pi/agent/models.json" = {
+        text = modelsJson;
+        force = true;
+      };
 
       # LSP server configuration for pi-lsp. Global config is trusted automatically.
       # Project-local .pi/lsp.json entries can override or disable these per-project.
@@ -354,16 +319,5 @@ in {
       (lib.hm.dag.entryAfter ["writeBoundary"] ''
         $DRY_RUN_CMD /bin/launchctl setenv HYPA_PI_MODE replace
       '');
-  };
-
-  # Render ~/.pi/agent/models.json at activation with the Xai apiKey
-  # substituted from the llm-xai sops secret. The static providers
-  # (openrouter + ollama) and the xai provider are built as a Nix attrset,
-  # serialized with builtins.toJSON, and the apiKey placeholder is substituted
-  # at activation by sops-nix — never baked into the store.
-  sops.templates.pi-models = {
-    path = "${config.home.homeDirectory}/.pi/agent/models.json";
-    mode = "0400";
-    content = modelsJson;
   };
 }
