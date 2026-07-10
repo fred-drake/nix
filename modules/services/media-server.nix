@@ -356,9 +356,10 @@ in
     ++ mediaProxies
     ++ [
       {
-        # SABnzbd's adopted /config directory is mutable application state, so
-        # inject its credentials at service start rather than putting them in the
-        # Nix store. Each value is sourced from the host SOPS document.
+        # SABnzbd's adopted /config directory is mutable application state. Its
+        # complete configuration is rendered at activation from this static
+        # template and runtime SOPS placeholders, keeping all secrets out of the
+        # Nix store.
         sops.secrets = {
           sabnzbd-api-key = {
             sopsFile = config.secrets.host.sabnzbd;
@@ -384,6 +385,28 @@ in
             mode = "0400";
             restartUnits = ["podman-sabnzbd.service"];
           };
+        };
+        sops.templates.sabnzbd-ini = {
+          content =
+            builtins.replaceStrings
+            [
+              "@api-key@"
+              "@nzb-key@"
+              "@newsdemon-username@"
+              "@newsdemon-password@"
+            ]
+            [
+              config.sops.placeholder.sabnzbd-api-key
+              config.sops.placeholder.sabnzbd-nzb-key
+              config.sops.placeholder.sabnzbd-newsdemon-username
+              config.sops.placeholder.sabnzbd-newsdemon-password
+            ]
+            (builtins.readFile ./sabnzbd.ini.in);
+          path = "/data/.state/nixarr/sabnzbd/sabnzbd.ini";
+          owner = "media";
+          group = "media";
+          mode = "0640";
+          restartUnits = ["podman-sabnzbd.service"];
         };
 
         # nixarr service configuration. Each service is enabled only while it has
@@ -556,72 +579,10 @@ in
 
             (lib.mkIf (isPodman "sabnzbd") {
               # MemoryHigh on the oci-container's systemd unit (oci-containers are
-              # systemd services, so the cap still applies). cache_limit and the
-              # blanked `permissions` now live in the preserved sabnzbd.ini under
-              # /config, and PGID 169 + UMASK 002 replace the old chmod fixup.
-              #
-              # The ExecStartPre silences SABnzbd's "not writable with special
-              # character filenames" warnings: the usenet download dirs live on the
-              # CIFS/SMB media mount, which can't store certain characters, so
-              # SABnzbd's startup probe fails harmlessly. Force helpful_warnings = 0
-              # in the bind-mounted ini before the container starts.
-              "podman-sabnzbd".serviceConfig = {
-                MemoryHigh = "2G";
-                ExecStartPre = lib.mkAfter [
-                  (pkgs.writeShellScript "sabnzbd-disable-helpful-warnings" ''
-                    ini="/data/.state/nixarr/sabnzbd/sabnzbd.ini"
-                    [ -f "$ini" ] || exit 0
-                    if ${pkgs.gnugrep}/bin/grep -q '^helpful_warnings = ' "$ini"; then
-                      ${pkgs.gnused}/bin/sed -i 's/^helpful_warnings = .*/helpful_warnings = 0/' "$ini"
-                    else
-                      # Key absent: insert it directly under the [misc] section header.
-                      ${pkgs.gnused}/bin/sed -i '/^\[misc\]/a helpful_warnings = 0' "$ini"
-                    fi
-                    # Keep the NewsDemon server on its original endpoint.
-                    ${pkgs.gnused}/bin/sed -i 's/eu\.newsdemon\.com/news.newsdemon.com/g' "$ini"
-
-                    # Apply secret values directly to the adopted configuration.
-                    # Pass secret paths, never their contents, to the interpreter.
-                    ${pkgs.python3}/bin/python3 - "$ini" \
-                      "${config.sops.secrets.sabnzbd-api-key.path}" \
-                      "${config.sops.secrets.sabnzbd-nzb-key.path}" \
-                      "${config.sops.secrets.sabnzbd-newsdemon-username.path}" \
-                      "${config.sops.secrets.sabnzbd-newsdemon-password.path}" <<'PY'
-                    import pathlib
-                    import sys
-
-                    ini_path, *secret_paths = map(pathlib.Path, sys.argv[1:])
-                    api_key, nzb_key, username, password = [
-                        path.read_text().rstrip("\n") for path in secret_paths
-                    ]
-                    lines = ini_path.read_text().splitlines(keepends=True)
-
-                    def section_bounds(header):
-                        start = next(i for i, line in enumerate(lines) if line.rstrip("\n") == header)
-                        end = next(
-                            (i for i in range(start + 1, len(lines)) if lines[i].startswith("[")),
-                            len(lines),
-                        )
-                        return start, end
-
-                    def set_value(header, key, value):
-                        start, end = section_bounds(header)
-                        prefix = f"{key} = "
-                        for index in range(start + 1, end):
-                            if lines[index].startswith(prefix):
-                                lines[index] = f"{prefix}{value}\n"
-                                return
-                        lines.insert(end, f"{prefix}{value}\n")
-
-                    set_value("[misc]", "api_key", api_key)
-                    set_value("[misc]", "nzb_key", nzb_key)
-                    set_value("[[news.newsdemon.com]]", "username", username)
-                    set_value("[[news.newsdemon.com]]", "password", password)
-                    ini_path.write_text("".join(lines))
-                    PY
-                  '')
-                ];
-              };
+              # systemd services, so the cap still applies). SABnzbd's complete
+              # configuration, including its credentials, is rendered by the
+              # SOPS template above before this unit starts.
+              "podman-sabnzbd".serviceConfig.MemoryHigh = "2G";
 
               sabnzbd-healthcheck = {
                 description = "SABnzbd health check";
