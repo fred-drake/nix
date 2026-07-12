@@ -29,6 +29,7 @@ in {
     networking = {
       nameservers = [
         "8.8.8.8"
+        "1.1.1.1"
       ];
       defaultGateway = gatewayAddress;
       dhcpcd.enable = false;

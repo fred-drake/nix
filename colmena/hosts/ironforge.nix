@@ -33,7 +33,6 @@ in {
       127.0.0.1 prowlarr.${soft-secrets.networking.domain}
       127.0.0.1 sabnzbd.${soft-secrets.networking.domain}
       127.0.0.1 bazarr.${soft-secrets.networking.domain}
-      10.1.1.5 traceway.${soft-secrets.networking.domain}
     '';
     imports =
       [

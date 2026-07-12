@@ -3,5 +3,6 @@
 {...}: {
   imports = [
     ../../colmena/hetzner-common
+    ./hetzner-split-dns.nix
   ];
 }

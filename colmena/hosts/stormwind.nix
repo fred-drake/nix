@@ -17,10 +17,6 @@ in {
       system = "x86_64-linux";
       overlays = [];
     };
-    # Resolve gitea internally so podman can pull traceway from gitea's container registry.
-    networking.extraHosts = ''
-      10.1.1.4 gitea.${soft-secrets.networking.domain}
-    '';
     imports =
       [
         nixosOptionsModule
@@ -64,9 +60,8 @@ in {
     ];
 
     # The otel-collector exporter ships stormwind's host metrics to the local
-    # Traceway nginx vhost; resolve it via /etc/hosts since the box's nameserver
-    # is public 8.8.8.8 and can't see *.internal names. (Gatus probes its own
-    # targets via per-container --add-host entries, defined in gatus.nix.)
+    # Traceway nginx vhost, so preserve this loopback override. Other internal
+    # names use the shared Hearthstone split-DNS resolver.
     networking.extraHosts = ''
       127.0.0.1 traceway.${domain}
     '';

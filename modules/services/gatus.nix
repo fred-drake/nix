@@ -14,36 +14,32 @@
   # gatus-env EnvironmentFile and substituted by gatus's ${VAR} support, so it
   # never lands in the (world-readable) Nix store.
 
-  # Endpoints Gatus probes, keyed by the private IP of the host that serves them.
-  # stormwind's nameserver is public 8.8.8.8 and can't resolve *.internal, so the
-  # container gets static --add-host entries below. Probing by hostname keeps the
-  # TLS SNI/Host matching each endpoint's ACME cert; a 4xx auth gate still counts
-  # as "up" (only a connection failure or nginx 5xx is a real outage).
-  endpointHosts = {
-    # ironforge media stack (10.1.1.3)
-    jellyfin = "10.1.1.3";
-    seerr = "10.1.1.3";
-    jellyseerr = "10.1.1.3";
-    sonarr = "10.1.1.3";
-    radarr = "10.1.1.3";
-    lidarr = "10.1.1.3";
-    prowlarr = "10.1.1.3";
-    sabnzbd = "10.1.1.3";
-    bazarr = "10.1.1.3";
-    # orgrimmar app stack (10.1.1.4)
-    resume = "10.1.1.4";
-    woodpecker = "10.1.1.4";
-    gitea = "10.1.1.4";
-    gitea-status = "10.1.1.4";
-    paperless = "10.1.1.4";
-    paperless-ai = "10.1.1.4";
-    calibre-web = "10.1.1.4";
-    files = "10.1.1.4";
+  # Shared Hetzner split DNS resolves these names through Hearthstone. Probing
+  # by hostname preserves each endpoint's TLS SNI/Host matching; a 4xx auth gate
+  # still counts as "up" (only a connection failure or nginx 5xx is a failure).
+  endpointGroups = {
+    ironforge = [
+      "jellyfin"
+      "seerr"
+      "jellyseerr"
+      "sonarr"
+      "radarr"
+      "lidarr"
+      "prowlarr"
+      "sabnzbd"
+      "bazarr"
+    ];
+    orgrimmar = [
+      "resume"
+      "woodpecker"
+      "gitea"
+      "gitea-status"
+      "paperless"
+      "paperless-ai"
+      "calibre-web"
+      "files"
+    ];
   };
-  groupOf = ip:
-    if ip == "10.1.1.3"
-    then "ironforge"
-    else "orgrimmar";
 
   gatusConfig = (pkgs.formats.yaml {}).generate "gatus-config.yaml" {
     web.port = 8080;
@@ -62,23 +58,21 @@
         send-on-resolved = true;
       };
     };
-    endpoints =
-      lib.mapAttrsToList (name: ip: {
-        inherit name;
-        group = groupOf ip;
-        url = "https://${name}.${domain}";
-        interval = "60s";
-        conditions = [
-          "[CONNECTED] == true"
-          "[STATUS] < 500"
-        ];
-        alerts = [{type = "discord";}];
-      })
-      endpointHosts;
+    endpoints = lib.concatMap (
+      group:
+        map (name: {
+          inherit name group;
+          url = "https://${name}.${domain}";
+          interval = "60s";
+          conditions = [
+            "[CONNECTED] == true"
+            "[STATUS] < 500"
+          ];
+          alerts = [{type = "discord";}];
+        })
+        endpointGroups.${group}
+    ) (lib.attrNames endpointGroups);
   };
-
-  addHostOptions =
-    lib.mapAttrsToList (name: ip: "--add-host=${name}.${domain}:${ip}") endpointHosts;
 in
   lib.mkMerge [
     (mkNginxProxy {
@@ -117,7 +111,6 @@ in
             GATUS_CONFIG_PATH = "/config/config.yaml";
           };
           environmentFiles = [config.sops.secrets.gatus-env.path];
-          extraOptions = addHostOptions;
         };
       };
     }

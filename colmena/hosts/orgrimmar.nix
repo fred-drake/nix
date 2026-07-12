@@ -7,7 +7,6 @@
   deferredNixosModules,
   ...
 }: let
-  soft-secrets = import "${secrets}/soft-secrets" {home = null;};
   nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
 in {
   # Base configuration for Orgrimmar
@@ -15,33 +14,6 @@ in {
     nixpkgs = {
       system = "x86_64-linux";
       overlays = [];
-    };
-    # Host's /etc/hosts is used by native `podman run`, but podman's Docker-compat
-    # API (used by Woodpecker's docker backend) generates a minimal hosts file
-    # that excludes these entries. Run dnsmasq as the host resolver so aardvark-dns
-    # forwards container queries here and every container — however it was created —
-    # resolves the internal gitea hostname.
-    networking.extraHosts = ''
-      10.1.1.4 gitea.${soft-secrets.networking.domain}
-      10.1.1.5 traceway.${soft-secrets.networking.domain}
-    '';
-    services.dnsmasq = {
-      enable = true;
-      resolveLocalQueries = true;
-      settings = {
-        # The Hetzner gateway routes the home LAN through its Tailscale peer,
-        # hearthstone; use that router as the authoritative split-DNS resolver.
-        server = [
-          "8.8.8.8"
-          "1.1.1.1"
-          "/${soft-secrets.networking.domain}/192.168.8.1"
-        ];
-        # aardvark-dns already binds :53 on every podman bridge gateway, so
-        # restrict dnsmasq to the loopback interface and skip other interfaces.
-        listen-address = ["127.0.0.1"];
-        bind-interfaces = true;
-        cache-size = 1000;
-      };
     };
     imports =
       [
