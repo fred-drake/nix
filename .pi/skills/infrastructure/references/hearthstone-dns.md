@@ -16,7 +16,7 @@ resolver going offline. The servers behind those names are almost always fine.
 | Tailnet IP | `100.64.0.13` — this exact IP matters (see below) |
 | headscale node | ID 14, user `fdrake` |
 | tailscaled state | `/etc/tailscale/tailscaled.state`; OpenWrt service config via `uci show tailscale` |
-| Original `tailscale up` flags | `--advertise-exit-node --accept-routes --accept-dns=false` |
+| Required `tailscale up` flags | `--advertise-routes=192.168.8.0/24 --advertise-exit-node --accept-routes --accept-dns=false` |
 
 **Why one box failing blackholes the whole internal zone:** the tailnet-wide
 split-DNS sends the entire `internal.freddrake.com` domain to hearthstone's
@@ -101,12 +101,15 @@ Two distinct failure signatures seen on hearthstone:
    ssh root@192.168.8.1 "tailscale up \
      --login-server=https://headscale.brainrush.ai \
      --auth-key=<KEY> \
+     --advertise-routes=192.168.8.0/24 \
      --advertise-exit-node --accept-routes --accept-dns=false"
    ```
 
    The machine key normally survives a state reset, so hearthstone reattaches to
    node 14 and **reclaims `100.64.0.13` automatically** — no DNS reconfig
-   needed. Verify: `ssh root@192.168.8.1 "tailscale ip -4"` => `100.64.0.13`.
+   needed. The `192.168.8.0/24` advertisement is required for Hetzner hosts to
+   reach on-prem LAN machines through the Hetzner gateway (`100.64.0.9`) and
+   hearthstone. Verify: `ssh root@192.168.8.1 "tailscale ip -4"` => `100.64.0.13`.
 
 3. **Verify end-to-end from the Mac** over the normal path (no IP hacks):
 

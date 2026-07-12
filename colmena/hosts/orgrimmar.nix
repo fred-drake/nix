@@ -29,7 +29,13 @@ in {
       enable = true;
       resolveLocalQueries = true;
       settings = {
-        server = ["8.8.8.8" "1.1.1.1"];
+        # The Hetzner gateway routes the home LAN through its Tailscale peer,
+        # hearthstone; use that router as the authoritative split-DNS resolver.
+        server = [
+          "8.8.8.8"
+          "1.1.1.1"
+          "/${soft-secrets.networking.domain}/192.168.8.1"
+        ];
         # aardvark-dns already binds :53 on every podman bridge gateway, so
         # restrict dnsmasq to the loopback interface and skip other interfaces.
         listen-address = ["127.0.0.1"];
