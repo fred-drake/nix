@@ -41,6 +41,27 @@
     ];
   };
 
+  # Each Storage Box host publishes mount health through node_exporter's
+  # textfile collector. The host-local probe catches both an inaccessible share
+  # and the subtle case where a long-lived CIFS mount still uses an address no
+  # longer returned by Storage Box DNS.
+  storageBoxMounts = {
+    ironforge = ["videos" "downloads"];
+    orgrimmar = ["fredbox" "gitea" "paperless" "calibre"];
+  };
+  storageBoxEndpoints =
+    lib.mapAttrsToList (group: mounts: {
+      name = "Storage Box CIFS mounts";
+      inherit group;
+      url = "http://${config.soft-secrets.host.${group}.admin_ip_address}:9000/metrics";
+      interval = "60s";
+      conditions =
+        ["[STATUS] == 200"]
+        ++ map (name: "[BODY] == pat(*storagebox_cifs_mount_healthy{name=\"${name}\"} 1*)") mounts;
+      alerts = [{type = "discord";}];
+    })
+    storageBoxMounts;
+
   gatusConfig = (pkgs.formats.yaml {}).generate "gatus-config.yaml" {
     web.port = 8080;
     storage = {
@@ -58,20 +79,22 @@
         send-on-resolved = true;
       };
     };
-    endpoints = lib.concatMap (
-      group:
-        map (name: {
-          inherit name group;
-          url = "https://${name}.${domain}";
-          interval = "60s";
-          conditions = [
-            "[CONNECTED] == true"
-            "[STATUS] < 500"
-          ];
-          alerts = [{type = "discord";}];
-        })
-        endpointGroups.${group}
-    ) (lib.attrNames endpointGroups);
+    endpoints =
+      lib.concatMap (
+        group:
+          map (name: {
+            inherit name group;
+            url = "https://${name}.${domain}";
+            interval = "60s";
+            conditions = [
+              "[CONNECTED] == true"
+              "[STATUS] < 500"
+            ];
+            alerts = [{type = "discord";}];
+          })
+          endpointGroups.${group}
+      ) (lib.attrNames endpointGroups)
+      ++ storageBoxEndpoints;
   };
 in
   lib.mkMerge [
