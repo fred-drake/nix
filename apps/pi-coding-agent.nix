@@ -10,6 +10,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchurl,
   versionCheckHook,
   writableTmpDirAsHomeHook,
   ripgrep,
@@ -30,6 +31,18 @@ buildNpmPackage (finalAttrs: {
   };
 
   inherit (pi-pin) npmDepsHash;
+
+  # WORKAROUND(pi-coding-agent): v0.81.1's source tag omits generated provider
+  # model data; obtain the release artifact until upstream includes it in tags.
+  pi-ai-data = fetchurl {
+    url = "https://registry.npmjs.org/@earendil-works/pi-ai/-/pi-ai-${finalAttrs.version}.tgz";
+    hash = pi-pin.piAiDataHash;
+  };
+
+  postPatch = ''
+    tar -xzf ${finalAttrs."pi-ai-data"} --strip-components=3 \
+      -C packages/ai/src/providers package/dist/providers/data
+  '';
 
   npmWorkspace = "packages/coding-agent";
 

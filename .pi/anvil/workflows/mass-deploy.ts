@@ -152,6 +152,28 @@ End with a concise pre-flight summary containing: blockers, skipped/unreachable 
 			],
 		},
 		{
+			id: "container-upgrade-preview",
+			title: "Preview container image upgrades",
+			prompt: `Review planned container image changes before deploying. This is an advisory phase: do not deploy hosts or modify files.
+
+1. Run \`git -C ${REPO} diff -- apps/fetcher/containers.toml apps/fetcher/containers-sha.nix\` and identify every changed image digest or tag.
+2. For each changed image, determine the old and new release versions from image metadata. Prefer \`skopeo inspect --config docker://<image-reference>\` and inspect OCI labels such as \`org.opencontainers.image.version\`; use a reachable owning host's \`podman image inspect\` only if needed. Never infer a release version from a digest alone.
+3. Flag an image as a MAJOR UPGRADE only when both versions are known semver-like releases and their major components differ (for example, 2.20.15 → 3.0.0). Treat moving \`latest\` images with unavailable metadata as UNKNOWN VERSION, not as a major upgrade.
+4. For each major upgrade, report the owning host(s), old → new version, and the config/secrets/migration review required before deployment. Look for existing \`WORKAROUND(<package>)\` comments or upgrade notes in \`apps/fetcher/containers.toml\` and include them.
+5. Also report ordinary upgrades and unknown-version changes, then state whether there are major upgrades requiring explicit operator awareness. Do not block this workflow: the purpose is advance warning, not an automatic veto.
+
+End with a concise upgrade preview summary containing major, ordinary, and unknown-version changes.`,
+			checks: [
+				{
+					type: "agent",
+					id: "upgrade-preview-summary",
+					name: "Container upgrade preview present",
+					prompt:
+						"Pass if the step reports that there were no planned container changes, or categorizes every changed container image as major, ordinary, or unknown-version and calls out any major-version migration/secrets review. Fail if it ignored the container diff or claimed a digest alone proves a semantic version.",
+				},
+			],
+		},
+		{
 			id: "workaround-audit",
 			title: "Audit temporary nixpkgs workarounds",
 			prompt: `Run the advisory Workaround Hygiene phase before deployment.

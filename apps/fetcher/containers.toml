@@ -38,7 +38,8 @@ architectures = ["linux/amd64"]
 [[containers]]
 repository = "ghcr.io"
 name = "paperless-ngx/paperless-ngx"
-tag = "latest"
+# WORKAROUND(paperless-ngx): Paperless 3.0.0 requires PAPERLESS_SECRET_KEY, absent from the current secrets configuration; remove when the secret is configured and 3.0.0 is validated.
+tag = "2.20.15"
 architectures = ["linux/amd64"]
 [[containers]]
 repository = "docker.io"

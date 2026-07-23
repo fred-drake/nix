@@ -10,10 +10,10 @@
   spotify =
     if prev.stdenv.isDarwin
     then
-      prev.spotify.overrideAttrs (oldAttrs: {
+      prev.spotify.overrideAttrs (_: {
         src = prev.fetchurl {
-          url = oldAttrs.src.url or "https://download.scdn.co/SpotifyARM64.dmg";
-          sha256 = "sha256-rQuvF7LWHBR3q8GJQWO671n1NRDKinQps+zYfXPktrU=";
+          url = "https://download.scdn.co/SpotifyARM64.dmg";
+          sha256 = "sha256-vtAD7Jz4AQqTbAd0YtsS9aeBr1ES0YegLwB7A8XFKJc=";
         };
       })
     else prev.spotify;

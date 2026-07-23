@@ -114,7 +114,7 @@ in
             extraOptions = ["--network=paperless-net"];
           };
           paperless-ngx = {
-            image = containers-sha."ghcr.io"."paperless-ngx/paperless-ngx"."latest"."linux/amd64";
+            image = containers-sha."ghcr.io"."paperless-ngx/paperless-ngx"."2.20.15"."linux/amd64";
             autoStart = true;
             dependsOn = ["paperless-postgres" "paperless-redis" "paperless-gotenberg" "paperless-tika"];
             extraOptions = ["--network=paperless-net"];
