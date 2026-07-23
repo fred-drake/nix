@@ -199,9 +199,9 @@
           widgets = [
             {
               type = "weather";
-              location = "\${GLANCE_ZIPCODE}";
-              units = "imperial";
-              hour-format = "12h";
+              location = "Florianópolis, Brazil";
+              units = "metric";
+              hour-format = "24h";
             }
             {
               type = "twitch-channels";
