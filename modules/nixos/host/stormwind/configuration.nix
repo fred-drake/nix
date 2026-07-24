@@ -23,4 +23,14 @@
       };
     };
   };
+
+  # Clients reach this host over a high-RTT, lossy Tailscale subnet route.
+  # BBR maintains throughput better than CUBIC when packets are retransmitted.
+  boot = {
+    kernel.sysctl = {
+      "net.core.default_qdisc" = "fq";
+      "net.ipv4.tcp_congestion_control" = "bbr";
+    };
+    kernelModules = ["tcp_bbr"];
+  };
 }
