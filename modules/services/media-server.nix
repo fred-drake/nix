@@ -312,7 +312,7 @@
   # two *arr instances, no templates — with media-net container names instead of
   # 127.0.0.1. API keys are injected at runtime from each *arr's preserved
   # config.xml (see the recyclarr-sync service), never entering the nix store.
-  recyclarrImage = containers-sha."ghcr.io"."recyclarr/recyclarr"."latest"."linux/amd64";
+  recyclarrImage = containers-sha."ghcr.io"."recyclarr/recyclarr"."8"."linux/amd64";
   recyclarrYml = pkgs.writeText "recyclarr.yml" ''
     sonarr:
       sonarr:

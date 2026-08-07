@@ -2,7 +2,7 @@
 # Pins hashes that depend on the current herdr-src entry in repos-src.nix.
 # Do not edit by hand; run ./apps/fetcher/update-herdr.sh.
 {
-  version = "0.7.5-unstable-2026-07-22";
-  cargoHash = "sha256-lWnc0Ka0hp7bbm+dkKKj22Dbk+Cwrld86romXs3lzBs=";
+  version = "0.8.0-unstable-2026-08-07";
+  cargoHash = "sha256-3iGUuWeXoSrV3LT9NIQghE8MXtzM1Jrzmjnc398AiD8=";
   zigDepsHash = "sha256-PnM+hZIlLyQwK8vJgd/Bhjt1lNIz06T8FahwliRmMrY=";
 }

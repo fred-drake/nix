@@ -3,8 +3,8 @@
 ####################################
 {pkgs, ...}: {
   claude-plugins-official-src = builtins.fetchTarball {
-    url = "https://github.com/anthropics/claude-plugins-official/archive/e3e378cbbb205673a5d7254ded32679cafa6179d.tar.gz";
-    sha256 = "13imy5lynsa97ziv6pmsfz38gwfpl77vhridms5yi2b7z8wf72yk";
+    url = "https://github.com/anthropics/claude-plugins-official/archive/82a73a367be4991ff22e2b43317b3956933c9f9a.tar.gz";
+    sha256 = "0j7iz2723q1bn5nh8d2kbld1kk5mcx2zlk8gg2icdsb4qsi6fsqd";
   };
   cc-marketplace-src = pkgs.fetchFromGitHub {
     owner = "samber";
@@ -15,20 +15,20 @@
   cc-skills-golang-src = pkgs.fetchFromGitHub {
     owner = "samber";
     repo = "cc-skills-golang";
-    rev = "709b18186985c2ae7b6b5eb9cded2c635aa74be5";
-    hash = "sha256-EQr2k7d0fDZgXG4JQUswJFwE+UHJfe6RCY9CYHAWcA8=";
+    rev = "3a823627c6fac359a74b82bd9b5fc8f126a0e950";
+    hash = "sha256-AHSWexd3cyO2GOUc99m21IZpUBSmh2ls5B7xAEZKp2E=";
   };
   superpowers-src = pkgs.fetchFromGitHub {
     owner = "obra";
     repo = "superpowers";
-    rev = "d884ae04edebef577e82ff7c4e143debd0bbec99";
-    hash = "sha256-kHdQ9e44doBk2yYW88tMSCqVG8ycYcvJSZlrIziXhpA=";
+    rev = "44c9b2d6e889982ac18c27d05a19fefe335194e1";
+    hash = "sha256-fnl+HbPL2qD5Zgz8a1NctjFJSqu6UsyHJAhQMLQNXXc=";
   };
   cmux-src = pkgs.fetchFromGitHub {
     owner = "manaflow-ai";
     repo = "cmux";
-    rev = "d19f59aa2997549b38f107b2131685ba80597fc6";
-    hash = "sha256-KOczBvNKLq3V5S9JbrqjHYftzsZeJJcoSrKsZvkdaW0=";
+    rev = "6089fa04d3effd27e43c5c6104a4eada62fe859f";
+    hash = "sha256-AkwueVaYuW5qLYOMMNTWBz3lgWX+pbmRxX8FiLWXxXY=";
   };
   karpathy-skills-src = pkgs.fetchFromGitHub {
     owner = "multica-ai";
@@ -39,43 +39,43 @@
   agent-rules-skill-src = pkgs.fetchFromGitHub {
     owner = "netresearch";
     repo = "agent-rules-skill";
-    rev = "1a9eae7ac182bf94e9f72e572384b3b2385fe2db";
-    hash = "sha256-dFF3SuOlx4+u9+e2cloYmvtwrIeOWGUWc3ZOlGd14A4=";
+    rev = "8089e92bb4803bb95fc51f61e24be9fd41e861c4";
+    hash = "sha256-9IDu8dK7q5KxCkpGme2+TypN9+Y9n7t6L522lQ7M9vQ=";
   };
   anthropic-skills-src = pkgs.fetchFromGitHub {
     owner = "anthropics";
     repo = "skills";
-    rev = "1f630fdf9259cec4a14913127dfd7c3b69ef72eb";
-    hash = "sha256-XPXKd05IEiyTPlAPkowfJUal1UfRlxEHo+GgszgHQCI=";
+    rev = "f17010c9bb483898c1d9c9f42dde2b3a98889434";
+    hash = "sha256-vTqAu8eRY+8ymbf065SWHHjNX/li3SOR+sWq1npteTM=";
   };
   vercel-agent-skills-src = pkgs.fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-skills";
-    rev = "4559f18a20c1691c744b4395194290db6a0df5e9";
-    hash = "sha256-SxkDanZXjdGAzLMPV3kk6gEtlHx7vsGFrTiS97WX+gg=";
+    rev = "7c180d9044c9ae2b442b567aad4e42a28dd5ed62";
+    hash = "sha256-5i/QesRS+SQ4gDFCyj22uthen90GZsnhT7dQvetRbpA=";
   };
   trailofbits-skills-src = pkgs.fetchFromGitHub {
     owner = "trailofbits";
     repo = "skills";
-    rev = "cfe5d7b1619e47fb5b38b7e2561dad7e5f1e89af";
-    hash = "sha256-hOA3v+QFGJLkw7OVPSzjtCZXS7zU792AfqGNdSNgsgA=";
+    rev = "7b9bd5f950f89a9ba71b249b9801c1a95be3928e";
+    hash = "sha256-gxzcnfXgjq4TYKdYzEH5g5+pmFpKBwqCg+6fdnq5YBg=";
   };
   remotion-skills-src = pkgs.fetchFromGitHub {
     owner = "remotion-dev";
     repo = "skills";
-    rev = "0dd76fafa3fd337b7bc6b5cd95b7db0179828a3d";
-    hash = "sha256-ZVAIy/aZS5a72zwjH8qBeqPdFWOxyBq7MPr0fwjvF1o=";
+    rev = "eed702478ce34eff4eb77230b748375332c536ae";
+    hash = "sha256-j+Tpj6KLGy8xVwR9gNBieVDlYDCbdDVwIuf2sKJeD5M=";
   };
   marketing-skills-src = pkgs.fetchFromGitHub {
     owner = "coreyhaines31";
     repo = "marketingskills";
-    rev = "c21a984a56da10fb6085e6334f6f60929220a4da";
-    hash = "sha256-pUC8Z0mu7LuTBqfTYGfnp8/n8VR7glXJDK2E7vZGP8A=";
+    rev = "7868cb9251fad80a73d26e488a5ad5f6c4a9f335";
+    hash = "sha256-NfHll8eEj5QZt0ubURhJdIhms1RuMAoAKHXOsss3U4s=";
   };
   herdr-src = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
-    rev = "2a20e90a026936d0d5b96823d74e2e4fe13a166f";
-    hash = "sha256-SlmAeR1bZE3+kwpVZXK4iFEDOaaaDZZPfYOeCsdeIxU=";
+    rev = "50ddc06f00ec69ede35fd5488a260dec2b74e98a";
+    hash = "sha256-PhCEh2+3PI+dVeUinkrD+1aOGRlroJalXcbmMS0Hheo=";
   };
 }
