@@ -97,7 +97,15 @@
       inputs.nixpkgs.follows = "nixpkgs"; # Use the same nixpkgs as above
     };
 
-    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew"; # Nix Homebrew integration
+    nix-homebrew = {
+      url = "github:zhaofengli-wip/nix-homebrew";
+      # Homebrew Core tracks brew's internal InstallSteps DSL. Track brew main
+      # so the immutable core tap and Homebrew implementation stay compatible.
+      inputs.brew-src = {
+        url = "github:Homebrew/brew";
+        flake = false;
+      };
+    };
     homebrew-core = {
       url = "github:homebrew/homebrew-core";
       flake = false;

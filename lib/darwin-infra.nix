@@ -8,25 +8,10 @@
   inherit (inputs) darwin home-manager nix-homebrew secrets sops-nix;
 
   # Homebrew tap wiring — shared across all Darwin hosts
-  homebrewModule = {
-    pkgs,
-    config,
-    ...
-  }: let
-    # WORKAROUND(homebrew): Homebrew 6.0.11 lacks InstallSteps methods required
-    # by current core casks; remove when nix-homebrew pins a compatible release.
-    homebrewInstallSteps = pkgs.fetchurl {
-      url = "https://raw.githubusercontent.com/Homebrew/brew/6.0.12/Library/Homebrew/install_steps.rb";
-      hash = "sha256-G1z3ITPwU1y3o6RQf+7JMd2a1lXAXKfBc+JA0SrtfpE=";
-    };
-  in {
+  homebrewModule = {config, ...}: {
     nix-homebrew = {
       enable = true;
-      package = pkgs.runCommandLocal "brew-install-steps-fix" {} ''
-        cp -r ${inputs.nix-homebrew.inputs.brew-src} "$out"
-        chmod -R u+w "$out/Library/Homebrew"
-        cp ${homebrewInstallSteps} "$out/Library/Homebrew/install_steps.rb"
-      '';
+      package = inputs.nix-homebrew.inputs.brew-src;
       enableRosetta = true;
       user = config.my.username;
       taps = {
