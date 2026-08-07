@@ -58,9 +58,12 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    npx tsgo -p packages/telemetry/tsconfig.build.json
     npx tsgo -p packages/ai/tsconfig.build.json
     npx tsgo -p packages/tui/tsconfig.build.json
     npx tsgo -p packages/agent/tsconfig.build.json
+    npx tsgo -p packages/protocol/tsconfig.build.json
+    npx tsgo -p packages/client/tsconfig.build.json
     npm run build --workspace=packages/coding-agent
 
     runHook postBuild
@@ -76,6 +79,9 @@ buildNpmPackage (finalAttrs: {
       # Replace workspace deps needed at runtime with real copies
       for ws in @earendil-works/pi-ai:packages/ai \
                 @earendil-works/pi-agent-core:packages/agent \
+                @earendil-works/pi-client:packages/client \
+                @earendil-works/pi-protocol:packages/protocol \
+                @earendil-works/pi-telemetry:packages/telemetry \
                 @earendil-works/pi-tui:packages/tui; do
         IFS=: read -r pkg src <<< "$ws"
         rm "$nm/$pkg"
