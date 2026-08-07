@@ -24,6 +24,7 @@ function deployStep(host: string, title: string, hostNotes: string) {
 	return {
 		id: `deploy-${host}`,
 		title,
+		runInMain: true,
 		skipIf: () => skippedHost(host),
 		prompt: `Deploy ${host} as part of the mass-deploy workflow.
 
@@ -103,6 +104,7 @@ export default {
 		{
 			id: "pre-flight",
 			title: "Pre-flight repository and host checks",
+			runInMain: true,
 			prompt: `Prepare a full-fleet remote NixOS deployment from ${REPO}.
 
 You are already executing inside Anvil's \`mass-deploy\` workflow, which is the required full-fleet workflow runner. Do not apply the infrastructure skill's "no workflow runner available" fallback and do not ask the user to select one; perform this workflow step directly.
@@ -158,6 +160,7 @@ End with a concise pre-flight summary containing: blockers, skipped/unreachable 
 		{
 			id: "container-upgrade-preview",
 			title: "Preview container image upgrades",
+			runInMain: true,
 			prompt: `Review planned container image changes before deploying. This is an advisory phase: do not deploy hosts or modify files.
 
 1. Run \`git -C ${REPO} diff -- apps/fetcher/containers.toml apps/fetcher/containers-sha.nix\` and identify every changed image digest or tag.
@@ -180,6 +183,7 @@ End with a concise upgrade preview summary containing major, ordinary, and unkno
 		{
 			id: "workaround-audit",
 			title: "Audit temporary nixpkgs workarounds",
+			runInMain: true,
 			prompt: `Run the advisory Workaround Hygiene phase before deployment.
 
 You are already executing inside Anvil's \`mass-deploy\` workflow, which is the required full-fleet workflow runner. Do not apply the infrastructure skill's "no workflow runner available" fallback and do not ask the user to select one; perform this workflow step directly.
