@@ -27,6 +27,8 @@ function deployStep(host: string, title: string, hostNotes: string) {
 		skipIf: () => skippedHost(host),
 		prompt: `Deploy ${host} as part of the mass-deploy workflow.
 
+You are already executing inside Anvil's \`mass-deploy\` workflow, which is the required full-fleet workflow runner. Do not apply the infrastructure skill's "no workflow runner available" fallback and do not ask the user to select one; perform this workflow step directly.
+
 Read ${INFRA_SKILL} and follow the full-fleet deployment contract. Current canonical order: ${ORDER_LABEL}.
 
 SSH targeting:
@@ -103,6 +105,8 @@ export default {
 			title: "Pre-flight repository and host checks",
 			prompt: `Prepare a full-fleet remote NixOS deployment from ${REPO}.
 
+You are already executing inside Anvil's \`mass-deploy\` workflow, which is the required full-fleet workflow runner. Do not apply the infrastructure skill's "no workflow runner available" fallback and do not ask the user to select one; perform this workflow step directly.
+
 Read ${INFRA_SKILL} first and follow its full-fleet deployment contract. Do not deploy yet.
 
 Initialize ${STATE_FILE} as JSON with at least:
@@ -177,6 +181,8 @@ End with a concise upgrade preview summary containing major, ordinary, and unkno
 			id: "workaround-audit",
 			title: "Audit temporary nixpkgs workarounds",
 			prompt: `Run the advisory Workaround Hygiene phase before deployment.
+
+You are already executing inside Anvil's \`mass-deploy\` workflow, which is the required full-fleet workflow runner. Do not apply the infrastructure skill's "no workflow runner available" fallback and do not ask the user to select one; perform this workflow step directly.
 
 Use the procedure in ${INFRA_SKILL}. In short:
 1. grep -rn 'WORKAROUND(' ${REPO} --exclude-dir=.git.
