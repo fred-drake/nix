@@ -24,7 +24,6 @@ function deployStep(host: string, title: string, hostNotes: string) {
 	return {
 		id: `deploy-${host}`,
 		title,
-		runInMain: true,
 		skipIf: () => skippedHost(host),
 		prompt: `Deploy ${host} as part of the mass-deploy workflow.
 
