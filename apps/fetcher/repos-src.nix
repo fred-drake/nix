@@ -70,7 +70,7 @@
   herdr-src = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
-    rev = "50ddc06f00ec69ede35fd5488a260dec2b74e98a";
-    hash = "sha256-PhCEh2+3PI+dVeUinkrD+1aOGRlroJalXcbmMS0Hheo=";
+    rev = "6f311498aeeb27c0973781961ef94e8d0016ed17";
+    hash = "sha256-clM2DkZ8jxKFtve/TxuZpu6elVeu34qikIIA37FRhYc=";
   };
 }
