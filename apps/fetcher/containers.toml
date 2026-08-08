@@ -16,6 +16,31 @@ name = "postgres"
 tag = "17"
 architectures = ["linux/amd64"]
 [[containers]]
+repository = "docker.io"
+name = "postgres"
+tag = "17-alpine"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "library/redis"
+tag = "7-alpine"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "minio/minio"
+tag = "RELEASE.2025-09-07T16-13-09Z"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
+name = "minio/mc"
+tag = "RELEASE.2025-08-13T08-35-41Z"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "ghcr.io"
+name = "block/buzz"
+tag = "main"
+architectures = ["linux/amd64"]
+[[containers]]
 repository = "ghcr.io"
 name = "fred-drake/gitea-check-service"
 tag = "latest"

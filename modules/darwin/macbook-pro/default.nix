@@ -36,7 +36,7 @@ _: {
     # BEGIN nix-darwin Hetzner internal services
     10.1.1.2 headscale.internal.freddrake.com
     10.1.1.3 jellyfin.internal.freddrake.com seerr.internal.freddrake.com jellyseerr.internal.freddrake.com sonarr.internal.freddrake.com radarr.internal.freddrake.com lidarr.internal.freddrake.com prowlarr.internal.freddrake.com sabnzbd.internal.freddrake.com bazarr.internal.freddrake.com
-    10.1.1.4 gitea.internal.freddrake.com gitea-status.internal.freddrake.com woodpecker.internal.freddrake.com paperless.internal.freddrake.com paperless-ai.internal.freddrake.com resume.internal.freddrake.com calibre-web.internal.freddrake.com files.internal.freddrake.com
+    10.1.1.4 buzz.internal.freddrake.com gitea.internal.freddrake.com gitea-status.internal.freddrake.com woodpecker.internal.freddrake.com paperless.internal.freddrake.com paperless-ai.internal.freddrake.com resume.internal.freddrake.com calibre-web.internal.freddrake.com files.internal.freddrake.com
     10.1.1.5 traceway.internal.freddrake.com gatus.internal.freddrake.com
     # END nix-darwin Hetzner internal services
     EOF

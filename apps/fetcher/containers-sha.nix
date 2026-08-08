@@ -46,8 +46,21 @@ _: {
       };
     };
     "library/redis" = {
+      "7-alpine" = {
+        "linux/amd64" = "docker.io/library/redis@sha256:e7723ff73d963f5cc6d9c4643ea3d989527a402a319239054e9472a7fb9219a2";
+      };
       "latest" = {
         "linux/amd64" = "docker.io/library/redis@sha256:52334768d4a6594d8969f51a1a6fee3ffa7545f6359a4877229cdc754d2def82";
+      };
+    };
+    "minio/mc" = {
+      "RELEASE.2025-08-13T08-35-41Z" = {
+        "linux/amd64" = "docker.io/minio/mc@sha256:a7fe349ef4bd8521fb8497f55c6042871b2ae640607cf99d9bede5e9bdf11727";
+      };
+    };
+    "minio/minio" = {
+      "RELEASE.2025-09-07T16-13-09Z" = {
+        "linux/amd64" = "docker.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e";
       };
     };
     "livekit/egress" = {
@@ -67,6 +80,9 @@ _: {
       "17" = {
         "linux/amd64" = "docker.io/postgres@sha256:dbbeb22a65db2503050cdbbe5e78f017478f10a1002a226463f049dbb017e99b";
       };
+      "17-alpine" = {
+        "linux/amd64" = "docker.io/postgres@sha256:742f40ea20b9ff2ff31db5458d127452988a2164df9e17441e191f3b72252193";
+      };
       "18" = {
         "linux/amd64" = "docker.io/postgres@sha256:4cc13dede823cab4e05290c7fb3350fb4e599ecabd9b07e6706b5d5e8f5bc929";
       };
@@ -83,6 +99,11 @@ _: {
     };
   };
   "ghcr.io" = {
+    "block/buzz" = {
+      "main" = {
+        "linux/amd64" = "ghcr.io/block/buzz@sha256:e0115067fac993b3d426518b4470a7ff873dc7a84e1585af49eae6b11c0c4e8d";
+      };
+    };
     "browserless/chromium" = {
       "v2.18.0" = {
         "linux/amd64" = "ghcr.io/browserless/chromium@sha256:bc7b9b4ce328e07226fdedb1e1166b7d0420c1ae6e009f8d2946837c100bee0f";

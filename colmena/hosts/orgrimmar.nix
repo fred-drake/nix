@@ -60,6 +60,7 @@ in {
       ../../modules/services/filebrowser.nix
       ../../modules/services/otel-collector.nix
       ../../modules/services/hermes.nix
+      ../../modules/services/buzz.nix
     ];
 
     _module.args = {
