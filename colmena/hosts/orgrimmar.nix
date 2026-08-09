@@ -61,6 +61,7 @@ in {
       ../../modules/services/otel-collector.nix
       ../../modules/services/hermes.nix
       ../../modules/services/buzz.nix
+      ../../modules/services/tailscale-saas.nix
     ];
 
     _module.args = {

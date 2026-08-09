@@ -51,9 +51,11 @@ in {
   "headscale" = {
     imports = [
       self.colmena._headscale
-      ../../modules/services/headscale-vpn.nix
-      ../../modules/services/tailscale-client.nix
+      ../../modules/services/hetzner-internal-dns.nix
+      ../../modules/services/tailscale-saas.nix
     ];
+
+    services.tailscale.extraUpFlags = ["--advertise-routes=10.1.0.0/16"];
 
     _module.args = {
       inherit secrets;

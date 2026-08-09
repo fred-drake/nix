@@ -57,6 +57,7 @@ in {
       ../../modules/services/traceway.nix
       ../../modules/services/otel-collector.nix
       ../../modules/services/gatus.nix
+      ../../modules/services/tailscale-saas.nix
     ];
 
     # The otel-collector exporter ships stormwind's host metrics to the local

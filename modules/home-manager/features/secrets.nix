@@ -382,6 +382,12 @@ in {
         key = "brainrush-terraform-prod-api-token";
       };
 
+      brainrush-terraform-stage-api-token = {
+        sopsFile = config.secrets.workstation.cloud.hetzner-home;
+        mode = "0400";
+        key = "brainrush-terraform-stage-api-token";
+      };
+
       brainrush-terraform-s3-access-key = {
         sopsFile = config.secrets.workstation.cloud.hetzner-home;
         mode = "0400";

@@ -73,6 +73,7 @@ in {
       self.colmena._ironforge
       ../../modules/services/media-server.nix
       ../../modules/services/otel-collector.nix
+      ../../modules/services/tailscale-saas.nix
     ];
 
     _module.args = {
