@@ -17,6 +17,7 @@
     ];
   };
   gitea-mcp = pkgs.callPackage ../../../apps/gitea-mcp.nix {};
+  actual-mcp = pkgs.callPackage ../../../apps/actual-mcp.nix {};
   ccstatusline = pkgs.callPackage ../../../apps/ccstatusline.nix {
     npm-packages = import ../../../apps/fetcher/npm-packages.nix;
   };
@@ -27,6 +28,7 @@ in {
   home.packages = [
     claude-code # Claude Code CLI tool
     gitea-mcp # Gitea MCP server
+    actual-mcp # Actual Budget MCP server
     claude-usage # Claude Code usage JSON fetcher
     pkgs.uv # uvx, used to run workspace-mcp and other Python MCP servers
 
@@ -46,6 +48,24 @@ in {
 
   # SOPS templates for MCP configuration
   sops.templates = {
+    mcp-actual = {
+      mode = "0400";
+      path = "${home}/mcp/actual.json";
+      content = builtins.toJSON {
+        mcpServers = {
+          actual = {
+            command = "${actual-mcp}/bin/actual-mcp";
+            args = ["--enable-write"];
+            env = {
+              ACTUAL_SERVER_URL = "https://actual.internal.freddrake.com";
+              ACTUAL_BUDGET_SYNC_ID = "0da0a210-9782-4137-ad4a-4b6ec2edb08b";
+              ACTUAL_PASSWORD = config.sops.placeholder.actual-password;
+            };
+          };
+        };
+      };
+    };
+
     mcp-browser = {
       mode = "0400";
       path = "${home}/mcp/browser.json";

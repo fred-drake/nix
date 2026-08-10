@@ -40,3 +40,7 @@ url = "https://github.com/ogulcancelik/herdr"
 [[repos]]
 name = "pi-subagents-src"
 url = "https://github.com/edxeth/pi-subagents"
+[[repos]]
+name = "actual-mcp-src"
+url = "https://github.com/s-stefanov/actual-mcp"
+rev = "69d9413342acbecd1f6ab748300337418ec8ac6d"

@@ -225,6 +225,12 @@ in {
         path = "${home}/.ssh/oracle_cloud_key.pem";
       };
 
+      actual-password = {
+        sopsFile = config.secrets.workstation.mcp.actual;
+        mode = "0400";
+        key = "password";
+      };
+
       ref-mcp-api-key = {
         sopsFile = config.secrets.workstation.mcp.ref-mcp;
         mode = "0400";

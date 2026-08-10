@@ -79,4 +79,10 @@
     rev = "4c4545da9053c95e921f0620519000972d8babae";
     hash = "sha256-Twtk+0g6S/PjHXq76FBsfr4hBIL90EzmcZ+SWZOCUJY=";
   };
+  actual-mcp-src = pkgs.fetchFromGitHub {
+    owner = "s-stefanov";
+    repo = "actual-mcp";
+    rev = "69d9413342acbecd1f6ab748300337418ec8ac6d";
+    hash = "sha256-Yv/Kc7L7o1Qg0U4ZnmWM5KRr1de463Gn6+lC4KcJ9lc=";
+  };
 }
