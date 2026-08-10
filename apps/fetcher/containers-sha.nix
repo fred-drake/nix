@@ -15,6 +15,11 @@ _: {
     };
   };
   "docker.io" = {
+    "actualbudget/actual-server" = {
+      "latest" = {
+        "linux/amd64" = "docker.io/actualbudget/actual-server@sha256:505d44229f0be406d75878639806b9a5c547b50889fe5be92982d1cc193fc7ac";
+      };
+    };
     "amruthpillai/reactive-resume" = {
       "latest" = {
         "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:0f6f602d530a6724a9619d5c784bf8c01abb65a62989b3137f90f268be11857e";

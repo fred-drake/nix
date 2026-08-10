@@ -4,56 +4,7 @@
   ...
 }: let
   home = config.home.homeDirectory;
-  # cmux ships a `claude` wrapper that injects --session-id + --settings (a hook
-  # bundle) so Claude Code drives cmux's Feed approvals, "Needs input" status
-  # ring, notifications, and session restore. cmux normally puts this wrapper on
-  # PATH via its zsh/bash shell integration, which our Nix-managed fish/zsh setup
-  # never sources — so on Darwin we route ~/.local/bin/claude (first on PATH)
-  # through it instead. See the ~/.local/bin/claude home.file entry below.
-  cmuxClaudeWrapper = pkgs.stdenv.hostPlatform.isDarwin;
-
-  # The real nix-installed claude binary (the next `claude` after our ~/.local/bin
-  # slot). cmux's wrapper execs this as REAL_CLAUDE after injecting its hooks.
   realClaude = "/etc/profiles/per-user/${config.home.username}/bin/claude";
-
-  # cmux's injected Notification hook turns Claude Code's ~60s idle event
-  # ("Claude is waiting for your input") into a second OS notification that fires
-  # a minute after a turn already ended. cmux exposes no per-event toggle and the
-  # injected hooks merge additively, so we can't remove it from settings.json.
-  # Instead, route cmux's hook calls through this filter: it drops ONLY the idle
-  # "waiting for your input" notification and forwards every other hook call
-  # (Stop, feed, permission, status ring) to the real cmux CLI untouched. The
-  # cmux wrapper's resolve_hook_cmux_bin() prefers $CMUX_BUNDLED_CLI_PATH, so
-  # setting that to this shim makes all injected hooks route through it.
-  cmuxNotifyFilter = pkgs.writeShellScript "cmux-notify-filter" ''
-    real="/Applications/cmux.app/Contents/Resources/bin/cmux"
-    if [ "$1" = "hooks" ] && [ "$2" = "claude" ] && [ "$3" = "notification" ]; then
-      payload="$(cat)"
-      case "$payload" in
-        *"waiting for your input"*) exit 0 ;;
-      esac
-      printf '%s' "$payload" | "$real" "$@"
-      exit $?
-    fi
-    exec "$real" "$@"
-  '';
-
-  # Outer claude launcher on Darwin: point cmux's hooks at the filter above, then
-  # hand off to cmux's own claude wrapper (which injects the hook bundle and execs
-  # the real nix claude). We set CMUX_CUSTOM_CLAUDE_PATH so cmux's find_real_claude
-  # resolves the real binary directly — otherwise it scans PATH, finds THIS wrapper
-  # first (~/.local/bin is first on PATH), and loops back into itself, re-appending
-  # --settings each pass until argv overflows ("Argument list too long"). Falls back
-  # to the real claude when cmux is absent, so it stays safe on any Darwin host.
-  cmuxClaudeFilterWrapper = pkgs.writeShellScript "claude-cmux-filtered" ''
-    cmux_wrap="/Applications/cmux.app/Contents/Resources/bin/claude"
-    if [ -x "$cmux_wrap" ]; then
-      export CMUX_BUNDLED_CLI_PATH="${cmuxNotifyFilter}"
-      export CMUX_CUSTOM_CLAUDE_PATH="${realClaude}"
-      exec "$cmux_wrap" "$@"
-    fi
-    exec "${realClaude}" "$@"
-  '';
 
   claude-plugins-src = import ../../../apps/fetcher/claude-plugins-src.nix {inherit pkgs;};
   lsp-plugin = import ../../../apps/claude-code/lsp-plugin.nix {
@@ -447,19 +398,7 @@ in {
 
   # Claude Code configuration files
   home.file = {
-    # ~/.local/bin is first on PATH, so this slot decides which `claude` runs.
-    # On Darwin, point it at cmuxClaudeFilterWrapper: it sets CMUX_BUNDLED_CLI_PATH
-    # to the notify filter (drops the duplicate ~60s "waiting for input" ping) and
-    # CMUX_CUSTOM_CLAUDE_PATH to the real binary, then execs cmux's claude wrapper,
-    # which injects --session-id + the hook bundle (Feed approvals, status ring,
-    # notifications, session restore) and execs the real nix claude. The filter
-    # wrapper falls back to the real claude when cmux is absent, so it is safe on
-    # any Darwin host. Elsewhere, point straight at the real claude (also satisfies
-    # Claude's native installer check).
-    ".local/bin/claude".source =
-      if cmuxClaudeWrapper
-      then cmuxClaudeFilterWrapper
-      else config.lib.file.mkOutOfStoreSymlink realClaude;
+    ".local/bin/claude".source = config.lib.file.mkOutOfStoreSymlink realClaude;
 
     # Agent-agnostic command files (shared via apps/agent-common)
     ".claude/commands" = {
@@ -501,20 +440,6 @@ in {
     "plugins/superpowers" = {
       source = "${claude-plugins-src.superpowers-src}";
       recursive = true;
-    };
-
-    # cmux skills (manaflow-ai/cmux) - opt-in, load via:
-    #   claude --plugin-dir ~/plugins/cmux
-    # Upstream is not itself a Claude plugin (no .claude-plugin/plugin.json),
-    # so we point the plugin dir at its skills/ and synthesize the manifest.
-    "plugins/cmux/skills" = {
-      source = "${claude-plugins-src.cmux-src}/skills";
-      recursive = true;
-    };
-    "plugins/cmux/.claude-plugin/plugin.json".text = builtins.toJSON {
-      name = "cmux";
-      description = "cmux end-user skills: topology/routing, workspace, settings, customization, diagnostics, browser automation, markdown viewer, and keyboard shortcuts.";
-      repository = "https://github.com/manaflow-ai/cmux";
     };
 
     # --- Opt-in skill/plugin bundles (load via claude --plugin-dir ~/plugins/<name>) ---

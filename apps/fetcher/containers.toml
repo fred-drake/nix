@@ -12,6 +12,11 @@ tag = "latest"
 architectures = ["linux/amd64"]
 [[containers]]
 repository = "docker.io"
+name = "actualbudget/actual-server"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
+repository = "docker.io"
 name = "postgres"
 tag = "17"
 architectures = ["linux/amd64"]

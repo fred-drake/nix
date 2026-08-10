@@ -6,6 +6,11 @@ in {
     shellInit = ''
       # Ensure ~/.local/bin is in PATH for all shell contexts (idempotent)
       fish_add_path $HOME/.local/bin
+
+      # Re-export in nested shells where Home Manager's session-vars marker is
+      # inherited without the variables (notably Herdr panes).
+      set -gx PI_SUBAGENT_MUX herdr
+      set -gx PI_SUBAGENT_HERDR_PLACEMENT tab
     '';
     interactiveShellInit = ''
       # Kill stock greeting

@@ -37,3 +37,6 @@ url = "https://github.com/fred-drake/scanimage-web"
 [[repos]]
 name = "herdr-src"
 url = "https://github.com/ogulcancelik/herdr"
+[[repos]]
+name = "pi-subagents-src"
+url = "https://github.com/edxeth/pi-subagents"

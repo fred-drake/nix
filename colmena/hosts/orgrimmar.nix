@@ -58,6 +58,7 @@ in {
       ../../modules/services/paperless.nix
       ../../modules/services/calibre.nix
       ../../modules/services/filebrowser.nix
+      ../../modules/services/actual.nix
       ../../modules/services/otel-collector.nix
       ../../modules/services/hermes.nix
       ../../modules/services/buzz.nix

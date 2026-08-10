@@ -12,7 +12,6 @@
 # which is intentionally left mutable.
 {
   pkgs,
-  lib,
   config,
   ...
 }: let
@@ -32,9 +31,6 @@
     (pkgs.callPackage ../../../apps/pi-lsp.nix {
       pin = import ../../../apps/fetcher/pi-lsp.nix;
     })
-    (pkgs.callPackage ../../../apps/pi-hypa.nix {
-      pin = import ../../../apps/fetcher/pi-hypa.nix;
-    })
     (pkgs.callPackage ../../../apps/pi-context-mode.nix {
       pin = import ../../../apps/fetcher/pi-context-mode.nix;
     })
@@ -47,9 +43,13 @@
     (pkgs.callPackage ../../../apps/pi-simplify.nix {
       pin = import ../../../apps/fetcher/pi-simplify.nix;
     })
+    (pkgs.callPackage ../../../apps/pi-loop.nix {
+      pin = import ../../../apps/fetcher/pi-loop.nix;
+    })
     (pkgs.callPackage ../../../apps/pi-hooks.nix {
       pin = import ../../../apps/fetcher/pi-hooks.nix;
     })
+    (pkgs.callPackage ../../../apps/pi-subagents.nix {})
   ];
 
   # Directory of prompt templates pi should discover. We reuse the Claude Code
@@ -193,7 +193,6 @@
       ];
     };
     skills = [
-      "${config.home.homeDirectory}/plugins/cmux/skills"
       "${config.home.homeDirectory}/plugins/superpowers/skills"
       "${config.home.homeDirectory}/plugins/andrej-karpathy-skills/skills"
       "${config.home.homeDirectory}/plugins/agent-rules-skill/skills"
@@ -202,19 +201,12 @@
   });
 in {
   home = {
-    sessionVariables = {
-      # Switch pi-hypa from additive mode (adds hypa_* tools alongside the
-      # built-ins) to replace mode (hypa_* tools replace bash/read/grep/find/ls
-      # so verbose output never reaches the context window).
-      HYPA_PI_MODE = "replace";
-    };
+    packages = [pi-coding-agent];
 
-    packages = [
-      pi-coding-agent
-      (pkgs.callPackage ../../../apps/hypa.nix {
-        pin = import ../../../apps/fetcher/hypa.nix;
-      })
-    ];
+    sessionVariables = {
+      PI_SUBAGENT_MUX = "herdr";
+      PI_SUBAGENT_HERDR_PLACEMENT = "tab";
+    };
 
     file = {
       # Generic user-level agent instructions shared with Claude Code.
@@ -279,45 +271,6 @@ in {
           }
         ];
       };
-
-      # cmux session-hook extension: bridges Pi lifecycle events (session_start,
-      # before_agent_start, agent_end) into cmux's restorable session store so
-      # cmux can show running/idle state, send notifications, and resume Pi
-      # sessions after an app relaunch.
-      #
-      # The extension lives in apps/pi-extensions/cmux-session.ts which is
-      # already discovered via the `extensions` key in settings.json above.
-      # We ALSO create a symlink at the canonical cmux location
-      # (~/.pi/agent/extensions/cmux-session.ts) pointing to the *same*
-      # Nix-store path.  Pi's discoverAndLoadExtensions() deduplicates by
-      # resolved path (Set<string>), so the extension is loaded exactly once
-      # even though two discovery paths both point to it.  The symlink also
-      # prevents `cmux hooks pi install` from silently replacing our managed
-      # version with a stale copy (it would overwrite the symlink with a
-      # different path, causing a duplicate; running `just switch` restores it).
-      #
-      # Darwin-only because cmux is a macOS app. The extension itself is safe
-      # elsewhere (it short-circuits when CMUX_SURFACE_ID is unset).
-      # cmux-pi-subagent skill: spawns a visible cmux pane, drives a pi RPC
-      # subagent inside it, collects the answer, and closes the pane. Placed
-      # in ~/.pi/agent/skills/ which pi auto-discovers at startup (no
-      # settings.json change needed). Darwin-only because it requires cmux.
-      ".pi/agent/skills/cmux-pi-subagent" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-        source = ../../../apps/pi-skills/cmux-pi-subagent;
-        recursive = true;
-      };
-
-      ".pi/agent/extensions/cmux-session.ts" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-        source = "${piExtensionsDir}/cmux-session.ts";
-      };
     };
-    # On macOS, GUI apps (cmux → pi) inherit the launchd per-user environment,
-    # not the shell profile. Push HYPA_PI_MODE into launchd so pi-hypa's
-    # replace mode is active regardless of how pi is launched.
-    activation.hypaLaunchdEnv =
-      lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
-      (lib.hm.dag.entryAfter ["writeBoundary"] ''
-        $DRY_RUN_CMD /bin/launchctl setenv HYPA_PI_MODE replace
-      '');
   };
 }

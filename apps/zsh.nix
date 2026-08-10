@@ -13,6 +13,12 @@
       enable = true;
       plugins = [];
     };
+    # Re-export in nested shells where Home Manager's session-vars marker is
+    # inherited without the variables (notably Herdr panes).
+    envExtra = ''
+      export PI_SUBAGENT_MUX=herdr
+      export PI_SUBAGENT_HERDR_PLACEMENT=tab
+    '';
     # Add local bin to path, and ensure that oh-my-posh doesn't get initialized in Apple Terminal
     initContent = ''
       PATH=~/bin:$PATH

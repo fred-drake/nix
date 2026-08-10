@@ -73,4 +73,10 @@
     rev = "6f311498aeeb27c0973781961ef94e8d0016ed17";
     hash = "sha256-clM2DkZ8jxKFtve/TxuZpu6elVeu34qikIIA37FRhYc=";
   };
+  pi-subagents-src = pkgs.fetchFromGitHub {
+    owner = "edxeth";
+    repo = "pi-subagents";
+    rev = "4c4545da9053c95e921f0620519000972d8babae";
+    hash = "sha256-Twtk+0g6S/PjHXq76FBsfr4hBIL90EzmcZ+SWZOCUJY=";
+  };
 }

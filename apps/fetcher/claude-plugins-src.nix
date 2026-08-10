@@ -24,12 +24,6 @@
     rev = "44c9b2d6e889982ac18c27d05a19fefe335194e1";
     hash = "sha256-fnl+HbPL2qD5Zgz8a1NctjFJSqu6UsyHJAhQMLQNXXc=";
   };
-  cmux-src = pkgs.fetchFromGitHub {
-    owner = "manaflow-ai";
-    repo = "cmux";
-    rev = "6089fa04d3effd27e43c5c6104a4eada62fe859f";
-    hash = "sha256-AkwueVaYuW5qLYOMMNTWBz3lgWX+pbmRxX8FiLWXxXY=";
-  };
   karpathy-skills-src = pkgs.fetchFromGitHub {
     owner = "multica-ai";
     repo = "andrej-karpathy-skills";

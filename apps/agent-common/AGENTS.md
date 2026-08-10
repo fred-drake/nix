@@ -11,6 +11,12 @@ requirements take precedence.
 - State important assumptions when they affect the result.
 - Verify outcomes before claiming work is complete, fixed, or passing.
 
+## Pi Subagents in Herdr
+
+- For visible Pi subagents, use the `subagent` tool while Pi is running inside Herdr. Interactive children open as a dedicated Herdr tab.
+- Every subagent launch requires a named agent definition: project-local `.pi/agents/<name>.md` takes precedence over user-level `~/.pi/agent/agents/<name>.md`.
+- Give each child a bounded task and use the definition to set its mode, tools, lifecycle, and permissions. Do not attempt ad-hoc unnamed launches.
+
 ## Git and Commits
 
 - Unless specifically told otherwise, use Conventional Commit messages.

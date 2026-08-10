@@ -25,7 +25,7 @@
   # sub-accounts; remote jobs are first rsynced from the source host into a
   # local staging tree, then borg snapshots that staging tree.
   dailyStorageNames = ["gitea" "paperless"];
-  dailyRemoteNames = ["hermes"];
+  dailyRemoteNames = ["hermes" "actual"];
   weeklyNames = ["calibre"];
   monthlyNames = ["videos" "nintendopower" "wowclient"];
 
@@ -47,6 +47,16 @@
       # Obsidian vault at /var/hermes/vault. The env file and vault deploy key
       # are sops-managed secrets, not filesystem state to back up here.
       paths = ["/var/hermes"];
+      identityFile = "/home/fdrake/.ssh/id_ansible";
+    };
+    actual = {
+      host = "10.1.1.4";
+      port = 2222;
+      user = "root";
+      # Actual keeps all recoverable server and budget state in the /data
+      # bind mount declared by modules/services/actual.nix. SOPS has no
+      # runtime secrets for this service.
+      paths = ["/var/actual"];
       identityFile = "/home/fdrake/.ssh/id_ansible";
     };
   };
@@ -412,7 +422,7 @@ in {
     services =
       {
         borg-backup-daily = {
-          description = "Sequential borg backups (daily: gitea, paperless, hermes)";
+          description = "Sequential borg backups (daily: gitea, paperless, hermes, actual)";
           after = ["network-online.target"];
           wants = ["network-online.target"];
           unitConfig.RequiresMountsFor = ["/mnt/hetzner-backup"];
