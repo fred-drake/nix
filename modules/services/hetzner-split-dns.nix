@@ -1,7 +1,7 @@
 {config, ...}: {
-  # Resolve internal service names through Hearthstone, while keeping public DNS
-  # for every other domain. All Hetzner hosts can reach Hearthstone's LAN IP
-  # through the Headscale subnet route.
+  # Resolve internal service names through the Tailscale DNS gateway, while
+  # keeping public DNS for every other domain. The resolver is reachable on
+  # the official Tailnet, not at the old LAN address.
   services.dnsmasq = {
     enable = true;
     resolveLocalQueries = true;
@@ -9,7 +9,7 @@
       server =
         config.networking.nameservers
         ++ [
-          "/${config.soft-secrets.networking.domain}/192.168.8.1"
+          "/${config.soft-secrets.networking.domain}/100.109.225.111"
         ];
       # Podman/aardvark-dns uses bridge-gateway addresses, so bind only to the
       # host loopback resolver and let it forward container queries here.
