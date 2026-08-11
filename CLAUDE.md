@@ -159,6 +159,12 @@ Use `alejandra` for formatting Nix files in this repository. Do not use
 `nix fmt` unless explicitly requested; the flake may not expose a formatter for
 all systems. The git commit pre-hook is expected to run the configured formatter.
 
+## Agent Workflow and Verification
+
+- Do not create or require Superpowers design specifications or implementation plans unless the user explicitly asks for them.
+- This repository has no dedicated automated test suite. For configuration changes, Nix evaluation or compilation (for example, `nix flake check`) is the normal verification.
+- Do not run `just switch` or `just colmena HOSTNAME` unless the user explicitly authorizes that deployment.
+
 ## Build Commands
 
 **IMPORTANT:** Do NOT use `sudo` with `just` commands — they handle `sudo` internally.
