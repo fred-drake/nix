@@ -21,6 +21,7 @@ in {
     [agent-browser ccstatusline herdr]
     ++ (with pkgs; [
       llama-cpp
+      python313Packages.huggingface-hub
     ])
     # Graphify (pkgs.graphify) is a uv2nix-built venv carrying the heavy
     # graspologic/tree-sitter closure; scope it to Darwin workstations
