@@ -62,6 +62,10 @@ in {
               ACTUAL_PASSWORD = config.sops.placeholder.actual-password;
             };
           };
+          chrome = {
+            command = "npx";
+            args = ["-y" "chrome-devtools-mcp@latest" "--browserUrl=http://127.0.0.1:9222"];
+          };
         };
       };
     };

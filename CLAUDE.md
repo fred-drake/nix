@@ -163,15 +163,17 @@ all systems. The git commit pre-hook is expected to run the configured formatter
 
 **IMPORTANT:** Do NOT use `sudo` with `just` commands — they handle `sudo` internally.
 
+**IMPORTANT:** Do not invoke the `home-manager` executable; it is not available on this system. Use the repository's `just` recipes for every switch operation.
+
 ```bash
-# Rebuild NixOS system (always pipe through tail to avoid token waste)
+# Switch the local configuration (always pipe through tail to avoid token waste)
 just switch 2>&1 | tail -20
+
+# Switch a remote Colmena host
+just colmena HOSTNAME
 
 # Build NixOS system only
 just build
-
-# Rebuild home-manager only
-home-manager switch --flake .
 
 # Check flake
 nix flake check
