@@ -212,6 +212,10 @@ in {
       # Generic user-level agent instructions shared with Claude Code.
       ".pi/agent/AGENTS.md".text = builtins.readFile ../../../apps/agent-common/AGENTS.md;
 
+      # A lightweight worker available in every Pi project. Projects may add
+      # specialized definitions under .pi/agents/ without affecting it.
+      ".pi/agent/agents/generalist.md".source = ../../../apps/agent-common/agents/generalist.md;
+
       ".pi/agent/settings.json".source = settingsJson;
 
       ".pi/agent/models.json" = {
