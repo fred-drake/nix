@@ -50,5 +50,11 @@ in {
 
     [theme]
     name = "tokyo-night"
+
+    [ui.toast]
+    delivery = "herdr"
+
+    [ui.sound.agents]
+    pi = "off"
   '';
 }

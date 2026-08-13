@@ -114,7 +114,7 @@ Expected: the following line is `pi = "off"`.
 Run:
 
 ```sh
-nix eval .#homeConfigurations.macbook-pro.activationPackage.drvPath
+nix eval .#darwinConfigurations.macbook-pro.system.drvPath
 ```
 
 Expected: exit 0.
