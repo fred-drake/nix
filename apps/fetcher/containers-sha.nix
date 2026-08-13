@@ -106,7 +106,7 @@ _: {
   "ghcr.io" = {
     "block/buzz" = {
       "main" = {
-        "linux/amd64" = "ghcr.io/block/buzz@sha256:e0115067fac993b3d426518b4470a7ff873dc7a84e1585af49eae6b11c0c4e8d";
+        "linux/amd64" = "ghcr.io/block/buzz@sha256:ae35bce235a176a2a0150715b6bec2ebc3ee2fc49bb2e71d1401963d5267a85d";
       };
     };
     "browserless/chromium" = {

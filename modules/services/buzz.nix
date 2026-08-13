@@ -13,6 +13,7 @@
 
   host = "buzz";
   proxyPort = "3003";
+  pairRelayPort = "3004";
   bucket = "buzz-media";
   dataDir = "/var/buzz";
   buzzEnv = config.sops.secrets.buzz-env.path;
@@ -46,6 +47,15 @@ in {
         deny all;
         client_max_body_size 250M;
       '';
+      extraLocations."= /pair" = {
+        proxyPass = "http://127.0.0.1:${pairRelayPort}";
+        proxyWebsockets = true;
+        extraConfig = ''
+          allow 10.1.0.0/16;
+          allow 100.64.0.0/10;
+          deny all;
+        '';
+      };
     })
   ];
 
@@ -70,6 +80,7 @@ in {
         "podman-buzz-redis.service"
         "podman-buzz-minio.service"
         "podman-buzz-relay.service"
+        "podman-buzz-pair-relay.service"
       ])
       // {
         buzz-minio-init = {
@@ -165,6 +176,7 @@ in {
           POSTGRES_DB = "buzz";
           POSTGRES_USER = "buzz";
           RELAY_URL = "wss://buzz.internal.freddrake.com";
+          BUZZ_PAIRING_RELAY_URL = "wss://buzz.internal.freddrake.com/pair";
           BUZZ_MEDIA_BASE_URL = "https://buzz.internal.freddrake.com/media";
           BUZZ_MEDIA_SERVER_DOMAIN = "buzz.internal.freddrake.com";
           BUZZ_CORS_ORIGINS = "https://buzz.internal.freddrake.com";
@@ -172,6 +184,19 @@ in {
           BUZZ_REQUIRE_RELAY_MEMBERSHIP = "true";
           BUZZ_ALLOW_NIP_OA_AUTH = "true";
           RUST_LOG = "buzz_relay=info,buzz_db=info,buzz_auth=info,buzz_pubsub=info,tower_http=info";
+        };
+        environmentFiles = [buzzEnv];
+      };
+
+      buzz-pair-relay = {
+        image = relayImage;
+        autoStart = true;
+        extraOptions = ["--network=buzz-net" "--entrypoint=/bin/sh"];
+        cmd = ["-ec" "exec /usr/local/bin/buzz-pair-relay"];
+        ports = ["127.0.0.1:${pairRelayPort}:5000"];
+        environment = {
+          BUZZ_PAIR_RELAY_BIND_ADDR = "0.0.0.0:5000";
+          RELAY_URL = "wss://buzz.internal.freddrake.com";
         };
         environmentFiles = [buzzEnv];
       };
