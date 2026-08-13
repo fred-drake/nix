@@ -61,6 +61,7 @@ lib.mkMerge [
         "codex"
         "cursor"
         "daisydisk"
+        "defold"
         "discord"
         "element"
         "finicky"
