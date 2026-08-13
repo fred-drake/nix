@@ -1,6 +1,7 @@
 {
   self,
   nixpkgs-stable,
+  nixpkgs-unstable,
   secrets,
   sops-nix,
   nixosOptionsModule,
@@ -8,6 +9,7 @@
   ...
 }: let
   nixpkgsVersion = import ../../lib/mk-nixpkgs-version.nix {inherit nixpkgs-stable;};
+  pkgsUnstable = import nixpkgs-unstable {system = "x86_64-linux";};
 in {
   # Base configuration for Orgrimmar
   _orgrimmar = {
@@ -66,7 +68,7 @@ in {
     ];
 
     _module.args = {
-      inherit secrets;
+      inherit pkgsUnstable secrets;
     };
   };
 }

@@ -19,9 +19,28 @@
   config,
   lib,
   pkgs,
+  pkgsUnstable,
   ...
 }: let
   containers-sha = import ../../apps/fetcher/containers-sha.nix {inherit pkgs;};
+  buzzCli = pkgsUnstable.callPackage ../../apps/buzz-cli.nix {pkgs = pkgsUnstable;};
+  hermesBuzzAdapter = pkgs.callPackage ../../apps/hermes-buzz-adapter.nix {};
+  managedConfig = pkgs.writeTextDir "config.yaml" (builtins.toJSON {
+    gateway.platforms.buzz = {
+      enabled = true;
+      extra = {
+        transport = "auto";
+        poll_interval = 4;
+        cli_path = "/usr/local/bin/buzz";
+        allow_all_users = false;
+        require_mention = true;
+      };
+    };
+    display.platforms.buzz = {
+      interim_assistant_messages = false;
+      tool_progress = "off";
+    };
+  });
   mkNginxProxy = import ../../lib/mk-nginx-proxy.nix {inherit config;};
 
   host = "hermes";
@@ -35,6 +54,8 @@
 
   dataDir = "/var/hermes";
   vaultDir = "${dataDir}/vault";
+  # Permanent, inert-by-default maintenance gate; operators create the marker.
+  vaultSyncInhibit = "/var/lib/hermes-migration/vault-sync.inhibit";
 
   # The internal gitea repo holding the Obsidian vault. Git-over-SSH reaches the
   # gitea container on :22 (gitea.<domain> -> 10.1.1.4 via networking.extraHosts).
@@ -83,6 +104,8 @@ in
       port = dashboardPort;
     })
     {
+      environment.systemPackages = [buzzCli];
+
       # Shared system identity for the container and the vault sync service.
       users.groups.hermes.gid = hermesGid;
       users.users.hermes = {
@@ -123,6 +146,7 @@ in
 
         services.hermes-vault-sync = {
           description = "Sync Hermes Obsidian vault with internal gitea";
+          unitConfig.ConditionPathExists = "!${vaultSyncInhibit}";
           after = ["network-online.target"];
           wants = ["network-online.target"];
           path = [pkgs.git pkgs.openssh];
@@ -137,6 +161,7 @@ in
 
       systemd.timers.hermes-vault-sync = {
         wantedBy = ["timers.target"];
+        unitConfig.ConditionPathExists = "!${vaultSyncInhibit}";
         timerConfig = {
           OnBootSec = "2min";
           OnUnitActiveSec = "10min";
@@ -147,24 +172,32 @@ in
       virtualisation.oci-containers = {
         backend = "podman";
         containers.hermes = {
-          image = containers-sha."docker.io"."nousresearch/hermes-agent"."v2026.6.19"."linux/amd64";
+          image = containers-sha."docker.io"."nousresearch/hermes-agent"."v2026.8.3"."linux/amd64";
           autoStart = true;
           # NixOS oci-containers uses `cmd` (NOT `command`) for the args passed
           # to the image entrypoint. Without this the image runs its default
           # interactive `hermes` CLI, which exits immediately on a non-TTY stdin
           # ("Input is not a terminal. Goodbye!") and the container flaps.
           cmd = ["gateway" "run"];
-          user = "${toString hermesUid}:${toString hermesGid}";
+          # Hermes 0.20's s6 entrypoint must start as root; after volume
+          # ownership and config migration it drops the gateway to this service
+          # identity via HERMES_UID/HERMES_GID.
           # All state (config.yaml, memory, skills, sessions) lives under
           # /opt/data; the vault is bind-mounted in for the Obsidian skill.
           volumes = [
             "${dataDir}:/opt/data"
             "${vaultDir}:/opt/data/vault"
+            "${buzzCli}/bin/buzz:/usr/local/bin/buzz:ro"
+            "${managedConfig}:/etc/hermes:ro"
+            "${hermesBuzzAdapter}/adapter.py:/opt/hermes/plugins/platforms/buzz/adapter.py:ro"
           ];
           environment = {
             TZ = "America/New_York";
             HERMES_UID = toString hermesUid;
             HERMES_GID = toString hermesGid;
+            # Give dynamic s6 services (notably gateway-default) enough time to
+            # persist their graceful-exit state before the supervisor kills them.
+            S6_KILL_GRACETIME = "30000";
             # Dashboard fronted by nginx + Hermes basic auth. Bind 0.0.0.0
             # *inside the container* so podman's published port can reach it
             # (podman forwards the published port to the container's eth0, not
@@ -185,6 +218,9 @@ in
             # Let the agent reach the LAN host by its short name from inside
             # the container; host /etc/hosts entries are not inherited there.
             "--add-host=gnomeregan:192.168.8.2"
+            # This outer Podman timeout must exceed s6's 30-second inner grace;
+            # systemd retains its generated 120-second stop allowance.
+            "--stop-timeout=90"
           ];
           # Dashboard only; gateway makes outbound connections, no inbound ports.
           ports = ["127.0.0.1:${dashboardPort}:${dashboardPort}"];

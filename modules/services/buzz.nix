@@ -44,6 +44,7 @@ in {
       extraConfig = ''
         allow 10.1.0.0/16;
         allow 100.64.0.0/10;
+        allow 10.88.0.0/16;
         deny all;
         client_max_body_size 250M;
       '';

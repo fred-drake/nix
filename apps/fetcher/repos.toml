@@ -44,3 +44,13 @@ url = "https://github.com/edxeth/pi-subagents"
 name = "actual-mcp-src"
 url = "https://github.com/s-stefanov/actual-mcp"
 rev = "69d9413342acbecd1f6ab748300337418ec8ac6d"
+
+[[repos]]
+name = "buzz-src"
+url = "https://github.com/block/buzz"
+rev = "4749bc7be3cdb78c2db4ce4864775ba7ab60b4cc"
+
+[[repos]]
+name = "hermes-agent-v2026.8.3-src"
+url = "https://github.com/NousResearch/hermes-agent"
+rev = "3c27eb6234bf91b8ceee9e9071591b31e9b148cb"

@@ -1,0 +1,844 @@
+diff --git a/plugins/platforms/buzz/adapter.py b/plugins/platforms/buzz/adapter.py
+index 8b77ae3..9cca331 100644
+--- a/plugins/platforms/buzz/adapter.py
++++ b/plugins/platforms/buzz/adapter.py
+@@ -97,0 +98,5 @@ _DM_DISCOVERY_EVERY = 5
++_DM_EVIDENCE_KEYS = (
++    "_relay_channel_type",
++    "_relay_visibility",
++    "_relay_dm_members",
++)
+@@ -218 +223,3 @@ def _normalize_user_ref(ref: str) -> Optional[str]:
+-    ref = (ref or "").strip().lower()
++    if not isinstance(ref, str):
++        return None
++    ref = ref.strip().lower()
+@@ -227,0 +235,81 @@ def _normalize_user_ref(ref: str) -> Optional[str]:
++def _normalize_dm_members(value: Any) -> Optional[Tuple[Tuple[str, str], ...]]:
++    """Return two unique normalized (pubkey, role) pairs or fail closed."""
++    if not isinstance(value, list) or len(value) != 2:
++        return None
++    members = []
++    seen = set()
++    for item in value:
++        if not isinstance(item, dict):
++            return None
++        pubkey = _normalize_user_ref(item.get("pubkey"))
++        role = item.get("role")
++        if pubkey is None or not isinstance(role, str) or role != "member" or pubkey in seen:
++            return None
++        seen.add(pubkey)
++        members.append((pubkey, role))
++    return tuple(sorted(members))
++
++
++def _is_verified_owner_dm(
++    channel_id: str,
++    metadata: Optional[dict],
++    event: dict,
++    self_pubkey: str,
++    allowed_pubkeys: set,
++) -> bool:
++    """Pure authoritative one-to-one owner-DM predicate."""
++    if not isinstance(metadata, dict):
++        return False
++    if metadata.get("_relay_channel_type") != "dm":
++        return False
++    if metadata.get("_relay_visibility") != "private":
++        return False
++
++    members = metadata.get("_relay_dm_members")
++    if not isinstance(members, tuple) or len(members) != 2:
++        return False
++    normalized_members = []
++    for member in members:
++        if not isinstance(member, tuple) or len(member) != 2:
++            return False
++        pubkey = _normalize_user_ref(member[0])
++        if pubkey is None or member[1] != "member" or pubkey != member[0]:
++            return False
++        normalized_members.append(pubkey)
++    if len(set(normalized_members)) != 2:
++        return False
++
++    normalized_self = _normalize_user_ref(self_pubkey)
++    normalized_allowed = {
++        pubkey
++        for value in allowed_pubkeys
++        if isinstance(value, str) and (pubkey := _normalize_user_ref(value))
++    }
++    if normalized_self is None or normalized_self not in normalized_members or not normalized_allowed:
++        return False
++    other_members = set(normalized_members) - {normalized_self}
++    if len(other_members) != 1:
++        return False
++    owner = next(iter(other_members))
++    if owner not in normalized_allowed:
++        return False
++
++    if int(event.get("kind") or 0) != _CHAT_KIND:
++        return False
++    author = _normalize_user_ref(event.get("pubkey"))
++    if author != owner or author == normalized_self:
++        return False
++    tags = event.get("tags")
++    if not isinstance(tags, list):
++        return False
++    channel_tags = [
++        tag for tag in tags
++        if isinstance(tag, (list, tuple)) and tag and tag[0] == "h"
++    ]
++    return (
++        len(channel_tags) == 1
++        and len(channel_tags[0]) == 2
++        and str(channel_tags[0][1]) == channel_id
++    )
++
++
+@@ -434,2 +522,2 @@ class BuzzAdapter(BasePlatformAdapter):
+-        # channel_id -> raw ``channels list`` entry; drives DM-vs-channel
+-        # classification (see _may_reclassify_as_dm).
++        # channel_id -> relay metadata. Name/description are discovery hints;
++        # authoritative type, visibility, and membership drive DM classification.
+@@ -942,3 +1030,2 @@ class BuzzAdapter(BasePlatformAdapter):
+-            # History is never dispatched, but it still classifies: a DM that
+-            # leaked in via ``channels list`` latches to chat_type="dm" here,
+-            # so it bypasses the mention gate from the very first poll.
++            # History is never dispatched. It may establish DM classification
++            # only from verified relay evidence and an allowlisted owner event.
+@@ -947,0 +1035,72 @@ class BuzzAdapter(BasePlatformAdapter):
++    async def _refresh_dm_evidence(self, candidate_ids: set[str]) -> None:
++        """Replace cached relay DM evidence for this discovery cycle."""
++        for candidate_id in candidate_ids:
++            metadata = self._channel_meta.setdefault(candidate_id, {})
++            for key in _DM_EVIDENCE_KEYS:
++                metadata.pop(key, None)
++            state = self._channel_state.get(candidate_id)
++            if state is not None and state.get("chat_type") == "dm":
++                state["chat_type"] = "group"
++
++        if not candidate_ids:
++            return
++
++        code, out, err = await self._run_cli(
++            ["channels", "search", "--query", "DM", "--exact", "--include-archived"]
++        )
++        if code != 0:
++            logger.warning("Buzz: DM metadata lookup failed — %s", _cli_error_message(err, code))
++            return
++        try:
++            rows = json.loads(out or "[]")
++        except ValueError:
++            rows = None
++        if not isinstance(rows, list):
++            logger.warning("Buzz: DM metadata lookup returned an invalid projection")
++            return
++
++        by_id: Dict[str, List[dict]] = {}
++        for row in rows:
++            if not isinstance(row, dict):
++                continue
++            row_id = str(row.get("channel_id") or "")
++            if row_id in candidate_ids:
++                by_id.setdefault(row_id, []).append(row)
++
++        for candidate_id in sorted(candidate_ids):
++            matching = by_id.get(candidate_id, [])
++            if len(matching) != 1:
++                continue
++            row = matching[0]
++            channel_type = row.get("channel_type")
++            visibility = row.get("visibility")
++            normalized_type = (
++                channel_type.strip().lower() if isinstance(channel_type, str) else None
++            )
++            normalized_visibility = (
++                visibility.strip().lower() if isinstance(visibility, str) else None
++            )
++            metadata = self._channel_meta.setdefault(candidate_id, {})
++            metadata["_relay_channel_type"] = normalized_type
++            metadata["_relay_visibility"] = normalized_visibility
++            if normalized_type != "dm" or normalized_visibility != "private":
++                continue
++
++            code, out, err = await self._run_cli(
++                ["channels", "members", "--channel", candidate_id]
++            )
++            if code != 0:
++                logger.warning(
++                    "Buzz: DM membership lookup failed for %s — %s",
++                    candidate_id,
++                    _cli_error_message(err, code),
++                )
++                continue
++            try:
++                members_value = json.loads(out or "[]")
++            except ValueError:
++                members_value = None
++            members = _normalize_dm_members(members_value)
++            if members is not None:
++                metadata["_relay_dm_members"] = members
++
+@@ -949,11 +1108,5 @@ class BuzzAdapter(BasePlatformAdapter):
+-        """Watch DM conversations.  New ones found mid-run dispatch from their
+-        beginning (a fresh conversation has no history worth suppressing);
+-        ones present at startup are seeded like channels.
+-
+-        ``dms list`` is only a best-effort source: on some hosted relays it
+-        returns ``[]`` even when DM conversations exist (#68871).  Those DMs
+-        DO surface in ``channels list`` as entries named "DM" with an empty
+-        description, so that listing is scanned as a fallback.  Fallback
+-        finds are watched as ``group`` and latch to ``dm`` via p-tag
+-        detection (_is_direct_message_event) rather than trusting the name
+-        alone to unlock the mention-free DM path.
++        """Discover conversation candidates and refresh authoritative evidence.
++
++        ``dms list`` and DM-shaped channel metadata are discovery hints only.
++        Every candidate starts as a group and can latch to DM only from relay
++        type/visibility, exact membership, allowlist, author, and channel tags.
+@@ -960,0 +1114,24 @@ class BuzzAdapter(BasePlatformAdapter):
++        stale_ids = {
++            channel_id
++            for channel_id, state in self._channel_state.items()
++            if state.get("chat_type") == "dm"
++        } | {
++            channel_id
++            for channel_id, metadata in self._channel_meta.items()
++            if any(key in metadata for key in _DM_EVIDENCE_KEYS)
++        }
++        for channel_id in stale_ids:
++            metadata = self._channel_meta.setdefault(channel_id, {})
++            for key in _DM_EVIDENCE_KEYS:
++                metadata.pop(key, None)
++            state = self._channel_state.get(channel_id)
++            if state is not None and state.get("chat_type") == "dm":
++                state["chat_type"] = "group"
++
++        candidate_ids: set[str] = {
++            channel_id
++            for channel_id, metadata in self._channel_meta.items()
++            if str(metadata.get("name") or "").strip() == "DM"
++            and not str(metadata.get("description") or "").strip()
++        }
++
+@@ -965,7 +1142,3 @@ class BuzzAdapter(BasePlatformAdapter):
+-                if not dm_id or dm_id in self._channel_state:
+-                    continue
+-                if seed:
+-                    await self._seed_channel(dm_id, chat_type="dm")
+-                else:
+-                    self._channel_state[dm_id] = {"chat_type": "dm", "last_ts": 0, "seen": OrderedDict()}
+-                self._channel_names.setdefault(dm_id, "DM")
++                if dm_id:
++                    candidate_ids.add(dm_id)
++                    self._channel_names.setdefault(dm_id, "DM")
+@@ -974,9 +1147,17 @@ class BuzzAdapter(BasePlatformAdapter):
+-        if code != 0:
+-            return
+-        for ch in _parse_json_list(out):
+-            ch_id = str(ch.get("channel_id") or "")
+-            if not ch_id:
+-                continue
+-            self._channel_meta[ch_id] = ch
+-            self._channel_names.setdefault(ch_id, str(ch.get("name") or ch_id))
+-            if ch_id in self._channel_state or not self._may_reclassify_as_dm(ch_id):
++        if code == 0:
++            for channel in _parse_json_list(out):
++                channel_id = str(channel.get("channel_id") or "")
++                if not channel_id:
++                    continue
++                if (
++                    str(channel.get("name") or "").strip() == "DM"
++                    and not str(channel.get("description") or "").strip()
++                ):
++                    candidate_ids.add(channel_id)
++                    self._channel_meta[channel_id] = channel
++                    self._channel_names.setdefault(channel_id, "DM")
++
++        await self._refresh_dm_evidence(candidate_ids)
++
++        for candidate_id in sorted(candidate_ids):
++            if candidate_id in self._channel_state:
+@@ -985 +1166 @@ class BuzzAdapter(BasePlatformAdapter):
+-                await self._seed_channel(ch_id, chat_type="group")
++                await self._seed_channel(candidate_id, chat_type="group")
+@@ -987 +1168,5 @@ class BuzzAdapter(BasePlatformAdapter):
+-                self._channel_state[ch_id] = {"chat_type": "group", "last_ts": 0, "seen": OrderedDict()}
++                self._channel_state[candidate_id] = {
++                    "chat_type": "group",
++                    "last_ts": 0,
++                    "seen": OrderedDict(),
++                }
+@@ -1027,0 +1213,6 @@ class BuzzAdapter(BasePlatformAdapter):
++        # Adapter-level allow-list denial happens before classification,
++        # mention gating, gateway dispatch, model execution, or tool execution.
++        if self._allowed_pubkeys and pubkey not in self._allowed_pubkeys:
++            logger.debug("Buzz: ignoring message from unauthorized pubkey %s…", pubkey[:8])
++            return
++
+@@ -1029 +1220,4 @@ class BuzzAdapter(BasePlatformAdapter):
+-        # message both latches the conversation and dispatches.
++        # owner message both latches the conversation and dispatches. Sticky
++        # conversation state never substitutes for validating the current
++        # event's owner and exact channel binding.
++        is_verified_dm_event = self._is_direct_message_event(channel_id, event)
+@@ -1035,8 +1229,7 @@ class BuzzAdapter(BasePlatformAdapter):
+-        # DMs always dispatch.
+-        if not is_dm and self.require_mention and not self._is_mentioned(content):
+-            return
+-
+-        # Adapter-level allow-list (the gateway applies BUZZ_ALLOWED_USERS /
+-        # BUZZ_ALLOW_ALL_USERS centrally as well; empty list = no filter here).
+-        if self._allowed_pubkeys and pubkey not in self._allowed_pubkeys:
+-            logger.debug("Buzz: ignoring message from unauthorized pubkey %s…", pubkey[:8])
++        # A DM bypasses mention gating only when this event independently
++        # satisfies the authoritative predicate.
++        if (
++            self.require_mention
++            and not self._is_mentioned(content)
++            and not (is_dm and is_verified_dm_event)
++        ):
+@@ -1061,7 +1254 @@ class BuzzAdapter(BasePlatformAdapter):
+-    # ── DM classification (issue #68871) ──────────────────────────────────
+-    #
+-    # ``buzz dms list`` returns [] on some hosted relays even when DM
+-    # conversations exist, so DMs leak in via ``channels list`` and get
+-    # watched as chat_type="group" — which wrongly puts them behind the
+-    # channel mention gate.  Classification therefore keys off the Nostr
+-    # tags of the messages themselves.  Observed on a live hosted relay:
++    # ── Authoritative DM classification (issue #68871) ────────────────────
+@@ -1069,32 +1256,4 @@ class BuzzAdapter(BasePlatformAdapter):
+-    #   * every message another user sends IN A DM carries a structural
+-    #     ["p", <our pubkey>] tag, even when the text never mentions us
+-    #     (recipient addressing);
+-    #   * in a real channel, a ["p", <our pubkey>] tag appears only when the
+-    #     text visibly @mentions us (typed mention, with or without a reply
+-    #     ["e", ...] tag) — never on plain broadcasts.
+-    #
+-    # So "p-tagged to self WITHOUT a visible mention in the content" is the
+-    # DM discriminator: in a channel that combination does not occur, and a
+-    # channel reply/mention that p-tags us is excluded because the mention
+-    # is right there in the text.  As a second, independent guard, a
+-    # conversation whose ``channels list`` metadata looks like a real
+-    # community channel (real name / non-empty description) is never
+-    # reclassified at all, whereas relay-materialized DMs are always named
+-    # "DM" with an empty description.  Nothing is lost while unlatched: a
+-    # DM message that DOES mention us dispatches through the mention gate
+-    # anyway, so the latch flips exactly on the first message that needs it.
+-
+-    def _may_reclassify_as_dm(self, channel_id: str) -> bool:
+-        """True when the conversation's metadata does not rule out a DM.
+-
+-        Known real community channels (real name or non-empty description in
+-        ``channels list``) must never turn into DMs just because a message
+-        p-tags us.  A conversation with no metadata at all is trusted only
+-        when the user did not explicitly configure it as a watched channel.
+-        """
+-        meta = self._channel_meta.get(channel_id)
+-        if meta is None:
+-            return channel_id not in self.channels
+-        name = str(meta.get("name") or "").strip()
+-        description = str(meta.get("description") or "").strip()
+-        return name == "DM" and not description
++    # ``dms list`` and relay-materialized names are discovery hints only.
++    # Mention-free DM classification requires relay dm/private metadata, an
++    # exact two-member roster, a non-empty owner allowlist, matching event
++    # author, and exactly one matching h channel tag. p tags are irrelevant.
+@@ -1103,20 +1262,7 @@ class BuzzAdapter(BasePlatformAdapter):
+-        """True when ``event`` is shaped like a direct message to us: a chat
+-        message from another user, p-tagged to our pubkey, whose content does
+-        NOT visibly mention us — i.e. the p-tag is structural DM addressing,
+-        not the artifact of a typed @mention (see block comment above)."""
+-        if not self._self_pubkey or not self._may_reclassify_as_dm(channel_id):
+-            return False
+-        if int(event.get("kind") or 0) != _CHAT_KIND:
+-            return False
+-        pubkey = str(event.get("pubkey") or "").lower()
+-        if not pubkey or pubkey == self._self_pubkey:
+-            return False
+-        tags = event.get("tags")
+-        if not isinstance(tags, list):
+-            return False
+-        p_tagged_to_self = any(
+-            isinstance(tag, (list, tuple))
+-            and len(tag) > 1
+-            and tag[0] == "p"
+-            and str(tag[1]).lower() == self._self_pubkey
+-            for tag in tags
++        """Return whether relay evidence verifies this event as an owner DM."""
++        return _is_verified_owner_dm(
++            channel_id,
++            self._channel_meta.get(channel_id),
++            event,
++            self._self_pubkey,
++            self._allowed_pubkeys,
+@@ -1124,4 +1269,0 @@ class BuzzAdapter(BasePlatformAdapter):
+-        if not p_tagged_to_self:
+-            return False
+-        content = event.get("content")
+-        return isinstance(content, str) and not self._is_mentioned(content)
+@@ -1130,3 +1272 @@ class BuzzAdapter(BasePlatformAdapter):
+-        """Latch a group conversation to chat_type="dm" once any direct
+-        message is seen; the classification then sticks so subsequent
+-        un-mentioned messages in the conversation dispatch too."""
++        """Latch a conversation only from authoritative owner-DM evidence."""
+@@ -1137 +1277,5 @@ class BuzzAdapter(BasePlatformAdapter):
+-        logger.info("Buzz: conversation %s reclassified as DM (message p-tagged to self)", channel_id)
++        logger.info(
++            "Buzz: conversation %s reclassified as DM "
++            "(verified relay DM metadata and owner participant)",
++            channel_id,
++        )
+diff --git a/tests/gateway/test_buzz_adapter.py b/tests/gateway/test_buzz_adapter.py
+index d612021..d621af8 100644
+--- a/tests/gateway/test_buzz_adapter.py
++++ b/tests/gateway/test_buzz_adapter.py
+@@ -210,0 +211,68 @@ class TestPollingDedupe:
++    @pytest.mark.asyncio
++    async def test_reconnect_overlap_and_restart_seed_do_not_replay(self, adapter):
++        adapter._channel_state[CHANNEL] = {
++            "chat_type": "group",
++            "last_ts": 200,
++            "seen": {"e-old": None},
++        }
++
++        class WebSocket:
++            def __init__(self):
++                self.sent = []
++
++            async def send(self, message):
++                self.sent.append(json.loads(message))
++
++        websocket = WebSocket()
++        subscriptions = await adapter._subscribe_websocket(websocket)
++        channel_subscription = next(key for key, value in subscriptions.items() if value == CHANNEL)
++        request = next(item for item in websocket.sent if item[1] == channel_subscription)
++        assert request[2]["since"] == 199
++
++        await adapter._handle_event(
++            CHANNEL,
++            adapter._channel_state[CHANNEL],
++            _event("e-old", content="@Chip replay", created_at=200),
++        )
++        assert adapter._dispatched == []
++
++        restarted = _make_adapter()
++        restarted._dispatched = []
++
++        async def capture(**kwargs):
++            restarted._dispatched.append(kwargs)
++
++        restarted._dispatch_message = capture
++        cli = _ScriptedCli()
++        cli.script("messages", "get", [_event("e-old", content="@Chip replay", created_at=200)])
++        restarted._run_cli = cli
++        await restarted._seed_channel(CHANNEL, chat_type="group")
++        assert restarted._dispatched == []
++        assert "e-old" in restarted._channel_state[CHANNEL]["seen"]
++
++    @pytest.mark.asyncio
++    async def test_periodic_polling_runs_dm_discovery_once(self, adapter, monkeypatch):
++        adapter._channel_state[CHANNEL] = {
++            "chat_type": "group",
++            "last_ts": 0,
++            "seen": {},
++        }
++        discover = AsyncMock()
++        poll = AsyncMock()
++        adapter._discover_dms = discover
++        adapter._poll_channel = poll
++        sleeps = 0
++
++        async def bounded_sleep(_interval):
++            nonlocal sleeps
++            sleeps += 1
++            if sleeps > 5:
++                raise asyncio.CancelledError
++
++        monkeypatch.setattr(asyncio, "sleep", bounded_sleep)
++        with pytest.raises(asyncio.CancelledError):
++            await adapter._poll_loop()
++
++        discover.assert_awaited_once_with(seed=False)
++        assert poll.await_count == 5
++
+@@ -254,7 +322 @@ class TestMentionGating:
+-# ── DM classification via p-tags (issue #68871) ──────────────────────────
+-#
+-# `buzz dms list` returns [] on some hosted relays, so DM conversations leak
+-# in via `channels list` and get seeded chat_type="group".  The adapter must
+-# reclassify them from the Nostr tags of real traffic: DM messages are
+-# p-tagged to our own pubkey WITHOUT the text mentioning us, while channel
+-# messages only ever p-tag us when the text visibly @mentions us.
++# ── Authoritative DM classification (issue #68871) ────────────────────────
+@@ -280,0 +343,57 @@ def _tagged_event(event_id, channel, *, content, pubkey=OTHER_PUBKEY,
++def _dm_search(channel_id=DM_CHANNEL, *, channel_type="dm", visibility="private"):
++    return [{
++        "channel_id": channel_id,
++        "name": "DM",
++        "channel_type": channel_type,
++        "visibility": visibility,
++        "archived": False,
++        "about": None,
++        "topic": None,
++        "purpose": None,
++    }]
++
++
++def _dm_members(owner=OTHER_PUBKEY, *, self_role="member", owner_role="member"):
++    return [
++        {"pubkey": SELF_PUBKEY, "role": self_role},
++        {"pubkey": owner, "role": owner_role},
++    ]
++
++
++async def _discover_fallback_dm(adapter, *, search=None, members=None,
++                                search_code=0, members_code=0):
++    cli = _ScriptedCli()
++    cli.script("dms", "list", [])
++    cli.script("channels", "list", [
++        {"channel_id": DM_CHANNEL, "name": "DM", "description": "", "created_at": 1},
++    ])
++    cli.script("channels", "search", _dm_search() if search is None else search,
++               code=search_code, stderr="search failed" if search_code else "")
++    cli.script("channels", "members", _dm_members() if members is None else members,
++               code=members_code, stderr="members failed" if members_code else "")
++    adapter._run_cli = cli
++    await adapter._discover_dms(seed=False)
++    return cli
++
++
++FAIL_CLOSED_CASES = [
++    pytest.param({"search_code": 2}, id="search-failure"),
++    pytest.param({"search": _dm_search(channel_type=None)}, id="missing-type"),
++    pytest.param({"search": _dm_search(channel_type="forum")}, id="wrong-type"),
++    pytest.param({"search": _dm_search(visibility=None)}, id="missing-visibility"),
++    pytest.param({"search": _dm_search(visibility="public")}, id="wrong-visibility"),
++    pytest.param({"members_code": 2}, id="members-failure"),
++    pytest.param({"members": _dm_members() + [{"pubkey": "c" * 64, "role": "member"}]}, id="group-dm"),
++    pytest.param({"members": _dm_members() + [{"pubkey": OTHER_PUBKEY, "role": "member"}]}, id="duplicate-member"),
++    pytest.param({"members": _dm_members() + [{"pubkey": OTHER_PUBKEY, "role": "owner"}]}, id="conflicting-member"),
++    pytest.param({"members": _dm_members(self_role="bot")}, id="wrong-self-role"),
++    pytest.param({"members": _dm_members(owner_role="owner")}, id="wrong-owner-role"),
++    pytest.param({"members": [{"pubkey": SELF_PUBKEY, "role": "member"}]}, id="missing-owner"),
++    pytest.param({"members": [{"pubkey": OTHER_PUBKEY, "role": "member"}, {"pubkey": "c" * 64, "role": "member"}]}, id="missing-self"),
++    pytest.param({"members": [{"pubkey": 123, "role": "member"}, {"pubkey": SELF_PUBKEY, "role": "member"}]}, id="non-string-pubkey"),
++    pytest.param({"members": [{"pubkey": OTHER_PUBKEY, "role": 123}, {"pubkey": SELF_PUBKEY, "role": "member"}]}, id="non-string-role"),
++    pytest.param({"members": {"pubkey": OTHER_PUBKEY, "role": "member"}}, id="non-list-projection"),
++    pytest.param({"members": [123, {"pubkey": SELF_PUBKEY, "role": "member"}]}, id="non-dict-member"),
++]
++
++
+@@ -293,13 +412 @@ class TestDmClassification:
+-        # Metadata exactly as `channels list` returns it on the hosted relay.
+-        a._channel_meta = {
+-            DM_CHANNEL: {"channel_id": DM_CHANNEL, "name": "DM", "description": ""},
+-            CHANNEL: {
+-                "channel_id": CHANNEL,
+-                "name": "general",
+-                "description": "General conversation and community updates.",
+-            },
+-        }
+-        a._channel_names = {DM_CHANNEL: "DM", CHANNEL: "general"}
+-        # Both leaked in as group — the bug under test.
+-        a._channel_state[DM_CHANNEL] = {"chat_type": "group", "last_ts": 0, "seen": {}}
+-        a._channel_state[CHANNEL] = {"chat_type": "group", "last_ts": 0, "seen": {}}
++        a._allowed_pubkeys = {OTHER_PUBKEY}
+@@ -308,6 +414,0 @@ class TestDmClassification:
+-    async def _poll_with(self, adapter, channel, *events):
+-        cli = _ScriptedCli()
+-        cli.script("messages", "get", list(events))
+-        adapter._run_cli = cli
+-        await adapter._poll_channel(channel)
+-
+@@ -315,5 +416,4 @@ class TestDmClassification:
+-    async def test_unmentioned_ptagged_dm_latches_and_dispatches(self, adapter):
+-        """The reported bug: a DM without an @mention must dispatch."""
+-        await self._poll_with(
+-            adapter, DM_CHANNEL,
+-            _tagged_event("e1", DM_CHANNEL, content="here's a test message", p=SELF_PUBKEY),
++    async def test_valid_owner_dm_without_p_tag_dispatches_once_as_dm(self, adapter):
++        cli = await _discover_fallback_dm(adapter)
++        event = _tagged_event(
++            "e-owner-dm", DM_CHANNEL, content="owner dm without mention"
+@@ -320,0 +421,2 @@ class TestDmClassification:
++        await adapter._handle_event(DM_CHANNEL, adapter._channel_state[DM_CHANNEL], event)
++
+@@ -322 +424,3 @@ class TestDmClassification:
+-        assert [d["message_id"] for d in adapter._dispatched] == ["e1"]
++        assert len(adapter._dispatched) == 1
++        assert adapter._dispatched[0]["message_id"] == "e-owner-dm"
++        assert adapter._dispatched[0]["user_id"] == OTHER_PUBKEY
+@@ -323,0 +428,2 @@ class TestDmClassification:
++        assert sum(call[0][:6] == ["channels", "search", "--query", "DM", "--exact", "--include-archived"] for call in cli.calls) == 1
++        assert sum(call[0] == ["channels", "members", "--channel", DM_CHANNEL] for call in cli.calls) == 1
+@@ -324,0 +431,10 @@ class TestDmClassification:
++    @pytest.mark.asyncio
++    async def test_private_stream_named_dm_remains_mention_gated(self, adapter):
++        await _discover_fallback_dm(adapter, search=_dm_search(channel_type="stream"))
++        await adapter._handle_event(
++            DM_CHANNEL,
++            adapter._channel_state[DM_CHANNEL],
++            _tagged_event("e-stream", DM_CHANNEL, content="not a dm"),
++        )
++        assert adapter._channel_state[DM_CHANNEL]["chat_type"] == "group"
++        assert adapter._dispatched == []
+@@ -327,7 +443,6 @@ class TestDmClassification:
+-    async def test_general_reply_ptagging_self_stays_channel(self, adapter):
+-        """A #general reply to us p-tags our pubkey (observed live) — that
+-        must NOT reclassify the channel; mention gating still applies."""
+-        await self._poll_with(
+-            adapter, CHANNEL,
+-            _tagged_event("e1", CHANNEL, content="@chip what's up?",
+-                          p=SELF_PUBKEY, reply_to="root-event"),
++    async def test_unauthorized_event_is_rejected_before_latch(self, adapter):
++        await _discover_fallback_dm(adapter)
++        await adapter._handle_event(
++            DM_CHANNEL,
++            adapter._channel_state[DM_CHANNEL],
++            _tagged_event("e-bad", DM_CHANNEL, pubkey="b" * 64, content="intruder"),
+@@ -335,9 +450,11 @@ class TestDmClassification:
+-        assert adapter._channel_state[CHANNEL]["chat_type"] == "group"
+-        # It carried a mention, so it dispatches — but as a group message.
+-        assert [d["chat_type"] for d in adapter._dispatched] == ["group"]
+-
+-        # And once the mention is absent, the channel gate drops the message
+-        # even though the earlier reply p-tagged us.
+-        await self._poll_with(
+-            adapter, CHANNEL,
+-            _tagged_event("e2", CHANNEL, content="thanks everyone", created_at=1001),
++        assert adapter._channel_state[DM_CHANNEL]["chat_type"] == "group"
++        assert adapter._dispatched == []
++
++    @pytest.mark.asyncio
++    async def test_empty_allowlist_never_unlocks_mention_free_dm(self, adapter):
++        adapter._allowed_pubkeys.clear()
++        await _discover_fallback_dm(adapter)
++        await adapter._handle_event(
++            DM_CHANNEL,
++            adapter._channel_state[DM_CHANNEL],
++            _tagged_event("e-empty", DM_CHANNEL, content="owner dm"),
+@@ -345 +462,2 @@ class TestDmClassification:
+-        assert len(adapter._dispatched) == 1
++        assert adapter._channel_state[DM_CHANNEL]["chat_type"] == "group"
++        assert adapter._dispatched == []
+@@ -346,0 +465,22 @@ class TestDmClassification:
++    @pytest.mark.asyncio
++    @pytest.mark.parametrize(
++        "author,search,content,p_tag,expected_dispatch,expected_type",
++        [
++            pytest.param(OTHER_PUBKEY, _dm_search(channel_type="stream"), "@Chip owner channel mention", None, 1, "group", id="owner-channel"),
++            pytest.param(OTHER_PUBKEY, _dm_search(), "@Chip owner DM mention", None, 1, "dm", id="owner-dm-no-p"),
++            pytest.param(OTHER_PUBKEY, _dm_search(), "@Chip owner DM mention", SELF_PUBKEY, 1, "dm", id="owner-dm-with-p"),
++            pytest.param("b" * 64, _dm_search(channel_type="stream"), "@Chip non-owner mention", None, 0, "group", id="non-owner-channel"),
++            pytest.param("b" * 64, _dm_search(), "@Chip non-owner DM mention", None, 0, "group", id="non-owner-dm"),
++        ],
++    )
++    async def test_mentioned_paths_are_unchanged(
++        self, adapter, author, search, content, p_tag, expected_dispatch, expected_type
++    ):
++        await _discover_fallback_dm(adapter, search=search)
++        await adapter._handle_event(
++            DM_CHANNEL,
++            adapter._channel_state[DM_CHANNEL],
++            _tagged_event("e-mentioned", DM_CHANNEL, pubkey=author, content=content, p=p_tag),
++        )
++        assert len(adapter._dispatched) == expected_dispatch
++        assert adapter._channel_state[DM_CHANNEL]["chat_type"] == expected_type
+@@ -349,8 +489,7 @@ class TestDmClassification:
+-    async def test_channel_like_metadata_blocks_latch_even_without_mention(self, adapter):
+-        """Second guard on its own: even a p-tagged, un-mentioned message
+-        cannot reclassify a conversation whose metadata says real channel."""
+-        adapter._channel_meta[CHANNEL]["description"] = ""
+-        adapter._channel_meta[CHANNEL]["name"] = "announcements"
+-        await self._poll_with(
+-            adapter, CHANNEL,
+-            _tagged_event("e1", CHANNEL, content="fyi everyone", p=SELF_PUBKEY),
++    @pytest.mark.parametrize("discovery", FAIL_CLOSED_CASES)
++    async def test_invalid_relay_evidence_fails_closed(self, adapter, discovery):
++        await _discover_fallback_dm(adapter, **discovery)
++        await adapter._handle_event(
++            DM_CHANNEL,
++            adapter._channel_state[DM_CHANNEL],
++            _tagged_event("e-invalid", DM_CHANNEL, content="owner dm"),
+@@ -358 +497 @@ class TestDmClassification:
+-        assert adapter._channel_state[CHANNEL]["chat_type"] == "group"
++        assert adapter._channel_state[DM_CHANNEL]["chat_type"] == "group"
+@@ -360,0 +500,21 @@ class TestDmClassification:
++    @pytest.mark.asyncio
++    @pytest.mark.parametrize(
++        "tags",
++        [
++            pytest.param(None, id="missing-tags"),
++            pytest.param([], id="no-h-tag"),
++            pytest.param([["h", CHANNEL]], id="wrong-h"),
++            pytest.param([["h", DM_CHANNEL], ["h", DM_CHANNEL]], id="duplicate-matching-h"),
++            pytest.param([["h", DM_CHANNEL], ["h", CHANNEL]], id="matching-and-conflicting-h"),
++        ],
++    )
++    async def test_invalid_event_binding_fails_closed(self, adapter, tags):
++        await _discover_fallback_dm(adapter)
++        event = _tagged_event("e-binding", DM_CHANNEL, content="owner dm")
++        if tags is None:
++            event.pop("tags")
++        else:
++            event["tags"] = tags
++        await adapter._handle_event(DM_CHANNEL, adapter._channel_state[DM_CHANNEL], event)
++        assert adapter._channel_state[DM_CHANNEL]["chat_type"] == "group"
++        assert adapter._dispatched == []
+@@ -363,5 +523,42 @@ class TestDmClassification:
+-    async def test_dm_shaped_channel_discovered_when_dms_list_empty(self):
+-        """Fallback discovery: with `dms list` broken (returns []), a
+-        DM-shaped `channels list` entry gets watched; real channels not
+-        already watched are left alone."""
+-        a = _make_adapter()
++    @pytest.mark.parametrize(
++        "tags",
++        [
++            pytest.param(None, id="missing-tags"),
++            pytest.param([], id="no-h-tag"),
++            pytest.param([["h", CHANNEL]], id="wrong-h"),
++            pytest.param([["h", DM_CHANNEL], ["h", DM_CHANNEL]], id="duplicate-matching-h"),
++            pytest.param([["h", DM_CHANNEL], ["h", CHANNEL]], id="matching-and-conflicting-h"),
++        ],
++    )
++    async def test_latched_dm_still_requires_current_event_binding(self, adapter, tags):
++        await _discover_fallback_dm(adapter)
++        state = adapter._channel_state[DM_CHANNEL]
++        await adapter._handle_event(
++            DM_CHANNEL, state,
++            _tagged_event("e-latch", DM_CHANNEL, content="valid owner dm"),
++        )
++        assert state["chat_type"] == "dm"
++        assert [item["message_id"] for item in adapter._dispatched] == ["e-latch"]
++
++        event = _tagged_event(
++            "e-after-latch", DM_CHANNEL, content="unbound owner dm", created_at=1001
++        )
++        if tags is None:
++            event.pop("tags")
++        else:
++            event["tags"] = tags
++        await adapter._handle_event(DM_CHANNEL, state, event)
++        assert state["chat_type"] == "dm"
++        assert [item["message_id"] for item in adapter._dispatched] == ["e-latch"]
++
++    @pytest.mark.asyncio
++    async def test_failed_refresh_demotes_stale_dm_evidence(self, adapter):
++        await _discover_fallback_dm(adapter)
++        state = adapter._channel_state[DM_CHANNEL]
++        await adapter._handle_event(
++            DM_CHANNEL, state,
++            _tagged_event("e-first", DM_CHANNEL, content="first owner dm"),
++        )
++        assert state["chat_type"] == "dm"
++        assert len(adapter._dispatched) == 1
++
+@@ -372,2 +568,0 @@ class TestDmClassification:
+-            {"channel_id": CHANNEL, "name": "general",
+-             "description": "General conversation and community updates.", "created_at": 2},
+@@ -375,7 +570,97 @@ class TestDmClassification:
+-        a._run_cli = cli
+-        await a._discover_dms(seed=False)
+-        # Watched as group; the p-tag latch flips it on the first real DM.
+-        assert a._channel_state[DM_CHANNEL]["chat_type"] == "group"
+-        assert a._may_reclassify_as_dm(DM_CHANNEL) is True
+-        assert CHANNEL not in a._channel_state
+-        assert a._may_reclassify_as_dm(CHANNEL) is False
++        cli.script("channels", "search", [], code=2, stderr="search failed")
++        adapter._run_cli = cli
++        await adapter._discover_dms(seed=False)
++        assert state["chat_type"] == "group"
++
++        await adapter._handle_event(
++            DM_CHANNEL, state,
++            _tagged_event("e-second", DM_CHANNEL, content="second owner dm", created_at=1001),
++        )
++        assert len(adapter._dispatched) == 1
++
++    @pytest.mark.asyncio
++    async def test_dms_list_candidate_starts_group_then_latches_from_authority(self, adapter):
++        cli = _ScriptedCli()
++        cli.script("dms", "list", [{"dm_id": DM_CHANNEL}])
++        cli.script("channels", "list", [])
++        cli.script("channels", "search", _dm_search())
++        cli.script("channels", "members", _dm_members())
++        adapter._run_cli = cli
++        await adapter._discover_dms(seed=False)
++        state = adapter._channel_state[DM_CHANNEL]
++        assert state["chat_type"] == "group"
++        await adapter._handle_event(
++            DM_CHANNEL, state,
++            _tagged_event("e-direct-list", DM_CHANNEL, content="owner dm"),
++        )
++        assert state["chat_type"] == "dm"
++        assert len(adapter._dispatched) == 1
++
++    @pytest.mark.asyncio
++    async def test_dms_list_only_failure_clears_stale_evidence(self, adapter):
++        cli = _ScriptedCli()
++        cli.script("dms", "list", [{"dm_id": DM_CHANNEL}])
++        cli.script("channels", "list", [])
++        cli.script("channels", "search", _dm_search())
++        cli.script("channels", "members", _dm_members())
++        adapter._run_cli = cli
++        await adapter._discover_dms(seed=False)
++        state = adapter._channel_state[DM_CHANNEL]
++        await adapter._handle_event(
++            DM_CHANNEL, state,
++            _tagged_event("e-list-latch", DM_CHANNEL, content="owner dm"),
++        )
++        assert state["chat_type"] == "dm"
++
++        failed = _ScriptedCli()
++        failed.script("dms", "list", [], code=2, stderr="dms failed")
++        failed.script("channels", "list", [])
++        adapter._run_cli = failed
++        await adapter._discover_dms(seed=False)
++
++        assert state["chat_type"] == "group"
++        assert not any(key.startswith("_relay_") for key in adapter._channel_meta[DM_CHANNEL])
++
++    @pytest.mark.asyncio
++    async def test_dm_shaped_channel_discovered_when_dms_list_empty(self, adapter):
++        cli = await _discover_fallback_dm(adapter)
++        assert adapter._channel_state[DM_CHANNEL]["chat_type"] == "group"
++        assert sum(call[0][:2] == ["channels", "search"] for call in cli.calls) == 1
++        assert CHANNEL not in adapter._channel_state
++
++    @pytest.mark.asyncio
++    async def test_websocket_membership_discovery_adds_one_subscription(self, adapter):
++        adapter._channel_state[CHANNEL] = {
++            "chat_type": "group",
++            "last_ts": 100,
++            "seen": {},
++        }
++
++        async def discover(*, seed):
++            assert seed is False
++            adapter._channel_state.setdefault(
++                DM_CHANNEL,
++                {"chat_type": "group", "last_ts": 0, "seen": {}},
++            )
++
++        adapter._discover_dms = AsyncMock(side_effect=discover)
++
++        class WebSocket:
++            def __init__(self):
++                self.sent = []
++
++            async def send(self, message):
++                self.sent.append(json.loads(message))
++
++        websocket = WebSocket()
++        subscriptions = {"hermes-buzz-0": CHANNEL, "hermes-buzz-membership": None}
++        event = {"created_at": 200}
++        await adapter._handle_membership_event(websocket, subscriptions, event)
++        await adapter._handle_membership_event(websocket, subscriptions, event)
++
++        dm_requests = [
++            request for request in websocket.sent
++            if request[0] == "REQ" and request[2].get("#h") == [DM_CHANNEL]
++        ]
++        assert len(dm_requests) == 1
++        assert list(subscriptions.values()).count(DM_CHANNEL) == 1
