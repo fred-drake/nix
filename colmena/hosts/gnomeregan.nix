@@ -73,6 +73,7 @@ in {
       self.colmena._gnomeregan
       ../../modules/services/glance-dashboard.nix
       ../../modules/services/borg-backup.nix
+      ../../modules/services/tailscale-saas.nix
     ];
   };
 }

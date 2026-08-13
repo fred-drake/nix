@@ -16,6 +16,9 @@ in {
       local = ["/${domain}/"];
       address = [
         (address "headscale" "10.1.1.2")
+        (address "anton" "192.168.8.3")
+        (address "glance" "192.168.8.2")
+        (address "gnomeregan" "192.168.8.2")
         (address "ironforge" "10.1.1.3")
         (address "jellyfin" "10.1.1.3")
         (address "seerr" "10.1.1.3")
@@ -27,6 +30,10 @@ in {
         (address "sabnzbd" "10.1.1.3")
         (address "bazarr" "10.1.1.3")
         (address "orgrimmar" "10.1.1.4")
+        (address "actual" "10.1.1.4")
+        (address "calibre-desktop" "10.1.1.4")
+        (address "calibre-desktop-web" "10.1.1.4")
+        (address "hermes" "10.1.1.4")
         (address "buzz" "10.1.1.4")
         # Preserve the IPv4-mapped answer used by Buzz's Reqwest client.
         "/buzz.${domain}/::ffff:10.1.1.4"

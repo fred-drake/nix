@@ -16,8 +16,11 @@
     lib.filterAttrs (name: _: !builtins.elem name desktopOnlyModules) config.my.modules.nixos
   );
 
-  # Home-manager deferred modules for Colmena hosts that need HM
-  deferredHmModules = builtins.attrValues config.my.modules.home-manager;
+  # Home Manager feature modules for Colmena hosts. Pi is a workstation-only
+  # tool: its extension source is Linux-only at evaluation time, which prevents
+  # Darwin controllers from evaluating the x86_64-linux Anton and gnomeregan
+  # configurations. Darwin hosts continue to receive the full feature set.
+  deferredHmModules = builtins.attrValues (lib.removeAttrs config.my.modules.home-manager ["pi"]);
 in {
   flake.colmena = import ../../colmena {
     inherit inputs;
