@@ -163,12 +163,6 @@
 
     nix-jetbrains-plugins.url = "github:theCapypara/nix-jetbrains-plugins";
 
-    nix4vscode = {
-      url = "github:nix-community/nix4vscode";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    # vscode.url = "github:fred-drake/vscode"; # My custom vscode configuration
-
     hyprland.url = "github:hyprwm/Hyprland";
     rose-pine-hyprcursor = {
       url = "github:ndom91/rose-pine-hyprcursor";

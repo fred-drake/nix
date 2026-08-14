@@ -21,11 +21,6 @@
       (import ../overlays/pyicloud.nix {inherit inputs;})
     ]
     ++ inputPackageOverlays;
-  vscodeOverlays =
-    baseOverlays
-    ++ [
-      inputs.nix4vscode.overlays.forVscode
-    ];
   mkPkgs = nixpkgsSrc: {
     overlays ? baseOverlays,
     cudaSupport ? false,
@@ -39,12 +34,12 @@
       inherit overlays;
     };
 in {
-  inherit mkPkgs baseOverlays vscodeOverlays;
+  inherit mkPkgs baseOverlays;
 
-  pkgs = mkPkgs inputs.nixpkgs {overlays = vscodeOverlays;};
-  pkgsUnstable = mkPkgs inputs.nixpkgs-unstable {overlays = vscodeOverlays;};
-  pkgsStable = mkPkgs inputs.nixpkgs-stable {overlays = vscodeOverlays;};
-  pkgsFredTesting = mkPkgs inputs.nixpkgs-fred-testing {overlays = vscodeOverlays;};
-  pkgsFredUnstable = mkPkgs inputs.nixpkgs-fred-unstable {overlays = vscodeOverlays;};
+  pkgs = mkPkgs inputs.nixpkgs {};
+  pkgsUnstable = mkPkgs inputs.nixpkgs-unstable {};
+  pkgsStable = mkPkgs inputs.nixpkgs-stable {};
+  pkgsFredTesting = mkPkgs inputs.nixpkgs-fred-testing {};
+  pkgsFredUnstable = mkPkgs inputs.nixpkgs-fred-unstable {};
   pkgsCuda = mkPkgs inputs.nixpkgs {cudaSupport = true;};
 }

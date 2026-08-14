@@ -159,21 +159,6 @@
             command = "${lib.getExe' pkgs.clang-tools "clangd"}";
           };
 
-          html = {
-            command = "${pkgs.vscode-langservers-extracted}/bin/vscode-html-language-server";
-            args = ["--stdio"];
-          };
-
-          css = {
-            command = "${pkgs.vscode-langservers-extracted}/bin/vscode-css-language-server";
-            args = ["--stdio"];
-          };
-
-          json = {
-            command = "${pkgs.vscode-langservers-extracted}/bin/vscode-json-language-server";
-            args = ["--stdio"];
-          };
-
           yaml = {
             command = "${pkgs.yaml-language-server}/bin/yaml-language-server";
             args = ["--stdio"];

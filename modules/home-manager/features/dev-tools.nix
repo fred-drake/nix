@@ -54,7 +54,6 @@
     ruff
     gopls
     clang-tools
-    vscode-langservers-extracted
     yaml-language-server
     prettier
     taplo
