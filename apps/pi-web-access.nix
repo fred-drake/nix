@@ -4,7 +4,7 @@
 #
 # The upstream repo ships no package-lock.json; we keep a generated one at
 # apps/fetcher/pi-web-access-lock.json alongside the pin (generated with
-# --omit=peer to exclude pi-core peer deps provided by pi at runtime).
+# --omit=peer and --legacy-peer-deps to exclude pi-core peers provided at runtime).
 #
 # Pi loads index.ts via jiti — no TypeScript compilation step needed.
 # The peer deps (@earendil-works/pi-ai, pi-coding-agent, pi-tui, typebox) are
@@ -39,9 +39,8 @@ in
     inherit src;
     inherit (pin) npmDepsHash;
 
-    # Lockfile was generated with --omit=peer; runtime peer deps are
-    # provided by pi core and are not in the lockfile.
-    npmFlags = ["--ignore-scripts" "--omit=peer"];
+    # Match lockfile generation exactly; runtime peer deps are provided by pi core.
+    npmFlags = ["--ignore-scripts" "--omit=peer" "--legacy-peer-deps"];
 
     # Pi loads index.ts directly via jiti — no compile step needed.
     buildPhase = ''
