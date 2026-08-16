@@ -25,12 +25,15 @@
         fetcher_arg="-f $fetcher"
       fi
 
+      # Attribute names are TOML data, not necessarily valid unquoted Nix identifiers.
+      name_escaped="''${name//\\/\\\\}"
+      name_escaped="''${name_escaped//\"/\\\"}"
       if [ -n "$rev" ]; then
         processed_url=pkgs.$(${pkgs.nurl}/bin/nurl $fetcher_arg "$url" "$rev" | tr -d '\n')
       else
         processed_url=pkgs.$(${pkgs.nurl}/bin/nurl $fetcher_arg "$url" | tr -d '\n')
       fi
-      echo "  ''${name} = ''${processed_url};"
+      echo "  \"''${name_escaped}\" = ''${processed_url};"
     done >> $SRCFILE
     echo "}" >> $SRCFILE
     ${pkgs.alejandra}/bin/alejandra --quiet $SRCFILE
@@ -91,6 +94,10 @@
       rev=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.rev // empty')
       fetcher=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.fetcher // empty')
 
+      # Attribute names are TOML data, not necessarily valid unquoted Nix identifiers.
+      name_escaped="''${name//\\/\\\\}"
+      name_escaped="''${name_escaped//\"/\\\"}"
+
       if [ "$fetcher" = "tarball" ]; then
         # Resolve to a concrete commit so the URL is reproducible.
         if [ -n "$rev" ]; then
@@ -100,7 +107,7 @@
         fi
         archive_url="$url/archive/''${resolved_rev}.tar.gz"
         sha256=$(${pkgs.nix}/bin/nix-prefetch-url --type sha256 --unpack "$archive_url" 2>/dev/null)
-        echo "  ''${name} = builtins.fetchTarball {"
+        echo "  \"''${name_escaped}\" = builtins.fetchTarball {"
         echo "    url = \"''${archive_url}\";"
         echo "    sha256 = \"''${sha256}\";"
         echo "  };"
@@ -110,7 +117,7 @@
         else
           processed_url=pkgs.$(${pkgs.nurl}/bin/nurl "$url" | tr -d '\n')
         fi
-        echo "  ''${name} = ''${processed_url};"
+        echo "  \"''${name_escaped}\" = ''${processed_url};"
       fi
     done >> $SRCFILE
     echo "}" >> $SRCFILE
