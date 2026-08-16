@@ -55,6 +55,7 @@ lib.mkMerge [
         "balenaetcher"
         "bitwarden"
         "blackhole-2ch"
+        "blender"
         "bruno"
         "claude"
         "cmux"
