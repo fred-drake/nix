@@ -3,7 +3,7 @@
 # Lockfile: pi-mcp-adapter-lock.json (generated; upstream repo has no lockfile).
 # Do not edit by hand; run ./apps/fetcher/update-pi-mcp-adapter.sh.
 {
-  version = "2.21.0";
-  hash = "sha256-9B+Q+SIutyXMuNvWZrVvCfGSpMaVrBwvFHvE995zFMA=";
-  npmDepsHash = "sha256-p+jm1kBIYvMHfMi56ARhFMrU+aKObniov7eUp0/1UTw=";
+  version = "2.26.0";
+  hash = "sha256-l8PDjwNk6SC4mzanp7gxOCsVm2NQcigNBl+7zs+CbWM=";
+  npmDepsHash = "sha256-4Fzrbq7g77z4gQlAqSGuSPopPYh6rf4RF2wKFxVBBv4=";
 }

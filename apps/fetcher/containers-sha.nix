@@ -10,7 +10,7 @@ _: {
     };
     "gitea" = {
       "1-rootless" = {
-        "linux/amd64" = "docker.gitea.com/gitea@sha256:89dc3c214b3992e5bb01e05ad21139d7a8b302d3ea3d8942d3f7e904e92af148";
+        "linux/amd64" = "docker.gitea.com/gitea@sha256:7de5f49ada687b8c8d2938f547cdb7634839764ba51f297457bae35cee3abd2c";
       };
     };
   };
@@ -22,7 +22,7 @@ _: {
     };
     "amruthpillai/reactive-resume" = {
       "latest" = {
-        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:0f6f602d530a6724a9619d5c784bf8c01abb65a62989b3137f90f268be11857e";
+        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:5156a1b0a8bb4b4a705f6a3fd0e1f1a8d92111771eaa15989a49b1fcecf049cc";
       };
     };
     "apache/tika" = {
@@ -47,30 +47,30 @@ _: {
     };
     "gotenberg/gotenberg" = {
       "latest" = {
-        "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:0ab77039fc13626f35de0011608d5d887e9d4bced646c77082d2df0c1c207099";
+        "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:9ced40d1b764b4538d79a7597137f42f0c187499d0f283208b227d1e62c55c3f";
       };
     };
     "library/redis" = {
       "7-alpine" = {
-        "linux/amd64" = "docker.io/library/redis@sha256:e7723ff73d963f5cc6d9c4643ea3d989527a402a319239054e9472a7fb9219a2";
+        "linux/amd64" = "docker.io/library/redis@sha256:9702d01c1f10c3ea9f48211b4362e44f154ff02d063e6f7268eba804059f53bf";
       };
       "latest" = {
         "linux/amd64" = "docker.io/library/redis@sha256:52334768d4a6594d8969f51a1a6fee3ffa7545f6359a4877229cdc754d2def82";
       };
     };
+    "livekit/egress" = {
+      "v1.13.0" = {
+        "linux/amd64" = "docker.io/livekit/egress@sha256:a3e61a70479694a5075cff3c081ab633f34d3bfa778adc6089935c96908b6550";
+      };
+    };
     "minio/mc" = {
       "RELEASE.2025-08-13T08-35-41Z" = {
-        "linux/amd64" = "docker.io/minio/mc@sha256:a7fe349ef4bd8521fb8497f55c6042871b2ae640607cf99d9bede5e9bdf11727";
+        "linux/amd64" = "docker.io/minio/mc@sha256:eb4ea9884b77704230e2423e9004d2fa738dc272876b9cc41a297d29443b8780";
       };
     };
     "minio/minio" = {
       "RELEASE.2025-09-07T16-13-09Z" = {
-        "linux/amd64" = "docker.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e";
-      };
-    };
-    "livekit/egress" = {
-      "v1.13.0" = {
-        "linux/amd64" = "docker.io/livekit/egress@sha256:a3e61a70479694a5075cff3c081ab633f34d3bfa778adc6089935c96908b6550";
+        "linux/amd64" = "docker.io/minio/minio@sha256:a1a8bd4ac40ad7881a245bab97323e18f971e4d4cba2c2007ec1bedd21cbaba2";
       };
     };
     "nousresearch/hermes-agent" = {
@@ -80,16 +80,16 @@ _: {
     };
     "postgres" = {
       "16-alpine" = {
-        "linux/amd64" = "docker.io/postgres@sha256:7a396fd264a2067788b6551122b50f162bf6136312c7fc9d74381cb92c648382";
+        "linux/amd64" = "docker.io/postgres@sha256:075f7ba66bc9b3ce7d6b8b635208ff61cd7cf1a67d71ec530eec5d7ae0cbe571";
       };
       "17" = {
-        "linux/amd64" = "docker.io/postgres@sha256:dbbeb22a65db2503050cdbbe5e78f017478f10a1002a226463f049dbb017e99b";
+        "linux/amd64" = "docker.io/postgres@sha256:a65e6a841f6c4dbc4abda3d67fa3bc21824e9611064fcd82e87ea67aad60a0c3";
       };
       "17-alpine" = {
-        "linux/amd64" = "docker.io/postgres@sha256:742f40ea20b9ff2ff31db5458d127452988a2164df9e17441e191f3b72252193";
+        "linux/amd64" = "docker.io/postgres@sha256:7456ef82e5f5bc43d997f4781bbd7c0d6389bff397564649a356e206ba473aee";
       };
       "18" = {
-        "linux/amd64" = "docker.io/postgres@sha256:4cc13dede823cab4e05290c7fb3350fb4e599ecabd9b07e6706b5d5e8f5bc929";
+        "linux/amd64" = "docker.io/postgres@sha256:cd78ca58eb75f929698e117a589488ccb2bd45107247fe02400b50ff6c418324";
       };
     };
     "woodpeckerci/woodpecker-agent" = {
@@ -106,7 +106,7 @@ _: {
   "ghcr.io" = {
     "block/buzz" = {
       "main" = {
-        "linux/amd64" = "ghcr.io/block/buzz@sha256:ae35bce235a176a2a0150715b6bec2ebc3ee2fc49bb2e71d1401963d5267a85d";
+        "linux/amd64" = "ghcr.io/block/buzz@sha256:ecdd164e53a83ddec9c3708fbe198e668b1ac59625407bf25c17974fc703f392";
       };
     };
     "browserless/chromium" = {
@@ -121,22 +121,22 @@ _: {
     };
     "linuxserver/bazarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:028aade282631e2a604795f0451fe047deed9d284dd7aedff3cfc24867ac0ff5";
+        "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:494da1d875aba84c2c96dd3b45a306b65d5446f1927babbded1bee89f83f5c0b";
       };
     };
     "linuxserver/calibre-web" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:b0a9989b006ea73b8ce9153095e339cf07d71eb68debf9806cceb07120326eff";
+        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:fb953f1b46aee37342b147fbc2ed9fbcee1e941008a61b5626b69dee78aa00e8";
       };
     };
     "linuxserver/jellyfin" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:bb455a7a3073d7977323e04f3bd2012a7798aa0e0e66f2ba144b48df9dac9a88";
+        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:7b1dea856daa1150fa9c4e00069c9a2a175f2705ac089d4f6513cf9fdbdf0f14";
       };
     };
     "linuxserver/lidarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/lidarr@sha256:0199ff56d973da7b66158ba8823cf3eac905d47b6ab7524d213931debfa75225";
+        "linux/amd64" = "ghcr.io/linuxserver/lidarr@sha256:d8fa06d5319b962c9ae6c7510bbf390b1d8c2b8c2b812a5eb61781507f40d4ee";
       };
     };
     "linuxserver/prowlarr" = {
@@ -151,12 +151,12 @@ _: {
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:51aa8ea844598c42dada3ed4e0235a281351fd5c636a9fffa49c6c98f8e95628";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:a53190ce920ac1a7e035c6678f6142588524c7f9570a9c82d5b48a11b274333e";
       };
     };
     "linuxserver/sonarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:f6bf16c4c5a0c6c99833eab891671ded0f06f553f30c7b0702e98f455c5642cc";
+        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:729b8f38d99b3af0c02bbb778f2184ed426676ecaad1fa87d12fb5347e36892a";
       };
     };
     "paperless-ngx/paperless-ngx" = {

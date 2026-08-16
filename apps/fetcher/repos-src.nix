@@ -2,90 +2,90 @@
 # Auto-generated -- do not modify! #
 ####################################
 {pkgs, ...}: {
-  outline-nvim-src = pkgs.fetchFromGitHub {
+  "outline-nvim-src" = pkgs.fetchFromGitHub {
     owner = "hedyhli";
     repo = "outline.nvim";
     rev = "2a132953b944561d45b52e4541ebfff71934a742";
     hash = "sha256-4kvDnzLYFDDqcnpPWuNv3uXKDOHZjFLFTYtRGmP7rsc=";
   };
-  container-digest-src = pkgs.fetchFromGitHub {
+  "container-digest-src" = pkgs.fetchFromGitHub {
     owner = "fred-drake";
     repo = "container-digest";
     rev = "8f71e0622f7f502ae0ba1068dc093e7e1391dd58";
     hash = "sha256-c+HgcGewHeIUo8I8yQI36QpKH6rWvSmMTHKiCA2l1Xk=";
   };
-  npm-refresh-src = pkgs.fetchFromGitHub {
+  "npm-refresh-src" = pkgs.fetchFromGitHub {
     owner = "fred-drake";
     repo = "npm-refresh";
     rev = "58f0fb1a3a9ea87f8780f4834f78396d4d9ba1b6";
     hash = "sha256-svg5/+mqBOvZxLLHBvXKmANpuBN+simUIY7QX0Yscz4=";
   };
-  autopair-fish-src = pkgs.fetchFromGitHub {
+  "autopair-fish-src" = pkgs.fetchFromGitHub {
     owner = "jorgebucaran";
     repo = "autopair.fish";
     rev = "4d1752ff5b39819ab58d7337c69220342e9de0e2";
     hash = "sha256-qt3t1iKRRNuiLWiVoiAYOu+9E7jsyECyIqZJ/oRIT1A=";
   };
-  fzf-fish-src = pkgs.fetchFromGitHub {
+  "fzf-fish-src" = pkgs.fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
     rev = "6a6136998879dcc1f29a405dfdd6b92c5f229c39";
     hash = "sha256-ql8UncXGwOIpyC49w1bCRfynRB02u7s1a1rOWTfKcTk=";
   };
-  fish-abbreviation-tips-src = pkgs.fetchFromGitHub {
+  "fish-abbreviation-tips-src" = pkgs.fetchFromGitHub {
     owner = "gazorby";
     repo = "fish-abbreviation-tips";
     rev = "8ed76a62bb044ba4ad8e3e6832640178880df485";
     hash = "sha256-F1t81VliD+v6WEWqj1c1ehFBXzqLyumx5vV46s/FZRU=";
   };
-  puffer-fish-src = pkgs.fetchFromGitHub {
+  "puffer-fish-src" = pkgs.fetchFromGitHub {
     owner = "nickeb96";
     repo = "puffer-fish";
     rev = "83174b07de60078be79985ef6123d903329622b8";
     hash = "sha256-Dhx5+XRxJvlhdnFyimNxFyFiASrGU4ZwyefsDwtKnSg=";
   };
-  gitea-mcp-src = pkgs.fetchgit {
+  "gitea-mcp-src" = pkgs.fetchgit {
     url = "https://gitea.com/fdrake/gitea-mcp";
     tag = "v0.3.0";
     hash = "sha256-hJQ0ryEcPg/WOi54RLZswhWZOjkbllZWOsYyOhe+4AA=";
   };
-  vicinae-src = pkgs.fetchFromGitHub {
+  "vicinae-src" = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "b3130be7b480817d2255b4781476a91593267afb";
-    hash = "sha256-iGKyp+peQzXI0T9LzYmRHr2tevkbhF5GfzDlVldVm2Q=";
+    rev = "8cf5993648be552d740c2ed0157bd7ec298c5ddd";
+    hash = "sha256-8GuyPZ5hajP2+LZ5fLVw9nGlI4ZSrdxtDJRaaatth4c=";
   };
-  spotifatius-src = pkgs.fetchFromGitHub {
+  "spotifatius-src" = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
     repo = "spotifatius";
     rev = "6eceb8e992ba2d1d89d370961a18a1fdeae729fa";
     hash = "sha256-esQiz9nduOm7nAUIq/Y5dMMxpKo2m19lEbZl6iRcxpo=";
   };
-  scanimage-web-src = pkgs.fetchFromGitHub {
+  "scanimage-web-src" = pkgs.fetchFromGitHub {
     owner = "fred-drake";
     repo = "scanimage-web";
     rev = "030c6a985cb22eca47a5fed7f0c67f9786afb284";
     hash = "sha256-JuGiHHvjz5EC+BUnthjIA9Sgef39fo7QtWjf4kB5U9g=";
   };
-  herdr-src = pkgs.fetchFromGitHub {
+  "herdr-src" = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
-    rev = "6f311498aeeb27c0973781961ef94e8d0016ed17";
-    hash = "sha256-clM2DkZ8jxKFtve/TxuZpu6elVeu34qikIIA37FRhYc=";
+    rev = "51b7064ef0a02642393bab1d2eea0f4dbd8414d2";
+    hash = "sha256-ALhahxbdgnN8rMvlKmgB5py0etICwyYY75Uz0jLIpM4=";
   };
-  pi-subagents-src = pkgs.fetchFromGitHub {
+  "pi-subagents-src" = pkgs.fetchFromGitHub {
     owner = "edxeth";
     repo = "pi-subagents";
-    rev = "4c4545da9053c95e921f0620519000972d8babae";
-    hash = "sha256-Twtk+0g6S/PjHXq76FBsfr4hBIL90EzmcZ+SWZOCUJY=";
+    rev = "f2e84c1ed59a6599be224b591ec8654ed0c12dd8";
+    hash = "sha256-JUEP1I19gjRHRg79WNwWgqu3XtQiorivWeaiPa1SGeE=";
   };
-  actual-mcp-src = pkgs.fetchFromGitHub {
+  "actual-mcp-src" = pkgs.fetchFromGitHub {
     owner = "s-stefanov";
     repo = "actual-mcp";
     rev = "69d9413342acbecd1f6ab748300337418ec8ac6d";
     hash = "sha256-Yv/Kc7L7o1Qg0U4ZnmWM5KRr1de463Gn6+lC4KcJ9lc=";
   };
-  buzz-src = pkgs.fetchFromGitHub {
+  "buzz-src" = pkgs.fetchFromGitHub {
     owner = "block";
     repo = "buzz";
     rev = "4749bc7be3cdb78c2db4ce4864775ba7ab60b4cc";
