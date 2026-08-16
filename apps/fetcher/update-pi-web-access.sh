@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Update pi-web-access.nix and pi-web-access-lock.json to the latest release.
-# The upstream repo ships no package-lock.json, so we generate one here with
-# --omit=peer (peer deps are provided by pi core at runtime).
+# The upstream repo ships no package-lock.json, so we generate one here without
+# peer dependencies (they are provided by pi core at runtime).
 #
 # Usage: ./apps/fetcher/update-pi-web-access.sh
 
@@ -23,14 +23,14 @@ hash=$(nix run nixpkgs#nurl -- "https://github.com/$REPO" "v$version" 2>/dev/nul
   | grep 'hash =' | sed 's/.*hash = "\(.*\)".*/\1/')
 echo "  hash: $hash"
 
-echo "Generating lockfile (--omit=peer) ..."
+echo "Generating lockfile (without peer dependencies) ..."
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 srcPath=$(nix flake prefetch --json "github:$REPO/v$version" | jq -r .storePath)
 cp -r "$srcPath"/. "$tmp/"
 chmod -R u+w "$tmp"
 cd "$tmp"
-npm install --ignore-scripts --omit=peer -q 2>&1 | tail -2
+npm install --ignore-scripts --omit=peer --legacy-peer-deps -q 2>&1 | tail -2
 cp package-lock.json "$LOCK_FILE"
 echo "  lockfile written to $LOCK_FILE"
 
