@@ -10,13 +10,14 @@
 
 ## Global Constraints
 
-- `buzz1` is a non-sudo system account with home `/home/buzz1`; it must not access `/home/fdrake`.
+- `buzz1` is a non-sudo system account with home `/home/buzz1`; it must not access `/home/fdrake`. Its one-time interactive Codex enrollment is performed by an administrator through `sudo -iu buzz1`; direct SSH login is not enabled.
 - Each Buzz Desktop agent has one supervised `buzz-acp` service and its own Buzz/Nostr identity; do not multiplex UI agents in one harness.
 - Services run as `buzz1`, work only in `/home/buzz1`, and share that account’s Codex authentication by design.
-- Initial routing is direct messages only and `BUZZ_ACP_RESPOND_TO=owner-only`; all other authors are dropped before Codex execution.
+- Final routing is direct messages plus explicitly owner-mentioned channel messages: force the pinned harness's exact `BUZZ_ACP_SUBSCRIBE=mentions` mode and `BUZZ_ACP_RESPOND_TO=owner-only`; all other authors are dropped before Codex execution.
+- Heartbeat is disabled authoritatively: force `BUZZ_ACP_HEARTBEAT_INTERVAL=0` and strip caller subscription filters and heartbeat interval/prompt/file controls at provider, helper, and launcher boundaries.
 - Runtime identity/auth values must never enter Git, the Nix store, process arguments, provider configuration, or logs.
 - The deployment helper must be the only sudo-allowed route from the SSH deploy principal to root agent management.
-- An unexpected harness failure restarts; an owner `!shutdown` clean exit must remain stopped until `systemctl start buzz-agent-AGENT_ID` or a provider reconcile starts it again.
+- An unexpected harness failure restarts; an owner `!shutdown` clean exit must remain stopped until `sudo buzz-agentctl start AGENT_ID` clears its marker and starts it persistently, or a provider reconcile starts it again. Raw root `systemctl start/restart buzz-agent@ID.service` is unsupported by contract because it bypasses marker and lock handling, but is not mechanically rejected; NixOS activation must be able to restart changed active template instances directly.
 - Format Nix with `alejandra`; add new repository files to Git before evaluating the flake.
 
 ---
@@ -134,21 +135,23 @@ users.users.buzz1 = {
   home = "/home/buzz1";
   createHome = true;
   shell = pkgs.bashInteractive;
+  # Interactive Codex enrollment is administrator-only via `sudo -iu buzz1`.
+  # Do not configure direct SSH credentials for this account.
 };
 users.groups.buzz1 = {};
 ```
 
 Define `/var/lib/buzz-agents/{env,units}` with root ownership and modes `0700`. Define `systemd.services."buzz-agent@"` with `User = "buzz1"`, `WorkingDirectory = "/home/buzz1"`, `EnvironmentFile = "/var/lib/buzz-agents/env/%i"`, `ExecStart` that runs the pinned `buzz-acp` with `BUZZ_ACP_AGENT_COMMAND` set to the pinned `codex-acp`, and hardening appropriate to an agent that must write only in its home: `ProtectSystem = "strict"`, `ReadWritePaths = ["/home/buzz1"]`, `ProtectHome = "tmpfs"` plus an explicit bind/read-write path for `/home/buzz1`, `NoNewPrivileges = true`, and `PrivateTmp = true`.
 
-Use `Restart = "on-failure"`; document and test the pinned Buzz version’s exit-code behavior before relying on clean `!shutdown` exit for non-restart semantics. If upstream does not distinguish intentional clean exit from failure, make the deploy helper stop/mask the unit explicitly on shutdown rather than claiming systemd alone solves it.
+Use `Restart = "always"` with `RestartPreventExitStatus = [42]`. The pinned harness returns 42 only for cryptographically verified owner `!shutdown`; ordinary status 0 and crashes restart, while raw `systemctl stop` and status 42 remain stopped. Route helper deploy/start/rollback plus boot restore directly to the actual static template while they hold the existing locks. Do not set `RefuseManualStart`: NixOS declarative activation directly stops and starts changed active template instances and must move them to current unit/runtime generations without failing. Add the module-owned `buzz-agentctl` with only the strict `start AGENT_ID` interface; it forwards a fixed request to the existing root helper and returns nonzero for `{ok:false}`. Boot restoration must skip marked agents without calling systemd and must stop a start if a marker races with its scan. Prove status-42 marking, NixOS-style changed-unit stop/start, agentctl persistent recovery, deploy/redeploy generation replacement, remove final state, and post-recovery reboot restoration in the real systemd VM test. Direct root start/restart remains unsupported by contract, not a tested application lifecycle guarantee.
 
 Import the module from `colmena/hosts/gnomeregan.nix`, not a Hetzner common module. Add only the needed runtime packages to the NixOS module, not to `fdrake`’s Home Manager packages.
 
 - [ ] **Step 4: Run static contracts and a build**
 
-Run: `bash tests/buzz-agent-host.sh && nix build --no-link .#colmenaHive.gnomeregan.config.system.build.toplevel`
+Run: `bash tests/buzz-agent-host.sh && colmena build --on gnomeregan --impure`
 
-Expected: PASS. The evaluated account has no wheel membership; the unit runs as `buzz1` with its declared working directory.
+Expected: PASS. The evaluated account has no wheel membership; the unit runs as `buzz1` with its declared working directory. This flake does not export a `colmenaHive` package attribute; use Colmena’s repository-standard build command.
 
 - [ ] **Step 5: Commit the host boundary**
 
@@ -194,13 +197,13 @@ Write `apps/scripts/buzz-agent-deploy` in Bash with `set -euo pipefail` and `jq`
 1. read exactly one JSON object from stdin;
 2. accept only `deploy`, `start`, `stop`, and `remove` operations;
 3. require `agent_id` matching `^[a-f0-9]{16,64}$` and derive only `buzz-agent@${agent_id}.service` from it;
-4. allow only the environment keys `BUZZ_PRIVATE_KEY`, `BUZZ_AUTH_TAG`, `BUZZ_RELAY_URL`, `BUZZ_ACP_RESPOND_TO`, `BUZZ_ACP_SUBSCRIBE`, `BUZZ_ACP_AGENT_COMMAND`, `BUZZ_ACP_AGENT_ARGS`, `BUZZ_ACP_MODEL`, and Codex adapter configuration keys explicitly approved by the module;
-5. require `BUZZ_ACP_RESPOND_TO=owner-only` and `BUZZ_ACP_SUBSCRIBE=direct-messages` (or the exact verified Buzz ACP DM-only equivalent); reject caller overrides;
+4. allow only validated environment names/values within the bounded aggregate while stripping module-owned command, routing, lifecycle, and heartbeat controls;
+5. require `BUZZ_ACP_RESPOND_TO=owner-only`, force the pinned harness's exact `BUZZ_ACP_SUBSCRIBE=mentions` mode (automatic DM `p` tags plus explicit channel mentions), force `BUZZ_ACP_HEARTBEAT_INTERVAL=0`, and reject/strip caller routing and heartbeat overrides;
 6. atomically write the environment file via `install -m 0600` and a same-directory `mv`, then `systemctl daemon-reload` and `systemctl enable --now` the derived unit;
 7. remove the environment file and disable/stop the unit for `remove`; and
 8. emit only an allowlisted JSON response that never contains received environment values.
 
-Wire it into `modules/services/buzz-agent-host.nix` as a root-owned executable. Add a sudo rule for a dedicated SSH deploy user permitting exactly this absolute executable with no arbitrary arguments; make the helper consume stdin instead of arguments to keep secrets out of the process list.
+Wire it into `modules/services/buzz-agent-host.nix` as a root-owned executable. Add a sudo rule for a dedicated SSH deploy user permitting exactly this absolute executable with no arbitrary arguments. Attach the deploy public key to a module-owned forced-command entrypoint that accepts only literal `buzz-agent-deploy`, disables shell/PTY/TCP and streamlocal forwarding/agent and X11 forwarding/user rc, bounds stdin before sudo, and passes secrets only on stdin through mode-0600 ephemeral handling.
 
 - [ ] **Step 4: Run helper tests**
 
@@ -268,7 +271,7 @@ Implement `apps/scripts/buzz-backend-gnomeregan` with no shell interpolation of 
 }
 ```
 
-For `deploy`, validate required non-empty identity, relay URL, and owner-only policy. Derive the stable ID from the agent public key—not the display name. Construct a compact JSON payload, pass it only through `ssh ... sudo /run/current-system/sw/bin/buzz-agent-deploy` standard input, and inspect the helper JSON response. Then use a second restricted SSH request to check `systemctl is-active buzz-agent@AGENT_ID.service`; return success only for `active`. Redact `nsec1...`, `BUZZ_AUTH_TAG`, and values from all caught diagnostic output.
+For `deploy`, validate required non-empty identity, relay URL, and owner-only policy. Derive the stable ID from the agent public key—not the display name. Construct a compact JSON payload, force `owner-only`/`mentions`/heartbeat interval 0, strip caller routing and heartbeat controls, and pass it only through `ssh ... buzz-agent-deploy` standard input to the forced-command transport. Inspect the helper JSON response and return success only after the helper's stability checks report the derived unit active. Redact `nsec1...`, `BUZZ_AUTH_TAG`, and values from all caught diagnostic output.
 
 Package it with `writeShellApplication`/`makeWrapper`, putting `jq`, `openssh`, and the script in `PATH`. Install the package on Desktop through `modules/home-manager/features/ai-tools.nix`, ensuring its binary name is exactly `buzz-backend-gnomeregan` so Desktop discovers it.
 
@@ -302,14 +305,14 @@ Run:
 ```bash
 alejandra apps/buzz-acp.nix apps/codex-acp.nix apps/buzz-backend-gnomeregan.nix modules/services/buzz-agent-host.nix modules/nixos/host/gnomeregan/configuration.nix
 bash tests/buzz-agent-host.sh
-nix build --no-link .#colmenaHive.gnomeregan.config.system.build.toplevel
+colmena build --on gnomeregan --impure
 ```
 
 Expected: all pass. Do not claim readiness if any assertion or build fails.
 
 - [ ] **Step 2: Commit verification/documentation changes**
 
-Document exact operator-only enrollment steps in the design spec: connect as the administrator, switch to `buzz1`, execute the installed Codex command once, finish browser/code login, and confirm a non-interactive `codex-acp --version` plus a minimal ACP initialization. Explicitly state that Codex credentials remain only under `/home/buzz1`.
+Document exact operator-only enrollment steps in the design spec: SSH as the administrator, run `sudo -iu buzz1`, execute the installed Codex command once, finish browser/code login, and confirm a non-interactive `codex-acp --version` plus a minimal ACP initialization. Do not enable direct SSH credentials for `buzz1`. Explicitly state that Codex credentials remain only under `/home/buzz1`.
 
 ```bash
 git add docs/superpowers/specs/2026-08-13-buzz1-remote-codex-harness-design.md
@@ -346,7 +349,7 @@ sudo -u buzz1 -H test -w /home/buzz1
 sudo -u buzz1 -H test ! -r /home/fdrake/.ssh/id_ed25519
 ```
 
-Then test: owner DM gives one reply; a non-owner DM yields no reply/no new Codex turn; disconnect the MacBook/Desktop and repeat owner DM; kill the harness to check restart; issue `!shutdown`, confirm it stays down, and restart with `systemctl start buzz-agent-AGENT_ID`.
+Then test: owner DM and owner-mentioned channel message each give one intended reply; an unmentioned channel message and non-owner DM/mention yield no reply/no new Codex turn; disconnect the MacBook/Desktop and repeat an owner request; verify ordinary status 0 and a crash restart; issue signed `!shutdown` and confirm status 42 stays down. Run `sudo buzz-agentctl start "$AGENT_ID"`, confirm the marker is gone, reboot, and confirm restoration starts the instance. Verify an active template instance can move to a changed declarative unit/runtime generation without switch failure. Redeploy and verify the running process uses the new environment generation. Remove one agent and confirm its process is down and only its environment/marker are removed while shared `/home/buzz1/.codex` remains. Raw root systemctl start/restart is unsupported and is not an acceptance path.
 
 - [ ] **Step 6: Commit final validation record**
 
