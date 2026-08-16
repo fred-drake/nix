@@ -1,0 +1,406 @@
+#!/usr/bin/env bash
+set -u
+set +e
+
+respond_error() {
+  jq -cn --arg error "$1" '{ok:false,error:$error}' 2>/dev/null || exit 1
+  exit 0
+}
+
+respond_rollback_error() {
+  jq -cn --arg error "$1" --arg step "$2" \
+    '{ok:false,error:$error,rollback:"helper: rollback failed",rollback_step:$step}' \
+    2>/dev/null || exit 1
+  exit 0
+}
+
+cleanup() {
+  [[ -z ${staged_file:-} ]] || rm -f "$staged_file"
+  [[ -z ${rollback_staged_file:-} ]] || rm -f "$rollback_staged_file"
+  [[ -z ${work_dir:-} ]] || rm -rf "$work_dir"
+}
+trap cleanup EXIT
+
+(( $# == 3 )) || respond_error "helper: invalid request"
+state_root=$1
+lock_file=$2
+operation_lock_file=$3
+umask 077
+# Stay below Linux MAX_ARG_STRLEN and leave headroom under its 128 KiB ARG_MAX
+# floor after base64 and worst-case systemd EnvironmentFile escape expansion.
+team_instructions_max_bytes=65536
+encoded_team_instructions_max_bytes=87384
+environment_name_max_bytes=128
+environment_value_max_bytes=16384
+# Reserve 32 entries for launcher- and systemd-owned effective environment.
+environment_entry_max=224
+environment_aggregate_max_bytes=114688
+work_dir=$(mktemp -d 2>/dev/null) || exit 1
+payload_file="$work_dir/request"
+cat >"$payload_file" || exit 1
+jq -ce -s 'if length == 1 and (.[0] | type == "object") then .[0] else error("invalid") end' \
+  "$payload_file" >"$work_dir/parsed" 2>/dev/null || respond_error "helper: invalid request"
+mv "$work_dir/parsed" "$payload_file"
+
+operation=$(jq -r '.operation // empty' "$payload_file")
+case "$operation" in
+  deploy | start | stop | remove) ;;
+  *) respond_error "helper: invalid request" ;;
+esac
+agent_id=$(jq -r '.agent_id // empty' "$payload_file")
+[[ $agent_id =~ ^[a-f0-9]{64}$ ]] || respond_error "helper: invalid request"
+unit="buzz-agent@${agent_id}.service"
+
+jq -e '(.unit_settings? // {}) | type == "object" and length == 0' "$payload_file" >/dev/null 2>&1 \
+  || respond_error "helper: invalid request"
+jq -e '
+  def unsafe_startup_key:
+    IN(
+      "BASH_ENV", "ENV", "SHELLOPTS", "BASHOPTS", "BASH_XTRACEFD", "PS4",
+      "PROMPT_COMMAND", "ZDOTDIR", "OPENSSL_CONF", "OPENSSL_MODULES",
+      "OPENSSL_ENGINES", "GCONV_PATH", "LOCPATH", "NLSPATH", "HOME",
+      "CODEX_HOME", "CODEX_CONFIG", "CODEX_MANAGED_PACKAGE_ROOT",
+      "CODEX_SQLITE_HOME", "XDG_CONFIG_HOME", "XDG_CONFIG_DIRS",
+      "XDG_DATA_HOME", "XDG_DATA_DIRS", "XDG_STATE_HOME", "XDG_CACHE_HOME"
+    ) or startswith("BASH_FUNC_") or startswith("LD_") or startswith("DYLD_")
+      or startswith("NODE_") or startswith("BUN_") or startswith("NPM_")
+      or startswith("npm_") or startswith("DENO_");
+  (.environment? // {}) as $env
+  | ($env | type == "object")
+    and all($env | to_entries[];
+      (.key | test("^[A-Za-z_][A-Za-z0-9_]*$"))
+      and (.key | IN("CODEX_PATH", "CODEX_CONFIG", "PATH") | not)
+      and (.key | unsafe_startup_key | not)
+      and ((.key | ascii_upcase) != "BUZZ_ACP_NO_PRESENCE")
+      and (.value | type == "string")
+    )
+' "$payload_file" >/dev/null 2>&1 || respond_error "helper: invalid request"
+
+# Process inactivity exit and caller-owned routing/heartbeat controls are
+# forbidden on this host. Strip them before validation and persistence, then
+# install the module-owned mentions/no-heartbeat policy for deploy requests.
+if ! jq -ce '
+  .environment |= del(
+    .BUZZ_ACP_EXIT_AFTER_INACTIVITY,
+    .BUZZ_ACP_SUBSCRIBE, .BUZZ_ACP_NO_MENTION_FILTER, .BUZZ_ACP_KINDS,
+    .BUZZ_ACP_CHANNELS, .BUZZ_ACP_CONFIG, .BUZZ_ACP_HEARTBEAT_INTERVAL,
+    .BUZZ_ACP_HEARTBEAT_PROMPT, .BUZZ_ACP_HEARTBEAT_PROMPT_FILE,
+    .BUZZ_AGENT_DISABLED_DIR, .BUZZ_AGENT_ENV_DIR, .BUZZ_AGENT_LOCK_FILE,
+    .BUZZ_AGENT_OPERATION_LOCK_FILE, .BUZZ_AGENT_STATE_ROOT,
+    .SERVICE_RESULT, .EXIT_CODE, .EXIT_STATUS
+  )
+  | if .operation == "deploy" then
+      .environment.BUZZ_ACP_SUBSCRIBE = "mentions"
+      | .environment.BUZZ_ACP_HEARTBEAT_INTERVAL = "0"
+    else . end
+  ' \
+  "$payload_file" >"$work_dir/always-on" 2>/dev/null \
+  || ! mv -f "$work_dir/always-on" "$payload_file" 2>/dev/null; then
+  respond_error "helper: invalid request"
+fi
+
+if ! jq -e \
+  --argjson name_max "$environment_name_max_bytes" \
+  --argjson value_max "$environment_value_max_bytes" \
+  --argjson encoded_team_max "$encoded_team_instructions_max_bytes" \
+  --argjson entry_max "$environment_entry_max" \
+  --argjson aggregate_max "$environment_aggregate_max_bytes" '
+    (.environment? // {}) as $env
+    | ($env | length) <= $entry_max
+      and all($env | keys[]; utf8bytelength <= $name_max)
+      and all($env | to_entries[];
+        (.value | utf8bytelength) <= (
+          if .key == "BUZZ_ACP_TEAM_INSTRUCTIONS" then $encoded_team_max
+          elif .key == "BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64" then $encoded_team_max
+          else $value_max
+          end))
+      and (([$env | to_entries[]
+        | (.key | utf8bytelength) + 2
+          + (if .key == "BUZZ_ACP_TEAM_INSTRUCTIONS"
+             then ((((.value | utf8bytelength) + 2) / 3 | floor) * 4)
+             elif .key == "BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64"
+             then (.value | utf8bytelength)
+             else ((.value | utf8bytelength) * 6)
+             end)] | add // 0) <= $aggregate_max)
+  ' "$payload_file" >/dev/null 2>&1; then
+  respond_error "helper: environment too large"
+fi
+
+if [[ $operation != deploy ]] && ! jq -e '(.environment? // {}) | length == 0' "$payload_file" >/dev/null 2>&1; then
+  respond_error "helper: invalid request"
+fi
+
+env_dir="$state_root/env"
+env_file="$env_dir/$agent_id"
+disabled_dir="$state_root/disabled"
+disabled_file="$disabled_dir/$agent_id"
+checks=${BUZZ_AGENT_STABILITY_CHECKS:-3}
+interval=${BUZZ_AGENT_STABILITY_INTERVAL:-1}
+[[ $checks =~ ^[1-9][0-9]*$ && $checks -le 30 ]] || respond_error "helper: invalid request"
+[[ $interval =~ ^[0-9]+([.][0-9]+)?$ ]] || respond_error "helper: invalid request"
+
+systemctl_quiet() {
+  systemctl "$@" >/dev/null 2>&1
+}
+
+lock_state() {
+  exec 9>"$lock_file" && flock 9 >/dev/null 2>&1
+}
+
+unlock_state() {
+  exec 9>&-
+}
+
+systemctl_lifecycle() {
+  local rc
+  unlock_state
+  systemctl_quiet "$@"
+  rc=$?
+  lock_state || return 3
+  return "$rc"
+}
+
+stabilize() {
+  local i active sub result status restarts
+  for ((i = 0; i < checks; i++)); do
+    if ! systemctl show "$unit" \
+      --property=ActiveState --property=SubState --property=Result \
+      --property=ExecMainStatus --property=NRestarts --value \
+      >"$work_dir/properties" 2>/dev/null; then
+      return 3
+    fi
+    mapfile -t properties <"$work_dir/properties"
+    active=${properties[0]:-}
+    sub=${properties[1]:-}
+    result=${properties[2]:-}
+    status=${properties[3]:-0}
+    restarts=${properties[4]:-0}
+    if [[ $active == active && $sub == running ]]; then
+      (( i + 1 == checks )) && return 0
+    elif [[ $status == 42 ]]; then
+      return 4
+    elif [[ $result != success || $status =~ ^[0-9]+$ && $status -ne 0 || $restarts =~ ^[0-9]+$ && $restarts -gt 0 ]]; then
+      return 2
+    elif [[ $active == inactive || $active == failed ]]; then
+      return 1
+    fi
+    sleep "$interval"
+  done
+  return 1
+}
+
+rollback() {
+  rollback_step='stop'
+  systemctl_lifecycle stop "$unit" || return 1
+  rollback_step='environment'
+  if [[ ${had_previous:-0} == 1 ]]; then
+    rollback_staged_file="$env_dir/.${agent_id}.rollback-staged.$$"
+    install -m 0600 "$work_dir/previous" "$rollback_staged_file" 2>/dev/null || return 1
+    mv -f "$rollback_staged_file" "$env_file" 2>/dev/null || return 1
+    rollback_staged_file=
+  else
+    rm -f "$env_file" || return 1
+  fi
+  if [[ ${was_disabled:-0} == 1 ]]; then
+    mkdir -p "$disabled_dir" 2>/dev/null || return 1
+    install -m 0600 /dev/null "$disabled_file" 2>/dev/null || return 1
+  else
+    rm -f "$disabled_file" || return 1
+  fi
+  rollback_step='active-state'
+  if [[ ${was_active:-0} == 1 && ${was_disabled:-0} == 0 ]]; then
+    systemctl_lifecycle start "$unit" || return 1
+  else
+    systemctl_lifecycle stop "$unit" || return 1
+  fi
+}
+
+rollback_or_error() {
+  local original_error=$1
+  if rollback; then
+    respond_error "$original_error"
+  fi
+  systemctl_lifecycle stop "$unit" || true
+  respond_rollback_error "$original_error" "${rollback_step:-stop}"
+}
+
+if ! exec 8>"$operation_lock_file" \
+  || ! flock 8 >/dev/null 2>&1 \
+  || ! lock_state; then
+  respond_error "helper: systemd start failed"
+fi
+
+case "$operation" in
+  deploy)
+    jq -e '
+      .environment as $env
+      | ($env.BUZZ_ACP_RESPOND_TO? == "owner-only")
+        and (($env.BUZZ_ACP_AGENT_COMMAND? // null) | . == null or . == "codex-acp")
+        and (($env.BUZZ_ACP_MCP_COMMAND? // null) | . == null or . == "buzz-dev-mcp")
+        and (($env.BUZZ_RELAY_URL? // "") | test("\\S"))
+        and (($env.BUZZ_PRIVATE_KEY? // "") | length == 63 and test("^nsec1[023456789acdefghjklmnpqrstuvwxyz]{58}$"))
+        and ($env.NOSTR_PRIVATE_KEY? == $env.BUZZ_PRIVATE_KEY)
+        and (($env.BUZZ_MANAGED_AGENT_START_NONCE? // "") | test("^[a-f0-9]{32}$"))
+        and ($env.BUZZ_ACP_SUBSCRIBE? == "mentions")
+        and ($env.BUZZ_ACP_HEARTBEAT_INTERVAL? == "0")
+        and (($env | has("BUZZ_ACP_NO_MENTION_FILTER")) | not)
+        and (($env | has("BUZZ_ACP_KINDS")) | not)
+        and (($env | has("BUZZ_ACP_CHANNELS")) | not)
+        and (($env | has("BUZZ_ACP_CONFIG")) | not)
+        and (($env | has("BUZZ_ACP_HEARTBEAT_PROMPT")) | not)
+        and (($env | has("BUZZ_ACP_HEARTBEAT_PROMPT_FILE")) | not)
+        and (($env | has("BUZZ_ACP_EXIT_AFTER_INACTIVITY")) | not)
+        and (($env.BUZZ_ACP_AGENT_OWNER? // null) as $owner
+          | $owner == null or ($owner | test("^[A-Fa-f0-9]{64}$")))
+        and (((($env.BUZZ_AUTH_TAG? // "") | test("\\S"))) or (($env.BUZZ_ACP_AGENT_OWNER? // "") | test("^[A-Fa-f0-9]{64}$")))
+        and (($env.BUZZ_ACP_RESPOND_TO_ALLOWLIST? // null) as $list
+          | $list == null or (($list | split(",")) | length > 0 and all(.[]; test("^[A-Fa-f0-9]{64}$"))))
+        and (($env | has("BUZZ_ACP_TEAM_INSTRUCTIONS") and has("BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64")) | not)
+        and (($env.BUZZ_ACP_TEAM_INSTRUCTIONS? // "") | contains("\u0000") | not)
+        and (($env.BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64? // null) as $encoded
+          | $encoded == null or (try (
+              ($encoded | @base64d) as $decoded
+              | (($decoded | contains("\u0000")) | not)
+                and (($decoded | @base64) == $encoded)
+            ) catch false))
+    ' "$payload_file" >/dev/null 2>&1 || respond_error "helper: invalid request"
+
+    if ! jq -e --argjson max "$team_instructions_max_bytes" '
+      .environment as $env
+      | (($env.BUZZ_ACP_TEAM_INSTRUCTIONS? // "") | utf8bytelength) <= $max
+        and (($env.BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64? // null) as $encoded
+          | $encoded == null or (($encoded | @base64d | utf8bytelength) <= $max))
+    ' "$payload_file" >/dev/null 2>&1; then
+      respond_error "helper: team instructions too large"
+    fi
+
+    private_key=$(jq -r '.environment.BUZZ_PRIVATE_KEY' "$payload_file")
+    if ! derived_id=$(printf '%s\n' "$private_key" | nak key public 2>/dev/null); then
+      respond_error "helper: invalid request"
+    fi
+    [[ $derived_id == "$agent_id" ]] || respond_error "helper: invalid request"
+    helper_nonce=$(od -An -N16 -tx1 /dev/urandom 2>/dev/null | tr -d ' \n')
+    [[ $helper_nonce =~ ^[a-f0-9]{32}$ ]] || respond_error "helper: environment install failed"
+    if ! jq -ce --arg nonce "$helper_nonce" '
+      .environment |= (
+        if has("BUZZ_ACP_TEAM_INSTRUCTIONS")
+          then .BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64 = (.BUZZ_ACP_TEAM_INSTRUCTIONS | @base64)
+            | del(.BUZZ_ACP_TEAM_INSTRUCTIONS)
+          else .
+        end
+        | del(
+            .BUZZ_ACP_AGENT_COMMAND, .BUZZ_ACP_MCP_COMMAND,
+            .BUZZ_ACP_EXIT_AFTER_INACTIVITY,
+            .BUZZ_ACP_NO_MENTION_FILTER, .BUZZ_ACP_KINDS,
+            .BUZZ_ACP_CHANNELS, .BUZZ_ACP_CONFIG,
+            .BUZZ_ACP_HEARTBEAT_PROMPT, .BUZZ_ACP_HEARTBEAT_PROMPT_FILE,
+            .CODEX_PATH, .PATH
+          )
+      )
+      | .environment.BUZZ_ACP_SUBSCRIBE = "mentions"
+      | .environment.BUZZ_ACP_HEARTBEAT_INTERVAL = "0"
+      | .environment.BUZZ_MANAGED_AGENT_START_NONCE = $nonce
+    ' \
+      "$payload_file" >"$work_dir/authoritative" 2>/dev/null \
+      || ! mv -f "$work_dir/authoritative" "$payload_file" 2>/dev/null; then
+      respond_error "helper: environment install failed"
+    fi
+
+    if ! jq -e \
+      --argjson name_max "$environment_name_max_bytes" \
+      --argjson value_max "$environment_value_max_bytes" \
+      --argjson encoded_team_max "$encoded_team_instructions_max_bytes" \
+      --argjson entry_max "$environment_entry_max" \
+      --argjson aggregate_max "$environment_aggregate_max_bytes" '
+        .environment as $env
+        | ($env | length) <= $entry_max
+          and all($env | keys[]; utf8bytelength <= $name_max)
+          and all($env | to_entries[];
+            (.value | utf8bytelength) <= (if .key == "BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64" then $encoded_team_max else $value_max end))
+          and (([$env | to_entries[]
+            | (.key | utf8bytelength) + 2
+              + (if .key == "BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64"
+                 then (.value | utf8bytelength)
+                 else ((.value | utf8bytelength) * 6)
+                 end)] | add // 0) <= $aggregate_max)
+      ' "$payload_file" >/dev/null 2>&1; then
+      respond_error "helper: environment too large"
+    fi
+
+    if ! mkdir -p "$env_dir" 2>/dev/null; then
+      respond_error "helper: environment install failed"
+    fi
+    had_previous=0
+    if [[ -f $env_file ]]; then
+      if ! install -m 0600 "$env_file" "$work_dir/previous" 2>/dev/null; then
+        respond_error "helper: environment install failed"
+      fi
+      had_previous=1
+    fi
+    was_active=0
+    systemctl_quiet is-active "$unit" && was_active=1
+    was_disabled=0
+    [[ ! -e $disabled_file && ! -L $disabled_file ]] || was_disabled=1
+
+    staged_file="$env_dir/.${agent_id}.staged.$$"
+    if ! jq -r '.environment | to_entries[] | "\(.key)=\(.value | @json)"' "$payload_file" >"$work_dir/environment" 2>/dev/null \
+      || ! install -m 0600 "$work_dir/environment" "$staged_file" 2>/dev/null \
+      || ! mv -f "$staged_file" "$env_file" 2>/dev/null; then
+      respond_error "helper: environment install failed"
+    fi
+    staged_file=
+
+    rm -f "$disabled_file" || rollback_or_error "helper: environment install failed"
+    if [[ $was_active == 1 ]]; then
+      systemctl_lifecycle stop "$unit" || rollback_or_error "helper: systemd start failed"
+    fi
+    systemctl_lifecycle start "$unit" || rollback_or_error "helper: systemd start failed"
+    unlock_state
+    stabilize
+    stable_rc=$?
+    lock_state || respond_error "helper: systemd start failed"
+    case $stable_rc in
+      0) ;;
+      4) respond_error "helper: service inactive" ;;
+      2) rollback_or_error "helper: service crashed immediately" ;;
+      1) rollback_or_error "helper: service inactive" ;;
+      *) rollback_or_error "helper: systemd start failed" ;;
+    esac
+    if [[ -e $disabled_file || -L $disabled_file ]]; then
+      systemctl_lifecycle stop "$unit" || true
+      respond_error "helper: service inactive"
+    fi
+    ;;
+  start)
+    rm -f "$disabled_file" || respond_error "helper: environment install failed"
+    systemctl_lifecycle start "$unit" || respond_error "helper: systemd start failed"
+    unlock_state
+    stabilize
+    stable_rc=$?
+    lock_state || respond_error "helper: systemd start failed"
+    case $stable_rc in
+      0) ;;
+      4) respond_error "helper: service inactive" ;;
+      2) respond_error "helper: service crashed immediately" ;;
+      1) respond_error "helper: service inactive" ;;
+      *) respond_error "helper: systemd start failed" ;;
+    esac
+    if [[ -e $disabled_file || -L $disabled_file ]]; then
+      systemctl_lifecycle stop "$unit" || true
+      respond_error "helper: service inactive"
+    fi
+    ;;
+  stop)
+    systemctl_lifecycle stop "$unit" || respond_error "helper: systemd start failed"
+    if ! mkdir -p "$disabled_dir" 2>/dev/null \
+      || ! install -m 0600 /dev/null "$disabled_file" 2>/dev/null; then
+      respond_error "helper: environment install failed"
+    fi
+    ;;
+  remove)
+    systemctl_lifecycle stop "$unit" || respond_error "helper: systemd start failed"
+    rm -f "$env_file" "$disabled_file" || respond_error "helper: environment install failed"
+    ;;
+esac
+
+jq -cn --arg unit "$unit" '{ok:true,unit:$unit}' 2>/dev/null || exit 1

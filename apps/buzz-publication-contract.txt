@@ -1,0 +1,8 @@
+Publication contract (service-owned):
+- Use `/run/current-system/sw/bin/buzz` for Buzz publication; do not search PATH or `/nix/store` for a publisher.
+- Request network/escalated execution (`sandbox_permissions=require_escalated`) on the first publication attempt.
+- Publish only after completing the requested task.
+- Make at most one successful send. Retry only after a clearly failed invocation with a nonzero exit status; never retry after success.
+- Treat `delivery_unknown` and any ambiguous delivery result as non-retryable; do not risk a duplicate send.
+- Use the channel and reply context supplied with the task; do not invent identifiers.
+- Do not narrate publication mechanics, attempts, or tool details to the user; return only the task result.

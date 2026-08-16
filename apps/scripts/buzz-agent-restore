@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -u
+
+# All paths are fixed module-owned arguments. Environment-file presence declares
+# a managed instance; a canonical root marker records verified owner shutdown.
+(( $# == 4 )) || exit 64
+env_dir=$1
+disabled_dir=$2
+lock_file=$3
+operation_lock_file=$4
+umask 077
+
+if ! exec 8>"$operation_lock_file" || ! flock 8 >/dev/null 2>&1; then
+  printf '%s\n' 'buzz-agent restore: operation lock unavailable' >&2
+  exit 0
+fi
+
+lock_state() {
+  if ! exec 9>"$lock_file" || ! flock 9 >/dev/null 2>&1; then
+    printf '%s\n' 'buzz-agent restore: lifecycle lock unavailable' >&2
+    return 1
+  fi
+}
+
+unlock_state() {
+  exec 9>&-
+}
+
+lock_state || exit 0
+shopt -s nullglob
+for env_file in "$env_dir"/*; do
+  [[ -f $env_file && ! -L $env_file ]] || continue
+  agent_id=${env_file##*/}
+  [[ $agent_id =~ ^[a-f0-9]{64}$ ]] || continue
+  disabled_file="$disabled_dir/$agent_id"
+  [[ ! -e $disabled_file && ! -L $disabled_file ]] || continue
+
+  # Keep the operation lock while dropping the state lock around systemd. This
+  # lets ExecStopPost take the state lock without deadlocking systemctl while
+  # still excluding deploy/start/stop/remove and another restore.
+  unlock_state
+  systemctl start "buzz-agent@${agent_id}.service" >/dev/null 2>&1 || true
+  lock_state || exit 0
+
+  # If a verified shutdown marker landed while start was queued, the shutdown
+  # event wins over this stale restore decision.
+  if [[ -e $disabled_file || -L $disabled_file ]]; then
+    unlock_state
+    systemctl stop "buzz-agent@${agent_id}.service" >/dev/null 2>&1 || true
+    lock_state || exit 0
+  fi
+done
+
+exit 0

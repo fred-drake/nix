@@ -1,0 +1,294 @@
+--- a/crates/buzz-acp/src/lib.rs
++++ b/crates/buzz-acp/src/lib.rs
+@@ -17,0 +18 @@
++use std::process::ExitCode;
+@@ -1527,0 +1529,13 @@
++    fn always_on_zero_disables_expiry_after_7200_seconds() {
++        let started = tokio::time::Instant::now();
++        let after_two_hours = started + Duration::from_secs(7_200);
++
++        assert!(!inactivity_expired(
++            started,
++            after_two_hours,
++            Duration::ZERO,
++            false
++        ));
++    }
++
++    #[test]
+@@ -1715 +1729,11 @@
+-pub fn run() -> Result<()> {
++const OWNER_SHUTDOWN_EXIT_STATUS: u8 = 42;
++
++fn shutdown_exit_status(owner_shutdown_requested: bool) -> u8 {
++    if owner_shutdown_requested {
++        OWNER_SHUTDOWN_EXIT_STATUS
++    } else {
++        0
++    }
++}
++
++pub fn run() -> Result<ExitCode> {
+@@ -1721 +1745 @@
+-async fn tokio_main() -> Result<()> {
++async fn tokio_main() -> Result<ExitCode> {
+@@ -1735 +1759,2 @@
+-        return run_models(args).await;
++        run_models(args).await?;
++        return Ok(ExitCode::SUCCESS);
+@@ -1745 +1770,2 @@
+-        return run_auth_methods(args).await;
++        run_auth_methods(args).await?;
++        return Ok(ExitCode::SUCCESS);
+@@ -1755 +1781,2 @@
+-        return run_authenticate(args).await;
++        run_authenticate(args).await?;
++        return Ok(ExitCode::SUCCESS);
+@@ -1776 +1803,2 @@
+-        return setup_mode::run_setup_listener(config, payload).await;
++        setup_mode::run_setup_listener(config, payload).await?;
++        return Ok(ExitCode::SUCCESS);
+@@ -2151,0 +2180 @@
++    let mut owner_shutdown_requested = false;
+@@ -2567 +2596,2 @@
+-                            let is_shutdown = is_owner_control_command(
++                            let resolved_owner = owner_cache.get().map(str::to_owned);
++                            if handle_authenticated_owner_shutdown(
+@@ -2570 +2599,0 @@
+-                                "!shutdown",
+@@ -2572,17 +2601,12 @@
+-                            );
+-                            if is_shutdown {
+-                                let owner = owner_cache.get();
+-                                if let Some(owner) = owner {
+-                                    if buzz_event.event.pubkey.to_hex() == *owner {
+-                                        tracing::info!(
+-                                            channel_id = %buzz_event.channel_id,
+-                                            sender = %buzz_event.event.pubkey.to_hex(),
+-                                            "shutdown command from owner — exiting gracefully"
+-                                        );
+-                                        let _ = shutdown_tx.send(());
+-                                        continue;
+-                                    }
+-                                }
+-                                // Not from owner — fall through to normal prompt handling.
+-                                // Don't drop it — it's a regular message that happens to
+-                                // contain "!shutdown" from a non-owner.
++                                resolved_owner.as_deref(),
++                                &mut owner_shutdown_requested,
++                                &shutdown_tx,
++                            )
++                            .await
++                            {
++                                tracing::info!(
++                                    channel_id = %buzz_event.channel_id,
++                                    sender = %buzz_event.event.pubkey.to_hex(),
++                                    "authenticated shutdown command from owner — exiting with dedicated status"
++                                );
++                                continue;
+@@ -2589,0 +2614,3 @@
++                            // Not from owner — fall through to normal prompt handling.
++                            // Don't drop it — it's a regular message that happens to
++                            // contain "!shutdown" from a non-owner.
+@@ -3346 +3373,3 @@
+-    Ok(())
++    Ok(ExitCode::from(shutdown_exit_status(
++        owner_shutdown_requested,
++    )))
+@@ -3372,0 +3402,32 @@
++async fn handle_authenticated_owner_shutdown(
++    event: &nostr::Event,
++    kind_u32: u32,
++    agent_pubkey_hex: &str,
++    owner_pubkey_hex: Option<&str>,
++    owner_shutdown_requested: &mut bool,
++    shutdown_tx: &watch::Sender<()>,
++) -> bool {
++    if !is_owner_control_command(event, kind_u32, "!shutdown", agent_pubkey_hex)
++        || !owner_pubkey_hex.is_some_and(|owner| event.pubkey.to_hex() == owner)
++    {
++        return false;
++    }
++
++    let event_to_verify = event.clone();
++    match tokio::task::spawn_blocking(move || buzz_core::verify_event(&event_to_verify)).await {
++        Ok(Ok(())) => {}
++        Ok(Err(error)) => {
++            tracing::warn!(error = %error, "owner shutdown event failed cryptographic verification");
++            return false;
++        }
++        Err(error) => {
++            tracing::warn!(error = %error, "owner shutdown verification task failed");
++            return false;
++        }
++    }
++
++    *owner_shutdown_requested = true;
++    let _ = shutdown_tx.send(());
++    true
++}
++
+@@ -4925 +4986 @@
+-    use nostr::{EventBuilder, Keys, Kind, Tag};
++    use nostr::{Event, EventBuilder, JsonUtil, Keys, Kind, Tag, Timestamp};
+@@ -4927,2 +4988,5 @@
+-    fn make_event(kind: u32, content: &str, p_hex: Option<&str>) -> nostr::Event {
+-        let keys = Keys::generate();
++    fn fixed_keys(secret_hex: &str) -> Keys {
++        Keys::parse(secret_hex).expect("fixed test key")
++    }
++
++    fn make_event_with_keys(keys: &Keys, kind: u32, content: &str, p_hex: Option<&str>) -> Event {
+@@ -4935,2 +4999,39 @@
+-            .sign_with_keys(&keys)
+-            .unwrap()
++            .custom_created_at(Timestamp::from(1_700_000_000_u64))
++            .sign_with_keys(keys)
++            .expect("signed event")
++    }
++
++    fn make_event(kind: u32, content: &str, p_hex: Option<&str>) -> Event {
++        make_event_with_keys(
++            &fixed_keys("0101010101010101010101010101010101010101010101010101010101010101"),
++            kind,
++            content,
++            p_hex,
++        )
++    }
++
++    fn mutate_event(event: &Event, mutate: impl FnOnce(&mut serde_json::Value)) -> Event {
++        let mut json: serde_json::Value =
++            serde_json::from_str(&event.as_json()).expect("event json");
++        mutate(&mut json);
++        Event::from_json(json.to_string()).expect("mutated event")
++    }
++
++    async fn assert_shutdown_rejected(event: &Event, agent: &str, owner: &str) {
++        let (shutdown_tx, shutdown_rx) = watch::channel(());
++        let mut owner_shutdown_requested = false;
++
++        assert!(
++            !handle_authenticated_owner_shutdown(
++                event,
++                event.kind.as_u16() as u32,
++                agent,
++                Some(owner),
++                &mut owner_shutdown_requested,
++                &shutdown_tx,
++            )
++            .await
++        );
++        assert!(!owner_shutdown_requested);
++        assert_eq!(shutdown_exit_status(owner_shutdown_requested), 0);
++        assert!(!shutdown_rx.has_changed().expect("shutdown watch"));
+@@ -4968,0 +5070,105 @@
++    }
++
++    #[tokio::test]
++    async fn authenticated_owner_shutdown_handler_sets_dedicated_exit_status() {
++        let agent = "ab".repeat(32);
++        let owner_keys =
++            fixed_keys("0101010101010101010101010101010101010101010101010101010101010101");
++        let event =
++            make_event_with_keys(&owner_keys, KIND_STREAM_MESSAGE, "!shutdown", Some(&agent));
++        let owner = owner_keys.public_key().to_hex();
++        let (shutdown_tx, shutdown_rx) = watch::channel(());
++        let mut owner_shutdown_requested = false;
++
++        assert!(
++            handle_authenticated_owner_shutdown(
++                &event,
++                KIND_STREAM_MESSAGE,
++                &agent,
++                Some(&owner),
++                &mut owner_shutdown_requested,
++                &shutdown_tx,
++            )
++            .await
++        );
++        assert!(owner_shutdown_requested);
++        assert_eq!(
++            shutdown_exit_status(owner_shutdown_requested),
++            OWNER_SHUTDOWN_EXIT_STATUS
++        );
++        assert_eq!(OWNER_SHUTDOWN_EXIT_STATUS, 42);
++        assert!(shutdown_rx.has_changed().expect("shutdown watch"));
++    }
++
++    #[tokio::test]
++    async fn authenticated_owner_shutdown_handler_rejects_non_owner_and_tampering() {
++        let agent = "ab".repeat(32);
++        let other_agent = "cd".repeat(32);
++        let owner_keys =
++            fixed_keys("0101010101010101010101010101010101010101010101010101010101010101");
++        let non_owner_keys =
++            fixed_keys("0202020202020202020202020202020202020202020202020202020202020202");
++        let owner = owner_keys.public_key().to_hex();
++        let valid =
++            make_event_with_keys(&owner_keys, KIND_STREAM_MESSAGE, "!shutdown", Some(&agent));
++
++        let valid_non_owner = make_event_with_keys(
++            &non_owner_keys,
++            KIND_STREAM_MESSAGE,
++            "!shutdown",
++            Some(&agent),
++        );
++        assert_shutdown_rejected(&valid_non_owner, &agent, &owner).await;
++
++        let forged_pubkey = mutate_event(&valid_non_owner, |json| {
++            json["pubkey"] = serde_json::Value::String(owner.clone());
++        });
++        assert_shutdown_rejected(&forged_pubkey, &agent, &owner).await;
++
++        let modified_content = mutate_event(&valid, |json| {
++            json["content"] = serde_json::Value::String(" !shutdown ".to_string());
++        });
++        assert_shutdown_rejected(&modified_content, &agent, &owner).await;
++
++        let modified_tags = mutate_event(&valid, |json| {
++            json["tags"]
++                .as_array_mut()
++                .expect("tags")
++                .push(serde_json::json!(["x", "tampered"]));
++        });
++        assert_shutdown_rejected(&modified_tags, &agent, &owner).await;
++
++        let modified_timestamp = mutate_event(&valid, |json| {
++            json["created_at"] = serde_json::Value::from(1_700_000_001_u64);
++        });
++        assert_shutdown_rejected(&modified_timestamp, &agent, &owner).await;
++
++        let modified_id = mutate_event(&valid, |json| {
++            json["id"] = serde_json::Value::String("11".repeat(32));
++        });
++        assert_shutdown_rejected(&modified_id, &agent, &owner).await;
++
++        let invalid_signature = mutate_event(&valid, |json| {
++            json["sig"] = serde_json::Value::String("0".repeat(128));
++        });
++        assert_shutdown_rejected(&invalid_signature, &agent, &owner).await;
++
++        let wrong_content = make_event_with_keys(
++            &owner_keys,
++            KIND_STREAM_MESSAGE,
++            "!shutdown now",
++            Some(&agent),
++        );
++        assert_shutdown_rejected(&wrong_content, &agent, &owner).await;
++
++        let missing_mention =
++            make_event_with_keys(&owner_keys, KIND_STREAM_MESSAGE, "!shutdown", None);
++        assert_shutdown_rejected(&missing_mention, &agent, &owner).await;
++
++        let wrong_mention = make_event_with_keys(
++            &owner_keys,
++            KIND_STREAM_MESSAGE,
++            "!shutdown",
++            Some(&other_agent),
++        );
++        assert_shutdown_rejected(&wrong_mention, &agent, &owner).await;
+--- a/crates/buzz-acp/src/main.rs
++++ b/crates/buzz-acp/src/main.rs
+@@ -1 +1 @@
+-fn main() -> anyhow::Result<()> {
++fn main() -> anyhow::Result<std::process::ExitCode> {

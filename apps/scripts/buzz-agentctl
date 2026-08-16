@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  printf '%s\n' 'usage: buzz-agentctl start AGENT_ID' >&2
+  exit 64
+}
+
+cleanup() {
+  [[ -z ${response_file:-} ]] || "$rm_bin" -f -- "$response_file"
+}
+trap cleanup EXIT
+
+((EUID == 0)) || {
+  printf '%s\n' 'buzz-agentctl: root privileges required' >&2
+  exit 77
+}
+(( $# == 2 )) || usage
+[[ $1 == start ]] || usage
+agent_id=$2
+[[ $agent_id =~ ^[a-f0-9]{64}$ ]] || usage
+
+: "${deploy_helper:?buzz-agentctl: internal helper unavailable}"
+: "${jq_bin:?buzz-agentctl: internal jq unavailable}"
+: "${mktemp_bin:?buzz-agentctl: internal mktemp unavailable}"
+: "${cat_bin:?buzz-agentctl: internal cat unavailable}"
+: "${rm_bin:?buzz-agentctl: internal rm unavailable}"
+readonly deploy_helper jq_bin mktemp_bin cat_bin rm_bin
+
+umask 077
+response_file=$("$mktemp_bin" -t buzz-agentctl.XXXXXX) || exit 70
+if printf '{"operation":"start","agent_id":"%s"}\n' "$agent_id" \
+  | "$deploy_helper" >"$response_file"; then
+  helper_rc=0
+else
+  helper_rc=$?
+fi
+
+if ! "$jq_bin" -e 'type == "object" and (.ok | type == "boolean")' \
+  "$response_file" >/dev/null 2>&1; then
+  printf '%s\n' 'buzz-agentctl: invalid helper response' >&2
+  exit 70
+fi
+"$cat_bin" -- "$response_file"
+((helper_rc == 0)) || exit 1
+"$jq_bin" -e '.ok == true' "$response_file" >/dev/null 2>&1 || exit 1

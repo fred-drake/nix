@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -u
+set +e
+
+reject() {
+  printf '%s\n' 'buzz-agent-deploy-ssh: command rejected' >&2
+  exit 126
+}
+
+cleanup() {
+  [[ -z ${work_dir:-} ]] || rm -rf "$work_dir"
+}
+trap cleanup EXIT
+
+(( $# == 0 )) || reject
+[[ ${SSH_ORIGINAL_COMMAND:-} == buzz-agent-deploy ]] || reject
+
+umask 077
+request_max_bytes=131072
+work_dir=$(mktemp -d 2>/dev/null) || exit 1
+request_file="$work_dir/request"
+head -c "$((request_max_bytes + 1))" >"$request_file" || exit 1
+request_bytes=$(wc -c <"$request_file" | tr -d '[:space:]') || exit 1
+if (( request_bytes > request_max_bytes )); then
+  printf '%s\n' '{"ok":false,"error":"helper: invalid request"}'
+  exit 0
+fi
+
+exec 3<"$request_file" || exit 1
+rm -rf "$work_dir" || exit 1
+work_dir=
+trap - EXIT
+exec /run/wrappers/bin/sudo -n /run/current-system/sw/bin/buzz-agent-deploy <&3

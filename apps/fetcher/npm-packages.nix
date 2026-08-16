@@ -12,6 +12,11 @@
     "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.2.27.tgz";
     "url-hash" = "sha256-T2Cb3tENjBBkUWzvuQLtWTkasru6l9WT6KEtB+LaWMI=";
   };
+  "codex-acp" = {
+    "version" = "1.2.0";
+    "url" = "https://registry.npmjs.org/@agentclientprotocol/codex-acp/-/codex-acp-1.2.0.tgz";
+    "url-hash" = "sha256-VrDJhFmusW0J3M2YSOHr2PMqjfvJae6G1P8H9Hv1B7o=";
+  };
   "mermaid-cli" = {
     "version" = "0.2.4";
     "url" = "https://registry.npmjs.org/mermaid-cli/-/mermaid-cli-0.2.4.tgz";

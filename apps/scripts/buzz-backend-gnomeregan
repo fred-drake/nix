@@ -1,0 +1,276 @@
+#!/usr/bin/env bash
+set -u
+set +e
+
+respond_error() {
+  jq -cn --arg error "$1" '{ok:false,error:$error}' 2>/dev/null || exit 1
+  exit 0
+}
+
+respond_rollback_error() {
+  jq -cn --arg error "$1" --arg step "$2" \
+    '{ok:false,error:$error,rollback:"helper: rollback failed",rollback_step:$step}' \
+    2>/dev/null || exit 1
+  exit 0
+}
+
+cleanup() {
+  [[ -z ${work_dir:-} ]] || rm -rf "$work_dir"
+}
+trap cleanup EXIT
+
+(( $# == 0 )) || respond_error "provider: invalid request"
+umask 077
+# Stay below Linux MAX_ARG_STRLEN and leave headroom under its 128 KiB ARG_MAX
+# floor after base64 and worst-case systemd EnvironmentFile escape expansion.
+team_instructions_max_bytes=65536
+encoded_team_instructions_max_bytes=87384
+environment_name_max_bytes=128
+environment_value_max_bytes=16384
+# Reserve 32 entries for launcher- and systemd-owned effective environment.
+environment_entry_max=224
+environment_aggregate_max_bytes=114688
+work_dir=$(mktemp -d 2>/dev/null) || exit 1
+request_file="$work_dir/request"
+cat >"$request_file" || exit 1
+jq -ce -s 'if length == 1 and (.[0] | type == "object") then .[0] else error("invalid") end' \
+  "$request_file" >"$work_dir/parsed" 2>/dev/null || respond_error "provider: invalid request"
+mv "$work_dir/parsed" "$request_file"
+op=$(jq -r '.op // empty' "$request_file" 2>/dev/null) || respond_error "provider: invalid request"
+
+case "$op" in
+  info)
+    jq -cn '{
+      ok: true,
+      name: "Gnomeregan",
+      version: "1.1.0",
+      protocol_version: 1,
+      description: "Deploys owner-only Codex ACP agents to gnomeregan",
+      config_schema: {
+        type: "object",
+        properties: {
+          host: {type: "string", default: "gnomeregan.internal.freddrake.com"},
+          ssh_user: {type: "string", default: "buzz-deploy"}
+        },
+        required: []
+      }
+    }' 2>/dev/null || exit 1
+    exit 0
+    ;;
+  deploy) ;;
+  *) respond_error "provider: invalid request" ;;
+esac
+
+jq -e '
+  (.agent? | type == "object")
+  and (.agent.private_key_nsec? | type == "string" and length == 63 and test("^nsec1[023456789acdefghjklmnpqrstuvwxyz]{58}$"))
+  and (.agent.relay_url? | type == "string")
+  and ((.agent.auth_tag? // null) | . == null or type == "string")
+  and ((.agent.respond_to? // null) | . == null or type == "string")
+  and ((.agent.respond_to_allowlist? // []) | type == "array" and all(.[]; type == "string"))
+  and ((.agent.env_vars? // {}) | type == "object" and all(to_entries[]; .value | type == "string"))
+  and ((.agent.launch? // null) as $l | $l == null or (
+    ($l | type == "object")
+    and (($l.command? // null) | . == null or type == "string")
+    and (($l.args? // []) | type == "array" and all(.[]; type == "string"))
+    and (($l.env? // {}) | type == "object" and all(to_entries[]; .value | type == "string"))
+    and (($l.policy_env? // {}) | type == "object" and all(to_entries[]; .value | type == "string"))
+    and (($l.owner_pubkey? // null) | . == null or type == "string")
+  ))
+  and ((.provider_config? // {}) | type == "object")
+' "$request_file" >/dev/null 2>&1 || respond_error "provider: invalid request"
+
+if jq -e '(.agent.provider? // "") | strings | gsub("^[[:space:]]+|[[:space:]]+$"; "") == "relay-mesh"' "$request_file" >/dev/null 2>&1; then
+  respond_error "provider: relay-mesh conflict"
+fi
+
+relay=$(jq -r '.agent.relay_url | gsub("^[[:space:]]+|[[:space:]]+$"; "")' "$request_file")
+[[ -n $relay ]] || respond_error "provider: invalid request"
+
+if ! agent_id=$(jq -r '.agent.private_key_nsec' "$request_file" | nak key public 2>/dev/null); then
+  respond_error "provider: identity derivation failed"
+fi
+[[ $agent_id =~ ^[a-f0-9]{64}$ ]] || respond_error "provider: invalid derived identity"
+
+has_launch=$(jq -r '.agent | has("launch") and .launch != null' "$request_file")
+if [[ $has_launch == true ]]; then
+  command=$(jq -r '.agent.launch.command // ""' "$request_file")
+  [[ $command == codex-acp ]] || respond_error "provider: unsupported launch command"
+fi
+
+owner_count=$(jq '[.agent.auth_tag, .agent.launch.owner_pubkey] | map(select(type == "string") | gsub("^[[:space:]]+|[[:space:]]+$"; "") | select(length > 0)) | length' "$request_file")
+(( owner_count > 0 )) || respond_error "provider: missing owner"
+if ! jq -e '
+  (.agent.launch.owner_pubkey? // null) as $owner
+  | $owner == null or (($owner | gsub("^[[:space:]]+|[[:space:]]+$"; "")) as $trimmed
+    | $trimmed == "" or ($trimmed | test("^[A-Fa-f0-9]{64}$")))
+' "$request_file" >/dev/null 2>&1; then
+  respond_error "provider: invalid owner"
+fi
+if ! jq -e '(.agent.respond_to_allowlist? // []) | all(.[]; test("^[A-Fa-f0-9]{64}$"))' "$request_file" >/dev/null 2>&1; then
+  respond_error "provider: invalid allowlist"
+fi
+
+respond_to=$(jq -r '.agent.respond_to // ""' "$request_file")
+[[ $respond_to == owner-only ]] || respond_error "provider: unsupported access policy"
+
+if jq -e '
+  ((.agent.launch.policy_env? // {}) + (.agent.launch.env? // {}) + (if (.agent | has("launch")) then {} else (.agent.env_vars // {}) end))
+  | keys | any(ascii_upcase == "BUZZ_ACP_NO_PRESENCE")
+' "$request_file" >/dev/null 2>&1; then
+  respond_error "provider: presence suppression refused"
+fi
+
+if ! jq -e --argjson max "$team_instructions_max_bytes" '
+  ((.agent.launch.policy_env? // {}) + (if (.agent | has("launch")) then (.agent.launch.env // {}) else (.agent.env_vars // {}) end))
+  | ((.BUZZ_ACP_TEAM_INSTRUCTIONS? // "") | utf8bytelength) <= $max
+' "$request_file" >/dev/null 2>&1; then
+  respond_error "provider: team instructions too large"
+fi
+
+if ! jq -e '
+  def unsafe_startup_key:
+    IN(
+      "BASH_ENV", "ENV", "SHELLOPTS", "BASHOPTS", "BASH_XTRACEFD", "PS4",
+      "PROMPT_COMMAND", "ZDOTDIR", "OPENSSL_CONF", "OPENSSL_MODULES",
+      "OPENSSL_ENGINES", "GCONV_PATH", "LOCPATH", "NLSPATH", "HOME",
+      "CODEX_HOME", "CODEX_CONFIG", "CODEX_MANAGED_PACKAGE_ROOT",
+      "CODEX_SQLITE_HOME", "XDG_CONFIG_HOME", "XDG_CONFIG_DIRS",
+      "XDG_DATA_HOME", "XDG_DATA_DIRS", "XDG_STATE_HOME", "XDG_CACHE_HOME"
+    ) or startswith("BASH_FUNC_") or startswith("LD_") or startswith("DYLD_")
+      or startswith("NODE_") or startswith("BUN_") or startswith("NPM_")
+      or startswith("npm_") or startswith("DENO_");
+  ((.agent.launch.policy_env? // {}) + (if (.agent | has("launch")) then (.agent.launch.env // {}) else (.agent.env_vars // {}) end))
+  | (keys | all(test("^[A-Za-z_][A-Za-z0-9_]*$") and (unsafe_startup_key | not)))
+    and ((.BUZZ_ACP_TEAM_INSTRUCTIONS? // "") | contains("\u0000") | not)
+' "$request_file" >/dev/null 2>&1; then
+  respond_error "provider: invalid environment"
+fi
+
+generation=$(od -An -N16 -tx1 /dev/urandom 2>/dev/null | tr -d ' \n') || exit 1
+[[ $generation =~ ^[a-f0-9]{32}$ ]] || exit 1
+rendered="$work_dir/rendered"
+if ! jq -ce --arg agent_id "$agent_id" --arg relay "$relay" --arg generation "$generation" '
+  .agent as $a
+  | ($a.launch // {}) as $launch
+  | (($launch.policy_env // {}) * (if ($a | has("launch")) then ($launch.env // {}) else ($a.env_vars // {}) end)) as $lower
+  | ($lower | has("BUZZ_ACP_TEAM_INSTRUCTIONS")) as $has_team_instructions
+  | ($lower.BUZZ_ACP_TEAM_INSTRUCTIONS // "") as $team_instructions
+  | ($lower | del(
+      .BUZZ_RELAY_URL, .BUZZ_PRIVATE_KEY, .NOSTR_PRIVATE_KEY, .BUZZ_AUTH_TAG,
+      .BUZZ_ACP_AGENT_OWNER, .BUZZ_ACP_AGENT_COMMAND, .BUZZ_ACP_AGENT_ARGS,
+      .BUZZ_ACP_RESPOND_TO, .BUZZ_ACP_RESPOND_TO_ALLOWLIST, .BUZZ_ACP_MCP_COMMAND,
+      .BUZZ_ACP_SUBSCRIBE, .BUZZ_ACP_NO_MENTION_FILTER, .BUZZ_ACP_KINDS,
+      .BUZZ_ACP_CHANNELS, .BUZZ_ACP_CONFIG, .BUZZ_ACP_HEARTBEAT_INTERVAL,
+      .BUZZ_ACP_HEARTBEAT_PROMPT, .BUZZ_ACP_HEARTBEAT_PROMPT_FILE,
+      .BUZZ_ACP_EXIT_AFTER_INACTIVITY, .BUZZ_ACP_TEAM_INSTRUCTIONS,
+      .BUZZ_MANAGED_AGENT_START_NONCE, .BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64,
+      .BUZZ_AGENT_DISABLED_DIR, .BUZZ_AGENT_ENV_DIR, .BUZZ_AGENT_LOCK_FILE,
+      .BUZZ_AGENT_OPERATION_LOCK_FILE, .BUZZ_AGENT_STATE_ROOT,
+      .SERVICE_RESULT, .EXIT_CODE, .EXIT_STATUS,
+      .CODEX_PATH, .PATH
+    )) as $base
+  | ($base + {
+      BUZZ_RELAY_URL: $relay,
+      BUZZ_PRIVATE_KEY: $a.private_key_nsec,
+      NOSTR_PRIVATE_KEY: $a.private_key_nsec,
+      BUZZ_ACP_RESPOND_TO: "owner-only",
+      BUZZ_ACP_SUBSCRIBE: "mentions",
+      BUZZ_ACP_HEARTBEAT_INTERVAL: "0",
+      BUZZ_MANAGED_AGENT_START_NONCE: $generation
+    })
+  | if $has_team_instructions
+      then .BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64 = ($team_instructions | @base64) else . end
+  | if (($a.auth_tag // "") | gsub("^[[:space:]]+|[[:space:]]+$"; "") | length) > 0
+      then .BUZZ_AUTH_TAG = ($a.auth_tag | gsub("^[[:space:]]+|[[:space:]]+$"; "")) else . end
+  | if (($launch.owner_pubkey // "") | gsub("^[[:space:]]+|[[:space:]]+$"; "") | length) > 0
+      then .BUZZ_ACP_AGENT_OWNER = ($launch.owner_pubkey | gsub("^[[:space:]]+|[[:space:]]+$"; "")) else . end
+  | if (($launch.args // []) | length) > 0 then .BUZZ_ACP_AGENT_ARGS = ($launch.args | join(",")) else . end
+  | if (($a.respond_to_allowlist // []) | length) > 0
+      then .BUZZ_ACP_RESPOND_TO_ALLOWLIST = ($a.respond_to_allowlist | join(",")) else . end
+  | {operation:"deploy", agent_id:$agent_id, environment:.}
+' "$request_file" >"$rendered" 2>/dev/null; then
+  respond_error "provider: invalid request"
+fi
+
+if ! jq -e \
+  --argjson name_max "$environment_name_max_bytes" \
+  --argjson value_max "$environment_value_max_bytes" \
+  --argjson encoded_team_max "$encoded_team_instructions_max_bytes" \
+  --argjson entry_max "$environment_entry_max" \
+  --argjson aggregate_max "$environment_aggregate_max_bytes" '
+    .environment as $env
+    | ($env | length) <= $entry_max
+      and all($env | keys[]; utf8bytelength <= $name_max)
+      and all($env | to_entries[];
+        (.value | utf8bytelength) <= (if .key == "BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64" then $encoded_team_max else $value_max end))
+      and (([$env | to_entries[]
+        | (.key | utf8bytelength) + 2
+          + (if .key == "BUZZ_MANAGED_TEAM_INSTRUCTIONS_B64"
+             then (.value | utf8bytelength)
+             else ((.value | utf8bytelength) * 6)
+             end)] | add // 0) <= $aggregate_max)
+  ' "$rendered" >/dev/null 2>&1; then
+  respond_error "provider: environment too large"
+fi
+
+host=$(jq -r '.provider_config.host // "gnomeregan.internal.freddrake.com"' "$request_file")
+ssh_user=$(jq -r '.provider_config.ssh_user // "buzz-deploy"' "$request_file")
+[[ $host =~ ^[A-Za-z0-9][A-Za-z0-9.-]*$ ]] || respond_error "provider: invalid request"
+[[ $ssh_user =~ ^[a-z_][a-z0-9_-]*$ ]] || respond_error "provider: invalid request"
+
+helper_response="$work_dir/helper-response"
+helper_error="$work_dir/helper-error"
+set +e
+ssh -o BatchMode=yes -- "$ssh_user@$host" buzz-agent-deploy \
+  <"$rendered" >"$helper_response" 2>"$helper_error"
+ssh_rc=$?
+set -e
+
+if jq -e '
+  keys == ["error","ok","rollback","rollback_step"]
+  and .ok == false
+  and (.error | IN(
+    "helper: systemd start failed",
+    "helper: service inactive",
+    "helper: service crashed immediately"
+  ))
+  and .rollback == "helper: rollback failed"
+  and (.rollback_step | IN("stop", "environment", "active-state"))
+' "$helper_response" >/dev/null 2>&1; then
+  error=$(jq -r '.error' "$helper_response")
+  rollback_step=$(jq -r '.rollback_step' "$helper_response")
+  respond_rollback_error "$error" "$rollback_step"
+fi
+
+if jq -e 'keys == ["error","ok"] and .ok == false and (.error | IN(
+    "helper: invalid request",
+    "helper: team instructions too large",
+    "helper: environment too large",
+    "helper: environment install failed",
+    "helper: systemd start failed",
+    "helper: service inactive",
+    "helper: service crashed immediately",
+    "helper: rollback failed"
+  ))' "$helper_response" >/dev/null 2>&1; then
+  error=$(jq -r '.error' "$helper_response")
+  respond_error "$error"
+fi
+
+if (( ssh_rc != 0 )); then
+  if grep -Eqi 'Could not resolve hostname|Name or service not known|nodename nor servname' "$helper_error"; then
+    respond_error "ssh: name resolution failed"
+  elif grep -Fqi 'Host key verification failed' "$helper_error"; then
+    respond_error "ssh: host key verification failed"
+  elif grep -Eqi 'Permission denied|Authentication failed' "$helper_error"; then
+    respond_error "ssh: authentication failed"
+  else
+    respond_error "ssh: connection failed"
+  fi
+fi
+
+jq -e --arg agent_id "$agent_id" '
+  keys == ["ok","unit"] and .ok == true and .unit == ("buzz-agent@" + $agent_id + ".service")
+' "$helper_response" >/dev/null 2>&1 || respond_error "helper: invalid response"
+
+jq -cn --arg agent_id "$agent_id" '{ok:true,agent_id:$agent_id}' 2>/dev/null || exit 1

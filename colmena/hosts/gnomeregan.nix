@@ -74,6 +74,7 @@ in {
       ../../modules/services/glance-dashboard.nix
       ../../modules/services/borg-backup.nix
       ../../modules/services/tailscale-saas.nix
+      ../../modules/services/buzz-agent-host.nix
     ];
   };
 }

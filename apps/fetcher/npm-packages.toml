@@ -8,3 +8,7 @@ repo = "ccstatusline"
 name = "agent-browser"
 repo = "agent-browser"
 
+
+[[npm-repository]]
+name = "codex-acp"
+repo = "@agentclientprotocol/codex-acp"

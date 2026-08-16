@@ -1,0 +1,14 @@
+{
+  "op": "deploy",
+  "request_id": "golden-legacy",
+  "agent": {
+    "private_key_nsec": "nsec1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqsmhltgl",
+    "auth_tag": "legacy-auth-secret",
+    "relay_url": "wss://relay.example",
+    "respond_to": "owner-only",
+    "env_vars": {
+      "LEGACY_SETTING": "legacy-value",
+      "BUZZ_RELAY_URL": "wss://forged.example"
+    }
+  }
+}

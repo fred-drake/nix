@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -u
+
+# Arguments are fixed by the module-owned ExecStopPost command. EnvironmentFile
+# values must never select privileged lifecycle paths.
+(( $# == 3 )) || exit 64
+disabled_dir=$1
+lock_file=$2
+agent_id=$3
+
+# Status 42 is emitted only after the pinned harness accepts an authenticated
+# owner !shutdown and completes graceful cleanup. Generic exit 0 is recoverable.
+if [[ ${SERVICE_RESULT:-} != exit-code \
+  || ${EXIT_CODE:-} != exited \
+  || ${EXIT_STATUS:-} != 42 ]]; then
+  exit 0
+fi
+[[ $agent_id =~ ^[a-f0-9]{64}$ ]] || exit 0
+
+umask 077
+if ! exec 9>"$lock_file" || ! flock 9 >/dev/null 2>&1; then
+  printf '%s\n' 'buzz-agent clean-exit recorder: lifecycle lock unavailable' >&2
+  exit 73
+fi
+
+staged_file="$disabled_dir/.${agent_id}.staged.$$"
+trap 'rm -f "$staged_file"' EXIT
+if ! install -d -m 0700 "$disabled_dir" 2>/dev/null \
+  || ! install -m 0600 /dev/null "$staged_file" 2>/dev/null \
+  || ! mv -f "$staged_file" "$disabled_dir/$agent_id" 2>/dev/null; then
+  printf '%s\n' 'buzz-agent clean-exit recorder: marker write failed' >&2
+  exit 73
+fi
+
+exit 0
