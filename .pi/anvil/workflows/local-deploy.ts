@@ -29,6 +29,7 @@ After every code or configuration change made during repair, and before the next
 					name: "just update-all succeeds",
 					command: "just update-all",
 					cwd: REPO,
+					timeoutMs: 900000,
 					onFail: { goto: "update-all", ...LOOP_POLICY },
 				},
 				{
