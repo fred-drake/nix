@@ -37,7 +37,7 @@ After every code or configuration change made during repair, and before the next
 					name: "Adversarial update review",
 					prompt: `Delegate a fresh adversarial reviewer subagent using \`${MODEL}\` with high reasoning. Require it to independently review all final code and configuration changes relevant to \`just update-all\` and confirm that the latest deterministic \`just update-all\` check succeeded without masked failures or weakened checks. This final gate is additional to, and does not replace, the fresh review required after every repair change.
 
-After considering the review, explicitly call \`anvil_verdict\` with the exact check id \`update-all-final-review\`. Pass only if the reviewer confirms both the final relevant changes and the successful command result; otherwise fail and report the findings for the retry loop.`,
+After considering the review, explicitly call \`anvil_verdict\` using the exact runtime \`check_id\` supplied by Anvil in the check instruction. Pass only if the reviewer confirms both the final relevant changes and the successful command result; otherwise fail and report the findings for the retry loop.`,
 					onFail: { goto: "update-all", ...LOOP_POLICY },
 				},
 			],
@@ -69,7 +69,7 @@ After every code or configuration change made during repair, and before the next
 					name: "Adversarial switch review",
 					prompt: `Delegate a fresh adversarial reviewer subagent using \`${MODEL}\` with high reasoning. Require it to independently review all final code and configuration changes relevant to \`just switch\` and confirm that the latest deterministic \`just switch\` check succeeded on this machine without masked failures or weakened checks. This final gate is additional to, and does not replace, the fresh review required after every repair change.
 
-After considering the review, explicitly call \`anvil_verdict\` with the exact check id \`switch-final-review\`. Pass only if the reviewer confirms both the final relevant changes and the successful command result; otherwise fail and report the findings for the retry loop.`,
+After considering the review, explicitly call \`anvil_verdict\` using the exact runtime \`check_id\` supplied by Anvil in the check instruction. Pass only if the reviewer confirms both the final relevant changes and the successful command result; otherwise fail and report the findings for the retry loop.`,
 					onFail: { goto: "switch", ...LOOP_POLICY },
 				},
 			],
