@@ -111,9 +111,7 @@ in {
         image = containers-sha."docker.io"."amruthpillai/reactive-resume"."latest"."linux/amd64";
         autoStart = true;
         dependsOn = ["resume-postgres" "resume-minio" "resume-chrome"];
-        extraOptions =
-          ["--network=resume-net"]
-          ++ map (dns: "--dns=${dns}") config.soft-secrets.networking.nameservers.internal;
+        extraOptions = ["--network=resume-net"];
         # v5.1.7 consolidated the separate Nuxt web SSR bundle into the server
         # bundle, so the old `/app/apps/web/.output/server/_ssr/client-*.mjs`
         # path (and its hardcoded `http://localhost:3000` profile-picture fetch)
