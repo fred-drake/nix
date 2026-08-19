@@ -2,8 +2,8 @@
 
 This reference maps hostnames to their types, locations, services, and web endpoints.
 The "Web Endpoints" tables below are the **source of truth for deployment health
-checks**: the `colmena-deploy` workflow probes every URL listed there after each
-host switch and requires the expected status before advancing.
+checks**: the `mass-deploy` skill requires every URL listed there to be probed
+after each clean host switch and to return the expected status before advancing.
 
 ## Hetzner Servers (Colmena-managed)
 

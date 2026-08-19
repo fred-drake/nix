@@ -9,50 +9,44 @@ description: |
   - Hetzner servers are remote VPS/dedicated hosts, deployed as root.
   - anton is a WSL NixOS host on a Windows laptop, deployed as the nixos user via sudo.
   - gnomeregan is a home LAN NixOS box (Wi-Fi). Unusual: tracks nixpkgs-unstable, runs the full workstation home-manager stack, uses its own SSH host key as sops identity. See references/gnomeregan.md before changing its config or rebuilding it.
-  - Full-fleet deployments run through the `colmena-deploy` workflow (one host at a time, with web health verification after every switch) — not ad-hoc colmena calls.
+  - Full-fleet deployments require the project-local `mass-deploy` skill (one host at a time, with web health verification after every switch) — not ad-hoc colmena calls.
 ---
 
 # Infrastructure Management
 
 ## Quick Reference
 
-### Full-fleet deployment: the `colmena-deploy` workflow
+### Full-fleet deployment: required `mass-deploy` skill
 
-**Any "deploy everything" request (including `/update-all-remote`) runs through
-the `colmena-deploy` workflow** when the current agent environment provides a
-workflow runner. Its source is
-`/Users/fdrake/nix/apps/agent-common/workflows/colmena-deploy.js`.
+**REQUIRED SUB-SKILL:** Any "deploy everything" request (including
+`/update-all-remote`) MUST use the project-local `mass-deploy` skill. It is the
+authoritative full-fleet coordinator contract for normal Pi `generalist`
+subagents; do not replace it with ad-hoc Colmena calls.
 
-If no workflow runner is available, stop and ask which runner/plugin should
-handle the deployment instead of re-implementing the sequence inline. The
-workflow encodes the deployment contract:
+The skill enforces this deployment contract:
 
 - Hosts are applied **one machine at a time**, in canonical order:
   **stormwind → ironforge → orgrimmar → anton → gnomeregan → headscale
   ("gateway")**.
-- After each successful switch, **every web endpoint in the fleet** (the
-  tables in `references/host-mapping.md`) is probed and must return its
-  expected status (default: 2xx after redirects).
-- If a host **fails to switch**, a fix agent diagnoses and repairs the root
-  cause, then the sequence **restarts from stormwind** (max 3 full restarts).
-- If the switch succeeds but **any site is unhealthy**, heal agents fix it
-  (max 3 rounds); the sequence does not advance until the whole fleet is
-  healthy.
-- After pre-flight, a **workaround audit** runs the "Workaround Hygiene"
-  procedure (below): every `WORKAROUND(`-tagged override under `overlays/` is
-  tested as a stock build at the pinned `nixpkgs-unstable` rev on a reachable
-  unstable host, and overrides upstream has fixed are retired before the
-  unstable hosts rebuild. Advisory — it never blocks the deploy. Markers
-  outside `overlays/` (e.g. container digest holds) are reported, not modified.
-- A pre-flight agent blocks the run on untracked `*.nix` files (invisible to
-  the git+file flake). **Unreachable machines never block**: whether detected
-  at pre-flight or at deploy time, a down host is skipped, its endpoints are
-  excluded from the health checks, and it is reported under `skipped` in the
-  result (status `partial`). A sleeping laptop must not hold up the fleet —
-  deploy it later with an ad-hoc single-host run once it's back.
+- After each clean switch, **every web endpoint in the fleet** (the tables in
+  `references/host-mapping.md`) is probed and must return its expected status
+  (default: 2xx after redirects).
+- Any repaired deploy/build/activation problem, repository or remote-state
+  change, or endpoint heal restarts the sequence **from stormwind** (max 3 full
+  restarts). The run never advances directly after a repair.
+- A pre-flight worker blocks the run on untracked `*.nix` files (invisible to
+  the git+file flake). **Unreachable machines never block**: a down host is
+  recorded as skipped, its endpoints are excluded from health checks, and the
+  result is `partial`. A sleeping laptop can be deployed later with an ad-hoc
+  single-host run.
+- Advisory container-upgrade preview and **workaround audit** workers persist
+  their results for the final report. The audit follows "Workaround Hygiene"
+  below: only `WORKAROUND(`-tagged overrides under `overlays/` are stock-tested
+  at the pinned `nixpkgs-unstable` revision; outside markers are reported, not
+  modified.
 
-When the workflow aborts, it returns a timeline of what switched, what failed,
-and what was fixed — surface that to the user rather than silently retrying.
+If the run aborts, surface its stop point, timeline, and next manual action
+rather than silently retrying or claiming partial work succeeded.
 
 ### Ad-hoc single-host deploys: the `colmena-deployer` subagent
 
@@ -163,15 +157,15 @@ If colmena fails with SSH errors:
 
 ### Deploy All Hosts
 
-Use the `colmena-deploy` workflow (see "Full-fleet deployment" above). Do NOT
-hand a comma-separated all-hosts `colmena apply` to a subagent — that deploys
-in parallel with no health gating between machines.
+Use the project-local `mass-deploy` skill (see "Full-fleet deployment" above).
+Do NOT hand a comma-separated all-hosts `colmena apply` to a subagent — that
+deploys in parallel with no health gating between machines.
 
 ### Update Secrets Before Deploy
 ```bash
 just update-secrets
 ```
-Run this first when secrets changed, then deploy (workflow or single-host).
+Run this first when secrets changed, then deploy (`mass-deploy` or single-host).
 
 ## Workaround Hygiene (unstable hosts)
 
@@ -187,10 +181,9 @@ Each temporary override carries a greppable marker comment:
 # WORKAROUND(<pkg>): <reason>; remove when <condition>.
 ```
 
-The `colmena-deploy` workflow runs this audit automatically (its "Workaround
-Audit" phase, between pre-flight and the first apply). Run it manually before
-ad-hoc single-host unstable deploys, macbook rebuilds, or when bumping
-`nixpkgs-unstable` outside a fleet deploy:
+The `mass-deploy` skill runs this audit automatically between pre-flight and
+the first apply. Run it manually before ad-hoc single-host unstable deploys,
+macbook rebuilds, or when bumping `nixpkgs-unstable` outside a fleet deploy:
 
 ```bash
 grep -rn 'WORKAROUND(' overlays/
