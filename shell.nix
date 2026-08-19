@@ -4,13 +4,16 @@
 
   # Helper scripts
   update-fetcher-repos = pkgs.writeShellScriptBin "update-fetcher-repos" ''
+    set -euo pipefail
     SRCFILE=''${PROJECT_ROOT:-$(pwd)}/apps/fetcher/repos-src.nix
     TOMLFILE=''${PROJECT_ROOT:-$(pwd)}/apps/fetcher/repos.toml
-    echo "####################################" > $SRCFILE
-    echo "# Auto-generated -- do not modify! #" >> $SRCFILE
-    echo "####################################" >> $SRCFILE
-    echo "{pkgs, ...}: {" >> $SRCFILE
-    ${pkgs.tomlq}/bin/tq --file $TOMLFILE --output json '.repos' | \
+    TMP_FILE=$(${pkgs.coreutils}/bin/mktemp "''${SRCFILE}.XXXXXX.nix")
+    trap 'rm -f "$TMP_FILE"' EXIT
+    echo "####################################" > "$TMP_FILE"
+    echo "# Auto-generated -- do not modify! #" >> "$TMP_FILE"
+    echo "####################################" >> "$TMP_FILE"
+    echo "{pkgs, ...}: {" >> "$TMP_FILE"
+    ${pkgs.tomlq}/bin/tq --file "$TOMLFILE" --output json '.repos' | \
     ${pkgs.jq}/bin/jq -c '.[]' | \
     while IFS= read -r repo; do
       name=$(echo "$repo" | ${pkgs.jq}/bin/jq -r '.name')
@@ -33,9 +36,10 @@
         processed_url=pkgs.$(${pkgs.nurl}/bin/nurl $fetcher_arg "$url" | tr -d '\n')
       fi
       echo "  ''${rendered_name} = ''${processed_url};"
-    done >> $SRCFILE
-    echo "}" >> $SRCFILE
-    ${pkgs.alejandra}/bin/alejandra --quiet $SRCFILE
+    done >> "$TMP_FILE"
+    echo "}" >> "$TMP_FILE"
+    ${pkgs.alejandra}/bin/alejandra --quiet "$TMP_FILE"
+    mv "$TMP_FILE" "$SRCFILE"
   '';
 
   system-flake-rebuild = pkgs.writeShellScriptBin "system-flake-rebuild" ''
