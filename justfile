@@ -31,6 +31,7 @@ update-container-digests:
 # Update NPM packages
 update-npm-packages:
     update-npm-packages
+    ./apps/fetcher/update-codex-acp.sh
 
 # Update Claude Code binary and plugin repos
 update-claude:

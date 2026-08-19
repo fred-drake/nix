@@ -3,30 +3,33 @@
   makeWrapper,
   nodejs,
   runCommand,
-}:
-buildNpmPackage {
-  pname = "codex";
-  version = "0.147.0";
+}: let
+  package = builtins.fromJSON (builtins.readFile ./fetcher/codex-package.json);
+in
+  buildNpmPackage {
+    pname = "codex";
+    inherit (package) version;
 
-  src = runCommand "codex-runtime-src" {} ''
-    mkdir $out
-    cp ${./fetcher/codex-package.json} $out/package.json
-    cp ${./fetcher/codex-lock.json} $out/package-lock.json
-  '';
+    src = runCommand "codex-runtime-src" {} ''
+      mkdir $out
+      cp ${./fetcher/codex-package.json} $out/package.json
+      cp ${./fetcher/codex-lock.json} $out/package-lock.json
+    '';
 
-  npmDepsHash = "sha256-22pcZdl68Bt/THvCjaS69nOZGgYlAdR461o4xRAAndg=";
+    # Updated with the generated lockfile by update-codex-acp.sh.
+    npmDepsHash = "sha256-XkBoxIW8JsWNVb4eQw3ejscmw09fz1O81wWvFwSo3jE=";
 
-  dontNpmBuild = true;
-  nativeBuildInputs = [makeWrapper];
+    dontNpmBuild = true;
+    nativeBuildInputs = [makeWrapper];
 
-  postInstall = ''
-    makeWrapper ${nodejs}/bin/node $out/bin/codex \
-      --add-flags "$out/lib/node_modules/codex-runtime/node_modules/@openai/codex/bin/codex.js"
-  '';
+    postInstall = ''
+      makeWrapper ${nodejs}/bin/node $out/bin/codex \
+        --add-flags "$out/lib/node_modules/codex-runtime/node_modules/@openai/codex/bin/codex.js"
+    '';
 
-  meta = {
-    description = "OpenAI Codex CLI compatible with codex-acp 1.2.0";
-    homepage = "https://www.npmjs.com/package/@openai/codex";
-    mainProgram = "codex";
-  };
-}
+    meta = {
+      description = "OpenAI Codex CLI compatible with codex-acp";
+      homepage = "https://www.npmjs.com/package/@openai/codex";
+      mainProgram = "codex";
+    };
+  }

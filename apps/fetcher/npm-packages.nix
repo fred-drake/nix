@@ -13,9 +13,9 @@
     "url-hash" = "sha256-T2Cb3tENjBBkUWzvuQLtWTkasru6l9WT6KEtB+LaWMI=";
   };
   "codex-acp" = {
-    "version" = "1.4.0";
-    "url" = "https://registry.npmjs.org/@agentclientprotocol/codex-acp/-/codex-acp-1.4.0.tgz";
-    "url-hash" = "sha256-Ano1yjvEVTMmC1WZxP7Fk9sOJmVK3Ua6jh4KHdZd5XM=";
+    "version" = "1.6.0";
+    "url" = "https://registry.npmjs.org/@agentclientprotocol/codex-acp/-/codex-acp-1.6.0.tgz";
+    "url-hash" = "sha256-NvJA/8o3DCTrNN+WIE5E1KbQ6vkIPEjwKIavndhiMto=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";
