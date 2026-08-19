@@ -3,8 +3,8 @@
 ####################################
 {pkgs, ...}: {
   "claude-plugins-official-src" = builtins.fetchTarball {
-    url = "https://github.com/anthropics/claude-plugins-official/archive/8864c9d619547417e9bd9305df0b4fc078f89b08.tar.gz";
-    sha256 = "0mdi4dbfmd0pc08imz01g09y6bl3g5m7qkkqxqwd8324fz6fk6vk";
+    url = "https://github.com/anthropics/claude-plugins-official/archive/ed279d8005254045c2e9806ba5c1d7c5b9e2f8c6.tar.gz";
+    sha256 = "0laa6nm9bmcdb4igrbdmykj99z2jxcdh7lkf3r181wpkp7q0pqpm";
   };
   "cc-marketplace-src" = pkgs.fetchFromGitHub {
     owner = "samber";
@@ -33,14 +33,14 @@
   "agent-rules-skill-src" = pkgs.fetchFromGitHub {
     owner = "netresearch";
     repo = "agent-rules-skill";
-    rev = "d49080028a5b782281723305829fa2eeb4dc4852";
-    hash = "sha256-mikMHMF4eMbeVxN4TG/+JxyWQP19zeNVELOYpMb2tA4=";
+    rev = "ebf4f0a2a686e4a55e4489b40fbe4165194c49e4";
+    hash = "sha256-GDwPHuIM8RyAAFf3TCyneZe6BUetBDvYR4SxSC2OVL8=";
   };
   "anthropic-skills-src" = pkgs.fetchFromGitHub {
     owner = "anthropics";
     repo = "skills";
-    rev = "f6656c1256d5a8adfa37db9110046ef20bac644c";
-    hash = "sha256-5/0f5AnGWX3oM+M9Xm/zSmooz11+S1YRdFPmAX+DXi0=";
+    rev = "0a64e398ec6bb34a494f0c347e8ccae53a862f8e";
+    hash = "sha256-0ZtHTJVHeW8jIprKgCo/yU2ZI2cZxUqD3Riet3UWdt8=";
   };
   "vercel-agent-skills-src" = pkgs.fetchFromGitHub {
     owner = "vercel-labs";
@@ -51,14 +51,14 @@
   "trailofbits-skills-src" = pkgs.fetchFromGitHub {
     owner = "trailofbits";
     repo = "skills";
-    rev = "4db88ee79db0a68bbe049fe827e272ee2bc19510";
-    hash = "sha256-KXhkSvBXH9axfJb6MlII7GVXSePK+91aRvrxi2bB/pE=";
+    rev = "07bce8a2c8ccc56c5b44b7067a04b8bf46128f05";
+    hash = "sha256-YXXBCTNxcTt+6oH/8bgR9n/iFFD7ND3VjtZTlxqTiYY=";
   };
   "remotion-skills-src" = pkgs.fetchFromGitHub {
     owner = "remotion-dev";
     repo = "skills";
-    rev = "9f0faa5056c3167d0fc0b7e9575d35284dce98c8";
-    hash = "sha256-zIvhiYUS85BZJh0K+dJhLPcbr3iA/Pwk8JKLk1E9YPk=";
+    rev = "21320596cf9008cf6ccaa6bf1a2b9f71c8f191c3";
+    hash = "sha256-m7Qce/fgINqSh778xICLVMCzwkqY4KLxPMubrgKRqnU=";
   };
   "marketing-skills-src" = pkgs.fetchFromGitHub {
     owner = "coreyhaines31";
@@ -69,7 +69,7 @@
   "herdr-src" = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
-    rev = "51b7064ef0a02642393bab1d2eea0f4dbd8414d2";
-    hash = "sha256-ALhahxbdgnN8rMvlKmgB5py0etICwyYY75Uz0jLIpM4=";
+    rev = "5203a5dc0f39a082938ea0f9836d6257ea7e155f";
+    hash = "sha256-LrqZGXng9hTBKbaI8HcQOAF5zSEo+gOFJJ6strLrcq4=";
   };
 }

@@ -52,8 +52,8 @@
   "vicinae-src" = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "8cf5993648be552d740c2ed0157bd7ec298c5ddd";
-    hash = "sha256-8GuyPZ5hajP2+LZ5fLVw9nGlI4ZSrdxtDJRaaatth4c=";
+    rev = "1f6de859a4142e24e73f7cc8a70df1a6e8d77a0e";
+    hash = "sha256-Of1YU59mj9BZwQi7lbj/+XGaCs+MTGFCZ12bgcNbEu0=";
   };
   "spotifatius-src" = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
@@ -70,8 +70,8 @@
   "herdr-src" = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
-    rev = "51b7064ef0a02642393bab1d2eea0f4dbd8414d2";
-    hash = "sha256-ALhahxbdgnN8rMvlKmgB5py0etICwyYY75Uz0jLIpM4=";
+    rev = "b5c4a0176e9183924df552eb8aecb94ed5f9e732";
+    hash = "sha256-m7Am/hZf08MU6T1ctr9foVU4phfojNiCszx8T2pi9F0=";
   };
   "pi-subagents-src" = pkgs.fetchFromGitHub {
     owner = "edxeth";

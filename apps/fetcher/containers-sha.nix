@@ -5,7 +5,7 @@ _: {
   "docker.gitea.com" = {
     "act_runner" = {
       "latest" = {
-        "linux/amd64" = "docker.gitea.com/act_runner@sha256:e51b88dfb018e740e4b53b3f308102d3949632b0ad3de17b322115b449df329e";
+        "linux/amd64" = "docker.gitea.com/act_runner@sha256:136963751f8fcbf0bf22db929c808fb3ec82fb19ed6812f1f7af19a4235d243b";
       };
     };
     "gitea" = {
@@ -22,7 +22,7 @@ _: {
     };
     "amruthpillai/reactive-resume" = {
       "latest" = {
-        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:5156a1b0a8bb4b4a705f6a3fd0e1f1a8d92111771eaa15989a49b1fcecf049cc";
+        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:55a1630949c6647293000ae41c27f94f377aa1a19ab40153f4f35b7eacdc0ad9";
       };
     };
     "apache/tika" = {
@@ -106,7 +106,7 @@ _: {
   "ghcr.io" = {
     "block/buzz" = {
       "main" = {
-        "linux/amd64" = "ghcr.io/block/buzz@sha256:ecdd164e53a83ddec9c3708fbe198e668b1ac59625407bf25c17974fc703f392";
+        "linux/amd64" = "ghcr.io/block/buzz@sha256:2bc2b35e7de66d40f153a12168277cfb10343d1a250289fe7feded71643ea8dc";
       };
     };
     "browserless/chromium" = {
@@ -121,7 +121,7 @@ _: {
     };
     "linuxserver/bazarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:494da1d875aba84c2c96dd3b45a306b65d5446f1927babbded1bee89f83f5c0b";
+        "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:e2c621e525d6356f34032cddd7deb3978cbaafc4f537e995efe64b5baf3c7548";
       };
     };
     "linuxserver/calibre-web" = {
@@ -131,7 +131,7 @@ _: {
     };
     "linuxserver/jellyfin" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:7b1dea856daa1150fa9c4e00069c9a2a175f2705ac089d4f6513cf9fdbdf0f14";
+        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:f59d6b4359fa47f881498f49456cdebd2d4d139e09c8b0ee1c272f178be09d21";
       };
     };
     "linuxserver/lidarr" = {
@@ -151,7 +151,7 @@ _: {
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:a53190ce920ac1a7e035c6678f6142588524c7f9570a9c82d5b48a11b274333e";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:dfa3bbd419569607e5bf7134fbfc3d59ccae7a127bf685f7c1862836d3dc7c64";
       };
     };
     "linuxserver/sonarr" = {
