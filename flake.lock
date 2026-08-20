@@ -279,11 +279,11 @@
     "glance-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1787155961,
-        "narHash": "sha256-mjuc8BXAnit3FJB6r02XzC594i7Ra1hVXnPrnGxfd5Y=",
+        "lastModified": 1780173316,
+        "narHash": "sha256-2WFX1Gca7ign9i1zOQ9lRdtOSGq9QG33vIA5QTnq9E8=",
         "owner": "glanceapp",
         "repo": "glance",
-        "rev": "16477442782e1beb5e619bc8ac76ae400aeb4bc0",
+        "rev": "91324e8de762702e97b0ac5c8e36271d644d8642",
         "type": "github"
       },
       "original": {
