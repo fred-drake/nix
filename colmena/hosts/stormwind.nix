@@ -62,7 +62,7 @@ in {
 
     # The otel-collector exporter ships stormwind's host metrics to the local
     # Traceway nginx vhost, so preserve this loopback override. Other internal
-    # names use the shared Hearthstone split-DNS resolver.
+    # names use the shared Tailscale DNS gateway.
     networking.extraHosts = ''
       127.0.0.1 traceway.${domain}
     '';

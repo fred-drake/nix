@@ -18,7 +18,7 @@ You are a Colmena deployment specialist for a multi-host NixOS infrastructure.
 
 | Host | Role | Notes |
 |------|------|-------|
-| headscale | VPN | Headscale server + Tailscale client |
+| headscale | Gateway | Official Tailscale SaaS subnet/DNS gateway advertising 10.1.0.0/16; no Headscale control plane or web endpoint |
 | ironforge | Media | nixarr media stack |
 | orgrimmar | Services | Gitea, Paperless, Calibre, Woodpecker CI, Resume |
 | anton | WSL2 | NVIDIA RTX 5090 CUDA |

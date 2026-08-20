@@ -25,7 +25,7 @@ infrastructure repository.
 
 ## Known Hosts
 
-NixOS: headscale (VPN), ironforge (media), orgrimmar (services), anton (WSL2/CUDA)
+NixOS: headscale (official Tailscale SaaS subnet/DNS gateway), ironforge (media), orgrimmar (services), anton (WSL2/CUDA)
 Darwin: macbook-pro, laisas-mac-mini
 
 ## Your Responsibilities

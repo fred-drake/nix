@@ -17,7 +17,7 @@ _: {
   };
 
   # Remove the legacy static mappings on activation. Internal service names are
-  # now delivered to connected Tailnet clients through Headscale MagicDNS.
+  # now delivered to connected Tailnet clients through official Tailscale DNS.
   system.activationScripts.postActivation.text = ''
     temporaryHosts="$(mktemp)"
     trap 'rm -f "$temporaryHosts"' EXIT

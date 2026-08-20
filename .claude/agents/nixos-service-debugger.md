@@ -19,7 +19,7 @@ infrastructure hosts.
 
 | Host | Key Services |
 |------|-------------|
-| headscale | Headscale VPN server, Tailscale client |
+| headscale | Official Tailscale SaaS subnet/DNS gateway advertising 10.1.0.0/16; no Headscale control plane or web endpoint |
 | ironforge | nixarr (Sonarr, Radarr, Prowlarr, etc.) |
 | orgrimmar | Gitea, Paperless-ngx, Calibre-web, Woodpecker CI, Reactive Resume |
 | anton | CUDA/NVIDIA services (WSL2) |
@@ -55,13 +55,13 @@ ssh HOST readlink /run/current-system
 1. Diagnose service failures by reading systemd status and journal logs
 2. Correlate runtime issues with Nix module configuration
 3. Check resource constraints (disk, memory, CPU) on affected hosts
-4. Verify networking (ports, firewall, DNS, Headscale connectivity)
+4. Verify networking (ports, firewall, DNS, Tailscale connectivity)
 5. Identify configuration drift between deployed and repo state
 6. Suggest Nix module changes to fix the root cause
 
 ## Important Notes
 
-- Hosts connect via Headscale/Tailscale mesh — use hostnames directly
+- Hosts connect via official Tailscale SaaS — use hostnames directly
 - Container services run via NixOS container modules, not raw Docker
 - Always check `journalctl` before suggesting config changes
 - Read the corresponding Nix module in `modules/nixos/host/<hostname>/`

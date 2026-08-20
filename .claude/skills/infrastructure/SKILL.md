@@ -36,9 +36,11 @@ The workflow encodes the deployment contract; do not re-implement it inline:
 - Hosts are applied **one machine at a time**, in canonical order:
   **stormwind → ironforge → orgrimmar → anton → gnomeregan → headscale
   ("gateway")**.
-- After each successful switch, **every web endpoint in the fleet** (the
-  tables in `references/host-mapping.md`) is probed and must return its
-  expected status (default: 2xx after redirects).
+- After each successful switch, **every documented web endpoint in the fleet**
+  (the tables in `references/host-mapping.md`) is probed and must return its
+  expected status (default: 2xx after redirects). The legacy-named `headscale`
+  gateway has zero web endpoints; successful private Hetzner application probes
+  indirectly exercise its Tailscale subnet route and DNS.
 - If a host **fails to switch**, a fix agent diagnoses and repairs the root
   cause, then the sequence **restarts from stormwind** (max 3 full restarts).
 - If the switch succeeds but **any site is unhealthy**, heal agents fix it
@@ -94,7 +96,7 @@ After an ad-hoc apply, verify the host's web endpoints from the tables in
 
 | Host | Type | Services |
 |------|------|----------|
-| headscale (aka "gateway") | Hetzner VPS | Headscale VPN, Tailscale client, subnet router for 10.1.0.0/16 (all tailnet access to the other Hetzner boxes rides through it) |
+| headscale (aka "gateway") | Hetzner VPS | Official Tailscale SaaS subnet/DNS gateway advertising 10.1.0.0/16 (all tailnet access to the other Hetzner boxes rides through it); despite the legacy name, it runs no Headscale control plane or web endpoint |
 | ironforge | Hetzner dedicated | media stack, all podman: jellyfin, seerr (+ jellyseerr redirect), sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr |
 | orgrimmar | Hetzner dedicated | gitea (+ gitea-status), woodpecker, paperless (+ paperless-ai), calibre-web, resume, filebrowser |
 | stormwind | Hetzner dedicated | traceway (observability stack), gatus (internal uptime dashboard) |
@@ -115,18 +117,18 @@ After an ad-hoc apply, verify the host's web endpoints from the tables in
 
 ### Many `*.internal.freddrake.com` names unreachable at once
 
-If "service X is down" but *other* internal sites are **also** unreachable, the
-problem is almost never that service — it's the internal DNS resolver
-(hearthstone, `100.64.0.13`) having dropped off the headscale tailnet. The
-servers stay fine; names just stop resolving (the whole `internal.freddrake.com`
-zone is split-DNS'd to `100.64.0.13`). This has happened (2026-06-23: an OpenWrt
-package upgrade wiped hearthstone's tailscaled state). See
-`references/hearthstone-dns.md` for the fast diagnosis and the re-register
-recovery procedure. Quick first checks:
+If "service X is down" but *other* internal sites are **also** unreachable,
+check local Tailscale first: a disconnected probing machine makes the private
+fleet look down. Internal service names are resolved by the legacy-named
+`headscale` gateway on official Tailscale SaaS. If local Tailscale is ready,
+diagnose that gateway's Tailscale client and `dnsmasq`; do not add a Headscale
+control plane or synthetic web health endpoint. Successful probes of the
+private Hetzner application URLs exercise both its DNS and advertised
+`10.1.0.0/16` route.
 
 ```bash
-tailscale status | grep -i hearthstone   # offline / last seen 15h ago?
-tailscale status                         # if LOCAL tailscale is down, the fleet only LOOKS dead
+tailscale status
+tailscale dns status
 ```
 
 ### Service Not Working
@@ -270,4 +272,3 @@ Notes:
 
 - `references/host-mapping.md` — Inventory of every managed host (SSH user, port, role).
 - `references/gnomeregan.md` — Gnomeregan-specific setup, sops identity model, and disaster-recovery procedure. Read first before changing its config or rebuilding it.
-- `references/hearthstone-dns.md` — The gateway/OpenWrt box (`ssh root@192.168.8.1`) that hosts the `internal.freddrake.com` DNS resolver on headscale (`100.64.0.13`). Read first when *many* internal names fail at once; covers diagnosis and the headscale re-register recovery.

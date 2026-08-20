@@ -28,7 +28,7 @@ with `mkIf`, so a single feature module works across all hosts.
 ### Servers
 
 - **Infrastructure Services** (Managed via Colmena):
-  - `headscale`: VPN coordination
+  - `headscale`: official Tailscale SaaS subnet/DNS gateway
   - `ironforge`: Multi-service host (nixarr with jellyfin, jellyseerr,
     sonarr, radarr, prowlarr, sabnzbd, bazarr, lidarr)
   - `orgrimmar`: Multi-service host (gitea, woodpecker, paperless,

@@ -9,7 +9,7 @@ after each clean host switch and to return the expected status before advancing.
 
 | Hostname | Type | Deploy User | SSH Port | Services |
 |----------|------|-------------|----------|----------|
-| headscale (aka "gateway") | Hetzner VPS | root | 22 | Headscale VPN, Tailscale client, subnet router for the Hetzner private net 10.1.0.0/16 |
+| headscale (aka "gateway") | Hetzner VPS | root | 22 | Legacy-named official Tailscale SaaS subnet/DNS gateway; advertises the Hetzner private net 10.1.0.0/16 and runs no Headscale control plane |
 | ironforge | Hetzner dedicated | root | 2222 | media stack, all podman: jellyfin, seerr (+ jellyseerr redirect), sonarr, radarr, lidarr, prowlarr, sabnzbd, bazarr |
 | orgrimmar | Hetzner dedicated | root | 2222 | gitea (+ gitea-status checker), woodpecker, paperless (+ paperless-ai), calibre-web, resume, filebrowser |
 | stormwind | Hetzner dedicated | root | 2222 | traceway (observability stack; container pulled from gitea's registry on orgrimmar), gatus (internal uptime dashboard) |
@@ -28,15 +28,6 @@ Gnomeregan is unusual: it tracks `nixpkgs-unstable` (via `meta.nodeNixpkgs.gnome
 |----------|------|-------------|----------|---------|
 | anton | WSL NixOS on Windows | nixos (sudo) | 22 | Gaming and AI processing |
 
-## Critical non-managed infrastructure
-
-| Hostname | Type | Access | Role |
-|----------|------|--------|------|
-| hearthstone | OpenWrt gateway router | `ssh root@192.168.8.1` (LAN default gateway; not in `~/.ssh/config`, **not** colmena-managed) | headscale node `100.64.0.13`; hosts the **`internal.freddrake.com` DNS resolver** the whole fleet's internal names depend on. If it drops off the tailnet, every `*.internal.freddrake.com` name fails to resolve while the servers stay up. See `hearthstone-dns.md`. |
-
-The headscale control plane (`headscale.brainrush.ai`) runs on `br-prod-gateway`
-(`headscale` CLI on PATH there) — used to re-register hearthstone if it falls off.
-
 ## Canonical Deploy Order
 
 Full-fleet deployments apply hosts **one at a time**, in this order:
@@ -52,11 +43,11 @@ Full-fleet deployments apply hosts **one at a time**, in this order:
 
 Every URL below must return its expected status (after following redirects;
 `curl -skL -o /dev/null -w '%{http_code}' --max-time 20 '<url>'`) for the fleet
-to be considered healthy. All `*.internal.freddrake.com` names resolve **only**
-via the internal DNS on hearthstone (100.64.0.13), so the probing machine must
-be on the tailnet — if every internal name fails DNS at once, run
-`tailscale status` locally first (a stopped local tailscaled looks exactly like
-a fleet-wide outage).
+to be considered healthy. All `*.internal.freddrake.com` names resolve through
+the `headscale` gateway on official Tailscale SaaS, so the probing machine must
+be on the tailnet. If every internal name fails DNS at once, run `tailscale
+status` locally first; a disconnected local client looks exactly like a
+fleet-wide outage.
 
 ### stormwind
 
@@ -104,24 +95,15 @@ No web endpoints. Health = the colmena switch verified active over ssh.
 
 ### headscale ("gateway")
 
-`headscale.internal.freddrake.com` has **no record** on the internal DNS, so
-probe the nginx vhost via the private IP. The Host header pins the probe to
-the right vhost (it currently works without it — this nginx has only one
-vhost — but keep it so the check survives additional vhosts):
+No web endpoints. Despite its legacy hostname, this machine does not run a
+Headscale control plane or nginx. Deployment health comes from SSH reachability,
+active-generation equality after the Colmena switch, local Tailscale readiness,
+and successful probes of the private Hetzner applications listed above.
 
-```bash
-curl -sk -o /dev/null -w '%{http_code}' --max-time 20 \
-  -H 'Host: headscale.internal.freddrake.com' https://10.1.1.2/health
-```
-
-| Check | Service | Expect |
-|-------|---------|--------|
-| https://10.1.1.2/health with Host header (see above) | headscale daemon behind nginx | 200 |
-
-Reaching 10.1.1.2 itself rides the subnet route this box advertises
-(10.1.0.0/16), so this check also verifies the box's gateway/routing role.
-Note: this headscale instance is vestigial (empty DB); the live control plane
-is headscale.brainrush.ai on brainrush-prod-gateway, managed in a separate repo.
+Those application names resolve through this machine's DNS service and their
+`10.1.1.x` addresses are reached through the `10.1.0.0/16` subnet route it
+advertises to official Tailscale SaaS. Successful application probes therefore
+exercise the gateway indirectly; do not add a synthetic gateway URL.
 
 ### Intentionally excluded from health checks
 

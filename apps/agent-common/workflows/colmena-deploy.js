@@ -23,7 +23,7 @@ const MAX_HEAL_ROUNDS = 3 // heal attempts per host visit before aborting
 // references/host-mapping.md — update BOTH together. Used to compute the
 // verification coverage floor (a verifier returning far fewer probes than the
 // non-skipped hosts' total has under-probed, e.g. only checked one host).
-const ENDPOINT_COUNTS = { stormwind: 2, ironforge: 9, orgrimmar: 8, anton: 0, gnomeregan: 1, headscale: 1 }
+const ENDPOINT_COUNTS = { stormwind: 2, ironforge: 9, orgrimmar: 8, anton: 0, gnomeregan: 1, headscale: 0 }
 
 const REPO = '/Users/fdrake/nix'
 const INFRA_SKILL_DIR = `${REPO}/.pi/skills/infrastructure`
@@ -46,12 +46,12 @@ that plainly rather than hunting for a config problem.`,
 nixpkgs-unstable, so builds can be much larger than on the stable hosts, and it runs the full
 workstation home-manager stack (long activation is normal).`,
   headscale: `headscale (the box your operator calls "gateway") is a Hetzner VPS (ssh alias
-"headscale" → 10.1.1.2, root, port 22). Its critical role is tailscale SUBNET ROUTER for the
-Hetzner private net 10.1.0.0/16 — breaking it cuts tailnet reachability of every 10.1.1.x web
-endpoint on stormwind/ironforge/orgrimmar, so treat activation failures here as urgent. The
-headscale daemon it runs is a vestigial empty-DB instance (the live control plane is
-headscale.brainrush.ai, managed in a separate repo): keep nginx, /health, and the tailscale
-client healthy; do not debug the daemon's registration features.`,
+"headscale" → 10.1.1.2, root, port 22). Despite its legacy name, it is an official Tailscale
+SaaS subnet/DNS gateway advertising the Hetzner private net 10.1.0.0/16; it runs no Headscale
+control plane or nginx and has zero web endpoints. Breaking it cuts tailnet reachability of
+every 10.1.1.x application on stormwind/ironforge/orgrimmar, so treat activation failures as
+urgent. SSH reachability and active-generation equality verify activation; local Tailscale
+readiness plus successful private application probes indirectly exercise its routing and DNS.`,
 }
 
 const PREFLIGHT_SCHEMA = {
@@ -175,9 +175,10 @@ colmena. Now verify the WHOLE fleet's web sites.
    the tailnet, and a stopped local tailscaled looks exactly like a fleet-wide outage. If it
    reports stopped, run \`tailscale up\`, confirm it connects, then proceed.
 2. Read the "Web Endpoints" tables in ${ENDPOINTS_DOC} — that file is the source of truth for
-   which URLs must be healthy, what status each is expected to return, and the special probe
-   forms (gitea-status uses /health; the headscale/"gateway" check probes https://10.1.1.2/health
-   via private IP, pinning the vhost with an explicit Host header).
+   which URLs must be healthy, what status each is expected to return, and special probe forms
+   (gitea-status uses /health). The legacy-named headscale gateway has zero web endpoints: do
+   not invent one. Successful private Hetzner application probes indirectly exercise its DNS
+   and advertised 10.1.0.0/16 route.
 3. Probe EVERY URL in those tables — do not stop at the just-deployed host. For each URL run:
      curl -skL -o /dev/null -w '%{http_code}' --max-time 20 '<url>'
    ok=true only if the FINAL status (after redirects) matches the table's expected status
@@ -191,8 +192,8 @@ In each result, the "host" field must be the exact colmena node name serving tha
 (stormwind, ironforge, orgrimmar, anton, gnomeregan, or headscale).
 
 Known fleet-wide signature: if EVERY *.internal.freddrake.com name still fails DNS with local
-tailscale up, the internal DNS resolver (hearthstone, 100.64.0.13) or the headscale subnet
-router is the problem — say so in notes instead of just marking every site broken.
+tailscale up, the legacy-named headscale gateway's official Tailscale route or DNS service is
+the likely problem — say so in notes instead of just marking every site broken.
 
 Return raw data only: one result per URL with its serving host, final status, and ok.`
 
@@ -266,8 +267,9 @@ Toolbox / known failure modes:
 - Containers: 'podman ps -a' and container unit logs on the owning host.
 - ALL *.internal.freddrake.com names failing DNS at once → first re-check \`tailscale status\`
   on THIS machine (a stopped local tailscaled mimics a fleet outage; \`tailscale up\` fixes it).
-  If local tailscale is up, hearthstone's tailscaled (OpenWRT router, 492MB RAM) has likely been
-  OOM-killed: ssh hearthstone '/etc/init.d/tailscale restart'.
+  If local Tailscale is up, diagnose the official Tailscale client and dnsmasq on the
+  legacy-named headscale gateway. It has no control plane or synthetic web health endpoint;
+  do not add either.
 - Service down + disk full → check coredumpctl for a crash-looping unit filling the disk.
 - If the root cause is a nix config bug, fix it in ${REPO} (conventions: WORKAROUND markers for
   temporary overlay overrides; \`git add\` new files; read

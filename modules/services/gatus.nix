@@ -14,8 +14,8 @@
   # gatus-env EnvironmentFile and substituted by gatus's ${VAR} support, so it
   # never lands in the (world-readable) Nix store.
 
-  # Shared Hetzner split DNS resolves these names through Hearthstone. Probing
-  # by hostname preserves each endpoint's TLS SNI/Host matching; a 4xx auth gate
+  # Shared Hetzner split DNS resolves these names through the Tailscale DNS
+  # gateway. Probing by hostname preserves each endpoint's TLS SNI/Host matching; a 4xx auth gate
   # still counts as "up" (only a connection failure or nginx 5xx is a failure).
   endpointGroups = {
     ironforge = [
