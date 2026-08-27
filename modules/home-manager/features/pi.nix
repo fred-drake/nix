@@ -34,6 +34,9 @@
     (pkgs.callPackage ../../../apps/pi-context-mode.nix {
       pin = import ../../../apps/fetcher/pi-context-mode.nix;
     })
+    (pkgs.callPackage ../../../apps/pi-context7.nix {
+      pin = import ../../../apps/fetcher/pi-context7.nix;
+    })
     (pkgs.callPackage ../../../apps/pi-ask-user-question.nix {
       pin = import ../../../apps/fetcher/pi-ask-user-question.nix;
     })
