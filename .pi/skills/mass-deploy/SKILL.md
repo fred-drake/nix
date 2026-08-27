@@ -50,15 +50,29 @@ Every invocation is a fresh run. The pre-flight worker MUST overwrite any stale
   "completedHostsThisPass": [],
   "containerPreview": [],
   "workaroundAudit": [],
-  "finalHealth": null
+  "finalHealth": null,
+  "deploymentBase": { "revision": null, "source": "unconfirmed" }
 }
 ```
 
-Workers preserve all fields, update the file atomically (write valid JSON to a
-temporary file in `/tmp`, then rename it), and append timestamped, auditable
-events with phase, host when applicable, action, outcome, and evidence. Store
-full preview, audit, repair, skip, restart, and endpoint results rather than only
-summaries.
+Workers preserve all fields and update the file atomically (write valid JSON to a
+temporary file in `/tmp`, then rename it). Use this canonical shape; do not
+invent alternate field names or nesting:
+
+- `skippedHosts`: objects with `host`, `reason`, and optional `intentional`.
+- `events`: objects with `timestamp`, `phase`, optional `host`, `action`,
+  `outcome`, and `evidence`. Host completion uses `action: "host_visit"` and
+  the terminal status as `outcome`.
+- `finalHealth`: an object with `checkedAt`, `tailscale`, flat `endpoints`
+  (each including `host`, expected/actual status, and `passed`), `allPassed`,
+  `excludedHosts`, and `hostsWithoutEndpoints`; use `null` only before the
+  first health gate.
+- `deploymentBase`: `{ "revision": string|null, "source": string }`, set by
+  pre-flight. A `null` revision means no confirmed prior deployment revision.
+
+Store full preview, audit, repair, skip, restart, and endpoint results rather
+than only summaries. The coordinator validates this exact shape before relying
+on a terminal report.
 
 There is no mid-fleet resume. An interruption or lost child fails closed; a
 later invocation starts over and pre-flight replaces stale `/tmp` state. Never
@@ -88,7 +102,8 @@ and does not deploy or repair anything.
 3. Probe every canonical SSH alias with BatchMode and a short timeout, for
    example `ssh -o BatchMode=yes -o ConnectTimeout=10 <alias> true`.
 4. Record unreachable hosts in `skippedHosts` and events. They are skips, not
-   blockers; Anton may be asleep.
+   blockers; Anton may be asleep. Record the confirmed prior deployment
+   revision in `deploymentBase`; if unavailable, set its revision to `null`.
 5. Return `PREFLIGHT_BLOCKED` if every host is unreachable or any blocker
    remains. Otherwise return `PREFLIGHT_READY`.
 
@@ -99,7 +114,12 @@ On `PREFLIGHT_BLOCKED`, the coordinator stops and reports the blockers.
 This phase is advisory: do not deploy or modify files.
 
 - Inspect the old/new diffs for `apps/fetcher/containers.toml` and
-  `apps/fetcher/containers-sha.nix` and account for every changed image.
+  `apps/fetcher/containers-sha.nix` and account for every changed image. Use
+  `deploymentBase.revision..HEAD` when the revision is confirmed. Otherwise use
+  `$(git merge-base HEAD @{upstream})..HEAD` only as an **inferred branch
+  delta**, label it as such, and state that it is not a confirmed deployed
+  delta. Never silently substitute a clean working-tree diff, `HEAD^`, or an
+  arbitrary historical range.
 - Classify each change as `major`, `ordinary`, or `unknown-version`. Obtain old
   and new release versions from OCI metadata when possible. A digest alone
   never proves a release version; `UNKNOWN VERSION` is not a major upgrade.
@@ -144,10 +164,15 @@ The worker follows this exact sequence:
    built/pushed system path. Anton exit 4 may be a spurious dbus-broker timeout;
    generation equality, not the exit code alone, decides activation.
 5. Diagnose and minimally repair a real eval, build, push, activation, or remote
-   failure. Stage new repository files and never mask a failure. If another
-   deployment is needed, verify the fix with
-   `colmena build --on <owning-host> --impure`; do not perform a second or
-   out-of-order apply. The restarted canonical pass performs it.
+   failure. Stage new repository files and never mask a failure. For a stalled
+   remote Nix build, inspect the lock holder, process tree, progress twice at a
+   short interval, network state, and resources. Never delete a Nix lock file.
+   Signal only identity-verified orphaned or no-progress process groups; record
+   the PIDs, evidence, and signals. After cleanup, run only
+   `colmena build --on <owning-host> --impure` to verify the closure before any
+   later apply. If another deployment is needed, verify the fix with that same
+   targeted build; do not perform a second or out-of-order apply. The restarted
+   canonical pass performs it.
 6. After a clean switch, first ensure local Tailscale is up, then verify every
    documented endpoint for every non-skipped host using the expected statuses
    in host mapping—not only this host's endpoints. Store complete results in
@@ -177,7 +202,8 @@ coordinator validates it and chooses the next action without applying it twice.
 | `PREVIEW_COMPLETE` | Preview | Preview persisted; launch workaround audit. |
 | `AUDIT_COMPLETE` | Audit | Audit persisted; start the canonical host loop. |
 | `CLEAN_DEPLOYED` | Host | Append the host to `completedHostsThisPass`; advance one slot. |
-| `SKIPPED_UNREACHABLE` | Host | Ensure the host is in `skippedHosts`; exclude its endpoints and advance one slot. |
+| `SKIPPED_UNREACHABLE` | Host | Ensure the host is in `skippedHosts` with an unreachable reason; exclude its endpoints and advance one slot. |
+| `SKIPPED_OPERATOR_APPROVED` | Host | Only after direct operator authorization is quoted in state; ensure `intentional: true`, exclude its endpoints, and advance one slot. This never waives pre-flight, order, activation, or health gates. |
 | `FIXED_AFTER_FAILURE` | Host | Increment `restartCount`, append repair/restart evidence, clear `completedHostsThisPass`; launch a fresh Stormwind worker. |
 | `ABORTED` | Any worker | Stop immediately and preserve the exact stop point and next action. |
 
@@ -196,7 +222,8 @@ Before reporting success, validate state rather than relying on prose:
   statuses pass.
 
 If any invariant fails, report `aborted`. Otherwise report `success` when no
-host was skipped or `partial` when at least one host was unreachable. Include:
+host was skipped or `partial` when at least one host was skipped, whether
+unreachable or operator-approved. Include:
 
 - overall status and canonical deployed order for the final clean pass;
 - skipped hosts;
@@ -217,6 +244,8 @@ host was skipped or `partial` when at least one host was unreachable. Include:
 | Any repair/change/heal | `FIXED_AFTER_FAILURE`; clear pass and restart at Stormwind |
 | Restart limit | Three; a fourth required restart aborts |
 | Unreachable host | Record, skip its endpoints, continue, final status `partial` |
+| Intentional host skip | Require direct operator authorization, record `intentional: true`, and return `SKIPPED_OPERATOR_APPROVED`; never mislabel it unreachable |
+| Stalled Nix build | Inspect lock holder and progress; never delete lock files; identity-verify processes, clean up with TERM only, then targeted-build before a fresh pass |
 | Child/status ambiguity | Fail closed as `ABORTED` |
 | Resume | Never from stale `/tmp` state |
 
