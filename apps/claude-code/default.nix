@@ -34,7 +34,7 @@ in
       inherit (platformMeta) hash;
     };
 
-    nativeBuildInputs = [makeWrapper] ++ lib.optionals stdenv.isLinux [patchelf];
+    nativeBuildInputs = [makeWrapper] ++ lib.optionals stdenv.hostPlatform.isLinux [patchelf];
 
     buildInputs = [bun];
 
@@ -49,7 +49,7 @@ in
     installPhase = ''
       runHook preInstall
       install -Dm755 $src $out/bin/.claude-unwrapped
-      ${lib.optionalString stdenv.isLinux ''
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
         # Patch only the interpreter, preserving the rest of the binary
         patchelf --set-interpreter ${glibc}/lib/ld-linux-x86-64.so.2 $out/bin/.claude-unwrapped
       ''}

@@ -8,7 +8,7 @@
   inherit (inputs.nixpkgs-woodpecker-agent.legacyPackages.${prev.stdenv.hostPlatform.system}) woodpecker-agent;
 
   spotify =
-    if prev.stdenv.isDarwin
+    if prev.stdenv.hostPlatform.isDarwin
     then
       prev.spotify.overrideAttrs (_: {
         src = prev.fetchurl {

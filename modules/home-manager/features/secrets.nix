@@ -8,7 +8,7 @@
 in {
   # Workaround for sops-nix LaunchAgent having empty PATH on macOS
   # The LaunchAgent needs /usr/bin in PATH to find 'getconf' for DARWIN_USER_TEMP_DIR
-  launchd.agents.sops-nix = lib.mkIf pkgs.stdenv.isDarwin {
+  launchd.agents.sops-nix = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     config = {
       EnvironmentVariables.PATH = lib.mkForce "/usr/bin:/bin:/usr/sbin:/sbin";
     };
@@ -19,7 +19,7 @@ in {
   # races with that phase and fails with "Bootstrap failed: 5". Keep the
   # activation node for ordering, but let Home Manager own agent loading.
   home = {
-    activation.sops-nix = lib.mkIf pkgs.stdenv.isDarwin (
+    activation.sops-nix = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (
       lib.mkForce (lib.hm.dag.entryAfter ["linkGeneration"] "")
     );
 

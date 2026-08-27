@@ -5,7 +5,7 @@
 }: let
   # Platform-specific Chrome/Chromium configuration
   browserConfig =
-    if stdenv.isDarwin
+    if stdenv.hostPlatform.isDarwin
     then {
       # On macOS, use the system-installed Chrome
       executablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
