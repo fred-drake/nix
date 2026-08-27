@@ -215,6 +215,7 @@ in {
       # A lightweight worker available in every Pi project. Projects may add
       # specialized definitions under .pi/agents/ without affecting it.
       ".pi/agent/agents/generalist.md".source = ../../../apps/agent-common/agents/generalist.md;
+      ".pi/agent/agents/reviewer.md".source = ../../../apps/agent-common/agents/reviewer.md;
 
       ".pi/agent/settings.json".source = settingsJson;
 
