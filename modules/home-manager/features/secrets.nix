@@ -231,6 +231,12 @@ in {
         key = "password";
       };
 
+      context7-api-key = {
+        sopsFile = config.secrets.workstation.mcp.context7;
+        mode = "0400";
+        key = "data";
+      };
+
       ref-mcp-api-key = {
         sopsFile = config.secrets.workstation.mcp.ref-mcp;
         mode = "0400";
@@ -611,6 +617,14 @@ in {
         mode = "0400";
         key = "api-key";
       };
+    };
+
+    templates.context7-env = {
+      path = "${home}/.config/fish/conf.d/context7-env.fish";
+      mode = "0400";
+      content = ''
+        set -gx CONTEXT7_API_KEY '${config.sops.placeholder.context7-api-key}'
+      '';
     };
 
     # Authenticate Nix's own github: flake-input fetches so `nix flake update`
