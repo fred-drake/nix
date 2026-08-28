@@ -55,7 +55,10 @@ in {
       ../../modules/services/tailscale-saas.nix
     ];
 
-    services.tailscale.extraUpFlags = ["--advertise-routes=10.1.0.0/16"];
+    services.tailscale.extraUpFlags = [
+      "--advertise-routes=10.1.0.0/16"
+      "--advertise-exit-node"
+    ];
 
     _module.args = {
       inherit secrets;
