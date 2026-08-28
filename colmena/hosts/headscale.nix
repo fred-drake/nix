@@ -55,7 +55,7 @@ in {
       ../../modules/services/tailscale-saas.nix
     ];
 
-    services.tailscale.extraUpFlags = [
+    services.tailscale.extraSetFlags = [
       "--advertise-routes=10.1.0.0/16"
       "--advertise-exit-node"
     ];
