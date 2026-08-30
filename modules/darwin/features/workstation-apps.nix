@@ -73,6 +73,7 @@ lib.mkMerge [
         "gstreamer-runtime"
         "inkscape"
         "krita"
+        "logitech-g-hub"
         "macdown"
         "maestral"
         "miniconda"
