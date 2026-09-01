@@ -18,6 +18,7 @@
   pi-coding-agent = pkgs.callPackage ../../../apps/pi-coding-agent.nix {
     pi-pin = import ../../../apps/fetcher/pi-coding-agent.nix;
   };
+  pi-acp = pkgs.callPackage ../../../apps/pi-acp.nix {};
 
   # Pi packages registered via local-path `packages` entries. Each must be a
   # built package directory in the store (apps/pi-*.nix).
@@ -204,7 +205,10 @@
   });
 in {
   home = {
-    packages = [pi-coding-agent];
+    packages = [
+      pi-coding-agent
+      pi-acp
+    ];
 
     sessionVariables = {
       PI_SUBAGENT_MUX = "herdr";
@@ -221,6 +225,18 @@ in {
       ".pi/agent/agents/reviewer.md".source = ../../../apps/agent-common/agents/reviewer.md;
 
       ".pi/agent/settings.json".source = settingsJson;
+
+      # Buzz discovers ACP harnesses from this macOS application-support path.
+      # The adapter inherits this account's Pi models, authentication, tools, and skills.
+      "Library/Application Support/xyz.block.buzz.app/custom_harnesses/pi.json".text = builtins.toJSON {
+        id = "pi";
+        label = "pi";
+        command = "${pi-acp}/bin/pi-acp";
+        args = [];
+        env = {};
+        install_instructions_url = "";
+        install_hint = "Managed declaratively by Home Manager.";
+      };
 
       ".pi/agent/models.json" = {
         text = modelsJson;
