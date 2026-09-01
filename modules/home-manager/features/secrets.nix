@@ -418,6 +418,12 @@ in {
         key = "api-key";
       };
 
+      vultr-api-key = {
+        sopsFile = config.secrets.workstation.cloud.vultr;
+        mode = "0400";
+        key = "api-key";
+      };
+
       cloudflare-account-id = {
         sopsFile = config.secrets.workstation.cloud.cloudflare;
         mode = "0400";
