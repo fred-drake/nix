@@ -42,6 +42,12 @@
     rev = "53048666b05b4799081517d00e09e0a2dd688678";
     hash = "sha256-xaxkXFpzH4s2OIOcZqPy+HzfRAy2HbKpagjMhY+uinA=";
   };
+  "apollo-skills-src" = pkgs.fetchFromGitHub {
+    owner = "apollographql";
+    repo = "skills";
+    rev = "c288eb80629dd2309eed81f23d693f66a452d043";
+    hash = "sha256-YSmu2te3xwvQzshGhKNzKgldUg0lBMgHwGiNxFeDAv8=";
+  };
   "vercel-agent-skills-src" = pkgs.fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-skills";
@@ -63,8 +69,8 @@
   "marketing-skills-src" = pkgs.fetchFromGitHub {
     owner = "coreyhaines31";
     repo = "marketingskills";
-    rev = "e55de886fe7580ec75cdb7ded5092b33f7d4ed58";
-    hash = "sha256-CRaR8T+sFtb3Vgi14AnqKjPSo9tvo5LFQHDK4AgAEa4=";
+    rev = "d4ff28a9c8d56c06809860bf2800d4f5224b52db";
+    hash = "sha256-MXsX+1y3qf5dWCuc9mafKLgRNkb7LjwEdr2tKznw4K8=";
   };
   "variate-src" = pkgs.fetchFromGitHub {
     owner = "Nutlope";
@@ -81,7 +87,7 @@
   "herdr-src" = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
-    rev = "0032c3b42751b6da9c5b1a91546b3c1a425d67f1";
-    hash = "sha256-LNLqK7TyaypzFa6SFSWX3CKsY7eHoYYD+z4hU0QW64A=";
+    rev = "cc88b3b8e5bb9f7d9f23ed6ae85a52fd7b5b9ed6";
+    hash = "sha256-B5Tlex5ueCRyNTGA2m45FkaRlm4H2ZoylIKz9YxdGRM=";
   };
 }

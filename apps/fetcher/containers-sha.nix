@@ -106,7 +106,7 @@ _: {
   "ghcr.io" = {
     "block/buzz" = {
       "main" = {
-        "linux/amd64" = "ghcr.io/block/buzz@sha256:da42a82f3ced6cde8155085334739350a37d6084b042beb4a6152e4195f34cb7";
+        "linux/amd64" = "ghcr.io/block/buzz@sha256:0420f164f44cd194c2b6ba466820956f0f376d60fcc5d7e9faaf0c6bb6180a7c";
       };
     };
     "browserless/chromium" = {
@@ -121,7 +121,7 @@ _: {
     };
     "linuxserver/bazarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:8f569b3eb7bbaf845f2bd0a557b9b00a2d95fc89b1aa95f64a02fdb078e1432f";
+        "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:819327cb5da94a4187bd0512a8f6f8632541404e52cf5977a96e8865d983b07b";
       };
     };
     "linuxserver/calibre-web" = {

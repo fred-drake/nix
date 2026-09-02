@@ -17,7 +17,7 @@ in
     '';
 
     # Updated with the generated lockfile by update-codex-acp.sh.
-    npmDepsHash = "sha256-ebdWkIpOozNCUgiDBrO5M7EruBvL07W9xCDirx3KHNw=";
+    npmDepsHash = "sha256-380mrCNkMOU9TwfZT/y/zbVQpWDUIEuSy7eqBNDTW/I=";
 
     dontNpmBuild = true;
     nativeBuildInputs = [makeWrapper];

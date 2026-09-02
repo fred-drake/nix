@@ -70,8 +70,8 @@
   "herdr-src" = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
-    rev = "0032c3b42751b6da9c5b1a91546b3c1a425d67f1";
-    hash = "sha256-LNLqK7TyaypzFa6SFSWX3CKsY7eHoYYD+z4hU0QW64A=";
+    rev = "cc88b3b8e5bb9f7d9f23ed6ae85a52fd7b5b9ed6";
+    hash = "sha256-B5Tlex5ueCRyNTGA2m45FkaRlm4H2ZoylIKz9YxdGRM=";
   };
   "pi-subagents-src" = pkgs.fetchFromGitHub {
     owner = "edxeth";

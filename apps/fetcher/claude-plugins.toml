@@ -39,6 +39,13 @@ url = "https://github.com/netresearch/agent-rules-skill"
 name = "anthropic-skills-src"
 url = "https://github.com/anthropics/skills"
 
+# Apollo Rust best-practices skill (apollographql/skills). No root plugin
+# manifest; claude-code.nix curates only skills/rust-best-practices into a
+# synthesized plugin.
+[[repos]]
+name = "apollo-skills-src"
+url = "https://github.com/apollographql/skills"
+
 # Vercel agent skills (vercel-labs/agent-skills). No root plugin manifest;
 # claude-code.nix curates a subset (web-design-guidelines,
 # vercel-react-best-practices, composition-patterns) into a synthesized plugin.

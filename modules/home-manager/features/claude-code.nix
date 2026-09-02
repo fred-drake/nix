@@ -542,6 +542,20 @@ in {
       repository = "https://github.com/anthropics/skills";
     };
 
+    # Apollo skills (apollographql/skills) - curated subset. No root plugin
+    # manifest upstream, so synthesize one exposing only rust-best-practices.
+    # Load via:
+    #   claude --plugin-dir ~/skills/all/apollo-skills
+    "skills/all/apollo-skills/skills/rust-best-practices" = {
+      source = "${claude-plugins-src.apollo-skills-src}/skills/rust-best-practices";
+      recursive = true;
+    };
+    "skills/all/apollo-skills/.claude-plugin/plugin.json".text = builtins.toJSON {
+      name = "apollo-skills";
+      description = "Apollo Rust best-practices skill.";
+      repository = "https://github.com/apollographql/skills";
+    };
+
     # Vercel agent skills (vercel-labs/agent-skills) - curated subset. No root
     # plugin manifest upstream, so synthesize one. The vercel-react-best-practices
     # skill lives in the react-best-practices/ directory. Load via:
