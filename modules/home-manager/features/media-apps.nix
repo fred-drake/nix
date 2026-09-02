@@ -18,7 +18,6 @@ in {
       wiki-tui
     ])
     ++ lib.optionals isWorkstation (with pkgs; [
-      spotify
       inkscape
       podman
       podman-tui

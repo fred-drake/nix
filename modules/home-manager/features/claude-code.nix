@@ -453,43 +453,43 @@ in {
     };
 
     # Samber Go skills plugin - opt-in, load via:
-    #   claude --plugin-dir ~/plugins/cc-skills-golang
-    "plugins/cc-skills-golang" = {
+    #   claude --plugin-dir ~/skills/all/cc-skills-golang
+    "skills/all/cc-skills-golang" = {
       source = "${claude-plugins-src.cc-skills-golang-src}";
       recursive = true;
     };
 
     # Superpowers plugin (obra/superpowers) - opt-in, load via:
-    #   claude --plugin-dir ~/plugins/superpowers
-    "plugins/superpowers" = {
+    #   claude --plugin-dir ~/skills/all/superpowers
+    "skills/all/superpowers" = {
       source = "${claude-plugins-src.superpowers-src}";
       recursive = true;
     };
 
-    # --- Opt-in skill/plugin bundles (load via claude --plugin-dir ~/plugins/<name>) ---
+    # --- Opt-in skill/plugin bundles (load via claude --plugin-dir ~/skills/all/<name>) ---
 
     # Andrej Karpathy behavioral skills (forrestchang/andrej-karpathy-skills).
     # Self-contained plugin (.claude-plugin/plugin.json at root). Load via:
-    #   claude --plugin-dir ~/plugins/andrej-karpathy-skills
-    "plugins/andrej-karpathy-skills" = {
+    #   claude --plugin-dir ~/skills/all/andrej-karpathy-skills
+    "skills/all/andrej-karpathy-skills" = {
       source = "${claude-plugins-src.karpathy-skills-src}";
       recursive = true;
     };
 
     # Netresearch AGENTS.md generator skill. Self-contained plugin; pi also
     # loads this through modules/home-manager/features/pi.nix skills.
-    "plugins/agent-rules-skill" = {
+    "skills/all/agent-rules-skill" = {
       source = "${claude-plugins-src.agent-rules-skill-src}";
       recursive = true;
     };
 
-    # herdr agent skill (ogulcancelik/herdr). Upstream keeps the reusable skill
-    # at repo-root SKILL.md; wrap just that file under skills/herdr so pi loads
-    # only the user-facing herdr control skill, not the repo's maintenance skills.
-    "plugins/herdr/skills/herdr/SKILL.md" = {
-      source = "${claude-plugins-src.herdr-src}/SKILL.md";
+    # herdr agent skill (ogulcancelik/herdr). Wrap the reusable skill under
+    # skills/herdr so pi loads only the user-facing herdr control skill, not the
+    # repo's maintenance skills.
+    "skills/all/herdr/skills/herdr/SKILL.md" = {
+      source = "${claude-plugins-src.herdr-src}/skills/herdr/SKILL.md";
     };
-    "plugins/herdr/.claude-plugin/plugin.json".text = builtins.toJSON {
+    "skills/all/herdr/.claude-plugin/plugin.json".text = builtins.toJSON {
       name = "herdr";
       description = "Control herdr from inside herdr: manage workspaces, tabs, panes, agents, output reads, and state waits.";
       repository = "https://github.com/ogulcancelik/herdr";
@@ -497,17 +497,29 @@ in {
 
     # Marketing skills (coreyhaines31/marketingskills) - one plugin bundling 43
     # skills. Load via:
-    #   claude --plugin-dir ~/plugins/marketing-skills
-    "plugins/marketing-skills" = {
+    #   claude --plugin-dir ~/skills/all/marketing-skills
+    "skills/all/marketing-skills" = {
       source = "${claude-plugins-src.marketing-skills-src}";
+      recursive = true;
+    };
+
+    # Variate skills (Nutlope/variate).
+    "skills/all/variate" = {
+      source = "${claude-plugins-src.variate-src}";
+      recursive = true;
+    };
+
+    # Slavingia skills (slavingia/skills).
+    "skills/all/slavingia-skills" = {
+      source = "${claude-plugins-src.slavingia-skills-src}";
       recursive = true;
     };
 
     # Trail of Bits security skills (trailofbits/skills) - a marketplace of 39
     # self-contained plugins under plugins/<name>. Load an individual plugin
     # via its subdir, e.g.:
-    #   claude --plugin-dir ~/plugins/trailofbits/plugins/modern-python
-    "plugins/trailofbits" = {
+    #   claude --plugin-dir ~/skills/all/trailofbits/plugins/modern-python
+    "skills/all/trailofbits" = {
       source = "${claude-plugins-src.trailofbits-skills-src}";
       recursive = true;
     };
@@ -515,16 +527,16 @@ in {
     # Anthropic example skills (anthropics/skills) - curated subset. Upstream is
     # a marketplace with no root plugin.json, so synthesize one exposing just
     # the skills we want. Load via:
-    #   claude --plugin-dir ~/plugins/anthropic-skills
-    "plugins/anthropic-skills/skills/frontend-design" = {
+    #   claude --plugin-dir ~/skills/all/anthropic-skills
+    "skills/all/anthropic-skills/skills/frontend-design" = {
       source = "${claude-plugins-src.anthropic-skills-src}/skills/frontend-design";
       recursive = true;
     };
-    "plugins/anthropic-skills/skills/pdf" = {
+    "skills/all/anthropic-skills/skills/pdf" = {
       source = "${claude-plugins-src.anthropic-skills-src}/skills/pdf";
       recursive = true;
     };
-    "plugins/anthropic-skills/.claude-plugin/plugin.json".text = builtins.toJSON {
+    "skills/all/anthropic-skills/.claude-plugin/plugin.json".text = builtins.toJSON {
       name = "anthropic-skills";
       description = "Curated Anthropic example skills: frontend-design, pdf.";
       repository = "https://github.com/anthropics/skills";
@@ -533,33 +545,33 @@ in {
     # Vercel agent skills (vercel-labs/agent-skills) - curated subset. No root
     # plugin manifest upstream, so synthesize one. The vercel-react-best-practices
     # skill lives in the react-best-practices/ directory. Load via:
-    #   claude --plugin-dir ~/plugins/vercel-agent-skills
-    "plugins/vercel-agent-skills/skills/web-design-guidelines" = {
+    #   claude --plugin-dir ~/skills/all/vercel-agent-skills
+    "skills/all/vercel-agent-skills/skills/web-design-guidelines" = {
       source = "${claude-plugins-src.vercel-agent-skills-src}/skills/web-design-guidelines";
       recursive = true;
     };
-    "plugins/vercel-agent-skills/skills/react-best-practices" = {
+    "skills/all/vercel-agent-skills/skills/react-best-practices" = {
       source = "${claude-plugins-src.vercel-agent-skills-src}/skills/react-best-practices";
       recursive = true;
     };
-    "plugins/vercel-agent-skills/skills/composition-patterns" = {
+    "skills/all/vercel-agent-skills/skills/composition-patterns" = {
       source = "${claude-plugins-src.vercel-agent-skills-src}/skills/composition-patterns";
       recursive = true;
     };
-    "plugins/vercel-agent-skills/.claude-plugin/plugin.json".text = builtins.toJSON {
+    "skills/all/vercel-agent-skills/.claude-plugin/plugin.json".text = builtins.toJSON {
       name = "vercel-agent-skills";
       description = "Curated Vercel agent skills: web-design-guidelines, vercel-react-best-practices, composition-patterns.";
       repository = "https://github.com/vercel-labs/agent-skills";
     };
 
     # Remotion best-practices skill (remotion-dev/skills) - no plugin manifest
-    # upstream, so synthesize one around skills/remotion. Load via:
-    #   claude --plugin-dir ~/plugins/remotion-skills
-    "plugins/remotion-skills/skills/remotion" = {
-      source = "${claude-plugins-src.remotion-skills-src}/skills/remotion";
+    # upstream, so synthesize one around skills/remotion-best-practices. Load via:
+    #   claude --plugin-dir ~/skills/all/remotion-skills
+    "skills/all/remotion-skills/skills/remotion" = {
+      source = "${claude-plugins-src.remotion-skills-src}/skills/remotion-best-practices";
       recursive = true;
     };
-    "plugins/remotion-skills/.claude-plugin/plugin.json".text = builtins.toJSON {
+    "skills/all/remotion-skills/.claude-plugin/plugin.json".text = builtins.toJSON {
       name = "remotion-skills";
       description = "Remotion best-practices skill for React video creation.";
       repository = "https://github.com/remotion-dev/skills";

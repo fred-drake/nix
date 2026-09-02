@@ -3,9 +3,9 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "agent-browser" = {
-    "version" = "0.35.0";
-    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.35.0.tgz";
-    "url-hash" = "sha256-+D/7eMYHF63hJNU4uEtKynJXYxvTJG5zLJxE78OhhuU=";
+    "version" = "0.36.0";
+    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.36.0.tgz";
+    "url-hash" = "sha256-hYp1N2ADTXPGvBfdiV+RFB7wPD/MqXg0izeOJtLWF+Q=";
   };
   "ccstatusline" = {
     "version" = "2.2.27";
@@ -13,9 +13,9 @@
     "url-hash" = "sha256-T2Cb3tENjBBkUWzvuQLtWTkasru6l9WT6KEtB+LaWMI=";
   };
   "codex-acp" = {
-    "version" = "1.6.2";
-    "url" = "https://registry.npmjs.org/@agentclientprotocol/codex-acp/-/codex-acp-1.6.2.tgz";
-    "url-hash" = "sha256-A0Sf0NN3OSA4Ie229vu4Rajmog99opTO3UpsxxISGdY=";
+    "version" = "1.8.0";
+    "url" = "https://registry.npmjs.org/@agentclientprotocol/codex-acp/-/codex-acp-1.8.0.tgz";
+    "url-hash" = "sha256-VGnILTVFsREmIlROFrTWkxwirfMi+/IOdmTuj8iTerI=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";

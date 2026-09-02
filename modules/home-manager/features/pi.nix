@@ -197,10 +197,10 @@
       ];
     };
     skills = [
-      "${config.home.homeDirectory}/plugins/superpowers/skills"
-      "${config.home.homeDirectory}/plugins/andrej-karpathy-skills/skills"
-      "${config.home.homeDirectory}/plugins/agent-rules-skill/skills"
-      "${config.home.homeDirectory}/plugins/herdr/skills"
+      "${config.home.homeDirectory}/skills/all/superpowers/skills"
+      "${config.home.homeDirectory}/skills/all/andrej-karpathy-skills/skills"
+      "${config.home.homeDirectory}/skills/all/agent-rules-skill/skills"
+      "${config.home.homeDirectory}/skills/all/herdr/skills"
     ];
   });
 in {

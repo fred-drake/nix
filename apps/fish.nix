@@ -159,8 +159,8 @@ in {
       hermes = "ssh orgrimmar podman exec -it hermes hermes";
       cld = "claude --add-dir ~/Screenshots";
       cldc = "claude --add-dir ~/Screenshots --continue --dangerously-skip-permissions";
-      cld-go = "claude --add-dir ~/Screenshots --plugin-dir ~/plugins/cc-skills-golang --plugin-dir ~/plugins/superpowers";
-      pi-go = "pi --skill ~/plugins/cc-skills-golang/skills";
+      cld-go = "claude --add-dir ~/Screenshots --plugin-dir ~/skills/all/cc-skills-golang --plugin-dir ~/skills/all/superpowers";
+      pi-go = "pi --skill ~/skills/all/cc-skills-golang/skills";
       pi-resume = "pi --mcp-config ~/mcp/resume.json";
       df = "duf";
       k = "kubectl";
