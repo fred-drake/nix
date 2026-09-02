@@ -38,6 +38,8 @@ in {
     file.".local/bin/buzz-backend-gnomeregan".source = "${buzz-backend-gnomeregan}/bin/buzz-backend-gnomeregan";
 
     file.".config/herdr/config.toml".text = ''
+      onboarding = false
+
       [keys]
       prefix = "ctrl+a"
       switch_workspace = "prefix+shift+1..9"

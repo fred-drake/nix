@@ -161,6 +161,8 @@ in {
       cldc = "claude --add-dir ~/Screenshots --continue --dangerously-skip-permissions";
       cld-go = "claude --add-dir ~/Screenshots --plugin-dir ~/skills/all/cc-skills-golang --plugin-dir ~/skills/all/superpowers";
       pi-go = "pi --skill ~/skills/all/cc-skills-golang/skills";
+      pi-marketing = "pi --no-skills --skill ~/skills/all/marketing-skills/skills";
+      pi-entrepreneur = "pi --no-skills --skill ~/skills/all/slavingia-skills/skills";
       pi-resume = "pi --mcp-config ~/mcp/resume.json";
       df = "duf";
       k = "kubectl";
