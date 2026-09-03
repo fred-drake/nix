@@ -46,7 +46,7 @@ fi
 rm -f "$acp_dir/package-lock.json"
 (
   cd "$acp_dir"
-  npm install --ignore-scripts --no-audit --no-fund --loglevel=error
+  nix shell nixpkgs#nodejs --command npm install --ignore-scripts --no-audit --no-fund --loglevel=error
 )
 
 missing_integrity=$(jq '[.packages | to_entries[] | select(.value.resolved != null and .value.integrity == null)] | length' "$acp_dir/package-lock.json")
@@ -68,7 +68,7 @@ jq -n --arg version "$codex_version" '{
 }' >"$codex_dir/package.json"
 (
   cd "$codex_dir"
-  npm install --ignore-scripts --no-audit --no-fund --loglevel=error
+  nix shell nixpkgs#nodejs --command npm install --ignore-scripts --no-audit --no-fund --loglevel=error
 )
 
 missing_integrity=$(jq '[.packages | to_entries[] | select(.value.resolved != null and .value.integrity == null)] | length' "$codex_dir/package-lock.json")

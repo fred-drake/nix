@@ -106,7 +106,7 @@ _: {
   "ghcr.io" = {
     "block/buzz" = {
       "main" = {
-        "linux/amd64" = "ghcr.io/block/buzz@sha256:0420f164f44cd194c2b6ba466820956f0f376d60fcc5d7e9faaf0c6bb6180a7c";
+        "linux/amd64" = "ghcr.io/block/buzz@sha256:583d0f0ad38c436c9486b6e5a423f68ef2c82ef0b3b1d754c80409f312083697";
       };
     };
     "browserless/chromium" = {
@@ -141,7 +141,7 @@ _: {
     };
     "linuxserver/prowlarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/prowlarr@sha256:b5688a5a527b048c9f520f7a00941fceed1dd54c6f4b2b887b6fb4b3859a2109";
+        "linux/amd64" = "ghcr.io/linuxserver/prowlarr@sha256:20ac4a451d4526b0f1be9f474210eb98541384e64596c3cf5eb76787b251afb4";
       };
     };
     "linuxserver/radarr" = {
@@ -151,7 +151,7 @@ _: {
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:7302365720e54d49b584c5dc1928df3c3f7f9de8368ae307c36c22d8218e5860";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:c687ea35a84f180a4c830ca905f30fd764dc8dcbec6bb032b38dd2b4ca19b572";
       };
     };
     "linuxserver/sonarr" = {
@@ -166,7 +166,7 @@ _: {
     };
     "recyclarr/recyclarr" = {
       "8" = {
-        "linux/amd64" = "ghcr.io/recyclarr/recyclarr@sha256:9addab19e5fd172e8a4cfcb7dbee2ba0b132ae44161bb46849395209f5f7ef43";
+        "linux/amd64" = "ghcr.io/recyclarr/recyclarr@sha256:9361158a23ec030e340b129780abe5692435b1efbf53698305218caf525ff248";
       };
     };
     "seerr-team/seerr" = {

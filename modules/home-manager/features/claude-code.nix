@@ -7,6 +7,7 @@
   realClaude = "/etc/profiles/per-user/${config.home.username}/bin/claude";
 
   claude-plugins-src = import ../../../apps/fetcher/claude-plugins-src.nix {inherit pkgs;};
+  repos-src = import ../../../apps/fetcher/repos-src.nix {inherit pkgs;};
   lsp-plugin = import ../../../apps/claude-code/lsp-plugin.nix {
     inherit pkgs;
     inherit (claude-plugins-src) claude-plugins-official-src;
@@ -463,6 +464,13 @@ in {
     #   claude --plugin-dir ~/skills/all/superpowers
     "skills/all/superpowers" = {
       source = "${claude-plugins-src.superpowers-src}";
+      recursive = true;
+    };
+
+    # Matt Pocock's skills are installed declaratively but not registered with
+    # any harness; select them explicitly where desired.
+    "skills/all/matt-pocock-skills" = {
+      source = "${repos-src.matt-pocock-skills-src}";
       recursive = true;
     };
 

@@ -464,8 +464,8 @@ wheels = [
 
 [[package]]
 name = "pyicloud"
-version = "2.6.6.dev24"
-source = { git = "https://github.com/timlaing/pyicloud#d909d7a17d6957a640c296e6bd9f5c708f52285c" }
+version = "2.6.6.dev33"
+source = { git = "https://github.com/timlaing/pyicloud#b4ffe42f05f992136d87652eec8f03bb48e6603f" }
 dependencies = [
     { name = "certifi" },
     { name = "cryptography" },

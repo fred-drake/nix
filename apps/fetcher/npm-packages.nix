@@ -8,9 +8,9 @@
     "url-hash" = "sha256-hYp1N2ADTXPGvBfdiV+RFB7wPD/MqXg0izeOJtLWF+Q=";
   };
   "ccstatusline" = {
-    "version" = "2.2.27";
-    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.2.27.tgz";
-    "url-hash" = "sha256-T2Cb3tENjBBkUWzvuQLtWTkasru6l9WT6KEtB+LaWMI=";
+    "version" = "2.2.29";
+    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.2.29.tgz";
+    "url-hash" = "sha256-3FgL4V0EN4cR8uFfDXZ4zhSqDct7IOVXqJsNlCoGeeU=";
   };
   "codex-acp" = {
     "version" = "1.8.0";
