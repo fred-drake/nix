@@ -1,6 +1,4 @@
-{inputs, ...}: final: prev:
-(import ./glance.nix {inherit inputs;} final prev)
-// {
+{inputs, ...}: _final: prev: {
   # Pin woodpecker-agent to the rev frozen in flake input
   # nixpkgs-woodpecker-agent so it stays in lockstep with the server
   # image pinned in apps/fetcher/containers.toml. See

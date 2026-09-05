@@ -30,12 +30,9 @@ in {
     # (prettier, lndir, …). Stable modules + unstable pkgs hits real mismatches
     # (e.g. systemd unit skew), so unstable hosts must align the module set
     # with the package set here rather than only overriding nixpkgs.pkgs.
-    # gnomeregan uses a bare nixpkgs (no mkPkgs overlays), so apply the
-    # glance-from-main overlay here directly. See overlays/glance.nix.
     nodeNixpkgs.gnomeregan = import nixpkgs-unstable {
       system = "x86_64-linux";
       overlays = [
-        (import ../overlays/glance.nix {inherit inputs;})
         (import ../overlays/pyicloud.nix {inherit inputs;})
       ];
     };

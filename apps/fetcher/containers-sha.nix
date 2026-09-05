@@ -45,6 +45,11 @@ _: {
         "linux/amd64" = "docker.io/filebrowser/filebrowser@sha256:1bc61f3b452ae458c0f5be7867fcc0c78476bbd48c5546b41d7d66a6df04db71";
       };
     };
+    "glanceapp/glance" = {
+      "latest" = {
+        "linux/amd64" = "docker.io/glanceapp/glance@sha256:e71f219c5894dde27644daea2fc77984e20bcab0e54a71f8f845a3ed5a5f06f6";
+      };
+    };
     "gotenberg/gotenberg" = {
       "latest" = {
         "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:9ced40d1b764b4538d79a7597137f42f0c187499d0f283208b227d1e62c55c3f";

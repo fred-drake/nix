@@ -241,7 +241,6 @@ Notes:
 - Only override packages tagged `WORKAROUND(` are candidates for removal.
   Other entries in `overlays/default.nix` are **intentional pins**, not
   staleness-driven — leave them alone:
-  - `glance` (built from main on purpose),
   - `woodpecker-agent` (locked to the server image; governed by the
     woodpecker-upgrade skill),
   - `spotify` darwin src override.
