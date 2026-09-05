@@ -155,6 +155,7 @@ in {
     ];
 
     shellAbbrs = {
+      agy = "agy --dangerously-skip-permissions";
       cm = "chezmoi";
       hermes = "ssh orgrimmar podman exec -it hermes hermes";
       cld = "claude --add-dir ~/Screenshots";
