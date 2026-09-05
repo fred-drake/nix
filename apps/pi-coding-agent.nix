@@ -61,6 +61,7 @@ buildNpmPackage (finalAttrs: {
     npx tsgo -p packages/telemetry/tsconfig.build.json
     npx tsgo -p packages/ai/tsconfig.build.json
     npx tsgo -p packages/tui/tsconfig.build.json
+    npx tsgo -p packages/chord/tsconfig.build.json
     npx tsgo -p packages/agent/tsconfig.build.json
     npx tsgo -p packages/protocol/tsconfig.build.json
     npx tsgo -p packages/client/tsconfig.build.json
@@ -78,6 +79,7 @@ buildNpmPackage (finalAttrs: {
 
       # Replace workspace deps needed at runtime with real copies
       for ws in @earendil-works/pi-ai:packages/ai \
+                @earendil-works/chord:packages/chord \
                 @earendil-works/pi-agent-core:packages/agent \
                 @earendil-works/pi-client:packages/client \
                 @earendil-works/pi-protocol:packages/protocol \
