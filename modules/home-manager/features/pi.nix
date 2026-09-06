@@ -201,6 +201,7 @@
       "${config.home.homeDirectory}/skills/all/andrej-karpathy-skills/skills"
       "${config.home.homeDirectory}/skills/all/agent-rules-skill/skills"
       "${config.home.homeDirectory}/skills/all/herdr/skills"
+      "${config.home.homeDirectory}/skills/all/graphify"
     ];
   });
 in {
