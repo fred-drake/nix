@@ -692,6 +692,7 @@ in {
     ".gemini/GEMINI.md".source = config.lib.file.mkOutOfStoreSymlink "${home}/.gemini/AGENTS.md";
     ".claude/CLAUDE.md".source = config.lib.file.mkOutOfStoreSymlink "${home}/.gemini/AGENTS.md";
     ".gemini/config/skills/graphify".source = config.lib.file.mkOutOfStoreSymlink "${home}/skills/all/graphify";
+    ".gemini/config/skills/agent-rules".source = config.lib.file.mkOutOfStoreSymlink "${home}/skills/all/agent-rules-skill/skills/agent-rules";
 
     ".claude/settings.json".text = builtins.toJSON {
       env = {
