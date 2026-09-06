@@ -686,9 +686,12 @@ in {
       };
     };
 
-    # Generic agent instructions live in apps/agent-common/AGENTS.md; the same
-    # source is surfaced to Claude Code as ~/.claude/CLAUDE.md.
-    ".claude/CLAUDE.md".text = builtins.readFile ../../../apps/agent-common/AGENTS.md;
+    # Generic agent instructions live in apps/agent-common/AGENTS.md; surfaced to
+    # Antigravity as ~/.gemini/AGENTS.md with ~/.claude/CLAUDE.md symlinked to it.
+    ".gemini/AGENTS.md".text = builtins.readFile ../../../apps/agent-common/AGENTS.md;
+    ".gemini/GEMINI.md".source = config.lib.file.mkOutOfStoreSymlink "${home}/.gemini/AGENTS.md";
+    ".claude/CLAUDE.md".source = config.lib.file.mkOutOfStoreSymlink "${home}/.gemini/AGENTS.md";
+    ".gemini/config/skills/graphify".source = config.lib.file.mkOutOfStoreSymlink "${home}/skills/all/graphify";
 
     ".claude/settings.json".text = builtins.toJSON {
       env = {
