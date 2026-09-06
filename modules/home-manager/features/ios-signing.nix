@@ -28,6 +28,13 @@ in
         key = "data";
         path = "${provisioningProfilesDir}/thrifter-app-store.mobileprovision";
       };
+
+      tour-practice-app-store-mobileprovision = {
+        sopsFile = config.secrets.workstation.projects.tour-practice.app-store-mobileprovision;
+        mode = "0400";
+        key = "data";
+        path = "${provisioningProfilesDir}/tour-practice-app-store.mobileprovision";
+      };
     };
 
     home.activation.ensureXcodeProvisioningDir = lib.hm.dag.entryBefore ["sops-nix"] ''
