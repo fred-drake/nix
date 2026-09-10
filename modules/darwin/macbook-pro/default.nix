@@ -5,7 +5,7 @@ _: {
 
   homebrew = {
     brews = ["container" "steipete/tap/remindctl"];
-    casks = ["antigravity" "antigravity-ide" "antigravity-cli" "bartender" "block-buzz" "naps2" "proxy-audio-device" "elgato-stream-deck" "elgato-camera-hub"];
+    casks = ["antigravity" "antigravity-ide" "antigravity-cli" "bartender" "naps2" "proxy-audio-device" "elgato-stream-deck" "elgato-camera-hub"];
     masApps = {
       "iWallpaper - Live Wallpaper" = 1552826194;
     };

@@ -56,9 +56,6 @@ _: {
       };
     };
     "library/redis" = {
-      "7-alpine" = {
-        "linux/amd64" = "docker.io/library/redis@sha256:1db42ccef14898aa29bae778452d567534b59c107129cbc1163fb552de184d3c";
-      };
       "latest" = {
         "linux/amd64" = "docker.io/library/redis@sha256:76961cd2a0f40ef6fdd334b6b1b3a76a2bad1848d89f3030ca30a7521d4a9493";
       };
@@ -66,16 +63,6 @@ _: {
     "livekit/egress" = {
       "v1.13.0" = {
         "linux/amd64" = "docker.io/livekit/egress@sha256:a3e61a70479694a5075cff3c081ab633f34d3bfa778adc6089935c96908b6550";
-      };
-    };
-    "minio/mc" = {
-      "RELEASE.2025-08-13T08-35-41Z" = {
-        "linux/amd64" = "docker.io/minio/mc@sha256:eb4ea9884b77704230e2423e9004d2fa738dc272876b9cc41a297d29443b8780";
-      };
-    };
-    "minio/minio" = {
-      "RELEASE.2025-09-07T16-13-09Z" = {
-        "linux/amd64" = "docker.io/minio/minio@sha256:a1a8bd4ac40ad7881a245bab97323e18f971e4d4cba2c2007ec1bedd21cbaba2";
       };
     };
     "nousresearch/hermes-agent" = {
@@ -89,9 +76,6 @@ _: {
       };
       "17" = {
         "linux/amd64" = "docker.io/postgres@sha256:d13db94ae661d517c5ed57c509a578d5ea64aae639871ba25294f4f42d83de28";
-      };
-      "17-alpine" = {
-        "linux/amd64" = "docker.io/postgres@sha256:7456ef82e5f5bc43d997f4781bbd7c0d6389bff397564649a356e206ba473aee";
       };
       "18" = {
         "linux/amd64" = "docker.io/postgres@sha256:7341002d2b8c7c5bdd7542a671a95b36196c0b5b888daf454ae4fc33ba5346d7";
@@ -109,11 +93,6 @@ _: {
     };
   };
   "ghcr.io" = {
-    "block/buzz" = {
-      "main" = {
-        "linux/amd64" = "ghcr.io/block/buzz@sha256:583d0f0ad38c436c9486b6e5a423f68ef2c82ef0b3b1d754c80409f312083697";
-      };
-    };
     "browserless/chromium" = {
       "v2.18.0" = {
         "linux/amd64" = "ghcr.io/browserless/chromium@sha256:bc7b9b4ce328e07226fdedb1e1166b7d0420c1ae6e009f8d2946837c100bee0f";

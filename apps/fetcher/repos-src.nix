@@ -91,10 +91,4 @@
     rev = "69d9413342acbecd1f6ab748300337418ec8ac6d";
     hash = "sha256-Yv/Kc7L7o1Qg0U4ZnmWM5KRr1de463Gn6+lC4KcJ9lc=";
   };
-  "buzz-src" = pkgs.fetchFromGitHub {
-    owner = "block";
-    repo = "buzz";
-    rev = "4749bc7be3cdb78c2db4ce4864775ba7ab60b4cc";
-    hash = "sha256-Np+2EtiJ+LMJyaIxGF2zByNoaWqLszyTXA+O61k7IiQ=";
-  };
 }

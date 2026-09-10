@@ -63,7 +63,6 @@ in {
       ../../modules/services/actual.nix
       ../../modules/services/otel-collector.nix
       ../../modules/services/hermes.nix
-      ../../modules/services/buzz.nix
       ../../modules/services/tailscale-saas.nix
     ];
 

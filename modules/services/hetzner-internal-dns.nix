@@ -34,9 +34,6 @@ in {
         (address "calibre-desktop" "10.1.1.4")
         (address "calibre-desktop-web" "10.1.1.4")
         (address "hermes" "10.1.1.4")
-        (address "buzz" "10.1.1.4")
-        # Preserve the IPv4-mapped answer used by Buzz's Reqwest client.
-        "/buzz.${domain}/::ffff:10.1.1.4"
         (address "gitea" "10.1.1.4")
         (address "gitea-status" "10.1.1.4")
         (address "woodpecker" "10.1.1.4")
