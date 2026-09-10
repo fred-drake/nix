@@ -13,14 +13,13 @@
     inherit (pkgs) playwright-driver;
   };
   herdr = pkgs.callPackage ../../../apps/herder.nix {};
-  buzz-backend-gnomeregan = pkgs.callPackage ../../../apps/buzz-backend-gnomeregan.nix {};
   # isWorkstation lives on the OS-level config (darwin/nixos), not in the
   # home-manager scope, so read it via osConfig like media-apps.nix does.
   isWorkstation = (osConfig.my or {}).isWorkstation or config.my.isWorkstation;
 in {
   home = {
     packages =
-      [agent-browser buzz-backend-gnomeregan ccstatusline herdr]
+      [agent-browser ccstatusline herdr]
       ++ (with pkgs; [
         llama-cpp
         python313Packages.huggingface-hub
@@ -34,8 +33,6 @@ in {
         then [(pkgs.writeShellScriptBin "docker" ''exec podman "$@"'')]
         else []
       );
-
-    file.".local/bin/buzz-backend-gnomeregan".source = "${buzz-backend-gnomeregan}/bin/buzz-backend-gnomeregan";
 
     file.".config/herdr/config.toml".text = ''
       onboarding = false
