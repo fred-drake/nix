@@ -19,28 +19,9 @@
   config,
   lib,
   pkgs,
-  pkgsUnstable,
   ...
 }: let
   containers-sha = import ../../apps/fetcher/containers-sha.nix {inherit pkgs;};
-  buzzCli = pkgsUnstable.callPackage ../../apps/buzz-cli.nix {pkgs = pkgsUnstable;};
-  hermesBuzzAdapter = pkgs.callPackage ../../apps/hermes-buzz-adapter.nix {};
-  managedConfig = pkgs.writeTextDir "config.yaml" (builtins.toJSON {
-    gateway.platforms.buzz = {
-      enabled = true;
-      extra = {
-        transport = "auto";
-        poll_interval = 4;
-        cli_path = "/usr/local/bin/buzz";
-        allow_all_users = false;
-        require_mention = true;
-      };
-    };
-    display.platforms.buzz = {
-      interim_assistant_messages = false;
-      tool_progress = "off";
-    };
-  });
   mkNginxProxy = import ../../lib/mk-nginx-proxy.nix {inherit config;};
 
   host = "hermes";
@@ -104,8 +85,6 @@ in
       port = dashboardPort;
     })
     {
-      environment.systemPackages = [buzzCli];
-
       # Shared system identity for the container and the vault sync service.
       users.groups.hermes.gid = hermesGid;
       users.users.hermes = {
@@ -172,7 +151,7 @@ in
       virtualisation.oci-containers = {
         backend = "podman";
         containers.hermes = {
-          image = containers-sha."docker.io"."nousresearch/hermes-agent"."v2026.8.3"."linux/amd64";
+          image = containers-sha."docker.io"."nousresearch/hermes-agent"."latest"."linux/amd64";
           autoStart = true;
           # NixOS oci-containers uses `cmd` (NOT `command`) for the args passed
           # to the image entrypoint. Without this the image runs its default
@@ -187,9 +166,6 @@ in
           volumes = [
             "${dataDir}:/opt/data"
             "${vaultDir}:/opt/data/vault"
-            "${buzzCli}/bin/buzz:/usr/local/bin/buzz:ro"
-            "${managedConfig}:/etc/hermes:ro"
-            "${hermesBuzzAdapter}/adapter.py:/opt/hermes/plugins/platforms/buzz/adapter.py:ro"
           ];
           environment = {
             TZ = "America/New_York";

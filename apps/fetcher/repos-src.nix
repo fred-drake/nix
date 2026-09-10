@@ -97,10 +97,4 @@
     rev = "4749bc7be3cdb78c2db4ce4864775ba7ab60b4cc";
     hash = "sha256-Np+2EtiJ+LMJyaIxGF2zByNoaWqLszyTXA+O61k7IiQ=";
   };
-  "hermes-agent-v2026.8.3-src" = pkgs.fetchFromGitHub {
-    owner = "NousResearch";
-    repo = "hermes-agent";
-    rev = "3c27eb6234bf91b8ceee9e9071591b31e9b148cb";
-    hash = "sha256-S6TSGgpf37N8YgbTv70dT+LaPiiaQ4/lJV+js2hnCPk=";
-  };
 }

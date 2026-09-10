@@ -198,7 +198,7 @@ architectures = ["linux/amd64"]
 [[containers]]
 repository = "docker.io"
 name = "nousresearch/hermes-agent"
-tag = "v2026.8.3"
+tag = "latest"
 architectures = ["linux/amd64"]
 [[containers]]
 repository = "docker.io"

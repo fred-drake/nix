@@ -79,8 +79,8 @@ _: {
       };
     };
     "nousresearch/hermes-agent" = {
-      "v2026.8.3" = {
-        "linux/amd64" = "docker.io/nousresearch/hermes-agent@sha256:c0cab4e3711bcb27a312be1b3776254fc06fd50d5f7a6b8017915fc7171cb39e";
+      "latest" = {
+        "linux/amd64" = "docker.io/nousresearch/hermes-agent@sha256:ef2234ea4c4b070919e665d67bc167a470a110af4b667623347df8c8cdd69189";
       };
     };
     "postgres" = {
