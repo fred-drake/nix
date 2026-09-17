@@ -91,7 +91,7 @@ No web endpoints. Health = the colmena switch verified active over ssh.
 
 | URL | Service | Expect |
 |-----|---------|--------|
-| http://gnomeregan.internal.freddrake.com:8084/ | glance dashboard (plain HTTP, no TLS on this host) | 2xx |
+| https://glance.internal.freddrake.com/ | glance dashboard | 2xx |
 
 ### headscale ("gateway")
 
