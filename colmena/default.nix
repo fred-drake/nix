@@ -34,6 +34,7 @@ in {
       system = "x86_64-linux";
       overlays = [
         (import ../overlays/pyicloud.nix {inherit inputs;})
+        (import ../overlays/sops-install-secrets.nix)
       ];
     };
     # anton (WSL) also tracks unstable end-to-end. It previously used only
@@ -45,6 +46,7 @@ in {
       config.allowUnfree = true;
       overlays = [
         (import ../overlays/pyicloud.nix {inherit inputs;})
+        (import ../overlays/sops-install-secrets.nix)
       ];
     };
   };

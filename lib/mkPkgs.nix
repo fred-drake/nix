@@ -19,6 +19,7 @@
       (import ../overlays/default.nix {inherit inputs;})
       (import ../overlays/graphify.nix {inherit inputs;})
       (import ../overlays/pyicloud.nix {inherit inputs;})
+      (import ../overlays/sops-install-secrets.nix)
     ]
     ++ inputPackageOverlays;
   mkPkgs = nixpkgsSrc: {

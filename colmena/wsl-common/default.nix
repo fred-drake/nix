@@ -34,7 +34,7 @@
   sops.age.sshKeyPaths = ["/home/nixos/.ssh/id_ed25519"];
 
   nix.settings = {
-    experimental-features = lib.mkDefault "nix-command flakes";
+    experimental-features = lib.mkDefault ["nix-command" "flakes"];
     trusted-users = ["root" "@wheel"];
   };
 
