@@ -4,7 +4,7 @@ _: {
   my.hasIosSigning = true;
 
   homebrew = {
-    brews = ["container" "steipete/tap/remindctl" "rjyo/moshi/moshi-hook"];
+    brews = ["container" "steipete/tap/remindctl" "rjyo/moshi/moshi-hook" "mosh"];
     casks = ["antigravity" "antigravity-ide" "antigravity-cli" "bartender" "naps2" "proxy-audio-device" "elgato-stream-deck" "elgato-camera-hub"];
     masApps = {
       "iWallpaper - Live Wallpaper" = 1552826194;
