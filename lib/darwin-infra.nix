@@ -22,6 +22,7 @@
         "sst/homebrew-tap" = inputs.homebrew-sst;
         "steipete/homebrew-tap" = inputs.homebrew-steipete;
         "facebook/homebrew-fb" = inputs.homebrew-facebook-fb;
+        "rjyo/homebrew-moshi" = inputs.homebrew-rjyo;
       };
       mutableTaps = false;
     };

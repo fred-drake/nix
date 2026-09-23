@@ -124,6 +124,10 @@
       url = "github:facebook/homebrew-fb";
       flake = false;
     };
+    homebrew-rjyo = {
+      url = "github:rjyo/homebrew-moshi";
+      flake = false;
+    };
 
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";

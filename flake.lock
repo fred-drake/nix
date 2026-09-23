@@ -397,6 +397,22 @@
         "type": "github"
       }
     },
+    "homebrew-rjyo": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790129910,
+        "narHash": "sha256-aWEtBnYK4PDT+TIZLvtRptca3lxrBYoqr+nQIGIPoME=",
+        "owner": "rjyo",
+        "repo": "homebrew-moshi",
+        "rev": "226bffb1496ce459a91b038d9e17c4d1635a7645",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rjyo",
+        "repo": "homebrew-moshi",
+        "type": "github"
+      }
+    },
     "homebrew-sst": {
       "flake": false,
       "locked": {
@@ -1193,6 +1209,7 @@
         "homebrew-core": "homebrew-core",
         "homebrew-facebook-fb": "homebrew-facebook-fb",
         "homebrew-nikitabobko": "homebrew-nikitabobko",
+        "homebrew-rjyo": "homebrew-rjyo",
         "homebrew-sst": "homebrew-sst",
         "homebrew-steipete": "homebrew-steipete",
         "hyprland": "hyprland",

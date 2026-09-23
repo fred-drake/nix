@@ -38,6 +38,7 @@ lib.mkMerge [
         "sst/tap"
         "steipete/tap"
         "facebook/fb"
+        "rjyo/moshi"
       ];
     };
   }
