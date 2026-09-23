@@ -140,6 +140,24 @@ Match → safe to re-add to known_hosts (key did not rotate). Mismatch → the h
 key actually changed, which would also break its sops decryption (see SOPS
 identity model above).
 
+### Colmena build failure: missing Home Manager derivation when building from macOS
+
+When running `colmena build --on gnomeregan --impure` from macOS, Colmena may fail with:
+
+```
+error: store path '/nix/store/...-unit-home-manager-fdrake.service.drv' does not exist
+```
+
+This happens because Darwin evaluates the Linux configuration where intermediate derivation (`.drv`) files for Home Manager user units are generated during eval but not copied or instantiated in the local store.
+
+**Fix:** Build or realize the system directly on Gnomeregan:
+
+```bash
+ssh gnomeregan "nix build --no-link -L .#nixosConfigurations.gnomeregan.config.system.build.toplevel"
+```
+
+Or run `colmena apply --on gnomeregan --impure` directly (which pushes the built closure rather than separate uninstantiated `.drv` paths).
+
 ## File touch-points
 
 | Concern | File |

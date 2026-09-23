@@ -92,19 +92,23 @@ or explicit ports.
 
 ### 1. Pre-flight worker
 
-The worker reads `.pi/skills/infrastructure/SKILL.md` and
-`.pi/skills/infrastructure/references/host-mapping.md`, overwrites the state,
+The worker reads `.agents/skills/infrastructure/SKILL.md` (or
+`.pi/skills/infrastructure/SKILL.md`) and
+`.agents/skills/infrastructure/references/host-mapping.md`, overwrites the state,
 and does not deploy or repair anything.
 
 1. Run `git status --porcelain` in the repository. Any untracked `*.nix` file is
    a blocker because a git+file flake cannot see it.
 2. Confirm Colmena is available.
-3. Probe every canonical SSH alias with BatchMode and a short timeout, for
+3. Run `colmena build --dry-run --impure` to catch cross-fleet evaluation errors,
+   type errors, or Nixpkgs stable/unstable API mismatches across all hosts before
+   applying to any machine.
+4. Probe every canonical SSH alias with BatchMode and a short timeout, for
    example `ssh -o BatchMode=yes -o ConnectTimeout=10 <alias> true`.
-4. Record unreachable hosts in `skippedHosts` and events. They are skips, not
+5. Record unreachable hosts in `skippedHosts` and events. They are skips, not
    blockers; Anton may be asleep. Record the confirmed prior deployment
    revision in `deploymentBase`; if unavailable, set its revision to `null`.
-5. Return `PREFLIGHT_BLOCKED` if every host is unreachable or any blocker
+6. Return `PREFLIGHT_BLOCKED` if every host is unreachable or any blocker
    remains. Otherwise return `PREFLIGHT_READY`.
 
 On `PREFLIGHT_BLOCKED`, the coordinator stops and reports the blockers.
@@ -150,7 +154,8 @@ This phase is advisory and performs no host apply.
 For every canonical slot, launch one fresh host worker, including hosts already
 marked unreachable. Every host worker reads the infrastructure skill and host
 mapping; the Gnomeregan worker also reads
-`.pi/skills/infrastructure/references/gnomeregan.md`.
+`.agents/skills/infrastructure/references/gnomeregan.md` (or
+`.pi/skills/infrastructure/references/gnomeregan.md`).
 
 The worker follows this exact sequence:
 
@@ -164,7 +169,11 @@ The worker follows this exact sequence:
    built/pushed system path. Anton exit 4 may be a spurious dbus-broker timeout;
    generation equality, not the exit code alone, decides activation.
 5. Diagnose and minimally repair a real eval, build, push, activation, or remote
-   failure. Stage new repository files and never mask a failure. For a stalled
+   failure. Stage new repository files and never mask a failure. For a transient
+   network stream drop during a fixed-output derivation (FOD) download (such as
+   an HTTP/2 stream reset on proxy.golang.org or GitHub release tarball timeout)
+   where no code or configuration changed, realize or build the FOD directly on
+   the host or retry once before declaring a deployment failure. For a stalled
    remote Nix build, inspect the lock holder, process tree, progress twice at a
    short interval, network state, and resources. Never delete a Nix lock file.
    Signal only identity-verified orphaned or no-progress process groups; record
@@ -173,22 +182,26 @@ The worker follows this exact sequence:
    later apply. If another deployment is needed, verify the fix with that same
    targeted build; do not perform a second or out-of-order apply. The restarted
    canonical pass performs it.
-6. After a clean switch, first ensure local Tailscale is up, then verify every
-   documented endpoint for every non-skipped host using the expected statuses
-   in host mapping—not only this host's endpoints. Store complete results in
-   `finalHealth`.
-7. Diagnose root causes and re-probe for at most three heal rounds. A config fix
-   needing deployment gets only a targeted build; the restarted pass applies
-   it in order. Never fake a status, remove a check, or disable a service just
-   to pass.
+6. After a clean switch, first ensure local Tailscale is up. Perform a quick
+   transport warm-up (e.g. `tailscale ping <host>` to establish peer direct wireguard
+   paths) to prevent initial Wireguard route negotiation latency from misclassifying
+   as a service outage. Then verify every documented endpoint for every non-skipped
+   host using the expected statuses in host mapping—not only this host's endpoints.
+   Store complete results in `finalHealth`.
+7. Diagnose root causes and re-probe for at most three heal rounds. Distinguish
+   between local transport path establishment (which settles after wireguard handshake)
+   and actual service recovery. A config fix needing deployment gets only a targeted
+   build; the restarted pass applies it in order. Never fake a status, remove a check,
+   or disable a service just to pass.
 8. Atomically record the result and end with exactly one host status token.
 
 Any repaired failure, any repository or remote-state change during the host
-visit, any local probe-path recovery, or any endpoint heal MUST return
-`FIXED_AFTER_FAILURE`, even when everything is healthy at the end.
-`CLEAN_DEPLOYED` is reserved for a clean activation and healthy whole fleet
-with no repair or state change. Unresolved failures, required manual action, or
-heal exhaustion return `ABORTED`.
+visit, or any genuine service heal MUST return `FIXED_AFTER_FAILURE`, even when
+everything is healthy at the end. Transport Wireguard route establishment during
+the initial warmup ping does not trigger a restart once settled. `CLEAN_DEPLOYED`
+is reserved for a clean activation and healthy whole fleet with no repair or
+state change. Unresolved failures, required manual action, or heal exhaustion
+return `ABORTED`.
 
 ## Status and transition contract
 
