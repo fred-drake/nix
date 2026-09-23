@@ -3,7 +3,7 @@
   stdenv,
   rustPlatform,
   pkgs,
-  zig_0_15,
+  zig_0_16,
   xcbuild,
   cctools,
 }: let
@@ -18,7 +18,7 @@ in
 
     src = repos-src.herdr-src;
 
-    zigDeps = zig_0_15.fetchDeps {
+    zigDeps = zig_0_16.fetchDeps {
       inherit (finalAttrs) pname version;
       src = "${finalAttrs.src}/vendor/libghostty-vt";
       fetchAll = true;
@@ -26,7 +26,7 @@ in
     };
 
     nativeBuildInputs =
-      [zig_0_15.hook]
+      [zig_0_16.hook]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         xcbuild # xcode-select/xcrun for Zig Darwin SDK discovery in the sandbox
         cctools # libtool for libghostty-vt's Zig build

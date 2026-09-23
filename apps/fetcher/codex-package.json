@@ -1,8 +1,8 @@
 {
   "name": "codex-runtime",
-  "version": "0.152.1",
+  "version": "0.155.1",
   "private": true,
   "dependencies": {
-    "@openai/codex": "0.152.1"
+    "@openai/codex": "0.155.1"
   }
 }

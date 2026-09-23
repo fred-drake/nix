@@ -3,19 +3,19 @@
 # To update packages, run: npm-refresh packages.toml > npm-packages.nix
 {
   "agent-browser" = {
-    "version" = "0.36.0";
-    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.36.0.tgz";
-    "url-hash" = "sha256-hYp1N2ADTXPGvBfdiV+RFB7wPD/MqXg0izeOJtLWF+Q=";
+    "version" = "0.38.1";
+    "url" = "https://registry.npmjs.org/agent-browser/-/agent-browser-0.38.1.tgz";
+    "url-hash" = "sha256-iaffR2H/M15N1TZ+TPBM7Lm6TizBMKAiD3mNGIQU3Gw=";
   };
   "ccstatusline" = {
-    "version" = "2.2.29";
-    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.2.29.tgz";
-    "url-hash" = "sha256-3FgL4V0EN4cR8uFfDXZ4zhSqDct7IOVXqJsNlCoGeeU=";
+    "version" = "2.2.30";
+    "url" = "https://registry.npmjs.org/ccstatusline/-/ccstatusline-2.2.30.tgz";
+    "url-hash" = "sha256-NWR5zB/3Nbdmvrom7ploLN7xQ8YDsPTx/X5qVugn12k=";
   };
   "codex-acp" = {
-    "version" = "1.8.0";
-    "url" = "https://registry.npmjs.org/@agentclientprotocol/codex-acp/-/codex-acp-1.8.0.tgz";
-    "url-hash" = "sha256-VGnILTVFsREmIlROFrTWkxwirfMi+/IOdmTuj8iTerI=";
+    "version" = "1.13.0";
+    "url" = "https://registry.npmjs.org/@agentclientprotocol/codex-acp/-/codex-acp-1.13.0.tgz";
+    "url-hash" = "sha256-yXh7BpkIXj2zp0TvzFkznPeC5JXct4NtA3ceBZC5UIo=";
   };
   "mermaid-cli" = {
     "version" = "0.2.4";
