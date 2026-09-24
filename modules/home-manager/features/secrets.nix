@@ -77,6 +77,13 @@ in {
         key = "data";
       };
 
+      ssh-id-moshi = {
+        sopsFile = config.secrets.workstation.identity.ssh.id_moshi;
+        path = "${home}/.ssh/id_moshi";
+        mode = "0400";
+        key = "data";
+      };
+
       # Private key Hermes (on orgrimmar) uses to sync the PKM-Personal vault
       # repo. Stored here so a copy lives on the workstation too.
       hermes-vault-ssh-key = {
