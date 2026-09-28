@@ -79,6 +79,7 @@ in {
     ignoreShellProgramCheck = true;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPy5EdETPOdH7LQnAQ4nwehWhrnrlrLup/PPzuhe2hF4"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIG5zyrszF2lPQf70BWBFQWZqQh/CzRAoqrtD2LuzC4u fdrake@moshi"
     ];
   };
 
