@@ -103,6 +103,7 @@ in {
     python3
     pyicloud-cli
     srtToTranscript
+    antigravity-cli
   ];
 
   # uvx (used by archive-email's workspace-mcp) downloads pre-built CPython

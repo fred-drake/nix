@@ -32,6 +32,7 @@ in {
     # with the package set here rather than only overriding nixpkgs.pkgs.
     nodeNixpkgs.gnomeregan = import nixpkgs-unstable {
       system = "x86_64-linux";
+      config.allowUnfree = true;
       overlays = [
         (import ../overlays/pyicloud.nix {inherit inputs;})
         (import ../overlays/sops-install-secrets.nix)
