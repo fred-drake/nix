@@ -28,6 +28,7 @@ in {
         nixpkgsVersion
       ]
       ++ deferredNixosModules;
+    sops.package = sops-nix.packages.x86_64-linux.sops-install-secrets;
     my = {
       hostName = "headscale";
       isServer = true;
