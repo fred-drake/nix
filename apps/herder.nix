@@ -36,6 +36,11 @@ in
     # depend on host process details, so Nix-only patches for them are brittle.
     doCheck = false;
 
+    # GNU ld (binutils >= 2.46) fails with ".eh_frame_hdr refers to overlapping FDEs"
+    # when linking libghostty-vt's Zig-compiled object files into herdr on Linux.
+    # Disabling .eh_frame_hdr generation avoids the fatal linker error.
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "--no-eh-frame-hdr";
+
     dontUseZigBuild = true;
     dontUseZigCheck = true;
     dontUseZigInstall = true;
