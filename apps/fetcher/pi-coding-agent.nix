@@ -2,8 +2,8 @@
 # Built from the earendil-works/pi monorepo via buildNpmPackage (see
 # ../pi-coding-agent.nix). Do not edit by hand; run ./apps/fetcher/update-pi.sh.
 {
-  version = "0.87.1";
-  hash = "sha256-GUhlq6t+l6iiViOZ0bkV28v3ZDqcLvEwpZpYZ5JAyDk=";
-  npmDepsHash = "sha256-JBIYoP2vvRNz1HONNvDJ1U3c+nmCJ7/VgNthRTkrkIA=";
-  piAiDataHash = "sha256-NbRDLyfMJmX4a+67mvajmxJRlwiDwwRL2L5PToxzHKA=";
+  version = "1.2.0";
+  hash = "sha256-IjNJvVxjzRur2foQDWPA5iM9sa3ThBoZU1/LT5pU6jc=";
+  npmDepsHash = "sha256-P/KWhkvLjtpWRiwLCHu2iUVyI8nragSnQGWUQNsRhw8=";
+  piAiDataHash = "sha256-w+aUI7yrlxLzGn5bbTRIrjVq+EQ57GvHAfYm9uoWRTU=";
 }

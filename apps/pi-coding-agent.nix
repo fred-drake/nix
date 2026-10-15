@@ -52,20 +52,12 @@ buildNpmPackage (finalAttrs: {
   nativeBuildInputs = [makeBinaryWrapper];
 
   # Build workspace dependencies in order, then the coding-agent.
-  # We invoke tsgo directly for workspace deps to skip pi-ai's
-  # generate-models script which requires network access
-  # (models.generated.ts is committed to the repo).
+  # Upstream provides build:offline which builds all packages in order
+  # without network access (using the restored pi-ai model data).
   buildPhase = ''
     runHook preBuild
 
-    npx tsgo -p packages/telemetry/tsconfig.build.json
-    npx tsgo -p packages/ai/tsconfig.build.json
-    npx tsgo -p packages/tui/tsconfig.build.json
-    npx tsgo -p packages/chord/tsconfig.build.json
-    npx tsgo -p packages/agent/tsconfig.build.json
-    npx tsgo -p packages/protocol/tsconfig.build.json
-    npx tsgo -p packages/client/tsconfig.build.json
-    npm run build --workspace=packages/coding-agent
+    npm run build:offline
 
     runHook postBuild
   '';
@@ -81,13 +73,15 @@ buildNpmPackage (finalAttrs: {
       for ws in @earendil-works/pi-ai:packages/ai \
                 @earendil-works/chord:packages/chord \
                 @earendil-works/pi-agent-core:packages/agent \
-                @earendil-works/pi-client:packages/client \
-                @earendil-works/pi-protocol:packages/protocol \
+                @earendil-works/pi-codemode:packages/codemode \
+                @earendil-works/pi-mcp:packages/mcp \
                 @earendil-works/pi-telemetry:packages/telemetry \
                 @earendil-works/pi-tui:packages/tui; do
         IFS=: read -r pkg src <<< "$ws"
-        rm "$nm/$pkg"
-        cp -r "$src" "$nm/$pkg"
+        if [ -e "$nm/$pkg" ]; then
+          rm -rf "$nm/$pkg"
+          cp -r "$src" "$nm/$pkg"
+        fi
       done
 
       # Delete remaining workspace symlinks

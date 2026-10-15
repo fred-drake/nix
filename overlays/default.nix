@@ -5,6 +5,16 @@
   # .claude/skills/woodpecker-upgrade/SKILL.md before bumping.
   inherit (inputs.nixpkgs-woodpecker-agent.legacyPackages.${prev.stdenv.hostPlatform.system}) woodpecker-agent;
 
+  atuin = prev.atuin.overrideAttrs {
+    doCheck = false;
+  };
+
+  typescript-language-server = prev.typescript-language-server.overrideAttrs (old: {
+    pnpmDeps = old.pnpmDeps.overrideAttrs (_: {
+      outputHash = "sha256-PmyJb8090pEPc09Tbv8RgdvQpzpba2L8ve87+aVncQU=";
+    });
+  });
+
   spotify =
     if prev.stdenv.hostPlatform.isDarwin
     then

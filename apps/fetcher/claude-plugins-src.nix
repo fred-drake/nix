@@ -3,8 +3,8 @@
 ####################################
 {pkgs, ...}: {
   "claude-plugins-official-src" = builtins.fetchTarball {
-    url = "https://github.com/anthropics/claude-plugins-official/archive/db467cc56673fc963ca418b4165c688dfbe77007.tar.gz";
-    sha256 = "0vaa2ghp9kagm6am1ra79njx6lgj2pmx882xiz7hraa9gw1yybll";
+    url = "https://github.com/anthropics/claude-plugins-official/archive/c2bdb427efe8673f190ae862c273cfa368d2390f.tar.gz";
+    sha256 = "02sglzhmfwfhj5nvw7igxmx58ai6cj4kc39jwxjhyiyhcnp3nv2r";
   };
   "cc-marketplace-src" = pkgs.fetchFromGitHub {
     owner = "samber";
@@ -15,14 +15,14 @@
   "cc-skills-golang-src" = pkgs.fetchFromGitHub {
     owner = "samber";
     repo = "cc-skills-golang";
-    rev = "19a0626ae8565d27a7b7bdf59d8d99d94d7e284c";
-    hash = "sha256-owdNtWmTwxzzrmS0XwU/8GKbJmDKl0uqi9VpiBhemps=";
+    rev = "8e899e20ff0cd4dc524af3993e4c62d8ee8c5717";
+    hash = "sha256-GYayraudW1jRetezgPZe3BUOSAc7N94HH/hlAGNXjzc=";
   };
   "superpowers-src" = pkgs.fetchFromGitHub {
     owner = "obra";
     repo = "superpowers";
-    rev = "5bf4e78011075bcfc0dc295f0724994cd123ee71";
-    hash = "sha256-rgeJhjQyABYlhlyFRmgyhbZmmmIPPNkch4CXyTkGEyM=";
+    rev = "bb92a77741419a4ab5f06e711a283343f1ada0c3";
+    hash = "sha256-UCVI+T7j1Xh1LDkrvnJduis7eHFqrizCyGTWAGW5d6U=";
   };
   "karpathy-skills-src" = pkgs.fetchFromGitHub {
     owner = "multica-ai";
@@ -33,20 +33,20 @@
   "agent-rules-skill-src" = pkgs.fetchFromGitHub {
     owner = "netresearch";
     repo = "agent-rules-skill";
-    rev = "7e1a602f6c735d076afa0bf09c4b8e09bf1b8e3b";
-    hash = "sha256-Pa4QVmlFxi8acU9lOAbmdmIrZ70U3ElR3+MhMDupr/U=";
+    rev = "1fb399373792e7e0a9966cdfb201ae192fe95347";
+    hash = "sha256-Ml+n67oqBv1VQXE8p5mHy7qaBvowvarhBBX/+mtkwII=";
   };
   "anthropic-skills-src" = pkgs.fetchFromGitHub {
     owner = "anthropics";
     repo = "skills";
-    rev = "34040c9c568585f6929bedeaad110ad08f079624";
-    hash = "sha256-tI4bTTBfI1ylltklGyiyA7pLoKXEWtrT6lrmwrpLbCw=";
+    rev = "dbd4588f9e1033efb41dad4bef2f7947c8993d44";
+    hash = "sha256-+UIqBnzyeIOvJSKYaDaE3GYPEpLw7qQqyUw5S971AfU=";
   };
   "apollo-skills-src" = pkgs.fetchFromGitHub {
     owner = "apollographql";
     repo = "skills";
-    rev = "c288eb80629dd2309eed81f23d693f66a452d043";
-    hash = "sha256-YSmu2te3xwvQzshGhKNzKgldUg0lBMgHwGiNxFeDAv8=";
+    rev = "aafc8944365a766d48cc519ce8b8575f93f953a4";
+    hash = "sha256-UzLzbqQXU50aD3Bx6rARrn5EuvKne+I0f+/teDMYVOs=";
   };
   "vercel-agent-skills-src" = pkgs.fetchFromGitHub {
     owner = "vercel-labs";
@@ -57,20 +57,20 @@
   "trailofbits-skills-src" = pkgs.fetchFromGitHub {
     owner = "trailofbits";
     repo = "skills";
-    rev = "32e34f8173796e3566a51aee877dc96bc5191f64";
-    hash = "sha256-ujaD5H89JdhYLeqJuSPGsFTYttYDbwLoHBD422w/I1k=";
+    rev = "e1f86a390d4caf28bf1c377a7d86707b2898669c";
+    hash = "sha256-WkNajKsDW4F1GuMMqCh9YwimGi8SgHaLk0jt2q+RbGI=";
   };
   "remotion-skills-src" = pkgs.fetchFromGitHub {
     owner = "remotion-dev";
     repo = "skills";
-    rev = "9682e994989f951c75912fbc49aa10332a512685";
-    hash = "sha256-BRdhHYm2RW7EPx1ZbJgDu075REuxsQXQXPwJooNpGRM=";
+    rev = "7ba4dcf8ebe1626b00baa41e1f2478113719b60b";
+    hash = "sha256-9bcjFgd02/+BXCbvvEOvd0C+WEbtlFYraH6TfqDbKCI=";
   };
   "marketing-skills-src" = pkgs.fetchFromGitHub {
     owner = "coreyhaines31";
     repo = "marketingskills";
-    rev = "5b2c0007766c6a1cf1d53fd8fc73e979e0821022";
-    hash = "sha256-x2dcZrwUMaGK4wHNQtE2TvPH5mBR474mW0Y5fQb19dw=";
+    rev = "55ff469422c3592dac45bcad08dfb40221981c02";
+    hash = "sha256-lTWD1IXOEgtFRg4UPInEbegAsPF1PDY+yfn6uj2NLmw=";
   };
   "variate-src" = pkgs.fetchFromGitHub {
     owner = "Nutlope";
@@ -87,7 +87,7 @@
   "herdr-src" = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
-    rev = "cd8306d7f35d6329d543944a0257b6bc4b297c8b";
-    hash = "sha256-OyvLHxxPBaN/CNhSJVKY0Eosw96zjq/8Ji3FUmRrJGk=";
+    rev = "916fcf8de029c6cac965b50f3cdb9687cd7d1537";
+    hash = "sha256-qi4htt98YMOPi/UEkr8tjOHJlsyY23NCSK6qTncQtaE=";
   };
 }
