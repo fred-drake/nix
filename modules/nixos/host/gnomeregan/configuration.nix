@@ -77,10 +77,10 @@ in {
     options = ["nofail" "x-systemd.device-timeout=10s"];
   };
 
-  services.logind.settings.Login = {
-    HandleLidSwitch = "ignore";
-    HandleLidSwitchExternalPower = "ignore";
-    HandleLidSwitchDocked = "ignore";
+  services.logind = {
+    lidSwitch = "ignore";
+    lidSwitchExternalPower = "ignore";
+    lidSwitchDocked = "ignore";
   };
 
   networking.firewall.allowedTCPPorts = [80 443];
