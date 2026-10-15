@@ -20,6 +20,14 @@ in {
     efi.canTouchEfiVariables = true;
   };
 
+  # Disable aggressive power-saving and ASPM on the Realtek RTL8822CE Wi-Fi
+  # card (rtw88_8822ce). Without this, the card enters deep sleep/low-power
+  # states during idle, dropping carrier and failing to recover after disconnects.
+  boot.extraModprobeConfig = ''
+    options rtw88_core disable_lps_deep=y
+    options rtw88_pci disable_aspm=y
+  '';
+
   # systemd-in-initrd (the default, soon to be the only option in 26.11).
   # Safe to enable now that sops.age.sshKeyPaths points at the host
   # ed25519 key, which lives on / and is accessible from stage 1.
@@ -36,6 +44,11 @@ in {
       enable = true;
       secretsFile = config.sops.secrets.wireless-env.path;
       networks."Hearthstone".pskRaw = "ext:HOME_PSK";
+      # Keep scanning automatically when disconnected, preventing wpa_supplicant
+      # from becoming dormant if the AP temporarily drops or reboots.
+      extraConfig = ''
+        autoscan=exponential:3:300
+      '';
     };
     networkmanager.enable = false;
   };
@@ -93,6 +106,35 @@ in {
   # stage 1, so it works with boot.initrd.systemd enabled.
   sops.age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
 
+  # Wi-Fi connectivity watchdog: periodically verify the default gateway is
+  # reachable. If unreachable after a retry, restart wpa_supplicant.service to
+  # force reassociation and lease renewal.
+  systemd.services.wifi-watchdog = {
+    description = "Wi-Fi gateway connectivity watchdog";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "wifi-watchdog" ''
+        if ! ${pkgs.iputils}/bin/ping -c 3 -W 5 192.168.8.1 >/dev/null 2>&1; then
+          echo "Gateway 192.168.8.1 unreachable, waiting 15s to recheck..."
+          sleep 15
+          if ! ${pkgs.iputils}/bin/ping -c 3 -W 5 192.168.8.1 >/dev/null 2>&1; then
+            echo "Gateway 192.168.8.1 still unreachable; restarting wpa_supplicant.service"
+            ${pkgs.systemd}/bin/systemctl restart wpa_supplicant.service
+          fi
+        fi
+      '';
+    };
+  };
+
+  systemd.timers.wifi-watchdog = {
+    description = "Run Wi-Fi gateway connectivity watchdog every 5 minutes";
+    wantedBy = ["timers.target"];
+    timerConfig = {
+      OnBootSec = "5m";
+      OnUnitActiveSec = "5m";
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     vim
     htop
@@ -104,6 +146,8 @@ in {
     pyicloud-cli
     srtToTranscript
     antigravity-cli
+    iw
+    pciutils
   ];
 
   # uvx (used by archive-email's workspace-mcp) downloads pre-built CPython
