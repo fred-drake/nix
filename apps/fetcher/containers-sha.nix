@@ -47,7 +47,7 @@ _: {
     };
     "glanceapp/glance" = {
       "latest" = {
-        "linux/amd64" = "docker.io/glanceapp/glance@sha256:e71f219c5894dde27644daea2fc77984e20bcab0e54a71f8f845a3ed5a5f06f6";
+        "linux/amd64" = "docker.io/glanceapp/glance@sha256:e976c3f0d43fe4ac2020bd7b496712108bba6ada27fb6784defe0cd187024d9f";
       };
     };
     "gotenberg/gotenberg" = {
