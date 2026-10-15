@@ -5,6 +5,9 @@
   # .claude/skills/woodpecker-upgrade/SKILL.md before bumping.
   inherit (inputs.nixpkgs-woodpecker-agent.legacyPackages.${prev.stdenv.hostPlatform.system}) woodpecker-agent;
 
+  # WORKAROUND(atuin): e2e_capture PTY tests time out under macOS sandboxing on Darwin.
+  # Tracked upstream in Nixpkgs issue #573527 ("Build failure: atuin" on aarch64-darwin).
+  # Remove this override once upstream nixpkgs adds Darwin checkFlags / skips the flaky test.
   atuin = prev.atuin.overrideAttrs {
     doCheck = false;
   };
