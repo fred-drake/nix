@@ -34,6 +34,10 @@ in {
 
   networking = {
     hostName = "gnomeregan";
+    nameservers = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
 
     # PSK comes from a sops-nix secret deployed with wpa_supplicant
     # ownership. Now that NixOS-level sops decryption works reliably at
