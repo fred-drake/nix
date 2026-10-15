@@ -76,7 +76,7 @@ in {
         environmentFiles = [config.sops.secrets.resume-postgresql-env.path];
       };
       resume-minio = {
-        image = "quay.io/minio/minio@sha256:a1a8bd4ac40ad7881a245bab97323e18f971e4d4cba2c2007ec1bedd21cbaba2";
+        image = containers-sha."gitea.internal.freddrake.com"."fdrake/minio"."latest"."linux/amd64";
         autoStart = true;
         extraOptions = ["--network=resume-net"];
         cmd = ["server" "/data"];

@@ -102,6 +102,11 @@ name = "fdrake/traceway"
 tag = "latest"
 architectures = ["linux/amd64"]
 [[containers]]
+repository = "gitea.internal.freddrake.com"
+name = "fdrake/minio"
+tag = "latest"
+architectures = ["linux/amd64"]
+[[containers]]
 repository = "ghcr.io"
 name = "twin/gatus"
 tag = "latest"

@@ -165,6 +165,11 @@ _: {
     };
   };
   "gitea.internal.freddrake.com" = {
+    "fdrake/minio" = {
+      "latest" = {
+        "linux/amd64" = "gitea.internal.freddrake.com/fdrake/minio@sha256:a614d3fd833e346ab37cd0ff0c540f88d5d7ed0d6f0034b20418bb91e1769a51";
+      };
+    };
     "fdrake/traceway" = {
       "latest" = {
         "linux/amd64" = "gitea.internal.freddrake.com/fdrake/traceway@sha256:aaa5ecc261deeffc6f2256517e1641e3c89f181829021a0517012b8d8ea7f679";
