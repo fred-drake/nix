@@ -21,8 +21,7 @@
   # Darwin controllers from evaluating the x86_64-linux Anton and gnomeregan
   # configurations. Darwin hosts continue to receive the full feature set.
   deferredHmModules = builtins.attrValues (lib.removeAttrs config.my.modules.home-manager ["pi"]);
-in {
-  flake.colmena = import ../../colmena {
+  colmenaConfig = import ../../colmena {
     inherit inputs;
     inherit (inputs) self;
     inherit
@@ -40,4 +39,7 @@ in {
       ;
     inherit nixosOptionsModule deferredNixosModules deferredHmModules;
   };
+in {
+  flake.colmena = colmenaConfig;
+  flake.colmenaHive = inputs.colmena.lib.makeHive colmenaConfig;
 }
