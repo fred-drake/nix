@@ -12,6 +12,7 @@
     doCheck = false;
   };
 
+  # WORKAROUND(typescript-language-server): upstream nixpkgs fixed-output pnpmDeps hash mismatch; remove when nixpkgs updates the derivation hash.
   typescript-language-server = prev.typescript-language-server.overrideAttrs (old: {
     pnpmDeps = old.pnpmDeps.overrideAttrs (_: {
       outputHash = "sha256-PmyJb8090pEPc09Tbv8RgdvQpzpba2L8ve87+aVncQU=";
