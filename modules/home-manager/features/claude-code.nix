@@ -470,7 +470,7 @@ in {
     # Matt Pocock's skills are installed declaratively but not registered with
     # any harness; select them explicitly where desired.
     "skills/all/matt-pocock-skills" = {
-      source = "${repos-src.matt-pocock-skills-src}";
+      source = "${claude-plugins-src.matt-pocock-skills-src}";
       recursive = true;
     };
 
@@ -495,7 +495,7 @@ in {
     # skills/herdr so pi loads only the user-facing herdr control skill, not the
     # repo's maintenance skills.
     "skills/all/herdr/skills/herdr/SKILL.md" = {
-      source = "${claude-plugins-src.herdr-src}/skills/herdr/SKILL.md";
+      source = "${repos-src.herdr-src}/skills/herdr/SKILL.md";
     };
     "skills/all/herdr/.claude-plugin/plugin.json".text = builtins.toJSON {
       name = "herdr";

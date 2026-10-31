@@ -79,8 +79,6 @@ url = "https://github.com/Nutlope/variate"
 name = "slavingia-skills-src"
 url = "https://github.com/slavingia/skills"
 
-# herdr agent skill (ogulcancelik/herdr). Upstream keeps the reusable skill at
-# repo-root SKILL.md, so claude-code.nix wraps just that file into a skills/ tree.
 [[repos]]
-name = "herdr-src"
-url = "https://github.com/ogulcancelik/herdr"
+name = "matt-pocock-skills-src"
+url = "https://github.com/mattpocock/skills"

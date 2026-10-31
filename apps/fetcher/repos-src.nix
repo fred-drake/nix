@@ -61,12 +61,6 @@
     rev = "6eceb8e992ba2d1d89d370961a18a1fdeae729fa";
     hash = "sha256-esQiz9nduOm7nAUIq/Y5dMMxpKo2m19lEbZl6iRcxpo=";
   };
-  "scanimage-web-src" = pkgs.fetchFromGitHub {
-    owner = "fred-drake";
-    repo = "scanimage-web";
-    rev = "030c6a985cb22eca47a5fed7f0c67f9786afb284";
-    hash = "sha256-JuGiHHvjz5EC+BUnthjIA9Sgef39fo7QtWjf4kB5U9g=";
-  };
   "herdr-src" = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
@@ -78,12 +72,6 @@
     repo = "pi-subagents";
     rev = "cf6dbf41c17986f3882e6804a68e8fb8282d25e6";
     hash = "sha256-Z95FzKiENUM8BsmkW3uiBNY97/+DTCaa94wA2XCAMcI=";
-  };
-  "matt-pocock-skills-src" = pkgs.fetchFromGitHub {
-    owner = "mattpocock";
-    repo = "skills";
-    rev = "a496f5513d4a4cf889bc48e189e579f4b0bdf6aa";
-    hash = "sha256-XpP8D7V2seR0sJ9bErscXgVLY2+6QiaA8TR/l8v2gx0=";
   };
   "actual-mcp-src" = pkgs.fetchFromGitHub {
     owner = "s-stefanov";

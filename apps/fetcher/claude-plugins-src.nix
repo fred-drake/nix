@@ -84,10 +84,10 @@
     rev = "eb9f57fba03ddb0382ed3bfe6654d3d7df128c70";
     hash = "sha256-TwuhBL6EdM5+l0V/XK1xJ0bduyb15Fd5qe3O/ceEVdg=";
   };
-  "herdr-src" = pkgs.fetchFromGitHub {
-    owner = "ogulcancelik";
-    repo = "herdr";
-    rev = "ee5bfb5041bb3e4a49d591c72308aae3c81ecdde";
-    hash = "sha256-0B58jR/v1vxbK7cwoq++SnOCsED0sHDkgqVMvsrjezE=";
+  "matt-pocock-skills-src" = pkgs.fetchFromGitHub {
+    owner = "mattpocock";
+    repo = "skills";
+    rev = "a496f5513d4a4cf889bc48e189e579f4b0bdf6aa";
+    hash = "sha256-XpP8D7V2seR0sJ9bErscXgVLY2+6QiaA8TR/l8v2gx0=";
   };
 }
