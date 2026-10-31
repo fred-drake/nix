@@ -12,9 +12,16 @@
   # PATH for jobs invoking claude + scripts from PKM-Personal.
   jobPath = "${home}/.local/bin:${home}/.nix-profile/bin:/etc/profiles/per-user/fdrake/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
 in {
-  home.packages = [
-    pkgs.gmail-cleaner
-  ];
+  home = {
+    packages = [
+      pkgs.gmail-cleaner
+    ];
+
+    file.".config/gmail-cleaner/prompt.txt" = {
+      text = config.soft-secrets.app.gmail-cleaner.prompt;
+      force = true;
+    };
+  };
 
   systemd.user = {
     services.process-daily = {

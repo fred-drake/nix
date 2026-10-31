@@ -630,6 +630,12 @@ in {
         mode = "0400";
         key = "api-key";
       };
+
+      gmail-cleaner-jev-api-key = {
+        sopsFile = config.secrets.app.gmail-cleaner;
+        mode = "0400";
+        key = "jev-api-key";
+      };
     };
 
     templates.context7-env = {

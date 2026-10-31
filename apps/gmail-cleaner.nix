@@ -17,6 +17,14 @@ in
 
     postFixup = ''
       wrapProgram $out/bin/gmail-cleaner --run '
+        if [ -z "''${JEV_API_KEY:-}" ]; then
+          for f in "$HOME/.config/sops-nix/secrets/gmail-cleaner-jev-api-key" "''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/secrets/gmail-cleaner-jev-api-key"; do
+            if [ -r "$f" ]; then
+              export JEV_API_KEY="$(cat "$f")"
+              break
+            fi
+          done
+        fi
         if [ -z "''${GMAIL_CLIENT_ID:-}" ]; then
           for f in "$HOME/.config/sops-nix/secrets/google-workspace-client-id" "''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/secrets/google-workspace-client-id"; do
             if [ -r "$f" ]; then

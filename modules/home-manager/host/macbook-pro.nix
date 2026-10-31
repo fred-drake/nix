@@ -5,8 +5,19 @@
 # The app bundles its own daemon and CLI, so the nixpkgs `tailscale` package is
 # intentionally NOT installed here — its CLI cannot talk to the app's sandboxed
 # daemon and would only add a confusing, non-functional binary to $PATH.
-{pkgs, ...}: {
-  home.packages = [
-    pkgs.gmail-cleaner
-  ];
+{
+  config,
+  pkgs,
+  ...
+}: {
+  home = {
+    packages = [
+      pkgs.gmail-cleaner
+    ];
+
+    file.".config/gmail-cleaner/prompt.txt" = {
+      text = config.soft-secrets.app.gmail-cleaner.prompt;
+      force = true;
+    };
+  };
 }
