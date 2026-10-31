@@ -24,6 +24,10 @@
   containers-sha = import ../../apps/fetcher/containers-sha.nix {inherit pkgs;};
   mkNginxProxy = import ../../lib/mk-nginx-proxy.nix {inherit config;};
 
+  # Dormant toggle: keep the full Hermes configuration intact while stopping and
+  # masking the container and vault-sync units. Flip to `true` to re-enable.
+  enabled = false;
+
   host = "hermes";
   dashboardPort = "9119";
   domain = config.soft-secrets.networking.domain;
@@ -104,7 +108,7 @@ in
           key = "data";
           # The container only reads the env file at start, so rotated
           # credentials are stranded unless we restart it on change.
-          restartUnits = ["podman-hermes.service"];
+          restartUnits = lib.optional enabled "podman-hermes.service";
         };
         # ed25519 private key for the gitea vault repo. Read only by the
         # (hermes-owned) sync service — never mounted into the agent container.
@@ -123,7 +127,10 @@ in
           "d ${vaultDir} 0750 ${toString hermesUid} ${toString hermesGid} -"
         ];
 
+        services.podman-hermes.enable = enabled;
+
         services.hermes-vault-sync = {
+          enable = enabled;
           description = "Sync Hermes Obsidian vault with internal gitea";
           unitConfig.ConditionPathExists = "!${vaultSyncInhibit}";
           after = ["network-online.target"];
@@ -139,7 +146,8 @@ in
       };
 
       systemd.timers.hermes-vault-sync = {
-        wantedBy = ["timers.target"];
+        enable = enabled;
+        wantedBy = lib.optional enabled "timers.target";
         unitConfig.ConditionPathExists = "!${vaultSyncInhibit}";
         timerConfig = {
           OnBootSec = "2min";
@@ -152,7 +160,7 @@ in
         backend = "podman";
         containers.hermes = {
           image = containers-sha."docker.io"."nousresearch/hermes-agent"."latest"."linux/amd64";
-          autoStart = true;
+          autoStart = enabled;
           # NixOS oci-containers uses `cmd` (NOT `command`) for the args passed
           # to the image entrypoint. Without this the image runs its default
           # interactive `hermes` CLI, which exits immediately on a non-TTY stdin
