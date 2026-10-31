@@ -22,6 +22,17 @@
   anton = import ./hosts/anton.nix {inherit self nixpkgs-stable nixpkgs-unstable nixos-wsl secrets sops-nix home-manager nixvim nix-index-database nixosOptionsModule deferredNixosModules deferredHmModules;};
   gnomeregan = import ./hosts/gnomeregan.nix {inherit self nixpkgs-stable nixpkgs-unstable secrets sops-nix home-manager nixvim nix-index-database nixosOptionsModule deferredNixosModules deferredHmModules;};
   stormwind = import ./hosts/stormwind.nix {inherit self nixpkgs-stable secrets sops-nix nixosOptionsModule deferredNixosModules;};
+  x86LinuxPkgs = import ../lib/mkPkgs.nix {
+    inherit inputs;
+    system = "x86_64-linux";
+  };
+  pkgsUnstableX86 = x86LinuxPkgs.mkPkgs nixpkgs-unstable {
+    overlays =
+      [
+        (import ../overlays/pyicloud.nix {inherit inputs;})
+      ]
+      ++ x86LinuxPkgs.inputPackageOverlays;
+  };
 in {
   meta = {
     nixpkgs = import nixpkgs-stable {system = "aarch64-linux";};
@@ -30,29 +41,12 @@ in {
     # (prettier, lndir, …). Stable modules + unstable pkgs hits real mismatches
     # (e.g. systemd unit skew), so unstable hosts must align the module set
     # with the package set here rather than only overriding nixpkgs.pkgs.
-    nodeNixpkgs.gnomeregan = import nixpkgs-unstable {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-      overlays = [
-        (import ../overlays/pyicloud.nix {inherit inputs;})
-        (final: _prev: {
-          gmail-cleaner = final.callPackage ../apps/gmail-cleaner.nix {
-            src = inputs.gmail-cleaner;
-          };
-        })
-      ];
-    };
+    nodeNixpkgs.gnomeregan = pkgsUnstableX86;
     # anton (WSL) also tracks unstable end-to-end. It previously used only
     # nixpkgs.pkgs = unstable on top of the stable module set, but unstable
     # systemd 260.1 dropped example/systemd/system/autovt@.service while the
     # stable getty.nix module still references it, breaking system-units.
-    nodeNixpkgs.anton = import nixpkgs-unstable {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-      overlays = [
-        (import ../overlays/pyicloud.nix {inherit inputs;})
-      ];
-    };
+    nodeNixpkgs.anton = pkgsUnstableX86;
   };
 
   # Merge all host configurations

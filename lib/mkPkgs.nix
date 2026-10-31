@@ -37,7 +37,7 @@
       inherit overlays;
     };
 in {
-  inherit mkPkgs baseOverlays;
+  inherit mkPkgs baseOverlays inputPackageOverlays;
 
   pkgs = mkPkgs inputs.nixpkgs {};
   pkgsUnstable = mkPkgs inputs.nixpkgs-unstable {};
