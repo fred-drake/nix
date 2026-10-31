@@ -35,6 +35,11 @@ in {
       config.allowUnfree = true;
       overlays = [
         (import ../overlays/pyicloud.nix {inherit inputs;})
+        (final: _prev: {
+          gmail-cleaner = final.callPackage ../apps/gmail-cleaner.nix {
+            src = inputs.gmail-cleaner;
+          };
+        })
       ];
     };
     # anton (WSL) also tracks unstable end-to-end. It previously used only

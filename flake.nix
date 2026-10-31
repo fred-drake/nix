@@ -174,6 +174,11 @@
       url = "github:linyinfeng/angrr";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    gmail-cleaner = {
+      url = "git+ssh://git@gitea.internal.freddrake.com/fdrake/gmail-cleaner.git";
+      flake = false;
+    };
   };
 
   # Output configuration

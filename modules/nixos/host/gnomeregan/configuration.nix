@@ -149,6 +149,7 @@ in {
     python3
     pyicloud-cli
     srtToTranscript
+    gmail-cleaner
     antigravity-cli
     iw
     pciutils

@@ -241,6 +241,22 @@
         "type": "github"
       }
     },
+    "gmail-cleaner": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793412175,
+        "narHash": "sha256-GiK5eDpTA52QKvSngSsXPAFLts98ILyV9NbzYo6QcM8=",
+        "ref": "refs/heads/master",
+        "rev": "5ab4961786e38197d7b0136020e2c7fe9fa09dff",
+        "revCount": 3,
+        "type": "git",
+        "url": "ssh://git@gitea.internal.freddrake.com/fdrake/gmail-cleaner.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@gitea.internal.freddrake.com/fdrake/gmail-cleaner.git"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -1165,6 +1181,7 @@
         "disko": "disko",
         "firefox-addons": "firefox-addons",
         "flake-parts": "flake-parts",
+        "gmail-cleaner": "gmail-cleaner",
         "home-manager": "home-manager",
         "homebrew-bundle": "homebrew-bundle",
         "homebrew-cask": "homebrew-cask",

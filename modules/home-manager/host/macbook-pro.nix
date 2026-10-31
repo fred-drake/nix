@@ -5,4 +5,8 @@
 # The app bundles its own daemon and CLI, so the nixpkgs `tailscale` package is
 # intentionally NOT installed here — its CLI cannot talk to the app's sandboxed
 # daemon and would only add a confusing, non-functional binary to $PATH.
-_: {}
+{pkgs, ...}: {
+  home.packages = [
+    pkgs.gmail-cleaner
+  ];
+}
