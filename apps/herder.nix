@@ -12,11 +12,13 @@
 in
   rustPlatform.buildRustPackage (finalAttrs: {
     pname = "herdr";
-    inherit (pin) version cargoHash;
+    inherit (pin) version;
 
     __structuredAttrs = true;
 
     src = repos-src.herdr-src;
+
+    cargoLock.lockFile = "${finalAttrs.src}/Cargo.lock";
 
     zigDeps = zig_0_16.fetchDeps {
       inherit (finalAttrs) pname version;

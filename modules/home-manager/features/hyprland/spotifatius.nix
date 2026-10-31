@@ -7,7 +7,7 @@ in
 
     src = repos-src.spotifatius-src;
 
-    cargoHash = "sha256-9yX9zSKeN7j8J4Ux5jre+HEd3yx/Nu6sdyJQbdzDHFI=";
+    cargoLock.lockFile = "${repos-src.spotifatius-src}/Cargo.lock";
 
     nativeBuildInputs = with pkgs; [
       pkg-config

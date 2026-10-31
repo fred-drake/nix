@@ -3,6 +3,5 @@
 # Do not edit by hand; run ./apps/fetcher/update-herdr.sh.
 {
   version = "0.9.5-unstable-2026-10-29";
-  cargoHash = "sha256-hppCIcIEAbefGYz1PgHmGuwCcnsr5iS9WtjTA+gCI2M=";
   zigDepsHash = "sha256-Cy0DdSvce+fhOFIfxHMQGF2b2j16UkS27UpGbfC42XI=";
 }
