@@ -27,12 +27,7 @@
 in {
   # Base configuration for Gnomeregan (local LAN NixOS host).
   _gnomeregan = {
-    nixpkgs.config = {
-      allowUnfree = true;
-      permittedInsecurePackages = [
-        "minio-client-2025-08-13T08-35-41Z"
-      ];
-    };
+    nixpkgs.config.allowUnfree = true;
     imports =
       [
         nixosOptionsModule

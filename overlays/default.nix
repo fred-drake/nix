@@ -19,16 +19,6 @@
     });
   });
 
-  # WORKAROUND(minio-client): go-m1cpu v0.1.6 segfaults in CGo init() on newer Apple Silicon
-  # when querying IORegistry voltage-states5-sram. Disable CGo so go-m1cpu uses its non-CGo path.
-  minio-client = prev.minio-client.overrideAttrs (old: {
-    env =
-      (old.env or {})
-      // {
-        CGO_ENABLED = 0;
-      };
-  });
-
   spotify =
     if prev.stdenv.hostPlatform.isDarwin
     then

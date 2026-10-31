@@ -6,8 +6,8 @@
     hclfmt
     inetutils
     lsof
-    minio-client
     openssl
+    rclone
     restic
     rsync
     smartmontools

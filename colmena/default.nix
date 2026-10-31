@@ -32,12 +32,7 @@ in {
     # with the package set here rather than only overriding nixpkgs.pkgs.
     nodeNixpkgs.gnomeregan = import nixpkgs-unstable {
       system = "x86_64-linux";
-      config = {
-        allowUnfree = true;
-        permittedInsecurePackages = [
-          "minio-client-2025-08-13T08-35-41Z"
-        ];
-      };
+      config.allowUnfree = true;
       overlays = [
         (import ../overlays/pyicloud.nix {inherit inputs;})
         (final: _prev: {
@@ -53,12 +48,7 @@ in {
     # stable getty.nix module still references it, breaking system-units.
     nodeNixpkgs.anton = import nixpkgs-unstable {
       system = "x86_64-linux";
-      config = {
-        allowUnfree = true;
-        permittedInsecurePackages = [
-          "minio-client-2025-08-13T08-35-41Z"
-        ];
-      };
+      config.allowUnfree = true;
       overlays = [
         (import ../overlays/pyicloud.nix {inherit inputs;})
       ];

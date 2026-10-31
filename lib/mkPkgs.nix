@@ -32,9 +32,6 @@
       inherit system;
       config = {
         allowUnfree = true;
-        permittedInsecurePackages = [
-          "minio-client-2025-08-13T08-35-41Z"
-        ];
         inherit cudaSupport;
       };
       inherit overlays;

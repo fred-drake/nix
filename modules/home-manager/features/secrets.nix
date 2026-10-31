@@ -107,9 +107,9 @@ in {
         key = "data";
       };
 
-      mc-config = {
-        sopsFile = config.secrets.workstation.tools.mc-config;
-        path = "${home}/.mc/config.json";
+      rclone-config = {
+        sopsFile = config.secrets.workstation.tools.rclone-config;
+        path = "${home}/.config/rclone/rclone.conf";
         mode = "0400";
         key = "data";
       };

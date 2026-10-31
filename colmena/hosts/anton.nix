@@ -30,12 +30,7 @@ in {
     # with the stable module set caused a systemd unit skew: stable getty.nix
     # expects example/systemd/system/autovt@.service, which unstable systemd
     # 260.1 dropped (it moved to a getty@ alias).
-    nixpkgs.config = {
-      allowUnfree = true;
-      permittedInsecurePackages = [
-        "minio-client-2025-08-13T08-35-41Z"
-      ];
-    };
+    nixpkgs.config.allowUnfree = true;
     documentation.nixos.enable = false;
     imports =
       [
