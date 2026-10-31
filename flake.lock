@@ -244,11 +244,11 @@
     "gmail-cleaner": {
       "flake": false,
       "locked": {
-        "lastModified": 1793426546,
-        "narHash": "sha256-d85pALi3p0reVQkYjHqybP2VWthDgfpfwiZHSAehufM=",
+        "lastModified": 1793477135,
+        "narHash": "sha256-Byq5XpN8fMcPRtQUL51umIqSpDGleS7G9LfJxL3KCNE=",
         "ref": "refs/heads/master",
-        "rev": "a2bc8069229c3d88ef6eabdde64ec398a139bfd3",
-        "revCount": 4,
+        "rev": "9216ab384a0cd35c0e9f4537426d004b2e629892",
+        "revCount": 6,
         "type": "git",
         "url": "ssh://git@gitea.internal.freddrake.com/fdrake/gmail-cleaner.git"
       },
