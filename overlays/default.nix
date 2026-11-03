@@ -5,20 +5,6 @@
   # .claude/skills/woodpecker-upgrade/SKILL.md before bumping.
   inherit (inputs.nixpkgs-woodpecker-agent.legacyPackages.${prev.stdenv.hostPlatform.system}) woodpecker-agent;
 
-  # WORKAROUND(atuin): e2e_capture PTY tests time out under macOS sandboxing on Darwin.
-  # Tracked upstream in Nixpkgs issue #573527 ("Build failure: atuin" on aarch64-darwin).
-  # Remove this override once upstream nixpkgs adds Darwin checkFlags / skips the flaky test.
-  atuin = prev.atuin.overrideAttrs {
-    doCheck = false;
-  };
-
-  # WORKAROUND(typescript-language-server): upstream nixpkgs fixed-output pnpmDeps hash mismatch; remove when nixpkgs updates the derivation hash.
-  typescript-language-server = prev.typescript-language-server.overrideAttrs (old: {
-    pnpmDeps = old.pnpmDeps.overrideAttrs (_: {
-      outputHash = "sha256-PmyJb8090pEPc09Tbv8RgdvQpzpba2L8ve87+aVncQU=";
-    });
-  });
-
   spotify =
     if prev.stdenv.hostPlatform.isDarwin
     then
