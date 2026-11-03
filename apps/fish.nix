@@ -70,7 +70,7 @@ in {
       end
 
       # Create (and focus) a workspace for a project.
-      # Uses herdr inside herdr (HERDR_ENV=1), otherwise cmux.
+      # Uses herdr-app inside Herdr (HC_TERMINAL_ID), herdr inside herdr TUI (HERDR_ENV=1), otherwise cmux.
       #   cws <name> [dir] [color]
       # Looks up dir + color from the windev registry (~/.config/windev/config.json)
       # by <name>; explicit [dir]/[color] args override. Unknown names just open
@@ -100,6 +100,20 @@ in {
           set color "$argv[3]"
         else if test -f "$config_file"
           set color (jq -r --arg name "$name" '.[] | select(.name == $name) | .color // empty' "$config_file" 2>/dev/null)
+        end
+
+        if test -n "$HC_TERMINAL_ID"
+          if not command -v herdr-app >/dev/null 2>&1
+            echo "cws: herdr-app not found" >&2
+            return 1
+          end
+
+          set -l out (herdr-app do space.new --name "$name" --folder "$devdir")
+          set -l rc $status
+          if test $rc -ne 0
+            printf '%s\n' $out >&2
+          end
+          return $rc
         end
 
         if test "$HERDR_ENV" = 1

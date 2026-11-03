@@ -33,32 +33,5 @@ in {
         then [(pkgs.writeShellScriptBin "docker" ''exec podman "$@"'')]
         else []
       );
-
-    file.".config/herdr/config.toml".text = ''
-      onboarding = false
-
-      [keys]
-      prefix = "ctrl+a"
-      switch_workspace = "prefix+shift+1..9"
-      focus_agent = "ctrl+1..9"
-      split_vertical = "prefix+|"
-      split_horizontal = "prefix+minus"
-      goto = "prefix+s"
-
-      [[keys.command]]
-      key = "prefix+g"
-      type = "pane"
-      command = "lazygit"
-      description = "run lazygit"
-
-      [theme]
-      name = "tokyo-night"
-
-      [ui.toast]
-      delivery = "herdr"
-
-        [ui.sound.agents]
-        pi = "off"
-    '';
   };
 }

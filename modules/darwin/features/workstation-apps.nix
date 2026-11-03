@@ -72,6 +72,7 @@ lib.mkMerge [
         "google-chrome"
         "google-drive"
         "gstreamer-runtime"
+        "herdr-app"
         "inkscape"
         "krita"
         "logitech-g-hub"
