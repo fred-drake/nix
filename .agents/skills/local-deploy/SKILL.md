@@ -12,15 +12,16 @@ Run update, switch, then commit through fresh `generalist` subagents. The parent
 ## Contract
 
 - Call `subagent` with `agent: "generalist"` and no model/thinking overrides. Launch one child at a time and await its later message without polling, resuming, or duplicating work.
-- Give each child a self-contained brief with repository, role, latest failure, constraints, and report format.
-- The parent never runs commands, investigates, edits, or repairs.
+- Give each child a self-contained brief with repository, role, latest failure, constraints, and report format. Instruct update and switch executors to stream command output to a predictable temp file (e.g. `set -o pipefail; just <phase> 2>&1 | tee /tmp/local-deploy-<phase>.log`) in addition to any harness task log.
+- The parent never runs commands, edits, or repairs, and never investigates on its own while waiting.
+- **On-demand progress inspection**: If the user explicitly asks how a phase is going or why it is taking so long, the parent may passively read (`read_file`) the tail of the child's transcript/task log or `/tmp/local-deploy-<phase>.log` to report concrete progress (e.g., which derivation is compiling or which activation step is running), then return to waiting without interrupting, killing, or overlapping the child.
 - Never reset, clean, restore, checkout, stash, or create another worktree. Only the commit executor may stage or commit. Never push.
 
 ## Async Result Recovery
 
 Subagent delivery state and command state are separate.
 
-- A missing later message does not prove whether the child is running or exited. The parent must not claim a status, poll, resume, kill, overlap another child, or retry. State that the result is pending and wait.
+- A missing later message does not prove whether the child is running or exited. Aside from a passive read of the log file when explicitly asked by the user for progress, the parent must not claim a final status, poll, resume, kill, overlap another child, or retry. State what the log currently shows (if asked) and that the final result is pending, then wait.
 - If the harness explicitly reports a delivery or surface failure after launch, treat the command outcome as unknown—not failed. Only then, launch a fresh **result remediator** for that phase. This read-only diagnostic is the sole exception to the one-child rule after the harness has declared the tracked child failed. It may inspect the prior transcript, process tree, repository, and system state, but cannot run deployment commands or edit.
 - If the command is still active, the result remediator reports and exits; the parent stops for user intervention rather than launching repeated diagnostics. If it finished with a recoverable exit status, continue from that result.
 - An absent process does not prove success or failure. If the exit status cannot be recovered, stop with the outcome unknown. Never retry because of a callback failure alone.
@@ -78,5 +79,5 @@ Claim success only after both deployment commands and the commit phase succeed. 
 | Preserve changes that predate deployment | Commit them; commit means everything outstanding. |
 | Push the commit | Do not push unless separately requested. |
 | Treat a callback error as command failure | Recover the actual command outcome first. |
-| Infer running or exited from silence | Report the status as unknown and wait. |
+| Infer running or exited from silence | Report the final status as unknown (if the user asked for progress, passively read the log tail to show current output) and wait. |
 | Delete a package lock after switch failure | Never delete it; check for a holder and stop for the user if it does not clear. |
