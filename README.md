@@ -255,7 +255,3 @@ For assistance with Nix configurations:
 1. Allow Apple Watch to unlock the computer or sudo:
    `Settings -> Touch ID & Password -> Use Apple Watch to unlock
    applications and your Mac`
-2. Open Raycast and import configuration from iCloud Drive
-3. Disable spotlight search:
-   `Settings -> Keyboard shortcuts -> Disable Spotlight Search`. Raycast
-   will now be the default search tool when hitting Cmd+Space.

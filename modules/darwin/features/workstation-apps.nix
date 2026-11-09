@@ -82,7 +82,6 @@ lib.mkMerge [
         "mouseless"
         "obs"
         "obsidian"
-        "raycast"
         "slack"
         "sourcetree"
         "steam"
