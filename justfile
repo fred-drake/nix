@@ -23,6 +23,7 @@ update-repos:
 # Update herdr source and hashes
 update-herdr: update-repos
     ./apps/fetcher/update-herdr.sh
+    ./apps/fetcher/update-herdr-core.sh
 
 # Update the SHA digests of container images
 update-container-digests:
