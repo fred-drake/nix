@@ -19,7 +19,7 @@ in
     inherit src;
 
     # Updated with the generated lockfile by update-codex-acp.sh.
-    npmDepsHash = "sha256-dxD9oHEWHQqZ9EWmonuCwWeLnhyUcVvxKuEtiC8OZgY=";
+    npmDepsHash = "sha256-XcKkmGUcLZK6vv4ZaHDMAsAHc1J0kujOqsuyHRhra50=";
 
     dontNpmBuild = true;
 

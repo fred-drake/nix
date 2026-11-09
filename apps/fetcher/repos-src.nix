@@ -52,8 +52,8 @@
   "vicinae-src" = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "b94c5100efa4aa6e79fa48c0521dfc68d5a03344";
-    hash = "sha256-oRwMcnX7EDDgW4SreLYJdkswIrIghVP/6Kp1fLYhf88=";
+    rev = "f7c4b5279a84030f69c8be2f1d62337f41bfac96";
+    hash = "sha256-jATqNEtnaqkrcvzatu2PCI40CJV/NKL2So+tJPwD8yY=";
   };
   "spotifatius-src" = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
