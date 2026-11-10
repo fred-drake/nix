@@ -53,6 +53,7 @@ lib.mkMerge [
       };
       casks = [
         "nikitabobko/tap/aerospace"
+        "alfred"
         "balenaetcher"
         "bitwarden"
         "blackhole-2ch"
