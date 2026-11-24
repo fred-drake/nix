@@ -5,8 +5,8 @@
   "outline-nvim-src" = pkgs.fetchFromGitHub {
     owner = "hedyhli";
     repo = "outline.nvim";
-    rev = "03ce1482222dc2bf1f781559508301f05382936d";
-    hash = "sha256-s17RigLhBQlg8Gk6DSxK/VUxo4Dvs1LIfnh4Q8DJmZc=";
+    rev = "6f95d46ff1d128fd4e6ec77f660caec6ad40a122";
+    hash = "sha256-o4dMbOiqdfcFcNdsWkAkHJTj5/dHh4wRX7FKALmJvQE=";
   };
   "container-digest-src" = pkgs.fetchFromGitHub {
     owner = "fred-drake";
@@ -52,8 +52,8 @@
   "vicinae-src" = pkgs.fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    rev = "f7c4b5279a84030f69c8be2f1d62337f41bfac96";
-    hash = "sha256-jATqNEtnaqkrcvzatu2PCI40CJV/NKL2So+tJPwD8yY=";
+    rev = "e1cdf596d8bfa140eaf5c1992a25a80f185e99f6";
+    hash = "sha256-/0brhNRZe9pndO/njG4yMUG0rbtOpAdW4kg1PgcpuiY=";
   };
   "spotifatius-src" = pkgs.fetchFromGitHub {
     owner = "AndreasBackx";
@@ -64,8 +64,8 @@
   "herdr-src" = pkgs.fetchFromGitHub {
     owner = "ogulcancelik";
     repo = "herdr";
-    rev = "ee5bfb5041bb3e4a49d591c72308aae3c81ecdde";
-    hash = "sha256-0B58jR/v1vxbK7cwoq++SnOCsED0sHDkgqVMvsrjezE=";
+    rev = "e8d7d9705a7a2c89cef4dd42079379f05685af87";
+    hash = "sha256-x+DOzoMhorpWTf8yN29g2P6Ha+oSGbaZdV7soxdSmaY=";
   };
   "pi-subagents-src" = pkgs.fetchFromGitHub {
     owner = "edxeth";

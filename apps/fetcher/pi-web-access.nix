@@ -3,7 +3,7 @@
 # Lockfile: pi-web-access-lock.json (generated; upstream repo has no lockfile).
 # Do not edit by hand; run ./apps/fetcher/update-pi-web-access.sh.
 {
-  version = "0.47.0";
-  hash = "sha256-QfwEKSqOTc/VhPonFySNsgDAOkx9ROf+PnEF9v/iCow=";
-  npmDepsHash = "sha256-W8NDa2tq+qGxF4z4lTQXF6mNAOC3bWiuyeeNIIEbStc=";
+  version = "0.48.0";
+  hash = "sha256-kvxwqQzvUEvBU8URxTCe4hGbWiUa41TbsdtdiM6+GqE=";
+  npmDepsHash = "sha256-kmyoh7lvHssAhSBU2qKqk9ElGgm6Z5BZUtBjy1+hri4=";
 }

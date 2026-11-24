@@ -205,6 +205,10 @@ in
       repo_root="$(git rev-parse --show-toplevel)"
       cd "$repo_root"
 
+      if ! command -v deadnix >/dev/null 2>&1 && command -v direnv >/dev/null 2>&1; then
+        export PATH="$(direnv exec "$repo_root" sh -c 'printf "%s" "$PATH"' 2>/dev/null || printf '%s' "$PATH")"
+      fi
+
       echo "Running Nix pre-commit checks..."
       _before_format="$(mktemp)"
       _after_format="$(mktemp)"

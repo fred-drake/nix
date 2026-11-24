@@ -85,7 +85,7 @@ buildNpmPackage (finalAttrs: {
       done
 
       # Delete remaining workspace symlinks
-      find "$nm" -type l -lname '*/packages/*' -delete
+      find "$nm" -type l \( -lname '*/packages/*' -o -lname '*/apps/*' \) -delete
 
       # Clean up now-dangling .bin symlinks
       find "$nm/.bin" -xtype l -delete

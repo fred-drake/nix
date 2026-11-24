@@ -5,7 +5,7 @@ _: {
   "docker.gitea.com" = {
     "act_runner" = {
       "latest" = {
-        "linux/amd64" = "docker.gitea.com/act_runner@sha256:5ab8f43875486703ca187843d75f96c16d76cee7dc2e5fba891c5adeb02cb012";
+        "linux/amd64" = "docker.gitea.com/act_runner@sha256:025669bce6dd0f722d141276ffcb3e7b39cc389e7e2df7b6801c94cb3c1e6c75";
       };
     };
     "gitea" = {
@@ -22,12 +22,12 @@ _: {
     };
     "amruthpillai/reactive-resume" = {
       "latest" = {
-        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:7659f84c79c4cc13cbeecc3c78bef0638c8121875a058588fe76be111d36e02a";
+        "linux/amd64" = "docker.io/amruthpillai/reactive-resume@sha256:d8b5fd6dfaa01d313b59c006ffdbd22d67c0fb11c7a9ef3cadf2aef45cac3838";
       };
     };
     "apache/tika" = {
       "latest" = {
-        "linux/amd64" = "docker.io/apache/tika@sha256:f0d739823474b38a31881dff3cbc94cc25ed29d8456045d3ff26ae2400e48255";
+        "linux/amd64" = "docker.io/apache/tika@sha256:c33c3cf12f4e845463302db469d2e7c723b9be1385a6eee5e79bf1e179bd31da";
       };
     };
     "clickhouse/clickhouse-server" = {
@@ -37,7 +37,7 @@ _: {
     };
     "clusterzx/paperless-ai" = {
       "latest" = {
-        "linux/amd64" = "docker.io/clusterzx/paperless-ai@sha256:19baad5ab2607d65087712fcb3ff74b6c5f7e840ea31061dace4d8ab1ef40a17";
+        "linux/amd64" = "docker.io/clusterzx/paperless-ai@sha256:6a4b28dcd034eed0bb1c3741f9bfe99b3cc7fb6565f5c2520dd81faf6f5646ed";
       };
     };
     "filebrowser/filebrowser" = {
@@ -52,12 +52,12 @@ _: {
     };
     "gotenberg/gotenberg" = {
       "latest" = {
-        "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:ab27164320fd757dcc4df81d512c2b5d2d6554c996f00c0058d94e192d2a8d0b";
+        "linux/amd64" = "docker.io/gotenberg/gotenberg@sha256:e16a9ca42a9807c765efe02fe7c6f65cd64b9f73c57365586b29748305d4cc74";
       };
     };
     "library/redis" = {
       "latest" = {
-        "linux/amd64" = "docker.io/library/redis@sha256:e2728231060693472a8efb488dd139a8142a01bd0612ae70429bf5b5be924be1";
+        "linux/amd64" = "docker.io/library/redis@sha256:29f0fcb48d8fe958e80767ca3f92d30aae798f940f257764620be3eec1b2fce5";
       };
     };
     "livekit/egress" = {
@@ -67,18 +67,18 @@ _: {
     };
     "nousresearch/hermes-agent" = {
       "latest" = {
-        "linux/amd64" = "docker.io/nousresearch/hermes-agent@sha256:0dd31821db01611eaeedc44743260336c2d72bff47b9117b06313b29ca85ad76";
+        "linux/amd64" = "docker.io/nousresearch/hermes-agent@sha256:41468459379a943cf0a25a55589e230d244bd9f95b83cff5eca789470c892fac";
       };
     };
     "postgres" = {
       "16-alpine" = {
-        "linux/amd64" = "docker.io/postgres@sha256:ac838714b7d794185a866e5a6b479b954e7d8a070568aa0acac6fe07c3070bf5";
+        "linux/amd64" = "docker.io/postgres@sha256:9d9e487c1bd6413c52ccb3c02f46c8e37fa1e1d1a32a84519eb4e68d0ad1da30";
       };
       "17" = {
-        "linux/amd64" = "docker.io/postgres@sha256:996e9dc583ba9f0265a2c75547a9c95fb22c251e394749cab205a0a00e1856a1";
+        "linux/amd64" = "docker.io/postgres@sha256:e711be2c7ff64c9eb8883fc87571621be6caa2f943d825a49e5d20ac5b0221d7";
       };
       "18" = {
-        "linux/amd64" = "docker.io/postgres@sha256:e923a22ac074261dd73970c57edf659475bf0497cb9456f17d98ed7cdd3ca913";
+        "linux/amd64" = "docker.io/postgres@sha256:32f5fdbf4d27ebe0d4552313126a593400f40b21bff207e43617b2305838bce3";
       };
     };
     "woodpeckerci/woodpecker-agent" = {
@@ -105,42 +105,42 @@ _: {
     };
     "linuxserver/bazarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:5730b1bccef8e0b2b12f8ea704c85195a400824afc3ecaa8e1e66dc09200fdd8";
+        "linux/amd64" = "ghcr.io/linuxserver/bazarr@sha256:03e59229ea021c0e8b151b106edc762d2c7b1f50106b888eaeb887e87600ce29";
       };
     };
     "linuxserver/calibre-web" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:446d8d19a706ea4885a8f6faa306aa799e41dadff4e51ea5fa18ef70765cc22d";
+        "linux/amd64" = "ghcr.io/linuxserver/calibre-web@sha256:cbec28e41282dbf89f390e0bba56b8744f00ebcb05e365d15a1b605a7a35fd3b";
       };
     };
     "linuxserver/jellyfin" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:542ccd921277f204001edace37d9316cba1ccbd15ca70d109829a171436f82e0";
+        "linux/amd64" = "ghcr.io/linuxserver/jellyfin@sha256:c7c0fcaf0a9b2360211750efbdc9601edb3754d6a6efd2a575e76f8fb19ce778";
       };
     };
     "linuxserver/lidarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/lidarr@sha256:2cef60c4023266e96e3d62371f93434d2deaadfd6b7d76ccd1bdee29f29c618e";
+        "linux/amd64" = "ghcr.io/linuxserver/lidarr@sha256:dbece386c6cf33ce27eb6f517d5c476f5495de3731439189357e3576562d3ed5";
       };
     };
     "linuxserver/prowlarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/prowlarr@sha256:171f9b04f0ac0754d4edea819355fa1ccf4021df5ab230e06e1df1c050f85af1";
+        "linux/amd64" = "ghcr.io/linuxserver/prowlarr@sha256:39f07a8b9d1368ca4bb15c5bcc38e2eca0a7690784d2bbe6595bf4ecb5538b03";
       };
     };
     "linuxserver/radarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:90fc402fd050506460369cf263feb1193888ebd06cbf5fa665e9a247f9c02b83";
+        "linux/amd64" = "ghcr.io/linuxserver/radarr@sha256:ff1b1f21a200e19f52017bd1544031143715b1ab262b823a9dcb916a71da0956";
       };
     };
     "linuxserver/sabnzbd" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:182829344fc484aa7dd85727d834eb6f9cb69a310dbebeb01bacb838c3dd93e8";
+        "linux/amd64" = "ghcr.io/linuxserver/sabnzbd@sha256:c46ec8a14951073d8fd02609a377c4bcd7a090f91ff8913f387b1ee083b8e8df";
       };
     };
     "linuxserver/sonarr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:b5f192993722f6e97b561c3ee3536cf42190db770db30e2723cc1117da093374";
+        "linux/amd64" = "ghcr.io/linuxserver/sonarr@sha256:69babc7d9e4cdc82aa8f84a37101c9e26a3f37ffcf83b0f8e9786d082f77cc0d";
       };
     };
     "paperless-ngx/paperless-ngx" = {
@@ -155,12 +155,12 @@ _: {
     };
     "seerr-team/seerr" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/seerr-team/seerr@sha256:2636191726a315dbd75228537f7be74b2fa7498998bb22e37b5b5c8756018fba";
+        "linux/amd64" = "ghcr.io/seerr-team/seerr@sha256:ccddd8e5c5b026790b447f4c97937751083227584c793864db218b460def7959";
       };
     };
     "twin/gatus" = {
       "latest" = {
-        "linux/amd64" = "ghcr.io/twin/gatus@sha256:a9af84db2ff232e45e3ae5eb5f7645e7b1750cfa1dc81f9a8f4fc61b99d56978";
+        "linux/amd64" = "ghcr.io/twin/gatus@sha256:dc688e587dd35ecec829b364d97b64cc0bc88ad8e575f39964a4d08977e577e7";
       };
     };
   };

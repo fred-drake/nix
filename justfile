@@ -1,3 +1,7 @@
+# Ensure flake devShell tools (update-npm-packages, system-flake-rebuild, etc.)
+# are on PATH even when invoked from a non-interactive shell with a stale PATH.
+export PATH := `if command -v update-npm-packages >/dev/null 2>&1 || ! command -v direnv >/dev/null 2>&1; then printf '%s' "$PATH"; else direnv exec . sh -c 'printf "%s" "$PATH"' 2>/dev/null || printf '%s' "$PATH"; fi`
+
 # List all commands
 default:
     @just --list
