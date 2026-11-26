@@ -199,8 +199,8 @@
           widgets = [
             {
               type = "weather";
-              location = "Florianópolis, Brazil";
-              units = "metric";
+              location = "Tampa, Florida, United States";
+              units = "imperial";
               hour-format = "24h";
             }
             {
