@@ -487,6 +487,11 @@ in
       (lib.mkIf (isPodman "recyclarr") {
         systemd.services.recyclarr-sync = {
           description = "Recyclarr quality-profile sync";
+          requires = [
+            "podman-network-media.service"
+            "podman-sonarr.service"
+            "podman-radarr.service"
+          ];
           after = [
             "podman-network-media.service"
             "podman-sonarr.service"
@@ -497,9 +502,22 @@ in
             RuntimeDirectory = "recyclarr";
             # Read each *arr's API key from its preserved config.xml into a tmpfs
             # env file (mode 0600, gone on reboot) so keys never hit the nix
-            # store or `ps` output, then sync.
+            # store or `ps` output, wait for both *arr HTTP APIs to be ready
+            # (podman notifies READY=1 on container start before s6-init / DB
+            # migrations finish), then sync.
             ExecStart = pkgs.writeShellScript "recyclarr-sync" ''
               set -eu
+              for url in http://127.0.0.1:8989/ping http://127.0.0.1:7878/ping; do
+                i=0
+                until ${pkgs.curl}/bin/curl -sf --max-time 5 "$url" >/dev/null 2>&1; do
+                  i=$((i + 1))
+                  if [ "$i" -ge 30 ]; then
+                    echo "Timed out waiting for $url" >&2
+                    exit 1
+                  fi
+                  sleep 2
+                done
+              done
               sk=$(${pkgs.gnugrep}/bin/grep -oE '<ApiKey>[a-f0-9]+</ApiKey>' /data/.state/nixarr/sonarr/config.xml | ${pkgs.gnused}/bin/sed 's/<[^>]*>//g')
               rk=$(${pkgs.gnugrep}/bin/grep -oE '<ApiKey>[a-f0-9]+</ApiKey>' /data/.state/nixarr/radarr/config.xml | ${pkgs.gnused}/bin/sed 's/<[^>]*>//g')
               umask 077
